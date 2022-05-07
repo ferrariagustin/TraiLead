@@ -1,15 +1,49 @@
 package com.aferrari.trailead.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.aferrari.login.LoginActivity
+import com.aferrari.login.session.SessionManagement
 import com.aferrari.trailead.R
+import com.aferrari.trailead.databinding.HomeActivityBinding
 
 /**
  * Moved to other package or module
  */
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var homeActivityBinding: HomeActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home_activity)
+        homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
+        initComponent()
+        initListeners()
+    }
+
+    private fun initListeners() {
+        homeActivityBinding.logoutBtn.setOnClickListener {
+            logout()
+        }
+    }
+
+    private fun logout() {
+        SessionManagement(this).removeSession()
+        goLogin()
+    }
+
+    private fun goLogin() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(LoginActivity.DEEPLINK_LOGIN))
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+    }
+
+    private fun initComponent() {
+        homeActivityBinding.UserName.text = SessionManagement(this).getSession().toString()
     }
 }
