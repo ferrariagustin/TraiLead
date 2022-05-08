@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.aferrari.login.LoginActivity"
+            android:name="com.aferrari.login.view.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

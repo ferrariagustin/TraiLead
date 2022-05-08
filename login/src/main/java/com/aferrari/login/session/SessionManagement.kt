@@ -9,6 +9,8 @@ class SessionManagement(context: Context) {
     companion object {
         const val SHARED_PREF_NAME: String = "session"
         const val SESSION_KEY: String = "user_session"
+        const val SESSION_KEY_NAME: String = "user_session_name"
+        const val SESSION_KEY_SURNAME: String = "user_session_surname"
         const val DEFAULT_SESSION: Int = -1
     }
 
@@ -18,6 +20,8 @@ class SessionManagement(context: Context) {
 
     fun saveSession(user: User) {
         editorSession.putInt(SESSION_KEY, user.id).commit()
+        editorSession.putString(SESSION_KEY_NAME, user.name).commit()
+        editorSession.putString(SESSION_KEY_SURNAME, user.surname).commit()
     }
 
     fun getSession(): Int = session.getInt(SESSION_KEY, DEFAULT_SESSION)
@@ -25,5 +29,18 @@ class SessionManagement(context: Context) {
     fun removeSession() {
         editorSession.putInt(SESSION_KEY, DEFAULT_SESSION).commit()
     }
+
+    fun getUser(userId: Int): User? {
+        val userId = getSession()
+        if (userId != DEFAULT_SESSION) {
+            return User(
+                userId,
+                session.getString(SESSION_KEY_NAME, "") as String,
+                session.getString(SESSION_KEY_SURNAME, "") as String
+            )
+        }
+        return null
+    }
+
 
 }
