@@ -8,7 +8,7 @@ import com.aferrari.login.model.User
 import com.aferrari.login.repository.DataSource
 import com.aferrari.login.session.SessionManagement
 
-class LoginViewModel : ViewModel() {
+class UserViewModel : ViewModel() {
 
     private lateinit var login: LiveData<User>
     private lateinit var userViewModel: User

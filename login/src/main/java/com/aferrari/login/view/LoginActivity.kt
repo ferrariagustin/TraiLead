@@ -5,21 +5,23 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.R
 import com.aferrari.login.databinding.LoginActivityBinding
 import com.aferrari.login.model.User
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils.DEEPLINK_HOME
-import com.aferrari.login.viewmodel.LoginViewModel
+import com.aferrari.login.viewmodel.UserViewModel
 
 class LoginActivity : AppCompatActivity(), Login {
 
     private lateinit var binding: LoginActivityBinding
-    private val loginViewModel = LoginViewModel()
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         binding.loginBtn.setOnClickListener {
             val user = binding.userIdLogin.text.toString()
@@ -34,10 +36,14 @@ class LoginActivity : AppCompatActivity(), Login {
         checkSession()
     }
 
+    /**
+     * Validate if exist some session in sharedPrefernce.
+     * If exist a session, redirect to home
+     */
     private fun checkSession() {
         val userId = SessionManagement(this).getSession()
         if (userId != -1) {
-            val user = loginViewModel.getUser(userId, this)
+            val user = userViewModel.getUser(userId, this)
             if (user != null) {
                 goHome(user)
             }
@@ -45,8 +51,8 @@ class LoginActivity : AppCompatActivity(), Login {
     }
 
     override fun login(user: String, pass: String) {
-        loginViewModel.loginUser(user, pass)
-        loginViewModel.getUserLogin().observe({ lifecycle }, {
+        userViewModel.loginUser(user, pass)
+        userViewModel.getUserLogin().observe({ lifecycle }, {
             SessionManagement(this).saveSession(it)
             goHome(it)
         })
