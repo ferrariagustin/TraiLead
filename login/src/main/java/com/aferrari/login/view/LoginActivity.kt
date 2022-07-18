@@ -8,10 +8,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.R
 import com.aferrari.login.databinding.LoginActivityBinding
-import com.aferrari.login.model.User
+import com.aferrari.login.db.User
+import com.aferrari.login.db.UserDataBase
+import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils.DEEPLINK_HOME
 import com.aferrari.login.viewmodel.UserViewModel
+import com.aferrari.login.viewmodel.UserViewModelFactory
 
 class LoginActivity : AppCompatActivity(), Login {
 
@@ -21,7 +24,12 @@ class LoginActivity : AppCompatActivity(), Login {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        val dao = UserDataBase.getInstance(application).userDao
+        val repository = UserRepository(dao)
+        val factory = UserViewModelFactory(repository)
+        userViewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
+        binding.userViewModel = userViewModel
+        binding.lifecycleOwner = this
 
         binding.loginBtn.setOnClickListener {
             val user = binding.userIdLogin.text.toString()
@@ -60,11 +68,9 @@ class LoginActivity : AppCompatActivity(), Login {
 
     override fun goHome(user: User) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DEEPLINK_HOME)).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                    Intent.FLAG_ACTIVITY_NEW_TASK
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             putExtra("user_name", user.name)
-            putExtra("user_surname", user.surname)
+            putExtra("user_surname", user.email)
         }
         startActivity(intent)
     }

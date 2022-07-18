@@ -18,6 +18,11 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var homeActivityBinding: HomeActivityBinding
 
+    // TODO: Resolve issue with loop with back
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)

@@ -1,5 +1,12 @@
 <layout>
 
+    <data>
+
+        <variable
+            name="userViewModel"
+            type="com.aferrari.login.viewmodel.UserViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -11,12 +18,12 @@
             style="@style/traiLead_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"
             android:text="@string/app_name"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
-            android:shadowRadius="3"
-            android:shadowDx="2"
-            android:shadowDy="2"
             app:layout_constraintBottom_toTopOf="@id/card_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

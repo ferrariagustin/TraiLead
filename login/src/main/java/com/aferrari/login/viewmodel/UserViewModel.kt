@@ -4,11 +4,12 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.aferrari.login.model.User
+import com.aferrari.login.db.User
+import com.aferrari.login.db.UserRepository
 import com.aferrari.login.repository.DataSource
 import com.aferrari.login.session.SessionManagement
 
-class UserViewModel : ViewModel() {
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
     private lateinit var login: LiveData<User>
     private lateinit var userViewModel: User

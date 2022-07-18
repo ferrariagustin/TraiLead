@@ -2,7 +2,7 @@ package com.aferrari.login.session
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.aferrari.login.model.User
+import com.aferrari.login.db.User
 
 class SessionManagement(context: Context) {
 
@@ -10,7 +10,8 @@ class SessionManagement(context: Context) {
         const val SHARED_PREF_NAME: String = "session"
         const val SESSION_KEY: String = "user_session"
         const val SESSION_KEY_NAME: String = "user_session_name"
-        const val SESSION_KEY_SURNAME: String = "user_session_surname"
+        const val SESSION_KEY_EMAIL: String = "user_session_email"
+        const val SESSION_KEY_PASSWORD: String = "user_session_password"
         const val DEFAULT_SESSION: Int = -1
     }
 
@@ -21,7 +22,8 @@ class SessionManagement(context: Context) {
     fun saveSession(user: User) {
         editorSession.putInt(SESSION_KEY, user.id).commit()
         editorSession.putString(SESSION_KEY_NAME, user.name).commit()
-        editorSession.putString(SESSION_KEY_SURNAME, user.surname).commit()
+        editorSession.putString(SESSION_KEY_EMAIL, user.email).commit()
+        editorSession.putString(SESSION_KEY_PASSWORD, user.password).commit()
     }
 
     fun getSession(): Int = session.getInt(SESSION_KEY, DEFAULT_SESSION)
@@ -36,7 +38,8 @@ class SessionManagement(context: Context) {
             return User(
                 userId,
                 session.getString(SESSION_KEY_NAME, "") as String,
-                session.getString(SESSION_KEY_SURNAME, "") as String
+                session.getString(SESSION_KEY_EMAIL, "") as String,
+                session.getString(SESSION_KEY_PASSWORD, "") as String
             )
         }
         return null

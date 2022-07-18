@@ -1,9 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
-
-apply plugin: 'kotlin-kapt'
 
 android {
     compileSdk 32
@@ -37,15 +36,15 @@ android {
 
 dependencies {
 
-//    AndroidX version
+//  AndroidX version
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
 
-    // Coroutine
+//  Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
 
-    // Lifecycle
+//  Lifecycle
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidx_lifecycle"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidx_lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_lifecycle"
@@ -61,10 +60,11 @@ dependencies {
 
 
     // ROOM
-//    implementation("androidx.room:room-runtime:$roomVersion")
-//    annotationProcessor("androidx.room:room-compiler:$roomVersion")
-//
-//    // To use Kotlin annotation processing tool (kapt)
-//    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-common:$roomVersion"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+
+    kapt("androidx.room:room-compiler:$roomVersion")
 
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -50,4 +51,12 @@ dependencies {
     testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
+
+//  ROOM
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-common:$roomVersion"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+
+    kapt("androidx.room:room-compiler:$roomVersion")
 }
