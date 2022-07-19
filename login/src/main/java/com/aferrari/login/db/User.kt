@@ -10,5 +10,5 @@ data class User(
     @ColumnInfo(name = "user_id") val id: Int,
     @ColumnInfo(name = "user_name") val name: String?,
     @ColumnInfo(name = "user_email") val email: String?,
-    @ColumnInfo(name = "user_password") val password: String?
+    @ColumnInfo(name = "user_pass") val pass: String?
 )

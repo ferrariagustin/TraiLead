@@ -13,27 +13,27 @@ import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils.DEEPLINK_HOME
-import com.aferrari.login.viewmodel.UserViewModel
-import com.aferrari.login.viewmodel.UserViewModelFactory
+import com.aferrari.login.viewmodel.LoginViewModel
+import com.aferrari.login.viewmodel.LoginViewModelFactory
 
 class LoginActivity : AppCompatActivity(), Login {
 
     private lateinit var binding: LoginActivityBinding
-    private lateinit var userViewModel: UserViewModel
+    private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity)
         val dao = UserDataBase.getInstance(application).userDao
         val repository = UserRepository(dao)
-        val factory = UserViewModelFactory(repository)
-        userViewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
-        binding.userViewModel = userViewModel
+        val factory = LoginViewModelFactory(repository)
+        loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
+        binding.loginViewModel = loginViewModel
         binding.lifecycleOwner = this
 
         binding.loginBtn.setOnClickListener {
-            val user = binding.userIdLogin.text.toString()
-            val pass = binding.passwordIdLogin.text.toString()
+            val user = binding.userInputText.text.toString()
+            val pass = binding.passwordInputText.text.toString()
             login(user, pass)
         }
     }
@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity(), Login {
     private fun checkSession() {
         val userId = SessionManagement(this).getSession()
         if (userId != -1) {
-            val user = userViewModel.getUser(userId, this)
+            val user = loginViewModel.getUser(userId, this)
             if (user != null) {
                 goHome(user)
             }
@@ -59,8 +59,8 @@ class LoginActivity : AppCompatActivity(), Login {
     }
 
     override fun login(user: String, pass: String) {
-        userViewModel.loginUser(user, pass)
-        userViewModel.getUserLogin().observe({ lifecycle }, {
+        loginViewModel.loginUser(user, pass)
+        loginViewModel.getUserLogin().observe({ lifecycle }, {
             SessionManagement(this).saveSession(it)
             goHome(it)
         })

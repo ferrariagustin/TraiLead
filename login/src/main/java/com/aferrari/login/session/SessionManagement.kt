@@ -23,7 +23,7 @@ class SessionManagement(context: Context) {
         editorSession.putInt(SESSION_KEY, user.id).commit()
         editorSession.putString(SESSION_KEY_NAME, user.name).commit()
         editorSession.putString(SESSION_KEY_EMAIL, user.email).commit()
-        editorSession.putString(SESSION_KEY_PASSWORD, user.password).commit()
+        editorSession.putString(SESSION_KEY_PASSWORD, user.pass).commit()
     }
 
     fun getSession(): Int = session.getInt(SESSION_KEY, DEFAULT_SESSION)
