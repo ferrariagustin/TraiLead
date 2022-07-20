@@ -2,16 +2,15 @@ package com.aferrari.login.viewmodel
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.User
 import com.aferrari.login.db.UserRepository
-import com.aferrari.login.repository.DataSource
 import com.aferrari.login.session.SessionManagement
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
-
-    private lateinit var login: LiveData<User>
 
     lateinit var user: User
         private set
@@ -85,24 +84,6 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     private fun goLogin(user: User) {
         this.user = user
         stateLogin.value = StateLogin.SUCCESS
-    }
-
-    fun loginUser(user: String, pass: String) {
-        login = validateUser(user, pass)
-//        when (response) {
-//            LoginResult.SUCCESS -> loginLiveData.value = response.isSuccess
-//            LoginResult.FAILED -> loginLiveData.value = null
-//        }
-    }
-
-    fun getUserLogin(): LiveData<User> = login
-
-    /**
-     * Validate if exist user for user-pass
-     */
-    private fun validateUser(user: String, pass: String): LiveData<User> = liveData {
-        this@LoginViewModel.user = DataSource().login(user, pass)
-        emit(this@LoginViewModel.user)
     }
 
     /**

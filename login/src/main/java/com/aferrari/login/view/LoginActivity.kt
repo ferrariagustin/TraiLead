@@ -38,11 +38,6 @@ class LoginActivity : AppCompatActivity(), Login, LifecycleOwner {
         binding.lifecycleOwner = this
 
         observeLogin()
-//        binding.loginBtn.setOnClickListener {
-//            val user = binding.userInputText.text.toString()
-//            val pass = binding.passwordInputText.text.toString()
-//            login(user, pass)
-//        }
     }
 
     private fun observeLogin() {
@@ -57,18 +52,17 @@ class LoginActivity : AppCompatActivity(), Login, LifecycleOwner {
     }
 
     private fun startLogin() {
-        Toast.makeText(this, "Start Login", Toast.LENGTH_LONG).show()
+        // do nothing
     }
 
     private fun successLogin() {
-        Toast.makeText(this, "Login Success", Toast.LENGTH_LONG).show()
         binding.progressBar.visibility = View.GONE
         SessionManagement(this).saveSession(loginViewModel.user)
         goHome(loginViewModel.user)
     }
 
     private fun errorLogin() {
-        Toast.makeText(this, "Login Error", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Login Error", Toast.LENGTH_SHORT).show()
         binding.progressBar.visibility = View.GONE
     }
 
@@ -95,14 +89,6 @@ class LoginActivity : AppCompatActivity(), Login, LifecycleOwner {
             }
         }
     }
-
-//    override fun login(user: String, pass: String) {
-//        loginViewModel.loginUser(user, pass)
-//        loginViewModel.getUserLogin().observe({ lifecycle }, {
-//            SessionManagement(this).saveSession(it)
-//            goHome(it)
-//        })
-//    }
 
     override fun goHome(user: User) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DEEPLINK_HOME)).apply {
