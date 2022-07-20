@@ -3,8 +3,11 @@ package com.aferrari.login.view
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.R
 import com.aferrari.login.databinding.LoginActivityBinding
@@ -13,10 +16,13 @@ import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils.DEEPLINK_HOME
+import com.aferrari.login.utils.StringUtils.USER_EMAIL_KEY
+import com.aferrari.login.utils.StringUtils.USER_NAME_KEY
 import com.aferrari.login.viewmodel.LoginViewModel
 import com.aferrari.login.viewmodel.LoginViewModelFactory
+import com.aferrari.login.viewmodel.StateLogin
 
-class LoginActivity : AppCompatActivity(), Login {
+class LoginActivity : AppCompatActivity(), Login, LifecycleOwner {
 
     private lateinit var binding: LoginActivityBinding
     private lateinit var loginViewModel: LoginViewModel
@@ -31,11 +37,43 @@ class LoginActivity : AppCompatActivity(), Login {
         binding.loginViewModel = loginViewModel
         binding.lifecycleOwner = this
 
-        binding.loginBtn.setOnClickListener {
-            val user = binding.userInputText.text.toString()
-            val pass = binding.passwordInputText.text.toString()
-            login(user, pass)
+        observeLogin()
+//        binding.loginBtn.setOnClickListener {
+//            val user = binding.userInputText.text.toString()
+//            val pass = binding.passwordInputText.text.toString()
+//            login(user, pass)
+//        }
+    }
+
+    private fun observeLogin() {
+        loginViewModel.stateLogin.observe(this) {
+            when (it!!) {
+                StateLogin.STARTED -> startLogin()
+                StateLogin.IN_PROGRESS -> showProgressBar()
+                StateLogin.FAILED -> errorLogin()
+                StateLogin.SUCCESS -> successLogin()
+            }
         }
+    }
+
+    private fun startLogin() {
+        Toast.makeText(this, "Start Login", Toast.LENGTH_LONG).show()
+    }
+
+    private fun successLogin() {
+        Toast.makeText(this, "Login Success", Toast.LENGTH_LONG).show()
+        binding.progressBar.visibility = View.GONE
+        SessionManagement(this).saveSession(loginViewModel.user)
+        goHome(loginViewModel.user)
+    }
+
+    private fun errorLogin() {
+        Toast.makeText(this, "Login Error", Toast.LENGTH_LONG).show()
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     override fun onStart() {
@@ -58,19 +96,19 @@ class LoginActivity : AppCompatActivity(), Login {
         }
     }
 
-    override fun login(user: String, pass: String) {
-        loginViewModel.loginUser(user, pass)
-        loginViewModel.getUserLogin().observe({ lifecycle }, {
-            SessionManagement(this).saveSession(it)
-            goHome(it)
-        })
-    }
+//    override fun login(user: String, pass: String) {
+//        loginViewModel.loginUser(user, pass)
+//        loginViewModel.getUserLogin().observe({ lifecycle }, {
+//            SessionManagement(this).saveSession(it)
+//            goHome(it)
+//        })
+//    }
 
     override fun goHome(user: User) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DEEPLINK_HOME)).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra("user_name", user.name)
-            putExtra("user_surname", user.email)
+            putExtra(USER_NAME_KEY, user.name)
+            putExtra(USER_EMAIL_KEY, user.email)
         }
         startActivity(intent)
     }

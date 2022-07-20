@@ -12,7 +12,9 @@ import kotlinx.coroutines.launch
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     private lateinit var login: LiveData<User>
-    private lateinit var userViewModel: User
+
+    lateinit var user: User
+        private set
 
     val users = repository.users
 
@@ -20,30 +22,69 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     val inputPass = MutableLiveData<String>()
 
-    private val stateLogin = MutableLiveData<StateLogin>()
+    var stateLogin = MutableLiveData<StateLogin>()
 
     init {
         stateLogin.value = StateLogin.STARTED
     }
 
     fun login() {
+        if (validateInput()) return
+        getUser(inputName.value!!, inputPass.value!!)
+    }
+
+    private fun validateInput(): Boolean {
+        stateLogin.value = StateLogin.IN_PROGRESS
         if (inputName.value.isNullOrEmpty()) {
             // TODO: handle case
             Log.e("TRAILEAD", "Debe agregar ingresar un nombre")
-            return
+            failedLogin()
+            return true
         }
         if (inputPass.value.isNullOrEmpty()) {
             // TODO: handle case
+            failedLogin()
             Log.e("TRAILEAD", "Debe agregar ingresar un password")
-            return
+            return true
         }
-        getUser(inputName.value!!, inputPass.value!!)
+        return false
     }
 
     private fun getUser(inputName: String, inputPass: String) {
         viewModelScope.launch {
-            repository.get(inputName, inputPass)
+            when (val user = repository.get(inputName, inputPass)) {
+                null -> failedLogin()
+                else -> goLogin(user)
+            }
         }
+    }
+
+    private fun insertUser(user: User) {
+        viewModelScope.launch {
+            val result = repository.insert(user)
+            Log.e("TRAILEAD", "Insert result = $result")
+            login()
+        }
+    }
+
+    fun register() {
+        if (validateInput()) return
+        val user = User(
+            0,
+            name = inputName.value!!,
+            pass = inputPass.value!!,
+            email = "test_email"
+        )
+        insertUser(user)
+    }
+
+    private fun failedLogin() {
+        stateLogin.value = StateLogin.FAILED
+    }
+
+    private fun goLogin(user: User) {
+        this.user = user
+        stateLogin.value = StateLogin.SUCCESS
     }
 
     fun loginUser(user: String, pass: String) {
@@ -60,8 +101,8 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
      * Validate if exist user for user-pass
      */
     private fun validateUser(user: String, pass: String): LiveData<User> = liveData {
-        userViewModel = DataSource().login(user, pass)
-        emit(userViewModel)
+        this@LoginViewModel.user = DataSource().login(user, pass)
+        emit(this@LoginViewModel.user)
     }
 
     /**

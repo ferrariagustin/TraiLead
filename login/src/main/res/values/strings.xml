@@ -4,4 +4,5 @@
     <string name="password_hint">Contraseña</string>
     <string name="login_btn_text">Ingresar</string>
     <string name="host_app_name">trailead</string>
+    <string name="register_btn_text">Registrarse</string>
 </resources>
