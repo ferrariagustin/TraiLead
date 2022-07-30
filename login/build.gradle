@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
 }
@@ -8,13 +8,11 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.aferrari.trailead"
         minSdk 23
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -37,12 +35,20 @@ android {
 }
 
 dependencies {
-    implementation project(':login')
 
-//    AndroidX version
+//  AndroidX version
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
+
+//  Coroutine
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
+
+//  Lifecycle
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidx_lifecycle"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidx_lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_lifecycle"
+
 
 //    UI Version
     implementation "com.google.android.material:material:$material"
@@ -52,11 +58,13 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$ext_junit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
 
-//  ROOM
+
+    // ROOM
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.room:room-common:$roomVersion"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
     kapt("androidx.room:room-compiler:$roomVersion")
+
 }
