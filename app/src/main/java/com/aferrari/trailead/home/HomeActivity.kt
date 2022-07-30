@@ -38,7 +38,6 @@ class HomeActivity : AppCompatActivity() {
 
     private fun logout() {
         SessionManagement(this).removeSession()
-        finish()
         goLogin()
     }
 
@@ -46,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DEEPLINK_LOGIN))
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+        finish()
     }
 
     private fun initComponent() {
