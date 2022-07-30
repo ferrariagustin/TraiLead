@@ -38,14 +38,13 @@ class HomeActivity : AppCompatActivity() {
 
     private fun logout() {
         SessionManagement(this).removeSession()
+        finish()
         goLogin()
     }
 
     private fun goLogin() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DEEPLINK_LOGIN))
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 

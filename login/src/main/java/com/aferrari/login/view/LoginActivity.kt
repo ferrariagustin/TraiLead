@@ -92,10 +92,12 @@ class LoginActivity : AppCompatActivity(), Login, LifecycleOwner {
 
     override fun goHome(user: User) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(DEEPLINK_HOME)).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             putExtra(USER_NAME_KEY, user.name)
             putExtra(USER_EMAIL_KEY, user.email)
         }
         startActivity(intent)
+        finish()
     }
 }

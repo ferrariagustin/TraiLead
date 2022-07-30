@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TraiLead">
         <activity
-            android:name="com.aferrari.trailead.home.MainActivity"
+            android:name="com.aferrari.trailead.home.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
