@@ -50,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_medium"
+                    android:inputType="textPassword"
                     android:hint="@string/password_hint"
                     android:text="@={loginViewModel.inputPass}"
                     app:layout_constraintBottom_toBottomOf="parent"

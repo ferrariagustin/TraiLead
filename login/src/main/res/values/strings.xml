@@ -2,7 +2,12 @@
     <string name="app_name">TraiLead</string>
     <string name="user_hint">Usuario</string>
     <string name="password_hint">Contraseña</string>
+    <string name="repeate_password_hint">Repetir contraseña</string>
+    <string name="name_hint">Nombre</string>
+    <string name="last_name_hint">Apellido</string>
+    <string name="email_hint">Email</string>
     <string name="login_btn_text">Ingresar</string>
+    <string name="cancel_btn_text">Cancelar</string>
     <string name="host_app_name">trailead</string>
     <string name="register_btn_text">Registrarse</string>
 </resources>
