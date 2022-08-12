@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.aferrari.login.R
 import com.aferrari.login.databinding.LoginFragmentBinding
 import com.aferrari.login.db.User
@@ -20,9 +19,9 @@ import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
-import com.aferrari.login.viewmodel.LoginViewModel
+import com.aferrari.login.viewmodel.login.LoginViewModel
 import com.aferrari.login.viewmodel.LoginViewModelFactory
-import com.aferrari.login.viewmodel.StateLogin
+import com.aferrari.login.viewmodel.login.LoginState
 
 class LoginFragment : Fragment(), Login, LifecycleOwner {
 
@@ -50,13 +49,13 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
     }
 
     private fun observeLogin() {
-        loginViewModel.stateLogin.observe(viewLifecycleOwner) {
+        loginViewModel.loginState.observe(viewLifecycleOwner) {
             when (it!!) {
-                StateLogin.STARTED -> startLogin()
-                StateLogin.IN_PROGRESS -> showProgressBar()
-                StateLogin.FAILED -> errorLogin()
-                StateLogin.SUCCESS -> successLogin()
-                StateLogin.REGISTER -> goRegister()
+                LoginState.STARTED -> startLogin()
+                LoginState.IN_PROGRESS -> showProgressBar()
+                LoginState.FAILED -> errorLogin()
+                LoginState.SUCCESS -> successLogin()
+                LoginState.REGISTER -> goRegister()
             }
         }
     }

@@ -5,7 +5,7 @@
 
         <variable
             name="loginViewModel"
-            type="com.aferrari.login.viewmodel.LoginViewModel" />
+            type="com.aferrari.login.viewmodel.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

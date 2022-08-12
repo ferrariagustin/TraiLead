@@ -1,4 +1,4 @@
-package com.aferrari.login.viewmodel
+package com.aferrari.login.viewmodel.login
 
 import android.content.Context
 import android.util.Log
@@ -21,10 +21,10 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     val inputPass = MutableLiveData<String>()
 
-    var stateLogin = MutableLiveData<StateLogin>()
+    var loginState = MutableLiveData<LoginState>()
 
     init {
-        stateLogin.value = StateLogin.STARTED
+        loginState.value = LoginState.STARTED
     }
 
     fun login() {
@@ -33,7 +33,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     private fun validateInput(): Boolean {
-        stateLogin.value = StateLogin.IN_PROGRESS
+        loginState.value = LoginState.IN_PROGRESS
         if (inputName.value.isNullOrEmpty()) {
             // TODO: handle case
             Log.e("TRAILEAD", "Debe agregar ingresar un nombre")
@@ -67,7 +67,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     fun register() {
-        stateLogin.value = StateLogin.REGISTER
+        loginState.value = LoginState.REGISTER
 //        if (validateInput()) return
 //        val user = User(
 //            0,
@@ -79,12 +79,12 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     private fun failedLogin() {
-        stateLogin.value = StateLogin.FAILED
+        loginState.value = LoginState.FAILED
     }
 
     private fun goLogin(user: User) {
         this.user = user
-        stateLogin.value = StateLogin.SUCCESS
+        loginState.value = LoginState.SUCCESS
     }
 
     /**

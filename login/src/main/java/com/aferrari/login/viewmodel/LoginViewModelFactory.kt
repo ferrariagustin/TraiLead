@@ -3,6 +3,8 @@ package com.aferrari.login.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.db.UserRepository
+import com.aferrari.login.viewmodel.login.LoginViewModel
+import com.aferrari.login.viewmodel.register.RegistrationViewModel
 
 class LoginViewModelFactory(private val repository: UserRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

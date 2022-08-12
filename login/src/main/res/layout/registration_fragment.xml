@@ -4,7 +4,7 @@
 
         <variable
             name="registrationViewModel"
-            type="com.aferrari.login.viewmodel.RegistrationViewModel" />
+            type="com.aferrari.login.viewmodel.register.RegistrationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -107,6 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@string/cancel_btn_text"
+                    android:onClick="@{() -> registrationViewModel.cancel()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/register_btn"
                     app:layout_constraintStart_toStartOf="parent"
