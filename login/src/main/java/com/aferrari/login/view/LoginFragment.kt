@@ -11,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.aferrari.login.R
 import com.aferrari.login.databinding.LoginFragmentBinding
 import com.aferrari.login.db.User
@@ -54,8 +56,13 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
                 StateLogin.IN_PROGRESS -> showProgressBar()
                 StateLogin.FAILED -> errorLogin()
                 StateLogin.SUCCESS -> successLogin()
+                StateLogin.REGISTER -> goRegister()
             }
         }
+    }
+
+    private fun goRegister() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_loginFragment_to_registrationFragment)
     }
 
     private fun startLogin() {

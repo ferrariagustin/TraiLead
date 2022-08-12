@@ -9,8 +9,8 @@
         <entry key="login/src/main/res/layout/login.xml" value="0.14739583333333334" />
         <entry key="login/src/main/res/layout/login_activity.xml" value="0.14375738479716424" />
         <entry key="login/src/main/res/layout/login_activity2.xml" value="0.15520833333333334" />
-        <entry key="login/src/main/res/layout/login_fragment.xml" value="0.2942708333333333" />
-        <entry key="login/src/main/res/layout/registration_fragment.xml" value="0.2484375" />
+        <entry key="login/src/main/res/layout/login_fragment.xml" value="0.13229166666666667" />
+        <entry key="login/src/main/res/layout/registration_fragment.xml" value="0.13229166666666667" />
       </map>
     </option>
   </component>

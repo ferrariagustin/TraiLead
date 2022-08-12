@@ -67,14 +67,15 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     fun register() {
-        if (validateInput()) return
-        val user = User(
-            0,
-            name = inputName.value!!,
-            pass = inputPass.value!!,
-            email = "test_email"
-        )
-        insertUser(user)
+        stateLogin.value = StateLogin.REGISTER
+//        if (validateInput()) return
+//        val user = User(
+//            0,
+//            name = inputName.value!!,
+//            pass = inputPass.value!!,
+//            email = "test_email"
+//        )
+//        insertUser(user)
     }
 
     private fun failedLogin() {
