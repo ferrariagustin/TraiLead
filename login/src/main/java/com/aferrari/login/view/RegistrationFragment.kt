@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.aferrari.login.R
@@ -19,6 +20,7 @@ import com.aferrari.login.viewmodel.LoginViewModelFactory
 import com.aferrari.login.viewmodel.register.RegisterErrorState
 import com.aferrari.login.viewmodel.register.RegisterState
 import com.aferrari.login.viewmodel.register.RegistrationViewModel
+import com.google.android.material.textfield.TextInputEditText
 
 class RegistrationFragment : Fragment() {
 
@@ -48,43 +50,22 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun handleError() {
-        registrationViewModel.inputNameError.observe(viewLifecycleOwner) {
+        observeError(registrationViewModel.inputNameError, binding.userNameRgInputText)
+        observeError(registrationViewModel.inputLastNameError, binding.lastNameRgInputText)
+        observeError(registrationViewModel.inputEmailError, binding.emailRgInputText)
+        observeError(registrationViewModel.inputPassError, binding.passwordRgInputText)
+        observeError(registrationViewModel.inputRepeatPassError, binding.repeatPasswordRgInputText)
+    }
+
+    private fun observeError(
+        registerErrorState: MutableLiveData<RegisterErrorState>,
+        inputEditText: TextInputEditText
+    ) {
+        registerErrorState.observe(viewLifecycleOwner) {
             when (it) {
-                RegisterErrorState.ERROR -> binding.userNameRgInputText.backgroundTintList =
+                RegisterErrorState.ERROR -> inputEditText.backgroundTintList =
                     ColorStateList.valueOf(Color.RED)
-                RegisterErrorState.DONE -> binding.userNameRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.GRAY)
-            }
-        }
-        registrationViewModel.inputLastNameError.observe(viewLifecycleOwner) {
-            when (it) {
-                RegisterErrorState.ERROR -> binding.lastNameRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.RED)
-                RegisterErrorState.DONE -> binding.lastNameRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.GRAY)
-            }
-        }
-        registrationViewModel.inputEmailError.observe(viewLifecycleOwner) {
-            when (it) {
-                RegisterErrorState.ERROR -> binding.emailRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.RED)
-                RegisterErrorState.DONE -> binding.emailRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.GRAY)
-            }
-        }
-        registrationViewModel.inputPassError.observe(viewLifecycleOwner) {
-            when (it) {
-                RegisterErrorState.ERROR -> binding.passwordRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.RED)
-                RegisterErrorState.DONE -> binding.passwordRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.GRAY)
-            }
-        }
-        registrationViewModel.inputRepeatPassError.observe(viewLifecycleOwner) {
-            when (it) {
-                RegisterErrorState.ERROR -> binding.repeatPasswordRgInputText.backgroundTintList =
-                    ColorStateList.valueOf(Color.RED)
-                RegisterErrorState.DONE -> binding.repeatPasswordRgInputText.backgroundTintList =
+                RegisterErrorState.DONE -> inputEditText.backgroundTintList =
                     ColorStateList.valueOf(Color.GRAY)
             }
         }
@@ -107,7 +88,8 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun successRegister() {
-        Toast.makeText(requireContext(), "Registrado", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Registrado Correctamente", Toast.LENGTH_SHORT).show()
+        goLogin()
     }
 
     private fun goLogin() {

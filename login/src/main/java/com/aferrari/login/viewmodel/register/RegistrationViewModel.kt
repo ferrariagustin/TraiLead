@@ -1,10 +1,14 @@
 package com.aferrari.login.viewmodel.register
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.User
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.db.UserType
+import com.aferrari.login.utils.StringUtils.EMPTY_STRING
+import kotlinx.coroutines.launch
 import java.util.*
 
 class RegistrationViewModel(private val repository: UserRepository) : ViewModel() {
@@ -38,20 +42,50 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
         registerState.value = RegisterState.STARTED
     }
 
+    /**
+     * Binding method to Cancel button
+     */
     fun cancel() {
-        cleanView()
+        restoreInputState()
+        restoreInputStateValues()
         goLogin()
     }
 
-    fun register() {
+    /**
+     * Binding method to Registration button
+     */
+    fun initRegistration() {
         restoreInputState()
         if (!validateInput()) {
             registerState.value = RegisterState.FAILED
+            return
         }
-        // registrar user
-        registerState.value = RegisterState.SUCCESS
+        register()
     }
 
+    private fun register() {
+        val result = insertUser()
+        Log.e("TRAILEAD", "Register result = $result")
+        registerState.value = RegisterState.SUCCESS
+        restoreInputState()
+        restoreInputStateValues()
+    }
+
+    private fun insertUser() = viewModelScope.launch {
+        repository.insert(
+            User(
+                id = 0,
+                name = inputName.value,
+                last_name = inputLastName.value,
+                email = inputEmail.value,
+                pass = inputPass.value
+            )
+        )
+    }
+
+    /**
+     * Restore all components on registration fragment
+     */
     private fun restoreInputState() {
         inputNameError.value = RegisterErrorState.DONE
         inputLastNameError.value = RegisterErrorState.DONE
@@ -60,14 +94,27 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
         inputRepeatPassError.value = RegisterErrorState.DONE
     }
 
+    /**
+     * Restore all components on registration fragment
+     */
+    private fun restoreInputStateValues() {
+        inputName.value = EMPTY_STRING
+        inputLastName.value = EMPTY_STRING
+        inputEmail.value = EMPTY_STRING
+        inputPass.value = EMPTY_STRING
+        inputRepeatPass.value = EMPTY_STRING
+    }
+
+    /**
+     * navigate to Login
+     */
     private fun goLogin() {
         registerState.value = RegisterState.CANCEL
     }
 
-    private fun cleanView() {
-        // TODO: Clean all components on register view
-    }
-
+    /**
+     * Update label on switch and apply lowercase
+     */
     fun switchTypeUser() {
         userType = when (userType) {
             UserType.TRAINEE -> {
@@ -80,6 +127,9 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
         inputUserType.value = userType.name.lowercase(Locale.ROOT)
     }
 
+    /**
+     * Validate input on textInput Registration fragment
+     */
     private fun validateInput(): Boolean {
         var isValidInput = true
         registerState.value = RegisterState.IN_PROGRESS

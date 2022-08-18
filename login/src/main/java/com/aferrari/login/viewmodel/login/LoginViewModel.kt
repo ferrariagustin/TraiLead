@@ -1,13 +1,11 @@
 package com.aferrari.login.viewmodel.login
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.User
 import com.aferrari.login.db.UserRepository
-import com.aferrari.login.session.SessionManagement
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
@@ -90,6 +88,14 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     /**
      * return User for userId
      */
-    fun getUser(userId: Int, context: Context): User? = SessionManagement(context).getUser(userId)
-
+    fun getUser(userId: Int): User? {
+        var resultUser: User? = null
+        viewModelScope.launch {
+            resultUser = repository.get(userId)
+        }
+        if (resultUser != null) {
+            user = resultUser as User
+        }
+        return resultUser
+    }
 }

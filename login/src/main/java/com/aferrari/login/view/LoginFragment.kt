@@ -19,9 +19,9 @@ import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
-import com.aferrari.login.viewmodel.login.LoginViewModel
 import com.aferrari.login.viewmodel.LoginViewModelFactory
 import com.aferrari.login.viewmodel.login.LoginState
+import com.aferrari.login.viewmodel.login.LoginViewModel
 
 class LoginFragment : Fragment(), Login, LifecycleOwner {
 
@@ -61,7 +61,8 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
     }
 
     private fun goRegister() {
-        NavHostFragment.findNavController(this).navigate(R.id.action_loginFragment_to_registrationFragment)
+        NavHostFragment.findNavController(this)
+            .navigate(R.id.action_loginFragment_to_registrationFragment)
     }
 
     private fun startLogin() {
@@ -96,9 +97,11 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
     private fun checkSession() {
         val userId = SessionManagement(requireContext()).getSession()
         if (userId != -1) {
-            val user = loginViewModel.getUser(userId, requireContext())
+            val user = loginViewModel.getUser(userId)
             if (user != null) {
                 goHome(user)
+            } else {
+                Toast.makeText(requireContext(), "Error on get Session", Toast.LENGTH_SHORT).show()
             }
         }
     }

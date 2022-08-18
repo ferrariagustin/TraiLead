@@ -21,9 +21,9 @@ class SessionManagement(context: Context) {
 
     fun saveSession(user: User) {
         editorSession.putInt(SESSION_KEY, user.id).commit()
-        editorSession.putString(SESSION_KEY_NAME, user.name).commit()
-        editorSession.putString(SESSION_KEY_EMAIL, user.email).commit()
-        editorSession.putString(SESSION_KEY_PASSWORD, user.pass).commit()
+//        editorSession.putString(SESSION_KEY_NAME, user.name).commit()
+//        editorSession.putString(SESSION_KEY_EMAIL, user.email).commit()
+//        editorSession.putString(SESSION_KEY_PASSWORD, user.pass).commit()
     }
 
     fun getSession(): Int = session.getInt(SESSION_KEY, DEFAULT_SESSION)
@@ -32,18 +32,18 @@ class SessionManagement(context: Context) {
         editorSession.putInt(SESSION_KEY, DEFAULT_SESSION).commit()
     }
 
-    fun getUser(userId: Int): User? {
-        val userId = getSession()
-        if (userId != DEFAULT_SESSION) {
-            return User(
-                userId,
-                session.getString(SESSION_KEY_NAME, "") as String,
-                session.getString(SESSION_KEY_EMAIL, "") as String,
-                session.getString(SESSION_KEY_PASSWORD, "") as String
-            )
-        }
-        return null
-    }
+//    fun getUser(userId: Int): User? {
+//        val userId = getSession()
+//        if (userId != DEFAULT_SESSION) {
+//            return User(
+//                userId,
+//                session.getString(SESSION_KEY_NAME, "") as String,
+//                session.getString(SESSION_KEY_EMAIL, "") as String,
+//                session.getString(SESSION_KEY_PASSWORD, "") as String
+//            )
+//        }
+//        return null
+//    }
 
 
 }
