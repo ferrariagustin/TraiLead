@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">TraiLead</string>
-    <string name="user_hint">Usuario</string>
     <string name="password_hint">Contraseña</string>
     <string name="repeate_password_hint">Repetir contraseña</string>
     <string name="name_hint">Nombre</string>

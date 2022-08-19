@@ -15,7 +15,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     val users = repository.users
 
-    val inputName = MutableLiveData<String>()
+    val inputEmail = MutableLiveData<String>()
 
     val inputPass = MutableLiveData<String>()
 
@@ -27,14 +27,14 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun login() {
         if (validateInput()) return
-        getUser(inputName.value!!, inputPass.value!!)
+        getUser(inputEmail.value!!, inputPass.value!!)
     }
 
     private fun validateInput(): Boolean {
         loginState.value = LoginState.IN_PROGRESS
-        if (inputName.value.isNullOrEmpty()) {
+        if (inputEmail.value.isNullOrEmpty()) {
             // TODO: handle case
-            Log.e("TRAILEAD", "Debe agregar ingresar un nombre")
+            Log.e("TRAILEAD", "Debe agregar ingresar un email")
             failedLogin()
             return true
         }
@@ -47,9 +47,9 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         return false
     }
 
-    private fun getUser(inputName: String, inputPass: String) {
+    private fun getUser(inputEmail: String, inputPass: String) {
         viewModelScope.launch {
-            when (val user = repository.get(inputName, inputPass)) {
+            when (val user = repository.get(inputEmail, inputPass)) {
                 null -> failedLogin()
                 else -> goLogin(user)
             }
@@ -64,16 +64,8 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun register() {
+    fun goRegister() {
         loginState.value = LoginState.REGISTER
-//        if (validateInput()) return
-//        val user = User(
-//            0,
-//            name = inputName.value!!,
-//            pass = inputPass.value!!,
-//            email = "test_email"
-//        )
-//        insertUser(user)
     }
 
     private fun failedLogin() {

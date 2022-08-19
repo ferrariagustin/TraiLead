@@ -8,6 +8,7 @@ import com.aferrari.login.db.User
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.db.UserType
 import com.aferrari.login.utils.StringUtils.EMPTY_STRING
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -64,14 +65,16 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
     }
 
     private fun register() {
-        val result = insertUser()
-        Log.e("TRAILEAD", "Register result = $result")
-        registerState.value = RegisterState.SUCCESS
-        restoreInputState()
-        restoreInputStateValues()
+        viewModelScope.launch {
+            val result = insertUser()
+            Log.e("TRAILEAD", "Register result = $result")
+            registerState.value = RegisterState.SUCCESS
+            restoreInputState()
+            restoreInputStateValues()
+        }
     }
 
-    private fun insertUser() = viewModelScope.launch {
+    private suspend fun insertUser() =
         repository.insert(
             User(
                 id = 0,
@@ -81,7 +84,6 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
                 pass = inputPass.value
             )
         )
-    }
 
     /**
      * Restore all components on registration fragment

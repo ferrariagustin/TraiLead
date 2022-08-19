@@ -30,14 +30,14 @@
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/user_input_text"
+                    android:id="@+id/user_email_input_text"
                     style="@style/traiLead_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_medium"
-                    android:hint="@string/user_hint"
-                    android:text="@={loginViewModel.inputName}"
+                    android:hint="@string/email_hint"
+                    android:text="@={loginViewModel.inputEmail}"
                     app:layout_constraintBottom_toTopOf="@id/password_input_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/user_input_text" />
+                    app:layout_constraintTop_toBottomOf="@id/user_email_input_text" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/login_btn"
@@ -75,7 +75,7 @@
                     style="@style/traiLead_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->loginViewModel.register()}"
+                    android:onClick="@{()->loginViewModel.goRegister()}"
                     android:text="@string/register_btn_text"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
