@@ -143,7 +143,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
             inputLastNameError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
-        if (!isValidInput(inputEmail)) {
+        if (!isValidEmail()) {
             inputEmailError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
@@ -151,11 +151,19 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
             inputPassError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
-        if (!isValidInput(inputRepeatPass)) {
+        if (!isValidRepeatPass()) {
             inputRepeatPassError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
         return isValidInput
+    }
+
+    private fun isValidRepeatPass(): Boolean =
+        !inputRepeatPass.value.isNullOrEmpty() && inputRepeatPass.value.equals(inputPass.value)
+
+    private fun isValidEmail(): Boolean {
+        return !inputEmail.value.isNullOrEmpty()
+                && android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail.value).matches()
     }
 
     private fun isValidInput(input: MutableLiveData<String>): Boolean {
