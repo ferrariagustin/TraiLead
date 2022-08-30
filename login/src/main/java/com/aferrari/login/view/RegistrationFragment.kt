@@ -1,12 +1,12 @@
 package com.aferrari.login.view
 
+import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -75,30 +75,54 @@ class RegistrationFragment : Fragment() {
         registrationViewModel.registerState.observe(viewLifecycleOwner) {
             when (it!!) {
                 RegisterState.STARTED -> startRegister()
-                RegisterState.IN_PROGRESS -> showProgressBar()
-                RegisterState.FAILED -> errorRegister()
-                RegisterState.SUCCESS -> successRegister()
-                RegisterState.CANCEL -> goLogin()
+                RegisterState.IN_PROGRESS -> showProgressBar(View.VISIBLE)
+                RegisterState.FAILED -> errorRegister(View.GONE)
+                RegisterState.FAILED_USER_EXIST -> errorRegisterExistUser(View.GONE)
+                RegisterState.SUCCESS -> successRegister(View.GONE)
+                RegisterState.CANCEL -> goLogin(View.GONE)
             }
         }
     }
 
-    private fun errorRegister() {
-        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+    private fun errorRegisterExistUser(visibility: Int) {
+        showProgressBar(visibility)
+        showDialog("El usuario ${binding.emailRgInputText.text} ya existe")
     }
 
-    private fun successRegister() {
-        Toast.makeText(requireContext(), "Registrado Correctamente", Toast.LENGTH_SHORT).show()
-        goLogin()
+    private fun errorRegister(visibility: Int) {
+        showProgressBar(visibility)
+        showDialog("Algo salió mal, inténtelo más tarde")
     }
 
-    private fun goLogin() {
+    private fun successRegister(visibility: Int) {
+        showProgressBar(visibility)
+        showDialog("El usuario ${binding.emailRgInputText.text} ha sido creado correctamente")
+        goLogin(View.GONE)
+    }
+
+    /**
+     * Show dialog with result of registration operation
+     */
+    private fun showDialog(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+
+        with(builder)
+        {
+            setTitle("Registrarse")
+            setMessage(message)
+            setNeutralButton("Entendido", null)
+            show()
+        }
+    }
+
+    private fun goLogin(visibility: Int) {
+        showProgressBar(visibility)
         NavHostFragment.findNavController(this)
             .navigate(R.id.action_registrationFragment_to_loginFragment)
     }
 
-    private fun showProgressBar() {
-        // TODO: implement
+    private fun showProgressBar(visibility: Int) {
+        binding.progressBar.visibility = visibility
     }
 
     private fun startRegister() {

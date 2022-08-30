@@ -25,6 +25,9 @@ interface UserDao {
     @Query("SELECT * FROM user_data_table WHERE user_email = :user_email and user_pass = :user_pass")
     suspend fun getUser(user_email: String, user_pass: String): User?
 
+    @Query("SELECT * FROM user_data_table WHERE user_email = :user_email")
+    suspend fun getUser(user_email: String): User?
+
     @Query("SELECT * FROM user_data_table")
     fun getAllUser(): LiveData<List<User>>
 }

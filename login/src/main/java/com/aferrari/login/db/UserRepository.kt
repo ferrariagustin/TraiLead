@@ -6,6 +6,8 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun get(user_id: Int): User? = dao.getUser(user_id)
 
+    suspend fun get(user_email: String): User? = dao.getUser(user_email)
+
     suspend fun get(user_email: String, user_pass: String) = dao.getUser(user_email, user_pass)
 
     suspend fun insert(user: User): Long = dao.insertUser(user)
