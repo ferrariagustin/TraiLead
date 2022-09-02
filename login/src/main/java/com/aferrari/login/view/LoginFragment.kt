@@ -101,6 +101,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
             if (user != null) {
                 goHome(user)
             } else {
+                // TODO: Crear un dialogo general para poder usar desde diferentes puntos de la app
                 Toast.makeText(requireContext(), "Error on get Session", Toast.LENGTH_SHORT).show()
             }
         }
