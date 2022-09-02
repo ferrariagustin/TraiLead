@@ -11,4 +11,13 @@
     <string name="register_btn_text">Registrarse</string>
     <string name="trainee">Trainee</string>
     <string name="leader">Leader</string>
+
+    <!--    Register    -->
+    <string name="error_register">Existe uno o más campos incorrectos, por favor modique los valores y vuelva a registrarse</string>
+    <string name="error_user_existe_register">El usuario ya existe</string>
+    <string name="success_register">El usuario ha sido creado exitosamente</string>
+
+    <!--    Login    -->
+    <string name="error_login">El usuario o la contraseña que ha ingresado es incorrecta, por favor vuelva a intentarlo</string>
+
 </resources>

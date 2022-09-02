@@ -17,12 +17,14 @@ import com.aferrari.login.databinding.LoginFragmentBinding
 import com.aferrari.login.db.User
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
+import com.aferrari.login.dialog.Dialog
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.login.viewmodel.LoginViewModelFactory
 import com.aferrari.login.viewmodel.login.LoginState
 import com.aferrari.login.viewmodel.login.LoginViewModel
 
+// TODO: don't working back navigation
 class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private lateinit var binding: LoginFragmentBinding
@@ -37,7 +39,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         val dao = UserDataBase.getInstance(requireActivity()).userDao
         val repository = UserRepository(dao)
         val factory = LoginViewModelFactory(repository)
-        loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
         binding.loginViewModel = loginViewModel
         binding.lifecycleOwner = this
         return binding.root
@@ -76,7 +78,11 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
     }
 
     private fun errorLogin() {
-        Toast.makeText(requireContext(), "Login Error", Toast.LENGTH_SHORT).show()
+        Dialog().showDialog(
+            getString(R.string.login_btn_text),
+            getString(R.string.error_login),
+            requireContext()
+        )
         binding.progressBar.visibility = View.GONE
     }
 
@@ -111,8 +117,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(StringUtils.DEEPLINK_HOME)).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            putExtra(StringUtils.USER_NAME_KEY, user.name)
-            putExtra(StringUtils.USER_EMAIL_KEY, user.email)
+            putExtra(StringUtils.USER_ID_KEY, user.id)
         }
         startActivity(intent)
         requireActivity().finish()

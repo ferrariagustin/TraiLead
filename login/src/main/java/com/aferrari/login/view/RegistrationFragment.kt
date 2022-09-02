@@ -22,6 +22,7 @@ import com.aferrari.login.viewmodel.register.RegisterState
 import com.aferrari.login.viewmodel.register.RegistrationViewModel
 import com.google.android.material.textfield.TextInputEditText
 
+// TODO: don't working back navigation
 class RegistrationFragment : Fragment() {
 
     private lateinit var binding: RegistrationFragmentBinding
@@ -87,7 +88,8 @@ class RegistrationFragment : Fragment() {
     private fun errorRegisterExistUser() {
         showProgressBar(View.GONE)
         Dialog().showDialog(
-            "El usuario ${binding.emailRgInputText.text} ya existe",
+            getString(R.string.register_btn_text),
+            getString(R.string.error_user_existe_register),
             requireContext()
         )
     }
@@ -95,15 +97,16 @@ class RegistrationFragment : Fragment() {
     private fun errorRegister() {
         showProgressBar(View.GONE)
         Dialog().showDialog(
-            "Existe uno o más campos incorrectos, " +
-                    "por favor modique los valores y vuelva a registrarse", requireContext()
+            getString(R.string.register_btn_text),
+            getString(R.string.error_register), requireContext()
         )
     }
 
     private fun successRegister() {
         showProgressBar(View.GONE)
         Dialog().showDialog(
-            "El usuario ${binding.emailRgInputText.text} ha sido creado correctamente",
+            getString(R.string.register_btn_text),
+            getString(R.string.success_register),
             requireContext()
         )
         goLogin()

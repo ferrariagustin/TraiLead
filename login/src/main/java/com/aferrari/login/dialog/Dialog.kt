@@ -7,12 +7,12 @@ class Dialog {
     /**
      * Show dialog with result of registration operation
      */
-    fun showDialog(message: String, context: Context) {
+    fun showDialog(title: String,message: String, context: Context) {
         val builder = AlertDialog.Builder(context)
 
         with(builder)
         {
-            setTitle("Registrarse")
+            setTitle(title)
             setMessage(message)
             setNeutralButton("Entendido", null)
             show()

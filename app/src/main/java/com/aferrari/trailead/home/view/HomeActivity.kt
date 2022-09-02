@@ -1,37 +1,50 @@
-package com.aferrari.trailead.home
+package com.aferrari.trailead.home.view
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import com.aferrari.login.db.UserDataBase
+import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils.DEEPLINK_LOGIN
 import com.aferrari.login.utils.StringUtils.USER_NAME_KEY
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.HomeActivityBinding
+import com.aferrari.trailead.home.viewmodel.HomeViewModel
+import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
 /**
  * Moved to other package or module
  */
+// TODO: don't working back and restore, remove session
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var homeActivityBinding: HomeActivityBinding
+    private lateinit var binding: HomeActivityBinding
 
-    // TODO: Resolve issue with loop with back
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
+        binding = DataBindingUtil.setContentView(this, R.layout.home_activity)
+        val dao = UserDataBase.getInstance(this).userDao
+        val repository = UserRepository(dao)
+        val factory = HomeViewModelFactory(repository)
+        homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
+        binding.lifecycleOwner = this
         initComponent()
         initListeners()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     private fun initListeners() {
-        homeActivityBinding.logoutBtn.setOnClickListener {
+        binding.logoutBtn.setOnClickListener {
             logout()
         }
     }
@@ -49,6 +62,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initComponent() {
-        homeActivityBinding.UserName.text = intent.extras?.get(USER_NAME_KEY) as String
+        homeViewModel.getUser(intent.extras?.get(USER_NAME_KEY) as String)
     }
 }

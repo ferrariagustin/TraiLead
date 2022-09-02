@@ -13,8 +13,5 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity)
-//        supportFragmentManager.beginTransaction()
-//            .add(R.id.fragment_container_id, LoginFragment())
-//            .commit()
     }
 }
