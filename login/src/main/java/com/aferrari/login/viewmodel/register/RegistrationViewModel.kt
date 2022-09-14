@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.db.User
-import com.aferrari.login.db.UserRepository
-import com.aferrari.login.db.UserType
+import com.aferrari.login.db.*
 import com.aferrari.login.utils.StringUtils.EMPTY_STRING
 import kotlinx.coroutines.launch
 import java.util.*
@@ -69,7 +67,13 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
                 registerState.value = RegisterState.FAILED_USER_EXIST
                 return@launch
             }
-            val result = insertUser()
+            var result: Long? = null
+            if (userType == UserType.TRAINEE) {
+                result = insertTrainee()
+            }
+            if (userType == UserType.LEADER) {
+                result = insertLeader()
+            }
             Log.e("TRAILEAD", "Register result = $result")
             registerState.value = RegisterState.SUCCESS
             restoreInputState()
@@ -86,17 +90,25 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
         return result != null
     }
 
-    private suspend fun insertUser() {
-        repository.insert(
-            User(
-                id = 0,
-                name = inputName.value,
-                last_name = inputLastName.value,
-                email = inputEmail.value,
-                pass = inputPass.value
-            )
+    private suspend fun insertLeader(): Long = repository.insertLeader(
+        Leader(
+            id = 0,
+            name = inputName.value!!,
+            lastName = inputLastName.value!!,
+            email = inputEmail.value!!,
+            pass = inputPass.value!!
         )
-    }
+    )
+
+    private suspend fun insertTrainee(): Long = repository.insertTrainee(
+        Trainee(
+            id = 0,
+            name = inputName.value!!,
+            lastName = inputLastName.value!!,
+            email = inputEmail.value!!,
+            pass = inputPass.value!!,
+        )
+    )
 
     /**
      * Restore all components on registration fragment

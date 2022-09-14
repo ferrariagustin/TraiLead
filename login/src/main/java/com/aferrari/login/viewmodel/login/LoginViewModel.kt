@@ -56,14 +56,6 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    private fun insertUser(user: User) {
-        viewModelScope.launch {
-            val result = repository.insert(user)
-            Log.e("TRAILEAD", "Insert result = $result")
-            login()
-        }
-    }
-
     fun goRegister() {
         loginState.value = LoginState.REGISTER
     }
