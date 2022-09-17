@@ -7,7 +7,7 @@ class Dialog {
     /**
      * Show dialog with result of registration operation
      */
-    fun showDialog(title: String,message: String, context: Context) {
+    fun showDialog(title: String, message: String, context: Context) {
         val builder = AlertDialog.Builder(context)
 
         with(builder)

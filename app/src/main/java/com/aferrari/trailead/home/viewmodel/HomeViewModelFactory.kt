@@ -10,6 +10,12 @@ class HomeViewModelFactory(private val repository: UserRepository) : ViewModelPr
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
             return HomeViewModel(repository) as T
         }
+        if (modelClass.isAssignableFrom(HomeLeaderViewModel::class.java)) {
+            return HomeLeaderViewModel(repository) as T
+        }
+        if (modelClass.isAssignableFrom(HomeTraineeViewModel::class.java)) {
+            return HomeTraineeViewModel(repository) as T
+        }
         throw IllegalArgumentException("Unknown View Model class")
     }
 }

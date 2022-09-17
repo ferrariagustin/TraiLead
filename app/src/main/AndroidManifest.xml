@@ -19,15 +19,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.view.HomeActivity"
+            android:name=".home.router.RouterHomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="home"
+                    android:scheme="@string/scheme_app_name" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".home.view.trainee.TraineeActivity"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data
-                    android:host="home"
-                    android:scheme="@string/host_app_name" />
+                    android:host="@string/host_trainee_home"
+                    android:scheme="@string/scheme_app_name" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".home.view.leader.LeaderActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="@string/host_leader_home"
+                    android:scheme="@string/scheme_app_name" />
             </intent-filter>
         </activity>
     </application>

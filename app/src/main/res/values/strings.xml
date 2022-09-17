@@ -3,6 +3,6 @@
     <string name="user_email_hint">Usuario</string>
     <string name="password_hint">Contraseña</string>
     <string name="login_btn_text">Ingresar</string>
-    <string name="host_app_name">trailead</string>
+    <string name="scheme_app_name">trailead</string>
     <string name="logout_btn_text">Cerrar Session</string>
 </resources>

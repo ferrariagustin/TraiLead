@@ -19,7 +19,7 @@ class HomeViewModel(private val repository: UserRepository) : ViewModel() {
             when (user?.userType) {
                 UserType.LEADER -> homeState.value = HomeState.LEADER
                 UserType.TRAINEE -> homeState.value = HomeState.TRAINEE
-                else -> homeState.value = HomeState.NONE
+                else -> homeState.value = HomeState.ERROR
             }
         }
     }
