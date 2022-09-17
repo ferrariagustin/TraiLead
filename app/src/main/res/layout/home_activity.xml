@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="user"
-            type="com.aferrari.login.db.User" />
+            name="homeViewModel"
+            type="com.aferrari.trailead.home.viewmodel.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

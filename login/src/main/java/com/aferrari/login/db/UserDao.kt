@@ -3,28 +3,57 @@ package com.aferrari.login.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-
 @Dao
 interface UserDao {
 
     @Insert
-    suspend fun insertUser(user: User): Long
+    suspend fun insertLeader(leader: Leader): Long
+
+    @Insert
+    suspend fun insertTrainee(trainee: Trainee): Long
 
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun updateLeader(leader: Leader)
+
+    @Update
+    suspend fun updateTrainee(trainee: Trainee)
 
     @Delete
-    suspend fun deleteUser(user: User)
+    suspend fun deleteLeader(leader: Leader)
 
-    @Query("DELETE FROM user_data_table")
-    suspend fun deleteAll()
+    @Delete
+    suspend fun deleteTrainee(trainee: Trainee)
 
-    @Query("SELECT * FROM user_data_table WHERE user_id = :user_id")
-    suspend fun getUser(user_id: Int): User?
+    @Query("DELETE FROM leader_data_table")
+    suspend fun deleteAllLeader()
 
-    @Query("SELECT * FROM user_data_table WHERE user_name = :user_name and user_pass = :user_pass")
-    suspend fun getUser(user_name: String, user_pass: String): User?
+    @Query("DELETE FROM trainee_data_table")
+    suspend fun deleteAllTrainee()
 
-    @Query("SELECT * FROM user_data_table")
-    fun getAllUser(): LiveData<List<User>>
+    @Query("SELECT * FROM leader_data_table")
+    fun getLeadersWithTrainee(): List<LeaderWithTrainee>
+
+    @Query("SELECT * FROM leader_data_table WHERE leader_id = :leader_id")
+    suspend fun getLeader(leader_id: Int): Leader?
+
+    @Query("SELECT * FROM trainee_data_table WHERE trainee_id = :trainee_id")
+    suspend fun getTrainee(trainee_id: Int): Trainee?
+
+    @Query("SELECT * FROM leader_data_table WHERE leader_email = :user_email and leader_pass = :user_pass")
+    suspend fun getLeader(user_email: String, user_pass: String): Leader?
+
+    @Query("SELECT * FROM trainee_data_table WHERE trainee_email = :user_email and trainee_pass = :user_pass")
+    suspend fun getTrainee(user_email: String, user_pass: String): Trainee?
+
+    @Query("SELECT * FROM leader_data_table WHERE leader_email = :leader_email")
+    suspend fun getLeader(leader_email: String): Leader?
+
+    @Query("SELECT * FROM trainee_data_table WHERE trainee_email = :trainee_email")
+    suspend fun getTrainee(trainee_email: String): Trainee?
+
+    @Query("SELECT * FROM leader_data_table,trainee_data_table")
+    fun getAllLeader(): LiveData<List<Leader>>
+
+    @Query("SELECT * FROM leader_data_table,trainee_data_table")
+    fun getAllTrainee(): LiveData<List<Trainee>>
 }

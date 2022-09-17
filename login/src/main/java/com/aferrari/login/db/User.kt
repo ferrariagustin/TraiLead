@@ -1,14 +1,12 @@
 package com.aferrari.login.db
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "user_data_table")
-data class User(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "user_id") val id: Int,
-    @ColumnInfo(name = "user_name") val name: String?,
-    @ColumnInfo(name = "user_email") val email: String?,
-    @ColumnInfo(name = "user_pass") val pass: String?
-)
+// TODO: Pensar en como no duplicar información de leader y trainee para poder
+// hacer una sola consulta cuando querramos saber si el user existe
+interface User {
+    val id: Int
+    val name: String
+    val lastName: String
+    val email: String
+    val pass: String
+    val userType: UserType
+}
