@@ -10,13 +10,13 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: UserRepository) : ViewModel() {
     private val users = repository.users
-    var userLogged: User? = null
+    var user: User? = null
     var homeState = MutableLiveData<HomeState>()
 
     fun getUser(userId: Int) {
         viewModelScope.launch {
-            userLogged = repository.get(userId)
-            when (userLogged?.userType) {
+            user = repository.get(userId)
+            when (user?.userType) {
                 UserType.LEADER -> homeState.value = HomeState.LEADER
                 UserType.TRAINEE -> homeState.value = HomeState.TRAINEE
                 else -> homeState.value = HomeState.NONE

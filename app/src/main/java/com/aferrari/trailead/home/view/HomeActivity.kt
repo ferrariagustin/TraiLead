@@ -22,7 +22,6 @@ import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 /**
  * Moved to other package or module
  */
-// TODO: don't working back and restore, remove session
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: HomeActivityBinding
@@ -39,11 +38,6 @@ class HomeActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initComponent()
         initListeners()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
     }
 
     private fun initListeners() {

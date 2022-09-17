@@ -72,14 +72,13 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     /**
      * return User for userId
      */
-    fun getUser(userId: Int): User? {
-        var resultUser: User? = null
+    fun getUser(userId: Int) {
         viewModelScope.launch {
-            resultUser = repository.get(userId)
+            when (val user = repository.get(userId)) {
+                null -> failedLogin()
+                else -> goLogin(user)
+            }
         }
-        if (resultUser != null) {
-            user = resultUser as User
-        }
-        return resultUser
     }
+
 }

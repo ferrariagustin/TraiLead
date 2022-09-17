@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -50,6 +49,21 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         observeLogin()
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkSession()
+    }
+
+    override fun goHome(user: User) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(StringUtils.DEEPLINK_HOME)).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra(StringUtils.USER_ID_KEY, user.id)
+        }
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     private fun observeLogin() {
         loginViewModel.loginState.observe(viewLifecycleOwner) {
             when (it!!) {
@@ -73,7 +87,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private fun successLogin() {
         binding.progressBar.visibility = View.GONE
-        SessionManagement(requireContext()).saveSession(loginViewModel.user)
+        SessionManagement(requireContext()).saveSession(loginViewModel.user.id)
         goHome(loginViewModel.user)
     }
 
@@ -90,12 +104,6 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        checkSession()
-    }
-
     /**
      * Validate if exist some session in sharedPrefernce.
      * If exist a session, redirect to home
@@ -103,23 +111,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
     private fun checkSession() {
         val userId = SessionManagement(requireContext()).getSession()
         if (userId != -1) {
-            val user = loginViewModel.getUser(userId)
-            if (user != null) {
-                goHome(user)
-            } else {
-                // TODO: Crear un dialogo general para poder usar desde diferentes puntos de la app
-                Toast.makeText(requireContext(), "Error on get Session", Toast.LENGTH_SHORT).show()
-            }
+            loginViewModel.getUser(userId)
         }
-    }
-
-    override fun goHome(user: User) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(StringUtils.DEEPLINK_HOME)).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            putExtra(StringUtils.USER_ID_KEY, user.id)
-        }
-        startActivity(intent)
-        requireActivity().finish()
     }
 }
