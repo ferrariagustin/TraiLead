@@ -1,12 +1,21 @@
 package com.aferrari.login.db
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 
-@Database(entities = [Leader::class, Trainee::class], version = 2)
+@Database(
+    version = 2,
+    entities = [Leader::class, Trainee::class],
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2, spec = UserDataBase.AutoMigration1To2::class)
+    ],
+    exportSchema = true
+)
 abstract class UserDataBase : RoomDatabase() {
+
+    @DeleteTable(tableName = "user_data_table")
+    class AutoMigration1To2 : AutoMigrationSpec
 
     abstract val userDao: UserDao
 
