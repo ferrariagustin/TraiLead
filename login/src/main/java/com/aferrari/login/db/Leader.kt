@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
     )]
 )
 data class Leader(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "leader_id") override val id: Int,
     @ColumnInfo(name = "leader_name") override val name: String,
     @ColumnInfo(name = "leader_last_name") override val lastName: String,

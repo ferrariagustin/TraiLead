@@ -58,7 +58,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(StringUtils.DEEPLINK_HOME)).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            putExtra(StringUtils.USER_ID_KEY, user.id)
+            putExtra(StringUtils.USER_KEY, user)
         }
         startActivity(intent)
         requireActivity().finish()

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.aferrari.login.db.User
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
@@ -84,6 +85,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initComponent() {
-        homeViewModel.getUser(requireActivity().intent.extras?.get(StringUtils.USER_ID_KEY) as Int)
+        homeViewModel.getUser(requireActivity().intent.extras?.getSerializable(StringUtils.USER_KEY) as User)
     }
 }

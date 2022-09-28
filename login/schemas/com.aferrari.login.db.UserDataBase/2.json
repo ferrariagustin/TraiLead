@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "8955e6aae5d0f948243fba9870f5565e",
+    "identityHash": "94721c041bfdebd33d0cc8d8bd69851c",
     "entities": [
       {
         "tableName": "leader_data_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`leader_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `leader_name` TEXT NOT NULL, `leader_last_name` TEXT NOT NULL, `leader_email` TEXT NOT NULL, `leader_pass` TEXT NOT NULL, `userType` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`leader_id` INTEGER NOT NULL, `leader_name` TEXT NOT NULL, `leader_last_name` TEXT NOT NULL, `leader_email` TEXT NOT NULL, `leader_pass` TEXT NOT NULL, `userType` TEXT NOT NULL, PRIMARY KEY(`leader_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -49,7 +49,7 @@
           "columnNames": [
             "leader_id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [
           {
@@ -66,7 +66,7 @@
       },
       {
         "tableName": "trainee_data_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trainee_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `trainee_name` TEXT NOT NULL, `trainee_last_name` TEXT NOT NULL, `trainee_email` TEXT NOT NULL, `trainee_pass` TEXT NOT NULL, `trainee_leader_id` INTEGER, `position` TEXT NOT NULL, `userType` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trainee_id` INTEGER NOT NULL, `trainee_name` TEXT NOT NULL, `trainee_last_name` TEXT NOT NULL, `trainee_email` TEXT NOT NULL, `trainee_pass` TEXT NOT NULL, `trainee_leader_id` INTEGER, `position` TEXT NOT NULL, `userType` TEXT NOT NULL, PRIMARY KEY(`trainee_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -121,7 +121,7 @@
           "columnNames": [
             "trainee_id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [
           {
@@ -140,7 +140,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8955e6aae5d0f948243fba9870f5565e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '94721c041bfdebd33d0cc8d8bd69851c')"
     ]
   }
 }

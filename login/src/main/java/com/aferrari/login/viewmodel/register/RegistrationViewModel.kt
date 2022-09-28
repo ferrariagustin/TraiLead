@@ -92,7 +92,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private suspend fun insertLeader(): Long = repository.insertLeader(
         Leader(
-            id = 0,
+            id = getUserId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,
@@ -102,13 +102,22 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private suspend fun insertTrainee(): Long = repository.insertTrainee(
         Trainee(
-            id = 0,
+            id = getUserId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,
             pass = inputPass.value!!,
         )
     )
+
+    private fun getUserId(): Int {
+    val randomId = UUID.randomUUID().mostSignificantBits.toInt()
+        return if (randomId < 0 ) {
+            randomId * (-1)
+        } else {
+            randomId
+        }
+    }
 
     /**
      * Restore all components on registration fragment

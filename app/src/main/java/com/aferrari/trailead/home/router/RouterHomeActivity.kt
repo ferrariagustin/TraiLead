@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.R
+import com.aferrari.login.db.User
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.dialog.Dialog
@@ -34,7 +35,7 @@ class RouterHomeActivity : AppCompatActivity() {
     }
 
     private fun initComponent() {
-        homeViewModel.getUser(intent.extras?.get(StringUtils.USER_ID_KEY) as Int)
+        homeViewModel.getUser(intent.extras?.get(StringUtils.USER_KEY) as User)
     }
 
     private fun initListeners() {
