@@ -8,13 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderHomeFragmentBinding
+import com.aferrari.trailead.databinding.LeaderProfileFragmentBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
-
-class LeaderHomeFragment : Fragment() {
-
-    private lateinit var binding: LeaderHomeFragmentBinding
+class LeaderProfileFragment : Fragment() {
+    private lateinit var binding: LeaderProfileFragmentBinding
 
     private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
 
@@ -24,9 +22,14 @@ class LeaderHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.leader_home_fragment, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.leader_profile_fragment, container, false)
         binding.lifecycleOwner = this
+        binding.homeLeaderViewModel = homeLeaderViewModel
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        homeLeaderViewModel.initComponent()
+    }
 }

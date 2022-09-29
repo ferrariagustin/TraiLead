@@ -4,12 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.1486810551558753" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1425" />
         <entry key="app/src/main/res/layout/home_activity.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/layout/leader_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_home_fragment.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/leader_profile_fragment.xml" value="0.15217391304347827" />
         <entry key="app/src/main/res/layout/login_activity.xml" value="0.2066492495329484" />
         <entry key="app/src/main/res/layout/trainee_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/trainee_home_fragment.xml" value="0.203125" />
+        <entry key="app/src/main/res/menu/menu_item_navigation_leader.xml" value="0.20416666666666666" />
+        <entry key="app/src/main/res/menu/menu_item_toolbar_leader.xml" value="0.18541666666666667" />
         <entry key="login/src/main/res/layout/home_activity.xml" value="0.22291666666666668" />
         <entry key="login/src/main/res/layout/login.xml" value="0.14739583333333334" />
         <entry key="login/src/main/res/layout/login_activity.xml" value="0.14375738479716424" />

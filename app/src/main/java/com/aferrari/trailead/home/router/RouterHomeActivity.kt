@@ -12,6 +12,8 @@ import com.aferrari.login.db.UserRepository
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.home.StringUtils.StringUtils.JOIN_DEEPLINK
+import com.aferrari.trailead.home.StringUtils.StringUtils.LEADER_KEY
+import com.aferrari.trailead.home.StringUtils.StringUtils.TRAINEE_KEY
 import com.aferrari.trailead.home.viewmodel.HomeState
 import com.aferrari.trailead.home.viewmodel.HomeViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
@@ -75,7 +77,9 @@ class RouterHomeActivity : AppCompatActivity() {
                     resources.getString(R.string.scheme_app_name) + JOIN_DEEPLINK +
                             resources.getString(R.string.host_trainee_home)
                 )
-            )
+            ).apply {
+                putExtra(TRAINEE_KEY, homeViewModel.user)
+            }
         startActivity(intent)
         finish()
     }
@@ -87,7 +91,9 @@ class RouterHomeActivity : AppCompatActivity() {
                 resources.getString(R.string.scheme_app_name) + JOIN_DEEPLINK +
                         resources.getString(R.string.host_leader_home)
             )
-        )
+        ).apply {
+            putExtra(LEADER_KEY, homeViewModel.user)
+        }
         startActivity(intent)
         finish()
     }

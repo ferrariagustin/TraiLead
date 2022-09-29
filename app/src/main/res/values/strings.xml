@@ -5,4 +5,11 @@
     <string name="login_btn_text">Ingresar</string>
     <string name="scheme_app_name">trailead</string>
     <string name="logout_btn_text">Cerrar Session</string>
+    <string name="trainees">Trainees</string>
+    <string name="profile">Perfil</string>
+    <string name="init">Inicio</string>
+    <string name="more">Más</string>
+    <string name="close_session">Cerrar sesión</string>
+    <string name="empty_trainee_list">La lista de trainee esta vacía</string>
+    <string name="welcome_to_home">Bienvenido al menu principal</string>
 </resources>
