@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
     )]
 )
 data class Trainee(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "trainee_id") override val id: Int,
     @ColumnInfo(name = "trainee_name") override val name: String,
     @ColumnInfo(name = "trainee_last_name") override val lastName: String,

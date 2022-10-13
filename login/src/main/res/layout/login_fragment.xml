@@ -36,6 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_medium"
+                    android:inputType="textEmailAddress"
                     android:hint="@string/email_hint"
                     android:text="@={loginViewModel.inputEmail}"
                     app:layout_constraintBottom_toTopOf="@id/password_input_text"

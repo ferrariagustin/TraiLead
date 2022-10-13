@@ -1,12 +1,23 @@
 package com.aferrari.login.db
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 
-@Database(entities = [Leader::class, Trainee::class], version = 2)
+@Database(
+    version = 3,
+    entities = [Leader::class, Trainee::class],
+    autoMigrations = [
+        AutoMigration(from = 2, to = 3, spec = UserDataBase.AutoMigration2To3::class)
+    ],
+    exportSchema = true
+)
 abstract class UserDataBase : RoomDatabase() {
+
+    @DeleteTable(tableName = "user_data_table")
+    class AutoMigration1To2 : AutoMigrationSpec
+
+    class AutoMigration2To3 : AutoMigrationSpec
 
     abstract val userDao: UserDao
 
@@ -23,7 +34,6 @@ abstract class UserDataBase : RoomDatabase() {
                         UserDataBase::class.java,
                         "user_data_database"
                     )
-                        .fallbackToDestructiveMigration()
                         .build()
                 }
                 return instance

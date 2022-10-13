@@ -13,13 +13,13 @@ class HomeViewModel(private val repository: UserRepository) : ViewModel() {
     var user: User? = null
     var homeState = MutableLiveData<HomeState>()
 
-    fun getUser(userId: Int) {
+    fun getUser(user: User) {
+        this.user = user
         viewModelScope.launch {
-            user = repository.get(userId)
-            when (user?.userType) {
+            when (user.userType) {
                 UserType.LEADER -> homeState.value = HomeState.LEADER
                 UserType.TRAINEE -> homeState.value = HomeState.TRAINEE
-                else -> homeState.value = HomeState.NONE
+                else -> homeState.value = HomeState.ERROR
             }
         }
     }

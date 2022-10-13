@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_leader"
+    app:startDestination="@id/leaderHomeFragment">
+
+    <fragment
+        android:id="@+id/leaderHomeFragment"
+        android:name="com.aferrari.trailead.home.view.leader.LeaderHomeFragment"
+        android:label="LeaderHomeFragment" >
+        <action
+            android:id="@+id/action_leaderHomeFragment_to_leaderProfileFragment"
+            app:destination="@id/leaderProfileFragment" />
+        <action
+            android:id="@+id/action_leaderHomeFragment_to_leaderTraineeListFragment"
+            app:destination="@id/leaderTraineeListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderProfileFragment"
+        android:name="com.aferrari.trailead.home.view.leader.LeaderProfileFragment"
+        android:label="LeaderProfileFragment" >
+        <action
+            android:id="@+id/action_leaderProfileFragment_to_leaderHomeFragment"
+            app:destination="@id/leaderHomeFragment" />
+        <action
+            android:id="@+id/action_leaderProfileFragment_to_leaderTraineeListFragment"
+            app:destination="@id/leaderTraineeListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderTraineeListFragment"
+        android:name="com.aferrari.trailead.home.view.leader.LeaderTraineeListFragment"
+        android:label="LeaderTraineeListFragment" >
+        <action
+            android:id="@+id/action_leaderTraineeListFragment_to_leaderHomeFragment"
+            app:destination="@id/leaderHomeFragment" />
+        <action
+            android:id="@+id/action_leaderTraineeListFragment_to_leaderProfileFragment"
+            app:destination="@id/leaderProfileFragment" />
+    </fragment>
+</navigation>
