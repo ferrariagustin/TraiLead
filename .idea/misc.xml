@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/layout/leader_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_home_fragment.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_profile_fragment.xml" value="0.15217391304347827" />
+        <entry key="app/src/main/res/layout/leader_trainee_list_fragment.xml" value="0.15217391304347827" />
         <entry key="app/src/main/res/layout/login_activity.xml" value="0.2066492495329484" />
         <entry key="app/src/main/res/layout/trainee_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/trainee_home_fragment.xml" value="0.203125" />
