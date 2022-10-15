@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.view.leader
+package com.aferrari.trailead.home.view.leader.listTrainee
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderTraineeListFragmentBinding
+import com.aferrari.trailead.databinding.ListAllTraineeBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
-class LeaderTraineeListFragment : Fragment() {
-
-    private lateinit var binding: LeaderTraineeListFragmentBinding
+class ListAllTraineeFragment : Fragment() {
+    lateinit var binding: ListAllTraineeBinding
 
     private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
 
@@ -21,16 +21,26 @@ class LeaderTraineeListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.leader_trainee_list_fragment,
+                R.layout.list_all_trainee,
                 container,
                 false
             )
         binding.homeLeaderViewModel = homeLeaderViewModel
         binding.lifecycleOwner = this
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initComponents()
+    }
+
+    private fun initComponents() {
+        binding.traineesRecycleView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 }

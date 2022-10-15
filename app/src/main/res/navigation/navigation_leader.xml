@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/leaderTraineeListFragment"
-        android:name="com.aferrari.trailead.home.view.leader.LeaderTraineeListFragment"
+        android:name="com.aferrari.trailead.home.view.leader.listTrainee.LeaderTraineeListFragment"
         android:label="LeaderTraineeListFragment" >
         <action
             android:id="@+id/action_leaderTraineeListFragment_to_leaderHomeFragment"
@@ -36,5 +36,16 @@
         <action
             android:id="@+id/action_leaderTraineeListFragment_to_leaderProfileFragment"
             app:destination="@id/leaderProfileFragment" />
+        <action
+            android:id="@+id/action_leaderTraineeListFragment_to_listAllTraineeFragment"
+            app:destination="@id/listAllTraineeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listAllTraineeFragment"
+        android:name="com.aferrari.trailead.home.view.leader.listTrainee.ListAllTraineeFragment"
+        android:label="ListAllTraineeFragment" >
+        <action
+            android:id="@+id/action_listAllTraineeFragment_to_leaderTraineeListFragment"
+            app:destination="@id/leaderTraineeListFragment" />
     </fragment>
 </navigation>

@@ -4,12 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.1486810551558753" />
+        <entry key="../../../Library/Android/sdk/platforms/android-32/data/res/layout/simple_spinner_item.xml" value="0.18070652173913043" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1425" />
         <entry key="app/src/main/res/layout/home_activity.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/layout/leader_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_home_fragment.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_profile_fragment.xml" value="0.15217391304347827" />
         <entry key="app/src/main/res/layout/leader_trainee_list_fragment.xml" value="0.15217391304347827" />
+        <entry key="app/src/main/res/layout/list_all_trainee.xml" value="0.1" />
         <entry key="app/src/main/res/layout/login_activity.xml" value="0.2066492495329484" />
         <entry key="app/src/main/res/layout/trainee_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/trainee_home_fragment.xml" value="0.203125" />
@@ -20,7 +22,7 @@
         <entry key="login/src/main/res/layout/login_activity.xml" value="0.14375738479716424" />
         <entry key="login/src/main/res/layout/login_activity2.xml" value="0.15520833333333334" />
         <entry key="login/src/main/res/layout/login_fragment.xml" value="0.12648417154947922" />
-        <entry key="login/src/main/res/layout/registration_fragment.xml" value="0.4121612548828125" />
+        <entry key="login/src/main/res/layout/registration_fragment.xml" value="0.1" />
       </map>
     </option>
   </component>
