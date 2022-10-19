@@ -2,14 +2,8 @@ package com.aferrari.login.db
 
 class UserRepository(private val dao: UserDao) {
 
-    private val trainees = dao.getAllTrainee().value
-    private val leaders = dao.getAllLeader().value
-    val users = getAllUsers()
-
-    private fun getAllUsers(): List<User> = arrayListOf<User>().apply {
-        trainees?.let { this.addAll(it as List<User>) }
-        leaders?.let { this.addAll(it as List<User>) }
-    }
+    private lateinit var trainees: List<Trainee>
+    private lateinit var leaders: List<Leader>
 
     suspend fun get(user_id: Int): User? {
         dao.getLeader(user_id).apply {
@@ -71,8 +65,14 @@ class UserRepository(private val dao: UserDao) {
         dao.deleteAllTrainee()
     }
 
-    suspend fun getAllTrainee() = dao.getAllTrainee()
+    suspend fun getAllTrainee(): List<Trainee> {
+        trainees = dao.getAllTrainee()
+        return trainees
+    }
 
-    suspend fun getAllLeader() = dao.getAllLeader()
+    suspend fun getAllLeader(): List<Leader> {
+        leaders = dao.getAllLeader()
+        return leaders
+    }
 
 }

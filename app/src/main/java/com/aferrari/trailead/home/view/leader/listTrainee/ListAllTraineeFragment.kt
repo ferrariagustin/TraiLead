@@ -21,7 +21,7 @@ class ListAllTraineeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(
                 inflater,
@@ -42,5 +42,9 @@ class ListAllTraineeFragment : Fragment() {
     private fun initComponents() {
         binding.traineesRecycleView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        homeLeaderViewModel.getAllTrainee()
+        homeLeaderViewModel.listAllTrainee.observe(viewLifecycleOwner) {
+            binding.traineesRecycleView.adapter = ListTraineeAdapter(it)
+        }
     }
 }

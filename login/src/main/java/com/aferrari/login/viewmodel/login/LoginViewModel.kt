@@ -13,8 +13,6 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     lateinit var user: User
         private set
 
-    val users = repository.users
-
     val inputEmail = MutableLiveData<String>()
 
     val inputPass = MutableLiveData<String>()

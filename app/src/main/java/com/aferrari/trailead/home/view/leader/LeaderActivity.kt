@@ -3,6 +3,7 @@ package com.aferrari.trailead.home.view.leader
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.home.StringUtils.StringUtils.LEADER_KEY
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
+import com.google.android.material.navigation.NavigationBarView
 
 class LeaderActivity : AppCompatActivity() {
 
@@ -37,7 +39,7 @@ class LeaderActivity : AppCompatActivity() {
     }
 
     private fun initComponent() {
-        homeLeaderViewModel.getLeader(intent.extras?.get(LEADER_KEY) as? Leader)
+        homeLeaderViewModel.setLeader(intent.extras?.get(LEADER_KEY) as? Leader)
     }
 
     private fun initListener() {

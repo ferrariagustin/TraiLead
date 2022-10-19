@@ -1,6 +1,5 @@
 package com.aferrari.login.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -51,9 +50,10 @@ interface UserDao {
     @Query("SELECT * FROM trainee_data_table WHERE trainee_email = :trainee_email")
     suspend fun getTrainee(trainee_email: String): Trainee?
 
-    @Query("SELECT * FROM leader_data_table,trainee_data_table")
-    fun getAllLeader(): LiveData<List<Leader>>
+    @Query("SELECT * FROM trainee_data_table")
+    suspend fun getAllTrainee(): List<Trainee>
 
-    @Query("SELECT * FROM leader_data_table,trainee_data_table")
-    fun getAllTrainee(): LiveData<List<Trainee>>
+    @Query("SELECT * FROM leader_data_table")
+    suspend fun getAllLeader(): List<Leader>
+
 }

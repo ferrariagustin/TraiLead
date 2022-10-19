@@ -9,7 +9,6 @@ import com.aferrari.login.db.UserType
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: UserRepository) : ViewModel() {
-    private val users = repository.users
     var user: User? = null
     var homeState = MutableLiveData<HomeState>()
 
