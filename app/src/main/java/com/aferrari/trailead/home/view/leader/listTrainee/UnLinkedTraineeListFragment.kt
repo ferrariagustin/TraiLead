@@ -13,7 +13,7 @@ import com.aferrari.trailead.databinding.ListAllTraineeBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.UnLinkedTraineeListAdapter
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
-class ListAllTraineeFragment : Fragment() {
+class UnLinkedTraineeListFragment : Fragment() {
     lateinit var binding: ListAllTraineeBinding
 
     private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()

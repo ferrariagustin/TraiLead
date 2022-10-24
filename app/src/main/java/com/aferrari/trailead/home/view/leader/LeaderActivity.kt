@@ -81,7 +81,7 @@ class LeaderActivity : AppCompatActivity() {
     }
 
     private fun navigateToTrainee() {
-        binding.fragmentContainerId.findNavController().navigate(R.id.leaderTraineeListFragment)
+        binding.fragmentContainerId.findNavController().navigate(R.id.linkedTraineeListFragment)
     }
 
 }

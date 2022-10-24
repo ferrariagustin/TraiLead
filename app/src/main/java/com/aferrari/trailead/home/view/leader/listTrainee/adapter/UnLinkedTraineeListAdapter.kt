@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Trainee
 import com.aferrari.login.dialog.Dialog
@@ -60,7 +59,6 @@ class UnLinkedTraineeListAdapter(
     private fun getPositiveAction(trainee: Trainee) =
         DialogInterface.OnClickListener { _, _ ->
             viewModel.setLinkedTrainee(trainee)
-            findNavController(fragment).navigate(R.id.leaderTraineeListFragment)
         }
 
     override fun getItemCount(): Int = dataSet.size

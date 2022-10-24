@@ -14,7 +14,7 @@ import com.aferrari.trailead.databinding.LeaderTraineeListFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.LinkedTraineeListAdapter
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
-class LeaderTraineeListFragment : Fragment() {
+class LinkedTraineeListFragment : Fragment() {
 
     private lateinit var binding: LeaderTraineeListFragmentBinding
 
@@ -41,7 +41,7 @@ class LeaderTraineeListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initComponents()
         binding.addFloatingButton.setOnClickListener {
-            findNavController().navigate(R.id.listAllTraineeFragment)
+            findNavController().navigate(R.id.action_linkedTraineeListFragment_to_unLinkedTraineeListFragment)
         }
     }
 
@@ -50,6 +50,10 @@ class LeaderTraineeListFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         homeLeaderViewModel.getLinkedTrainees()
         homeLeaderViewModel.listLinkedTrainees.observe(viewLifecycleOwner) {
+            when (it.isEmpty()) {
+                true -> binding.emptyResultTextView.visibility = View.VISIBLE
+                false -> binding.emptyResultTextView.visibility = View.INVISIBLE
+            }
             binding.traineeListRecyclerView.adapter =
                 LinkedTraineeListAdapter(it, this, homeLeaderViewModel)
         }

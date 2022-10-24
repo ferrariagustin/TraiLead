@@ -12,8 +12,8 @@
             android:id="@+id/action_leaderHomeFragment_to_leaderProfileFragment"
             app:destination="@id/leaderProfileFragment" />
         <action
-            android:id="@+id/action_leaderHomeFragment_to_leaderTraineeListFragment"
-            app:destination="@id/leaderTraineeListFragment" />
+            android:id="@+id/action_leaderHomeFragment_to_linkedTraineeListFragment"
+            app:destination="@id/linkedTraineeListFragment" />
     </fragment>
     <fragment
         android:id="@+id/leaderProfileFragment"
@@ -23,29 +23,37 @@
             android:id="@+id/action_leaderProfileFragment_to_leaderHomeFragment"
             app:destination="@id/leaderHomeFragment" />
         <action
-            android:id="@+id/action_leaderProfileFragment_to_leaderTraineeListFragment"
-            app:destination="@id/leaderTraineeListFragment" />
+            android:id="@+id/action_leaderProfileFragment_to_linkedTraineeListFragment"
+            app:destination="@id/linkedTraineeListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/leaderTraineeListFragment"
-        android:name="com.aferrari.trailead.home.view.leader.listTrainee.LeaderTraineeListFragment"
-        android:label="LeaderTraineeListFragment" >
+        android:id="@+id/unLinkedTraineeListFragment"
+        android:name="com.aferrari.trailead.home.view.leader.listTrainee.UnLinkedTraineeListFragment"
+        android:label="UnLinkedTraineeListFragment" >
         <action
-            android:id="@+id/action_leaderTraineeListFragment_to_leaderHomeFragment"
+            android:id="@+id/action_unLinkedTraineeListFragment_to_linkedTraineeListFragment"
+            app:destination="@id/linkedTraineeListFragment"
+            app:enterAnim="@android:anim/slide_out_right"
+            app:exitAnim="@android:anim/slide_in_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/linkedTraineeListFragment"
+        android:name="com.aferrari.trailead.home.view.leader.listTrainee.LinkedTraineeListFragment"
+        android:label="LinkedTraineeListFragment" >
+        <action
+            android:id="@+id/action_linkedTraineeListFragment_to_leaderHomeFragment"
             app:destination="@id/leaderHomeFragment" />
         <action
-            android:id="@+id/action_leaderTraineeListFragment_to_leaderProfileFragment"
+            android:id="@+id/action_linkedTraineeListFragment_to_leaderProfileFragment"
             app:destination="@id/leaderProfileFragment" />
         <action
-            android:id="@+id/action_leaderTraineeListFragment_to_listAllTraineeFragment"
-            app:destination="@id/listAllTraineeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/listAllTraineeFragment"
-        android:name="com.aferrari.trailead.home.view.leader.listTrainee.ListAllTraineeFragment"
-        android:label="ListAllTraineeFragment" >
-        <action
-            android:id="@+id/action_listAllTraineeFragment_to_leaderTraineeListFragment"
-            app:destination="@id/leaderTraineeListFragment" />
+            android:id="@+id/action_linkedTraineeListFragment_to_unLinkedTraineeListFragment"
+            app:destination="@id/unLinkedTraineeListFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_in_left" />
     </fragment>
 </navigation>
