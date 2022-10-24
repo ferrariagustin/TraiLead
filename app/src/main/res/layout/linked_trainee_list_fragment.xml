@@ -36,6 +36,7 @@
             android:id="@+id/addFloatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="@dimen/floating_elevation_default_shadow"
             android:layout_margin="@dimen/margin_long"
             android:src="@drawable/ic_add_person"
             app:layout_constraintBottom_toBottomOf="parent"

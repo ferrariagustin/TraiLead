@@ -7,4 +7,9 @@
     <dimen name="text_size_small">16sp</dimen>
     <dimen name="text_size_medium">24sp</dimen>
     <dimen name="text_size_large">32sp</dimen>
+
+    <!-- Shadow -->
+    <dimen name="card_elevation_default_shadow">8dp</dimen>
+    <dimen name="floating_elevation_default_shadow">12dp</dimen>
+
 </resources>

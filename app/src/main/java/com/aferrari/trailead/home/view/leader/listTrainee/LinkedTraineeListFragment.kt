@@ -10,13 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderTraineeListFragmentBinding
+import com.aferrari.trailead.databinding.LinkedTraineeListFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.LinkedTraineeListAdapter
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
 class LinkedTraineeListFragment : Fragment() {
 
-    private lateinit var binding: LeaderTraineeListFragmentBinding
+    private lateinit var binding: LinkedTraineeListFragmentBinding
 
     private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
 
@@ -28,7 +28,7 @@ class LinkedTraineeListFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.leader_trainee_list_fragment,
+                R.layout.linked_trainee_list_fragment,
                 container,
                 false
             )
