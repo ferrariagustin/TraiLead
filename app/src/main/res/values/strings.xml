@@ -12,4 +12,10 @@
     <string name="close_session">Cerrar sesión</string>
     <string name="empty_trainee_list">La lista de trainee esta vacía</string>
     <string name="welcome_to_home">Bienvenido al menu principal</string>
+
+    <!-- Dialog -->
+    <string name="dialog_title_add_trainee">Agregar Trainee</string>
+    <string name="dialog_message_add_trainee">Esta seguro que desea agregar a %s como su nuevo Trainee</string>
+    <string name="dialog_title_removed_trainee">Eliminar Trainee</string>
+    <string name="dialog_message_removed_trainee">Esta seguro que desea eliminar a %s de su lista de Trainees</string>
 </resources>

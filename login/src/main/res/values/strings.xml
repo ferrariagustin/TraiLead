@@ -14,6 +14,9 @@
 
     <!--  Dialog  -->
     <string name="title_error">Error</string>
+    <string name="neutral_dialog">Entendido</string>
+    <string name="positive_dialog">OK</string>
+    <string name="negative_dialog">Cancelar</string>
 
     <!--    Register    -->
     <string name="error_register">Existe uno o más campos incorrectos, por favor modique los valores y vuelva a registrarse</string>

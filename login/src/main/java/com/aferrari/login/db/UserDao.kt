@@ -56,4 +56,15 @@ interface UserDao {
     @Query("SELECT * FROM leader_data_table")
     suspend fun getAllLeader(): List<Leader>
 
+    @Query("UPDATE trainee_data_table SET trainee_leader_id=:leader_id WHERE trainee_id = :trainee_id")
+    suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int)
+
+    @Query("SELECT * FROM trainee_data_table WHERE trainee_leader_id IS NULL")
+    suspend fun getUnlinkedTrainees(): List<Trainee>
+
+    @Query("SELECT * FROM trainee_data_table WHERE trainee_leader_id=:leader_id")
+    suspend fun getLinkedTrainees(leader_id: Int): List<Trainee>
+
+    @Query("UPDATE trainee_data_table SET trainee_leader_id = NULL WHERE trainee_id =:trainee_id")
+    suspend fun setUnlinkedTrainee(trainee_id: Int)
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ListAllTraineeBinding
+import com.aferrari.trailead.home.view.leader.listTrainee.adapter.UnLinkedTraineeListAdapter
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
 class ListAllTraineeFragment : Fragment() {
@@ -40,11 +41,12 @@ class ListAllTraineeFragment : Fragment() {
     }
 
     private fun initComponents() {
-        binding.traineesRecycleView.layoutManager =
+        binding.traineesLeadersNoneRecycleView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        homeLeaderViewModel.getAllTrainee()
-        homeLeaderViewModel.listAllTrainee.observe(viewLifecycleOwner) {
-            binding.traineesRecycleView.adapter = ListTraineeAdapter(it)
+        homeLeaderViewModel.getUnLinkedTrainees()
+        homeLeaderViewModel.listunlinkedTrainees.observe(viewLifecycleOwner) {
+            binding.traineesLeadersNoneRecycleView.adapter =
+                UnLinkedTraineeListAdapter(it, this, homeLeaderViewModel)
         }
     }
 }

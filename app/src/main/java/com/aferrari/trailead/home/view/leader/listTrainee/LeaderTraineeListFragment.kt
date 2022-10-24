@@ -8,8 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderTraineeListFragmentBinding
+import com.aferrari.trailead.home.view.leader.listTrainee.adapter.LinkedTraineeListAdapter
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
 class LeaderTraineeListFragment : Fragment() {
@@ -37,9 +39,19 @@ class LeaderTraineeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initComponents()
         binding.addFloatingButton.setOnClickListener {
             findNavController().navigate(R.id.listAllTraineeFragment)
         }
+    }
 
+    private fun initComponents() {
+        binding.traineeListRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        homeLeaderViewModel.getLinkedTrainees()
+        homeLeaderViewModel.listLinkedTrainees.observe(viewLifecycleOwner) {
+            binding.traineeListRecyclerView.adapter =
+                LinkedTraineeListAdapter(it, this, homeLeaderViewModel)
+        }
     }
 }

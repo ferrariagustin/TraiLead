@@ -22,7 +22,7 @@ import com.google.android.material.navigation.NavigationBarView
 
 class LeaderActivity : AppCompatActivity() {
 
-    private lateinit var binding: LeaderActivityBinding
+    internal lateinit var binding: LeaderActivityBinding
 
     private lateinit var homeLeaderViewModel: HomeLeaderViewModel
 

@@ -75,4 +75,16 @@ class UserRepository(private val dao: UserDao) {
         return leaders
     }
 
+    suspend fun setLinkedTrainee(trainee: Trainee, leader: Leader) {
+        dao.setLinkedTrainee(trainee.id, leader.id)
+    }
+
+    suspend fun getUnlinkedTrainees(): List<Trainee> {
+        return dao.getUnlinkedTrainees()
+    }
+
+    suspend fun getLinkedTrainees(leader: Leader): List<Trainee> = dao.getLinkedTrainees(leader.id)
+
+    suspend fun setUnlinkedTrainee(trainee: Trainee) = dao.setUnlinkedTrainee(trainee.id)
+
 }

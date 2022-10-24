@@ -19,6 +19,11 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     val listAllTrainee = MutableLiveData<List<Trainee>>()
 
+    val listLinkedTrainees = MutableLiveData<List<Trainee>>()
+
+    // Use with premium mode
+    val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
+
     fun initComponent() {
         nameUser.value = leader.name
         lastNameUser.value = leader.lastName
@@ -35,6 +40,43 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         viewModelScope.launch {
             listAllTrainee.value = repository.getAllTrainee()
         }
+    }
+
+    fun getUnLinkedTrainees() {
+        viewModelScope.launch {
+            listunlinkedTrainees.value = repository.getUnlinkedTrainees()
+        }
+    }
+
+    fun setLinkedTrainee(trainee: Trainee) {
+        viewModelScope.launch {
+            repository.setLinkedTrainee(trainee, leader)
+            updateList()
+        }
+    }
+
+    /**
+     * return trainee list of leader session now
+     */
+    fun getLinkedTrainees() {
+        viewModelScope.launch {
+            listLinkedTrainees.value = repository.getLinkedTrainees(leader)
+        }
+    }
+
+    /**
+     * Removed linked leaderId with trainee
+     */
+    fun setUnlinkedTrainee(trainee: Trainee) {
+        viewModelScope.launch {
+            repository.setUnlinkedTrainee(trainee)
+            updateList()
+        }
+    }
+
+    private fun updateList() {
+        getUnLinkedTrainees()
+        getLinkedTrainees()
     }
 
 }
