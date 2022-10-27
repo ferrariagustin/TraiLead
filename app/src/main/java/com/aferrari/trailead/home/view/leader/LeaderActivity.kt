@@ -1,9 +1,6 @@
 package com.aferrari.trailead.home.view.leader
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -11,14 +8,11 @@ import androidx.navigation.findNavController
 import com.aferrari.login.db.Leader
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
-import com.aferrari.login.session.SessionManagement
-import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.home.StringUtils.StringUtils.LEADER_KEY
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
-import com.google.android.material.navigation.NavigationBarView
 
 class LeaderActivity : AppCompatActivity() {
 
@@ -51,25 +45,6 @@ class LeaderActivity : AppCompatActivity() {
             }
             return@setOnItemSelectedListener true
         }
-
-        binding.leaderHomeToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.close_session_leader_toolbar_menu -> logout()
-            }
-            return@setOnMenuItemClickListener true
-        }
-    }
-
-    private fun logout() {
-        SessionManagement(this).removeSession()
-        goLogin()
-    }
-
-    private fun goLogin() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(StringUtils.DEEPLINK_LOGIN))
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
     }
 
     private fun navigateToProfile() {

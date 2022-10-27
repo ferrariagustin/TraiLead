@@ -11,11 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/leader_unlinked_trainees_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/toolbar_unlinked_trainees" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trainees_leaders_none_recycle_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/Theme.TraiLead"
+            android:layout_marginTop="@dimen/toolbar_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

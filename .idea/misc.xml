@@ -12,11 +12,13 @@
         <entry key="app/src/main/res/layout/leader_home_fragment.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_profile_fragment.xml" value="0.15217391304347827" />
         <entry key="app/src/main/res/layout/leader_trainee_list_fragment.xml" value="0.15217391304347827" />
+        <entry key="app/src/main/res/layout/linked_trainee_list_fragment.xml" value="0.1947463768115942" />
         <entry key="app/src/main/res/layout/list_all_trainee.xml" value="0.1" />
         <entry key="app/src/main/res/layout/login_activity.xml" value="0.2066492495329484" />
         <entry key="app/src/main/res/layout/trainee_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/trainee_home_fragment.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/unlinked_trainee_list.xml" value="0.1947463768115942" />
+        <entry key="app/src/main/res/layout/unlinked_trainee_list_fragment.xml" value="0.1947463768115942" />
         <entry key="app/src/main/res/menu/menu_item_navigation_leader.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/menu/menu_item_toolbar_leader.xml" value="0.18541666666666667" />
         <entry key="login/src/main/res/layout/home_activity.xml" value="0.22291666666666668" />

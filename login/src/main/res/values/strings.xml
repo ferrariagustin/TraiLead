@@ -11,6 +11,8 @@
     <string name="register_btn_text">Registrarse</string>
     <string name="trainee">Trainee</string>
     <string name="leader">Leader</string>
+    <string name="home">Inicio</string>
+    <string name="profile">Perfile</string>
 
     <!--  Dialog  -->
     <string name="title_error">Error</string>

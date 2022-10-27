@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.UnlinkedTraineeListFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.UnLinkedTraineeListAdapter
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+
 
 class UnLinkedTraineeListFragment : Fragment() {
     lateinit var binding: UnlinkedTraineeListFragmentBinding
@@ -47,6 +49,9 @@ class UnLinkedTraineeListFragment : Fragment() {
         homeLeaderViewModel.listunlinkedTrainees.observe(viewLifecycleOwner) {
             binding.traineesLeadersNoneRecycleView.adapter =
                 UnLinkedTraineeListAdapter(it, this, homeLeaderViewModel)
+        }
+        binding.leaderUnlinkedTraineesToolbar.setNavigationOnClickListener {
+            findNavController().navigate(R.id.action_unLinkedTraineeListFragment_to_linkedTraineeListFragment)
         }
     }
 }

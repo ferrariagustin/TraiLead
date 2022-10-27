@@ -24,15 +24,12 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
 
-    fun initComponent() {
-        nameUser.value = leader.name
-        lastNameUser.value = leader.lastName
-        emailUser.value = leader.email
-    }
-
     fun setLeader(leader: Leader?) {
         leader?.let {
             this.leader = it
+            nameUser.value = leader.name
+            lastNameUser.value = leader.lastName
+            emailUser.value = leader.email
         }
     }
 

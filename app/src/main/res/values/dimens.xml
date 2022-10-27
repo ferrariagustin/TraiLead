@@ -11,5 +11,7 @@
     <!-- Shadow -->
     <dimen name="card_elevation_default_shadow">8dp</dimen>
     <dimen name="floating_elevation_default_shadow">12dp</dimen>
+    <dimen name="toolbar_size">48dp</dimen>
+    <dimen name="bottom_navigation_size">48dp</dimen>
 
 </resources>
