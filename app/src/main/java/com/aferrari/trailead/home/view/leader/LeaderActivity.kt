@@ -11,14 +11,16 @@ import com.aferrari.login.db.UserRepository
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.home.StringUtils.StringUtils.LEADER_KEY
+import com.aferrari.trailead.home.StringUtils.StringUtils.TAB_ID
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
 class LeaderActivity : AppCompatActivity() {
 
-    internal lateinit var binding: LeaderActivityBinding
+    lateinit var binding: LeaderActivityBinding
 
     private lateinit var homeLeaderViewModel: HomeLeaderViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,24 +41,45 @@ class LeaderActivity : AppCompatActivity() {
     private fun initListener() {
         binding.bottomNavigationId.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.home_leader_menu -> if (!it.isChecked) navigateToHome()
-                R.id.trainee_list_leader_menu -> if (!it.isChecked) navigateToTrainee()
-                R.id.profile_leader_menu -> if (!it.isChecked) navigateToProfile()
+                R.id.home_leader_menu -> if (!it.isChecked) {
+                    navigateToHome()
+                }
+                R.id.trainee_list_leader_menu -> if (!it.isChecked) {
+                    navigateToTrainee()
+                }
+                R.id.profile_leader_menu -> if (!it.isChecked) {
+                    navigateToProfile()
+                }
             }
             return@setOnItemSelectedListener true
         }
     }
 
     private fun navigateToProfile() {
-        binding.fragmentContainerId.findNavController().navigate(R.id.leaderProfileFragment)
+        binding.fragmentContainerId.findNavController()
+            .navigate(R.id.leaderProfileFragment, getBundleTab(2))
     }
 
     private fun navigateToHome() {
-        binding.fragmentContainerId.findNavController().navigate(R.id.leaderHomeFragment)
+        binding.fragmentContainerId.findNavController()
+            .navigate(R.id.leaderHomeFragment, getBundleTab(0))
     }
 
     private fun navigateToTrainee() {
-        binding.fragmentContainerId.findNavController().navigate(R.id.linkedTraineeListFragment)
+        binding.fragmentContainerId.findNavController()
+            .navigate(R.id.linkedTraineeListFragment, getBundleTab(1))
     }
 
+    private fun getBundleTab(tabId: Int): Bundle = Bundle().apply { this.putInt(TAB_ID, tabId) }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        binding.fragmentContainerId.findNavController().currentBackStackEntry?.arguments.let {
+            if (it != null) {
+                binding.bottomNavigationId.menu.getItem(it[TAB_ID] as Int).isChecked = true
+            } else {
+                binding.bottomNavigationId.menu.getItem(0).isChecked = true
+            }
+        }
+    }
 }
