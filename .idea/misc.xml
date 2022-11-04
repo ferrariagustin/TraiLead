@@ -10,11 +10,12 @@
         <entry key="app/src/main/res/layout/item_trainee_list.xml" value="0.3073745727539063" />
         <entry key="app/src/main/res/layout/leader_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_home_fragment.xml" value="0.203125" />
-        <entry key="app/src/main/res/layout/leader_profile_fragment.xml" value="0.15217391304347827" />
+        <entry key="app/src/main/res/layout/leader_profile_fragment.xml" value="0.21207122802734377" />
         <entry key="app/src/main/res/layout/leader_trainee_list_fragment.xml" value="0.15217391304347827" />
         <entry key="app/src/main/res/layout/linked_trainee_list_fragment.xml" value="0.1947463768115942" />
         <entry key="app/src/main/res/layout/list_all_trainee.xml" value="0.1" />
         <entry key="app/src/main/res/layout/login_activity.xml" value="0.2066492495329484" />
+        <entry key="app/src/main/res/layout/profile_card_view_layout.xml" value="0.3759740193684896" />
         <entry key="app/src/main/res/layout/trainee_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/trainee_home_fragment.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/unlinked_trainee_list.xml" value="0.1947463768115942" />
