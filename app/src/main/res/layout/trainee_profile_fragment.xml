@@ -1,0 +1,76 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/trainee_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/profile_app_bar_background"
+            android:elevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/trainee_profile_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/profile"
+                app:titleCentered="true" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/trainee_profile_toolbar_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_profile"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/traninee_profile_name"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin_medium"
+                android:text="@string/place_holder_name" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_email_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_label_email_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:text="@string/email"
+            app:layout_constraintStart_toEndOf="@id/image_view_email_icon"
+            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_email_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/place_holder_name"
+            app:layout_constraintStart_toStartOf="@id/trainee_label_email_textview"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_email_textview" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

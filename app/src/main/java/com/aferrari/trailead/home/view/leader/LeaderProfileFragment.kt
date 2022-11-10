@@ -36,7 +36,7 @@ class LeaderProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.leaderProfileToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.close_session_leader_toolbar_menu -> logout()
+                R.id.close_session_toolbar_menu -> logout()
             }
             return@setOnMenuItemClickListener true
         }

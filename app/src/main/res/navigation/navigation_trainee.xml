@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/traineeHomeFragment"
         android:name="com.aferrari.trailead.home.view.trainee.TraineeHomeFragment"
-        android:label="TraineeHomeFragment" />
+        android:label="TraineeHomeFragment" >
+        <action
+            android:id="@+id/action_traineeHomeFragment_to_traineeProfileFragment"
+            app:destination="@id/traineeProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/traineeProfileFragment"
+        android:name="com.aferrari.trailead.home.view.trainee.TraineeProfileFragment"
+        android:label="TraineeProfileFragment" >
+        <action
+            android:id="@+id/action_traineeProfileFragment_to_traineeHomeFragment"
+            app:destination="@id/traineeHomeFragment" />
+    </fragment>
 </navigation>

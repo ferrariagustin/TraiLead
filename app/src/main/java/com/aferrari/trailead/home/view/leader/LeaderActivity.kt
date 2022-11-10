@@ -55,11 +55,6 @@ class LeaderActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToProfile() {
-        binding.fragmentContainerId.findNavController()
-            .navigate(R.id.leaderProfileFragment, getBundleTab(2))
-    }
-
     private fun navigateToHome() {
         binding.fragmentContainerId.findNavController()
             .navigate(R.id.leaderHomeFragment, getBundleTab(0))
@@ -68,6 +63,11 @@ class LeaderActivity : AppCompatActivity() {
     private fun navigateToTrainee() {
         binding.fragmentContainerId.findNavController()
             .navigate(R.id.linkedTraineeListFragment, getBundleTab(1))
+    }
+
+    private fun navigateToProfile() {
+        binding.fragmentContainerId.findNavController()
+            .navigate(R.id.leaderProfileFragment, getBundleTab(2))
     }
 
     private fun getBundleTab(tabId: Int): Bundle = Bundle().apply { this.putInt(TAB_ID, tabId) }
