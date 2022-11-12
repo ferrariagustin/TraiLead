@@ -6,18 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.aferrari.login.db.UserDataBase
-import com.aferrari.login.db.UserRepository
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeProfileFragmentBinding
+import com.aferrari.trailead.home.Utils.BundleUtils
 import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
-import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
 class TraineeProfileFragment : Fragment() {
 
     private lateinit var binding: TraineeProfileFragmentBinding
-    private lateinit var homeTraineeViewModel: HomeTraineeViewModel
+    private val homeTraineeViewModel: HomeTraineeViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,16 +26,19 @@ class TraineeProfileFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.trainee_profile_fragment, container, false)
-        val dao = UserDataBase.getInstance(requireActivity()).userDao
-        val repository = UserRepository(dao)
-        val factory = HomeViewModelFactory(repository)
-        homeTraineeViewModel = ViewModelProvider(this, factory)[HomeTraineeViewModel::class.java]
         binding.lifecycleOwner = this
+        binding.traineeViewModel = homeTraineeViewModel
         initListeners()
         return binding.root
     }
 
     private fun initListeners() {
-        // do nothing
+        binding.tranineeProfileName.setOnClickListener {
+            navigateToEditProfileName()
+        }
+    }
+
+    private fun navigateToEditProfileName() {
+        findNavController().navigate(R.id.action_traineeProfileFragment_to_traineeEditProfileName, BundleUtils().getBundleTab(1))
     }
 }

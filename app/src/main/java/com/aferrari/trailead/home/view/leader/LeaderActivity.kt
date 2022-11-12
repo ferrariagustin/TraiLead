@@ -10,8 +10,9 @@ import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderActivityBinding
-import com.aferrari.trailead.home.StringUtils.StringUtils.LEADER_KEY
-import com.aferrari.trailead.home.StringUtils.StringUtils.TAB_ID
+import com.aferrari.trailead.home.Utils.BundleUtils
+import com.aferrari.trailead.home.Utils.StringUtils.LEADER_KEY
+import com.aferrari.trailead.home.Utils.StringUtils.TAB_ID
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
@@ -57,20 +58,18 @@ class LeaderActivity : AppCompatActivity() {
 
     private fun navigateToHome() {
         binding.fragmentContainerId.findNavController()
-            .navigate(R.id.leaderHomeFragment, getBundleTab(0))
+            .navigate(R.id.leaderHomeFragment, BundleUtils().getBundleTab(0))
     }
 
     private fun navigateToTrainee() {
         binding.fragmentContainerId.findNavController()
-            .navigate(R.id.linkedTraineeListFragment, getBundleTab(1))
+            .navigate(R.id.linkedTraineeListFragment, BundleUtils().getBundleTab(1))
     }
 
     private fun navigateToProfile() {
         binding.fragmentContainerId.findNavController()
-            .navigate(R.id.leaderProfileFragment, getBundleTab(2))
+            .navigate(R.id.leaderProfileFragment, BundleUtils().getBundleTab(2))
     }
-
-    private fun getBundleTab(tabId: Int): Bundle = Bundle().apply { this.putInt(TAB_ID, tabId) }
 
     override fun onBackPressed() {
         super.onBackPressed()

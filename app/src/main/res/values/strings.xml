@@ -24,4 +24,10 @@
     <string name="trainee_test">Test</string>
     <string name="place_holder_name">John Doe</string>
     <string name="email">Email</string>
+    <string name="position">Rol</string>
+    <string name="assigned_leader">Líder asignado</string>
+    <string name="edit_trainee_profile_name">Editar nombre</string>
+    <string name="edit_profile_last_name">Ingrese su nuevo apellido</string>
+    <string name="edit_profile_name">Ingrese su nuevo nombre</string>
+    <string name="edit_button">Modificar</string>
 </resources>

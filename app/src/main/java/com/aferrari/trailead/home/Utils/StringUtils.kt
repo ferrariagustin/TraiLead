@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.StringUtils
+package com.aferrari.trailead.home.Utils
 
 object StringUtils {
 
@@ -6,4 +6,6 @@ object StringUtils {
     const val LEADER_KEY = "leader_key"
     const val TRAINEE_KEY = "trainee_key"
     const val TAB_ID = "tab_id"
+
+
 }

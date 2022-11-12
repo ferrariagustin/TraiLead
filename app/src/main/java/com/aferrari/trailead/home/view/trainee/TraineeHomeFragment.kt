@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
@@ -21,7 +22,7 @@ import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 class TraineeHomeFragment : Fragment() {
     private lateinit var binding: TraineeHomeFragmentBinding
 
-    private lateinit var homeTraineeViewModel: HomeTraineeViewModel
+    private val homeTraineeViewModel: HomeTraineeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,10 +31,6 @@ class TraineeHomeFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.trainee_home_fragment, container, false)
-        val dao = UserDataBase.getInstance(requireActivity()).userDao
-        val repository = UserRepository(dao)
-        val factory = HomeViewModelFactory(repository)
-        homeTraineeViewModel = ViewModelProvider(this, factory)[HomeTraineeViewModel::class.java]
         binding.lifecycleOwner = this
         initListeners()
         return binding.root

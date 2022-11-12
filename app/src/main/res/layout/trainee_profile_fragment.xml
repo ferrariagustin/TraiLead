@@ -1,6 +1,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="traineeViewModel"
+            type="com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -11,6 +18,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/profile_app_bar_background"
             android:elevation="1dp"
+            android:src="@drawable/login_bg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -39,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin_medium"
-                android:text="@string/place_holder_name" />
+                android:hint="@string/name_hint"
+                android:text="@={traineeViewModel.traineeCompleteName}" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -58,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:text="@string/email"
+            android:hint="@string/email"
             app:layout_constraintStart_toEndOf="@id/image_view_email_icon"
             app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
 
@@ -67,10 +76,83 @@
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/place_holder_name"
+            android:text="@={traineeViewModel.traineeEmail}"
             app:layout_constraintStart_toStartOf="@id/trainee_label_email_textview"
             app:layout_constraintTop_toBottomOf="@id/trainee_label_email_textview" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/email_divider_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_email_textview" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_position_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_position"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_divider_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_label_position_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/position"
+            app:layout_constraintStart_toEndOf="@id/image_view_position_icon"
+            app:layout_constraintTop_toBottomOf="@id/email_divider_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_position_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={traineeViewModel.traineePosition}"
+            app:layout_constraintStart_toStartOf="@id/trainee_label_position_textview"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_position_textview" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/position_divider_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_position_textview" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_trainee_leader_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_assigned_leader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/position_divider_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_label_leader_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/assigned_leader"
+            app:layout_constraintStart_toEndOf="@id/image_view_trainee_leader_icon"
+            app:layout_constraintTop_toBottomOf="@id/position_divider_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_leader_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={traineeViewModel.traineeAssignedLeader}"
+            app:layout_constraintStart_toStartOf="@id/trainee_label_leader_textview"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_leader_textview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
