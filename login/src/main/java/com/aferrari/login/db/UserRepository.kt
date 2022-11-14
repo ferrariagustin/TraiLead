@@ -49,6 +49,12 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun updateTrainee(trainee: Trainee) = dao.updateTrainee(trainee)
 
+    suspend fun updateTraineeName(idTrainee: Int, name: String) =
+        dao.updateTraineeName(idTrainee, name)
+
+    suspend fun updateTraineeLastName(idTrainee: Int, lastName: String) =
+        dao.updateTraineeLastName(idTrainee, lastName)
+
     suspend fun deleteLeader(leader: Leader) {
         dao.deleteLeader(leader)
     }

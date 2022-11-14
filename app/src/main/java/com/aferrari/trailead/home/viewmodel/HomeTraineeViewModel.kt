@@ -47,7 +47,22 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
         EMPTY_LEADER
     }
 
+    fun updateInformation(name: String, lastName: String) {
+        viewModelScope.launch {
+            if (name.isNotEmpty()) {
+                repository.updateTraineeName(trainee.id, name)
+                traineeName.value = name
+            }
+            if (lastName.isNotEmpty()) {
+                repository.updateTraineeLastName(trainee.id, lastName)
+                traineeLastName.value = lastName
+            }
+            traineeCompleteName.value = traineeName.value + SPACE_STRING + traineeLastName.value
+        }
+    }
+
     companion object {
         private const val EMPTY_LEADER = "No tiene líder asignado"
+        private const val SPACE_STRING = " "
     }
 }

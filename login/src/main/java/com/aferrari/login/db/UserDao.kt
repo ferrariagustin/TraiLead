@@ -17,6 +17,12 @@ interface UserDao {
     @Update
     suspend fun updateTrainee(trainee: Trainee)
 
+    @Query("UPDATE trainee_data_table SET trainee_name=:name WHERE trainee_id = :idTrainee")
+    suspend fun updateTraineeName(idTrainee: Int, name: String)
+
+    @Query("UPDATE trainee_data_table SET trainee_last_name=:lastName WHERE trainee_id = :idTrainee")
+    suspend fun updateTraineeLastName(idTrainee: Int, lastName: String)
+
     @Delete
     suspend fun deleteLeader(leader: Leader)
 
