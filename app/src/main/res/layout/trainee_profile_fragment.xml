@@ -12,36 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/trainee_app_bar"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/trainee_profile_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/profile_app_bar_background"
-            android:elevation="1dp"
-            android:src="@drawable/login_bg"
+            android:elevation="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/trainee_profile_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title="@string/profile"
-                app:titleCentered="true" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/trainee_profile_toolbar_image"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin_small"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_profile"
-                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                app:strokeWidth="1dp" />
-
-        </com.google.android.material.appbar.AppBarLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/profile"
+            app:titleCentered="true" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_complete_name_icon"
@@ -50,7 +31,7 @@
             android:layout_margin="@dimen/margin_medium"
             android:src="@drawable/ic_profile"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+            app:layout_constraintTop_toBottomOf="@id/trainee_profile_toolbar" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/trainee_label_complete_name_textview"
@@ -60,7 +41,7 @@
             android:layout_margin="@dimen/margin_medium"
             android:hint="@string/name_hint"
             app:layout_constraintStart_toEndOf="@id/image_view_complete_name_icon"
-            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+            app:layout_constraintTop_toBottomOf="@id/trainee_profile_toolbar" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/trainee_complete_name_textview"
@@ -75,10 +56,10 @@
             android:id="@+id/image_view_edit_complete_name_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next"
             android:layout_marginEnd="@dimen/margin_medium"
-            app:layout_constraintTop_toBottomOf="@id/trainee_label_complete_name_textview"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_complete_name_textview" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/complete_name_divider_id"
@@ -159,10 +140,10 @@
             android:id="@+id/image_view_edit_password_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next"
             android:layout_marginEnd="@dimen/margin_medium"
-            app:layout_constraintTop_toBottomOf="@id/trainee_label_password_textview"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_password_textview" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_password_id"
