@@ -13,6 +13,8 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
     private lateinit var trainee: Trainee
 
     private val traineeLeader = MutableLiveData<Leader>()
+    val statusEditProfilePass = MutableLiveData<StatusUpdateInformation>()
+
     val traineeName = MutableLiveData<String>()
     val traineeLastName = MutableLiveData<String>()
     val traineeCompleteName = MutableLiveData<String>()
@@ -60,6 +62,18 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
                 traineeLastName.value = lastName
             }
             traineeCompleteName.value = traineeName.value + SPACE_STRING + traineeLastName.value
+        }
+    }
+
+    fun updatePassword(password: String, repeatPassword: String) {
+        if (password.isEmpty() or repeatPassword.isEmpty() or (password != repeatPassword)) {
+            statusEditProfilePass.value = StatusUpdateInformation.FAILED
+            return
+        }
+        viewModelScope.launch {
+            repository.updateTraineePassword(password, trainee.id)
+            traineePassword.value = password
+            statusEditProfilePass.value = StatusUpdateInformation.SUCCESS
         }
     }
 

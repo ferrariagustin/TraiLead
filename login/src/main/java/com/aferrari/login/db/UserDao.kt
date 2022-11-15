@@ -23,6 +23,9 @@ interface UserDao {
     @Query("UPDATE trainee_data_table SET trainee_last_name=:lastName WHERE trainee_id = :idTrainee")
     suspend fun updateTraineeLastName(idTrainee: Int, lastName: String)
 
+    @Query("UPDATE trainee_data_table SET trainee_pass=:password WHERE trainee_id = :idTrainee")
+    suspend fun updateTraineePassword(password: String, idTrainee: Int)
+
     @Delete
     suspend fun deleteLeader(leader: Leader)
 

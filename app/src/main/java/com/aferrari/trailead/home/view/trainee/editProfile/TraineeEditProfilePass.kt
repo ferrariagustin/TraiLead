@@ -9,9 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeEditProfilePasswordFragmentBinding
 import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
+import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 class TraineeEditProfilePass : Fragment() {
 
@@ -33,8 +35,12 @@ class TraineeEditProfilePass : Fragment() {
             )
         binding.lifecycleOwner = this
         binding.traineeViewModel = traineeViewModel
-        initListeners()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initListeners()
     }
 
     private fun initListeners() {
@@ -42,12 +48,33 @@ class TraineeEditProfilePass : Fragment() {
             findNavController().navigate(R.id.action_traineeEditProfilePass_to_traineeProfileFragment)
         }
         binding.editProfilePasswordButton.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                "Su contraseña fue actualizada correctamente",
-                Toast.LENGTH_SHORT
-            ).show()
-            findNavController().navigate(R.id.action_traineeEditProfilePass_to_traineeProfileFragment)
+            traineeViewModel.updatePassword(
+                binding.editProfilePasswordInputText.text.toString(),
+                binding.editProfilePasswordRepeatInputText.text.toString(),
+            )
         }
+        traineeViewModel.statusEditProfilePass.observe(viewLifecycleOwner) {
+            when (it.name) {
+                StatusUpdateInformation.FAILED.name -> showError()
+                StatusUpdateInformation.SUCCESS.name -> showSuccess()
+            }
+        }
+    }
+
+    private fun showSuccess() {
+        Toast.makeText(
+            requireContext(),
+            "Su contraseña fue actualizada correctamente",
+            Toast.LENGTH_SHORT
+        ).show()
+        findNavController().navigate(R.id.action_traineeEditProfilePass_to_traineeProfileFragment)
+    }
+
+    private fun showError() {
+        Dialog().showDialog(
+            resources.getString(com.aferrari.login.R.string.title_error),
+            "Ingrese una contraseña correcta",
+            requireContext()
+        )
     }
 }
