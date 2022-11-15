@@ -35,22 +35,59 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
+                android:layout_margin="@dimen/margin_small"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_profile"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
                 app:strokeWidth="1dp" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/traninee_profile_name"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin_medium"
-                android:hint="@string/name_hint"
-                android:text="@={traineeViewModel.traineeCompleteName}" />
-
         </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_complete_name_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_label_complete_name_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/name_hint"
+            app:layout_constraintStart_toEndOf="@id/image_view_complete_name_icon"
+            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_complete_name_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={traineeViewModel.traineeCompleteName}"
+            app:layout_constraintStart_toStartOf="@id/trainee_label_complete_name_textview"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_complete_name_textview" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_edit_complete_name_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next"
+            android:layout_marginEnd="@dimen/margin_medium"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_complete_name_textview"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/complete_name_divider_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_complete_name_textview" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_email_icon"
@@ -59,7 +96,7 @@
             android:layout_margin="@dimen/margin_medium"
             android:src="@drawable/ic_email"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+            app:layout_constraintTop_toBottomOf="@id/complete_name_divider_id" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/trainee_label_email_textview"
@@ -69,7 +106,7 @@
             android:layout_margin="@dimen/margin_medium"
             android:hint="@string/email"
             app:layout_constraintStart_toEndOf="@id/image_view_email_icon"
-            app:layout_constraintTop_toBottomOf="@id/trainee_app_bar" />
+            app:layout_constraintTop_toBottomOf="@id/complete_name_divider_id" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/trainee_email_textview"
@@ -90,13 +127,60 @@
             app:layout_constraintTop_toBottomOf="@id/trainee_email_textview" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_password_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_lock"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_divider_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_label_password_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/password_hint"
+            app:layout_constraintStart_toEndOf="@id/image_view_password_icon"
+            app:layout_constraintTop_toBottomOf="@id/email_divider_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_password_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:text="@={traineeViewModel.traineePassword}"
+            app:layout_constraintStart_toStartOf="@id/trainee_label_password_textview"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_password_textview" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_edit_password_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next"
+            android:layout_marginEnd="@dimen/margin_medium"
+            app:layout_constraintTop_toBottomOf="@id/trainee_label_password_textview"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_password_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_password_textview" />
+
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_position_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
             android:src="@drawable/ic_position"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/email_divider_id" />
+            app:layout_constraintTop_toBottomOf="@id/divider_password_id" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/trainee_label_position_textview"
@@ -106,7 +190,7 @@
             android:layout_margin="@dimen/margin_medium"
             android:hint="@string/position"
             app:layout_constraintStart_toEndOf="@id/image_view_position_icon"
-            app:layout_constraintTop_toBottomOf="@id/email_divider_id" />
+            app:layout_constraintTop_toBottomOf="@id/divider_password_id" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/trainee_position_textview"

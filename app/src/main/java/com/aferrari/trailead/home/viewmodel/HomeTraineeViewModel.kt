@@ -18,6 +18,7 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
     val traineeCompleteName = MutableLiveData<String>()
     val traineeEmail = MutableLiveData<String>()
     val traineePosition = MutableLiveData<String>()
+    val traineePassword = MutableLiveData<String>()
     val traineeAssignedLeader = MutableLiveData<String>()
 
     fun setTrainee(trainee: Trainee?) {
@@ -27,6 +28,7 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
             traineeLastName.value = trainee.lastName
             traineeEmail.value = trainee.email
             traineePosition.value = trainee.position.name
+            traineePassword.value = trainee.pass
             traineeCompleteName.value = trainee.name + " " + trainee.lastName
             getLeaderFromTrainee(trainee.leaderId)
         }

@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_traineeProfileFragment_to_traineeEditProfileName"
             app:destination="@id/traineeEditProfileName" />
+        <action
+            android:id="@+id/action_traineeProfileFragment_to_traineeEditProfilePass"
+            app:destination="@id/traineeEditProfilePass" />
     </fragment>
     <fragment
         android:id="@+id/traineeEditProfileName"
@@ -29,6 +32,14 @@
         android:label="TraineeEditProfileName" >
         <action
             android:id="@+id/action_traineeEditProfileName_to_traineeProfileFragment"
+            app:destination="@id/traineeProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/traineeEditProfilePass"
+        android:name="com.aferrari.trailead.home.view.trainee.editProfile.TraineeEditProfilePass"
+        android:label="TraineeEditProfilePass" >
+        <action
+            android:id="@+id/action_traineeEditProfilePass_to_traineeProfileFragment"
             app:destination="@id/traineeProfileFragment" />
     </fragment>
 </navigation>
