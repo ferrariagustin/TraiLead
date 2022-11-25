@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
@@ -40,7 +41,12 @@ class TraineeEditProfilePass : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initComponent()
         initListeners()
+    }
+
+    private fun initComponent() {
+        traineeViewModel.init()
     }
 
     private fun initListeners() {

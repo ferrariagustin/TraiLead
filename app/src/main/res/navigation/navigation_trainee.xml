@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_trainee"
     app:startDestination="@id/traineeHomeFragment">
 
     <fragment
         android:id="@+id/traineeHomeFragment"
         android:name="com.aferrari.trailead.home.view.trainee.TraineeHomeFragment"
-        android:label="TraineeHomeFragment" >
+        android:label="TraineeHomeFragment"
+        tools:layout="@layout/trainee_home_fragment">
         <action
             android:id="@+id/action_traineeHomeFragment_to_traineeProfileFragment"
             app:destination="@id/traineeProfileFragment" />
@@ -15,7 +17,8 @@
     <fragment
         android:id="@+id/traineeProfileFragment"
         android:name="com.aferrari.trailead.home.view.trainee.TraineeProfileFragment"
-        android:label="TraineeProfileFragment" >
+        android:label="TraineeProfileFragment"
+        tools:layout="@layout/trainee_profile_fragment">
         <action
             android:id="@+id/action_traineeProfileFragment_to_traineeHomeFragment"
             app:destination="@id/traineeHomeFragment" />
@@ -29,7 +32,8 @@
     <fragment
         android:id="@+id/traineeEditProfileName"
         android:name="com.aferrari.trailead.home.view.trainee.editProfile.TraineeEditProfileName"
-        android:label="TraineeEditProfileName" >
+        android:label="TraineeEditProfileName"
+        tools:layout="@layout/trainee_edit_profile_name_fragment">
         <action
             android:id="@+id/action_traineeEditProfileName_to_traineeProfileFragment"
             app:destination="@id/traineeProfileFragment" />
@@ -37,9 +41,12 @@
     <fragment
         android:id="@+id/traineeEditProfilePass"
         android:name="com.aferrari.trailead.home.view.trainee.editProfile.TraineeEditProfilePass"
-        android:label="TraineeEditProfilePass" >
+        android:label="TraineeEditProfilePass"
+        tools:layout="@layout/trainee_edit_profile_password_fragment">
         <action
             android:id="@+id/action_traineeEditProfilePass_to_traineeProfileFragment"
-            app:destination="@id/traineeProfileFragment" />
+            app:destination="@id/traineeProfileFragment"
+            app:popUpTo="@id/navigation_trainee"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

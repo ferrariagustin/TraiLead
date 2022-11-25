@@ -13,7 +13,7 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
     private lateinit var trainee: Trainee
 
     private val traineeLeader = MutableLiveData<Leader>()
-    val statusEditProfilePass = MutableLiveData<StatusUpdateInformation>()
+    val statusEditProfilePass = MutableLiveData(StatusUpdateInformation.NONE)
 
     val traineeName = MutableLiveData<String>()
     val traineeLastName = MutableLiveData<String>()
@@ -75,6 +75,10 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
             traineePassword.value = password
             statusEditProfilePass.value = StatusUpdateInformation.SUCCESS
         }
+    }
+
+    fun init() {
+        statusEditProfilePass.value = StatusUpdateInformation.NONE
     }
 
     companion object {
