@@ -1,5 +1,6 @@
 package com.aferrari.trailead.home.viewmodel
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
 
     private val traineeLeader = MutableLiveData<Leader>()
     val statusEditProfilePass = MutableLiveData(StatusUpdateInformation.NONE)
+    val statusVisibilityPassword = MutableLiveData(StatusVisibilityPassword.INVISIBLE)
 
     val traineeName = MutableLiveData<String>()
     val traineeLastName = MutableLiveData<String>()
@@ -79,6 +81,7 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
 
     fun init() {
         statusEditProfilePass.value = StatusUpdateInformation.NONE
+        statusVisibilityPassword.value = StatusVisibilityPassword.INVISIBLE
     }
 
     companion object {
