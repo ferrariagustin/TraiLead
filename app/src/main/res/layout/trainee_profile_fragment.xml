@@ -16,13 +16,11 @@
             android:id="@+id/trainee_profile_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/profile_app_bar_background"
-            android:elevation="3dp"
+            android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/profile"
-            app:titleCentered="true" />
+            app:title="@string/profile" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_complete_name_icon"

@@ -13,5 +13,6 @@
     <dimen name="floating_elevation_default_shadow">12dp</dimen>
     <dimen name="toolbar_size">48dp</dimen>
     <dimen name="bottom_navigation_size">48dp</dimen>
+    <dimen name="default_toolbar_elevation">1dp</dimen>
 
 </resources>
