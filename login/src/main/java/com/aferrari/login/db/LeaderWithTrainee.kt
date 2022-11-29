@@ -1,4 +1,4 @@
-package com.aferrari.login.database
+package com.aferrari.login.db
 
 import androidx.room.Embedded
 import androidx.room.Relation

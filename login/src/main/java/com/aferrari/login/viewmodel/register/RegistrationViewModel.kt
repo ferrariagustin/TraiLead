@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.database.*
+import com.aferrari.login.db.*
 import com.aferrari.login.utils.StringUtils.EMPTY_STRING
 import kotlinx.coroutines.launch
 import java.util.*

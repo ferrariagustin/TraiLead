@@ -1,4 +1,4 @@
-package com.aferrari.login.database
+package com.aferrari.login.db
 
 import java.io.Serializable
 
