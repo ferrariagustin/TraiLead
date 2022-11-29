@@ -1,4 +1,4 @@
-package com.aferrari.login.db
+package com.aferrari.login.database
 
 class UserRepository(private val dao: UserDao) {
 

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.aferrari.login.db.Trainee
+import com.aferrari.login.database.Trainee
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemTraineeListBinding

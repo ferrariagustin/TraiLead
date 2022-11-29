@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.aferrari.login.db.Leader
-import com.aferrari.login.db.UserDataBase
-import com.aferrari.login.db.UserRepository
+import com.aferrari.login.database.Leader
+import com.aferrari.login.database.UserDataBase
+import com.aferrari.login.database.UserRepository
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.home.Utils.BundleUtils

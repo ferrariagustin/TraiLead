@@ -9,15 +9,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import com.aferrari.login.db.UserDataBase
-import com.aferrari.login.db.UserRepository
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeHomeFragmentBinding
 import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
-import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
 class TraineeHomeFragment : Fragment() {
     private lateinit var binding: TraineeHomeFragmentBinding

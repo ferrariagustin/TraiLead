@@ -1,14 +1,14 @@
-package com.aferrari.login.db
+package com.aferrari.login.database
 
 import android.content.Context
 import androidx.room.*
 import androidx.room.migration.AutoMigrationSpec
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [Leader::class, Trainee::class],
     autoMigrations = [
-        AutoMigration(from = 2, to = 3, spec = UserDataBase.AutoMigration2To3::class)
+        AutoMigration(from = 3, to = 4, spec = UserDataBase.AutoMigration3To4::class)
     ],
     exportSchema = true
 )
@@ -18,6 +18,8 @@ abstract class UserDataBase : RoomDatabase() {
     class AutoMigration1To2 : AutoMigrationSpec
 
     class AutoMigration2To3 : AutoMigrationSpec
+
+    class AutoMigration3To4 : AutoMigrationSpec
 
     abstract val userDao: UserDao
 

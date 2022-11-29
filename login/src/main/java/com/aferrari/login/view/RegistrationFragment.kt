@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.aferrari.login.R
 import com.aferrari.login.databinding.RegistrationFragmentBinding
-import com.aferrari.login.db.UserDataBase
-import com.aferrari.login.db.UserRepository
+import com.aferrari.login.database.UserDataBase
+import com.aferrari.login.database.UserRepository
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.login.viewmodel.LoginViewModelFactory
 import com.aferrari.login.viewmodel.register.RegisterErrorState

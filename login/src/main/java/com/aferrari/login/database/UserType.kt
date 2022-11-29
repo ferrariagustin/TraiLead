@@ -1,4 +1,4 @@
-package com.aferrari.login.db
+package com.aferrari.login.database
 
 enum class UserType {
     TRAINEE, LEADER

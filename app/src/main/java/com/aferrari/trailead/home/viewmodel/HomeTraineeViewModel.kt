@@ -1,12 +1,11 @@
 package com.aferrari.trailead.home.viewmodel
 
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.db.Leader
-import com.aferrari.login.db.Trainee
-import com.aferrari.login.db.UserRepository
+import com.aferrari.login.database.Leader
+import com.aferrari.login.database.Trainee
+import com.aferrari.login.database.UserRepository
 import kotlinx.coroutines.launch
 
 class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel() {
