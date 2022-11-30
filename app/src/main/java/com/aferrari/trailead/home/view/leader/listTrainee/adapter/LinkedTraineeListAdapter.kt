@@ -35,9 +35,9 @@ class LinkedTraineeListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val trainee = dataSet[position]
-        holder.viewHolderBinding.nameLabelId.text = trainee.name
-        holder.viewHolderBinding.lastNameLabelId.text = trainee.lastName
+        holder.viewHolderBinding.nameLabelId.text = trainee.name + " " + trainee.lastName
         holder.viewHolderBinding.emailLabelId.text = trainee.email
+        holder.viewHolderBinding.positionLabelId.text = trainee.position.name
 
         holder.viewHolderBinding.traineeCardItem.setOnClickListener {
             Dialog().showDialogWithAction(
