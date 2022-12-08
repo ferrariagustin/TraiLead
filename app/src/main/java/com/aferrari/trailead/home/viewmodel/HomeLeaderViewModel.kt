@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.Leader
+import com.aferrari.login.db.Position
 import com.aferrari.login.db.Trainee
 import com.aferrari.login.db.UserRepository
 import kotlinx.coroutines.launch
@@ -20,6 +21,13 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
     val listAllTrainee = MutableLiveData<List<Trainee>>()
 
     val listLinkedTrainees = MutableLiveData<List<Trainee>>()
+
+    val statusUpdateTraineeRol = MutableLiveData(StatusUpdateInformation.NONE)
+
+    var traineeSelected: Trainee? = null
+
+    var radioRolCheck: Position? = null
+
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
@@ -74,6 +82,19 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
     private fun updateList() {
         getUnLinkedTrainees()
         getLinkedTrainees()
+    }
+
+    fun updateTraineeRol() {
+        traineeSelected?.let { trainee ->
+            radioRolCheck?.let { position ->
+                viewModelScope.launch {
+                    repository.updateTraineePosition(trainee, position)
+                    statusUpdateTraineeRol.value = StatusUpdateInformation.SUCCESS
+                }
+                return
+            }
+        }
+        statusUpdateTraineeRol.value = StatusUpdateInformation.FAILED
     }
 
 }

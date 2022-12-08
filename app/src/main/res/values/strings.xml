@@ -27,10 +27,15 @@
     <string name="position">Rol</string>
     <string name="assigned_leader">Líder asignado</string>
     <string name="edit_trainee_profile_name">Editar nombre</string>
+    <string name="edit_trainee_rol">Editar Rol</string>
     <string name="edit_trainee_profile_password">Editar contraseña</string>
     <string name="edit_profile_last_name">Ingrese su nuevo apellido</string>
     <string name="edit_profile_name">Ingrese su nuevo nombre</string>
+    <string name="edit_rol">Seleccione el nuevo rol</string>
     <string name="edit_profile_password">Ingrese su nueva contraseña</string>
     <string name="edit_profile_repeat_password">Ingrese nuevamente su nueva contraseña</string>
     <string name="edit_button">Modificar</string>
+    <string name="rol_junior">JUNIOR</string>
+    <string name="rol_semisenior">SEMISENIOR</string>
+    <string name="rol_senior">SENIOR</string>
 </resources>

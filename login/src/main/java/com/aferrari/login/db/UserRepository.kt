@@ -93,6 +93,10 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun setUnlinkedTrainee(trainee: Trainee) = dao.setUnlinkedTrainee(trainee.id)
 
-    suspend fun updateTraineePassword(password: String, id: Int) = dao.updateTraineePassword(password, id)
+    suspend fun updateTraineePassword(password: String, id: Int) =
+        dao.updateTraineePassword(password, id)
+
+    suspend fun updateTraineePosition(trainee: Trainee, position: Position) =
+        dao.updateTraineePosition(trainee.id, position)
 
 }

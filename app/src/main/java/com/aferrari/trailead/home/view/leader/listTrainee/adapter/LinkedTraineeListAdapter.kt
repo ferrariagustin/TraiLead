@@ -1,10 +1,12 @@
 package com.aferrari.trailead.home.view.leader.listTrainee.adapter
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Trainee
 import com.aferrari.login.dialog.Dialog
@@ -33,11 +35,18 @@ class LinkedTraineeListAdapter(
         return ViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val trainee = dataSet[position]
         holder.viewHolderBinding.nameLabelId.text = trainee.name + " " + trainee.lastName
         holder.viewHolderBinding.emailLabelId.text = trainee.email
         holder.viewHolderBinding.positionLabelId.text = trainee.position.name
+
+        holder.viewHolderBinding.editTraineeButton.setOnClickListener {
+            viewModel.traineeSelected = trainee
+            Navigation.findNavController(holder.itemView)
+                .navigate(R.id.action_linkedTraineeListFragment_to_traineeEditRolFragment)
+        }
 
         holder.viewHolderBinding.traineeCardItem.setOnClickListener {
             Dialog().showDialogWithAction(

@@ -76,4 +76,7 @@ interface UserDao {
 
     @Query("UPDATE trainee_data_table SET trainee_leader_id = NULL WHERE trainee_id =:trainee_id")
     suspend fun setUnlinkedTrainee(trainee_id: Int)
+
+    @Query("UPDATE trainee_data_table SET position = :trainee_position WHERE trainee_id =:trainee_id")
+    suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position)
 }
