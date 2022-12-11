@@ -12,30 +12,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/leader_profile_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_item_toolbar_close_session"
+            app:title="@string/toolbar_profile" />
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_long"
-            android:elevation="@dimen/cardview_default_elevation"
+            android:padding="@dimen/margin_small"
             android:theme="@style/Theme.TraiLead"
+            app:cardCornerRadius="@dimen/card_elevation_default_shadow"
+            app:cardElevation="@dimen/card_elevation_default_shadow"
+            app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/leader_profile_toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:padding="@dimen/margin_small"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_small">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/image_profile_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="@dimen/margin_small"
                     android:src="@drawable/ic_profile"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                    app:strokeWidth="1dp" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/name_label_id"
@@ -44,8 +60,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@={homeLeaderViewModel.nameUser}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/image_profile_id" />
+                    app:layout_constraintStart_toEndOf="@id/image_profile_id"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/last_name_label_id"
@@ -54,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@={homeLeaderViewModel.lastNameUser}"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/image_profile_id"
                     app:layout_constraintTop_toBottomOf="@id/name_label_id" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -64,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@={homeLeaderViewModel.emailUser}"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/image_profile_id"
                     app:layout_constraintTop_toBottomOf="@id/last_name_label_id" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

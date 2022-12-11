@@ -13,8 +13,6 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
     lateinit var user: User
         private set
 
-    val users = repository.users
-
     var registerState = MutableLiveData<RegisterState>()
 
     val inputName = MutableLiveData<String>()

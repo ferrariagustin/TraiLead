@@ -11,9 +11,14 @@
     <string name="register_btn_text">Registrarse</string>
     <string name="trainee">Trainee</string>
     <string name="leader">Leader</string>
+    <string name="home">Inicio</string>
+    <string name="profile">Perfil</string>
 
     <!--  Dialog  -->
     <string name="title_error">Error</string>
+    <string name="neutral_dialog">Entendido</string>
+    <string name="positive_dialog">OK</string>
+    <string name="negative_dialog">Cancelar</string>
 
     <!--    Register    -->
     <string name="error_register">Existe uno o más campos incorrectos, por favor modique los valores y vuelva a registrarse</string>

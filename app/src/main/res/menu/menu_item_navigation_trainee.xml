@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/trainee_leader_menu"
+        android:icon="@drawable/ic_home"
+        android:title="@string/init" />
+
+    <item
+        android:id="@+id/profile_trainee_menu"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile" />
+
+    <item
+        android:id="@+id/trainee_test"
+        android:icon="@drawable/ic_test"
+        android:title="@string/trainee_test"
+        android:visible="false" />
+
+</menu>

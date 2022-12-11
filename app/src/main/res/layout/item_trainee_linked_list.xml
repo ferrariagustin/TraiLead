@@ -1,0 +1,118 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="homeLeaderViewModel"
+            type="com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_small">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/trainee_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.TraiLead"
+            app:cardCornerRadius="@dimen/card_elevation_default_shadow"
+            app:cardElevation="@dimen/card_elevation_default_shadow"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_small"
+                android:theme="@style/Theme.TraiLead">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/name_label_icon_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:src="@drawable/ic_profile"
+                    android:text="@string/name_hint"
+                    android:theme="@style/traiLead_text"
+                    android:tint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/name_label_id"
+                    style="@style/traiLead_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:theme="@style/traiLead_text"
+                    app:layout_constraintStart_toEndOf="@id/name_label_icon_id"
+                    app:layout_constraintTop_toTopOf="@id/name_label_icon_id" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/email_label_icon_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:src="@drawable/ic_email"
+                    android:text="@string/email_hint"
+                    android:theme="@style/traiLead_text"
+                    android:tint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/name_label_icon_id" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/email_label_id"
+                    style="@style/traiLead_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_medium"
+                    android:theme="@style/traiLead_text"
+                    app:layout_constraintStart_toEndOf="@id/email_label_icon_id"
+                    app:layout_constraintTop_toTopOf="@id/email_label_icon_id" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/position_label_icon_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:src="@drawable/ic_position"
+                    android:text="@string/position"
+                    android:theme="@style/traiLead_text"
+                    android:tint="@color/primaryColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/email_label_icon_id" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/config_trainee_icon_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:src="@drawable/ic_setting"
+                    android:theme="@style/traiLead_text"
+                    android:tint="@color/primaryColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/position_label_id"
+                    style="@style/traiLead_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_medium"
+                    android:theme="@style/traiLead_text"
+                    app:layout_constraintStart_toEndOf="@id/position_label_icon_id"
+                    app:layout_constraintTop_toTopOf="@id/position_label_icon_id" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

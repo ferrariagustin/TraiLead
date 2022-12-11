@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-// TODO: Resoler los siguientes issues:
+// * Resoler los siguientes issues:
 // * Se pueden crear un Leader y un Trainee con el mismo mail
 // * Al buscar en la base de datos esta buscando primer en el Leader y despues en el Trainee. Como
 // son tablas diferentes pueden existir 2 users con el mismo userId. Lograr seprar esto!

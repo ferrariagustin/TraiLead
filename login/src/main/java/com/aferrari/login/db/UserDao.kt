@@ -1,6 +1,5 @@
 package com.aferrari.login.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -17,6 +16,15 @@ interface UserDao {
 
     @Update
     suspend fun updateTrainee(trainee: Trainee)
+
+    @Query("UPDATE trainee_data_table SET trainee_name=:name WHERE trainee_id = :idTrainee")
+    suspend fun updateTraineeName(idTrainee: Int, name: String)
+
+    @Query("UPDATE trainee_data_table SET trainee_last_name=:lastName WHERE trainee_id = :idTrainee")
+    suspend fun updateTraineeLastName(idTrainee: Int, lastName: String)
+
+    @Query("UPDATE trainee_data_table SET trainee_pass=:password WHERE trainee_id = :idTrainee")
+    suspend fun updateTraineePassword(password: String, idTrainee: Int)
 
     @Delete
     suspend fun deleteLeader(leader: Leader)
@@ -51,9 +59,24 @@ interface UserDao {
     @Query("SELECT * FROM trainee_data_table WHERE trainee_email = :trainee_email")
     suspend fun getTrainee(trainee_email: String): Trainee?
 
-    @Query("SELECT * FROM leader_data_table,trainee_data_table")
-    fun getAllLeader(): LiveData<List<Leader>>
+    @Query("SELECT * FROM trainee_data_table")
+    suspend fun getAllTrainee(): List<Trainee>
 
-    @Query("SELECT * FROM leader_data_table,trainee_data_table")
-    fun getAllTrainee(): LiveData<List<Trainee>>
+    @Query("SELECT * FROM leader_data_table")
+    suspend fun getAllLeader(): List<Leader>
+
+    @Query("UPDATE trainee_data_table SET trainee_leader_id=:leader_id WHERE trainee_id = :trainee_id")
+    suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int)
+
+    @Query("SELECT * FROM trainee_data_table WHERE trainee_leader_id IS NULL")
+    suspend fun getUnlinkedTrainees(): List<Trainee>
+
+    @Query("SELECT * FROM trainee_data_table WHERE trainee_leader_id=:leader_id")
+    suspend fun getLinkedTrainees(leader_id: Int): List<Trainee>
+
+    @Query("UPDATE trainee_data_table SET trainee_leader_id = NULL WHERE trainee_id =:trainee_id")
+    suspend fun setUnlinkedTrainee(trainee_id: Int)
+
+    @Query("UPDATE trainee_data_table SET position = :trainee_position WHERE trainee_id =:trainee_id")
+    suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position)
 }

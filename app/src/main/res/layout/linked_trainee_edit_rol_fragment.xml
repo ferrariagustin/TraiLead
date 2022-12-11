@@ -1,0 +1,77 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/trainee_rol_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/default_toolbar_elevation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/primaryColor"
+            app:title="@string/edit_trainee_rol" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/edit_profile_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/edit_rol"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_rol_toolbar" />
+
+        <RadioGroup
+            android:id="@+id/radio_rol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/edit_profile_name_label">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_junior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rol_junior" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_semisenior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rol_semisenior" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_senior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rol_senior" />
+        </RadioGroup>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_edit_rol_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:onClick="@{() -> viewModel.updateTraineeRol()}"
+            android:text="@string/edit_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_rol" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

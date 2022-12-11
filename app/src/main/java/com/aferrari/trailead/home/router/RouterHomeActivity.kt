@@ -11,9 +11,9 @@ import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.login.utils.StringUtils
-import com.aferrari.trailead.home.StringUtils.StringUtils.JOIN_DEEPLINK
-import com.aferrari.trailead.home.StringUtils.StringUtils.LEADER_KEY
-import com.aferrari.trailead.home.StringUtils.StringUtils.TRAINEE_KEY
+import com.aferrari.trailead.home.Utils.StringUtils.JOIN_DEEPLINK
+import com.aferrari.trailead.home.Utils.StringUtils.LEADER_KEY
+import com.aferrari.trailead.home.Utils.StringUtils.TRAINEE_KEY
 import com.aferrari.trailead.home.viewmodel.HomeState
 import com.aferrari.trailead.home.viewmodel.HomeViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory

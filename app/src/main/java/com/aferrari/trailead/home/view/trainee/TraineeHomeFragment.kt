@@ -8,20 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.aferrari.login.db.UserDataBase
-import com.aferrari.login.db.UserRepository
+import androidx.fragment.app.activityViewModels
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeHomeFragmentBinding
 import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
-import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
 class TraineeHomeFragment : Fragment() {
     private lateinit var binding: TraineeHomeFragmentBinding
 
-    private lateinit var homeTraineeViewModel: HomeTraineeViewModel
+    private val homeTraineeViewModel: HomeTraineeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,18 +27,17 @@ class TraineeHomeFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.trainee_home_fragment, container, false)
-        val dao = UserDataBase.getInstance(requireActivity()).userDao
-        val repository = UserRepository(dao)
-        val factory = HomeViewModelFactory(repository)
-        homeTraineeViewModel = ViewModelProvider(this, factory)[HomeTraineeViewModel::class.java]
         binding.lifecycleOwner = this
         initListeners()
         return binding.root
     }
 
     private fun initListeners() {
-        binding.logoutBtn.setOnClickListener {
-            logout()
+        binding.traineeHomeToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.close_session_toolbar_menu -> logout()
+            }
+            return@setOnMenuItemClickListener true
         }
     }
 

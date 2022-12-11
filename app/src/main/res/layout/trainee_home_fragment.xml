@@ -5,24 +5,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/trainee_home_toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hola Trainee"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/logout_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/logout_btn_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_item_toolbar_close_session"
+            app:title="@string/welcome_home_trainee" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

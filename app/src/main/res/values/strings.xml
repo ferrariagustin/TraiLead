@@ -6,10 +6,43 @@
     <string name="scheme_app_name">trailead</string>
     <string name="logout_btn_text">Cerrar Session</string>
     <string name="trainees">Trainees</string>
-    <string name="profile">Perfil</string>
+    <string name="toolbar_profile">Perfil</string>
+    <string name="toolbar_trainees">Listado de Trainees</string>
+    <string name="toolbar_unlinked_trainees">Listado de Trainees sin líder</string>
     <string name="init">Inicio</string>
     <string name="more">Más</string>
     <string name="close_session">Cerrar sesión</string>
     <string name="empty_trainee_list">La lista de trainee esta vacía</string>
     <string name="welcome_to_home">Bienvenido al menu principal</string>
+
+    <!-- Dialog -->
+    <string name="dialog_title_add_trainee">Agregar Trainee</string>
+    <string name="dialog_message_add_trainee">Esta seguro que desea agregar a %s como su nuevo Trainee</string>
+    <string name="dialog_title_removed_trainee">Eliminar Trainee</string>
+    <string name="dialog_title_unlinked_trainee">Desvincular Trainee</string>
+    <string name="dialog_message_removed_trainee">Esta seguro que desea eliminar a %s de su lista de Trainees</string>
+    <string name="dialog_message_delete_trainee">Esta seguro que desea eliminar la cuenta: %s </string>
+    <string name="dialog_message_unlinked_trainee">Esta seguro que desea desvincular a %s de su lista de Trainees</string>
+    <string name="welcome_home_trainee">Hola Trainee</string>
+    <string name="trainee_test">Test</string>
+    <string name="place_holder_name">John Doe</string>
+    <string name="email">Email</string>
+    <string name="position">Rol</string>
+    <string name="assigned_leader">Líder asignado</string>
+    <string name="edit_trainee_profile_name">Editar nombre</string>
+    <string name="edit_trainee_rol">Editar Rol</string>
+    <string name="edit_material_trainee">Configurar material del Trainee</string>
+    <string name="unlinked_trainee">Desvincular trainee</string>
+    <string name="delete_trainee">Eliminar Trainee</string>
+    <string name="config_trainee">Configuración</string>
+    <string name="edit_trainee_profile_password">Editar contraseña</string>
+    <string name="edit_profile_last_name">Ingrese su nuevo apellido</string>
+    <string name="edit_profile_name">Ingrese su nuevo nombre</string>
+    <string name="edit_rol">Seleccione el nuevo rol</string>
+    <string name="edit_profile_password">Ingrese su nueva contraseña</string>
+    <string name="edit_profile_repeat_password">Ingrese nuevamente su nueva contraseña</string>
+    <string name="edit_button">Modificar</string>
+    <string name="rol_junior">JUNIOR</string>
+    <string name="rol_semisenior">SEMISENIOR</string>
+    <string name="rol_senior">SENIOR</string>
 </resources>
