@@ -1,7 +1,6 @@
 package com.aferrari.trailead.home.view.leader.listTrainee.adapter
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -9,9 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Trainee
-import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.ItemTraineeListBinding
+import com.aferrari.trailead.databinding.ItemTraineeLinkedListBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
 /**
@@ -23,12 +21,12 @@ class LinkedTraineeListAdapter(
     private val viewModel: HomeLeaderViewModel
 ) : RecyclerView.Adapter<LinkedTraineeListAdapter.ViewHolder>() {
 
-    internal lateinit var binding: ItemTraineeListBinding
+    internal lateinit var binding: ItemTraineeLinkedListBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.item_trainee_list,
+            R.layout.item_trainee_linked_list,
             parent,
             false
         )
@@ -42,35 +40,18 @@ class LinkedTraineeListAdapter(
         holder.viewHolderBinding.emailLabelId.text = trainee.email
         holder.viewHolderBinding.positionLabelId.text = trainee.position.name
 
-        holder.viewHolderBinding.editTraineeButton.setOnClickListener {
+        holder.viewHolderBinding.configTraineeIconId.setOnClickListener {
             viewModel.traineeSelected = trainee
             Navigation.findNavController(holder.itemView)
-                .navigate(R.id.action_linkedTraineeListFragment_to_traineeEditRolFragment)
-        }
-
-        holder.viewHolderBinding.traineeCardItem.setOnClickListener {
-            Dialog().showDialogWithAction(
-                title = fragment.resources.getString(R.string.dialog_title_removed_trainee),
-                message = fragment.resources.getString(
-                    R.string.dialog_message_removed_trainee,
-                    trainee.name
-                ),
-                fragment.requireContext(),
-                getPositiveAction(trainee)
-            )
+                .navigate(R.id.action_linkedTraineeListFragment_to_configTraineeFragment)
         }
     }
 
-    private fun getPositiveAction(trainee: Trainee): DialogInterface.OnClickListener =
-        DialogInterface.OnClickListener { _, _ ->
-            viewModel.setUnlinkedTrainee(trainee)
-        }
-
-
     override fun getItemCount(): Int = dataSet.size
 
-    class ViewHolder(binding: ItemTraineeListBinding) : RecyclerView.ViewHolder(binding.root) {
-        val viewHolderBinding: ItemTraineeListBinding = binding
+    class ViewHolder(binding: ItemTraineeLinkedListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        val viewHolderBinding: ItemTraineeLinkedListBinding = binding
     }
 
 }

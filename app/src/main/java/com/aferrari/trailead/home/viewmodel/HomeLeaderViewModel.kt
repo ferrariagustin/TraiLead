@@ -22,7 +22,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     val listLinkedTrainees = MutableLiveData<List<Trainee>>()
 
-    val statusUpdateTraineeRol = MutableLiveData(StatusUpdateInformation.NONE)
+    val statusUpdateTraineeRol = MutableLiveData<StatusUpdateInformation>()
 
     var traineeSelected: Trainee? = null
 
@@ -31,6 +31,10 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
+
+    fun init() {
+        statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
+    }
 
     fun setLeader(leader: Leader?) {
         leader?.let {
@@ -79,6 +83,18 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         }
     }
 
+    /**
+     * Removed linked leaderId with trainee
+     */
+    fun setUnlinkedTrainee() {
+        traineeSelected?.let { trainee ->
+            viewModelScope.launch {
+                repository.setUnlinkedTrainee(trainee)
+                updateList()
+            }
+        }
+    }
+
     private fun updateList() {
         getUnLinkedTrainees()
         getLinkedTrainees()
@@ -89,6 +105,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             radioRolCheck?.let { position ->
                 viewModelScope.launch {
                     repository.updateTraineePosition(trainee, position)
+                    traineeSelected = repository.get(trainee.id) as Trainee
                     statusUpdateTraineeRol.value = StatusUpdateInformation.SUCCESS
                 }
                 return

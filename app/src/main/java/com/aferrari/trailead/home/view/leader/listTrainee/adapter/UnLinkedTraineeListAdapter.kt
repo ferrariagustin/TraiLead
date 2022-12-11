@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Trainee
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.ItemTraineeListBinding
+import com.aferrari.trailead.databinding.ItemTraineeUnlinkedListBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
 /**
@@ -23,26 +23,26 @@ class UnLinkedTraineeListAdapter(
 ) :
     RecyclerView.Adapter<UnLinkedTraineeListAdapter.ViewHolder>() {
 
-    internal lateinit var binding: ItemTraineeListBinding
+    internal lateinit var binding: ItemTraineeUnlinkedListBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.item_trainee_list,
+            R.layout.item_trainee_unlinked_list,
             parent,
             false
         )
         return ViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "ResourceAsColor", "UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val trainee = dataSet[position]
-        holder.viewHolderBinding.nameLabelId.text = trainee.name + " " + trainee.lastName
-        holder.viewHolderBinding.emailLabelId.text = trainee.email
-        holder.viewHolderBinding.positionLabelId.text = trainee.position.name
+        holder.viewHolderBinding.unlinkedNameLabelId.text = trainee.name + " " + trainee.lastName
+        holder.viewHolderBinding.unlinkedEmailLabelId.text = trainee.email
+        holder.viewHolderBinding.unlinkedPositionLabelId.text = trainee.position.name
 
-        holder.viewHolderBinding.traineeCardItem.setOnClickListener {
+        holder.viewHolderBinding.unlinkedConfigTraineeIconId.setOnClickListener {
             Dialog().showDialogWithAction(
                 title = fragment.resources.getString(R.string.dialog_title_add_trainee),
                 message = fragment.resources.getString(
@@ -50,7 +50,18 @@ class UnLinkedTraineeListAdapter(
                     trainee.name
                 ),
                 fragment.requireContext(),
-                getPositiveAction(trainee)
+                getPositiveAction(trainee),
+                icon = fragment.resources.getDrawable(
+                    R.drawable.ic_link,
+                    fragment.requireContext().theme
+                ).apply {
+                    this.setTint(
+                        fragment.resources.getColor(
+                            R.color.primaryColor,
+                            fragment.requireContext().theme
+                        )
+                    )
+                }
             )
         }
     }
@@ -65,8 +76,9 @@ class UnLinkedTraineeListAdapter(
 
     override fun getItemCount(): Int = dataSet.size
 
-    class ViewHolder(binding: ItemTraineeListBinding) : RecyclerView.ViewHolder(binding.root) {
-        val viewHolderBinding: ItemTraineeListBinding = binding
+    class ViewHolder(binding: ItemTraineeUnlinkedListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        val viewHolderBinding: ItemTraineeUnlinkedListBinding = binding
     }
 
 }

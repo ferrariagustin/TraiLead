@@ -39,9 +39,6 @@
             app:destination="@id/linkedTraineeListFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right" />
-        <action
-            android:id="@+id/action_unLinkedTraineeListFragment_to_traineeEditRolFragment"
-            app:destination="@id/traineeEditRolFragment" />
     </fragment>
     <fragment
         android:id="@+id/linkedTraineeListFragment"
@@ -62,19 +59,28 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
-            android:id="@+id/action_linkedTraineeListFragment_to_traineeEditRolFragment"
+            android:id="@+id/action_linkedTraineeListFragment_to_configTraineeFragment"
+            app:destination="@id/configTraineeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/configTraineeFragment"
+        android:name="com.aferrari.trailead.home.view.leader.listTrainee.ConfigTraineeFragment"
+        tools:layout="@layout/leader_config_trainee_fragment"
+        android:label="ConfigTraineeFragment" >
+        <action
+            android:id="@+id/action_configTraineeFragment_to_linkedTraineeListFragment"
+            app:destination="@id/linkedTraineeListFragment" />
+        <action
+            android:id="@+id/action_configTraineeFragment_to_traineeEditRolFragment"
             app:destination="@id/traineeEditRolFragment" />
     </fragment>
     <fragment
         android:id="@+id/traineeEditRolFragment"
         android:name="com.aferrari.trailead.home.view.leader.listTrainee.TraineeEditRolFragment"
-        android:label="TraineeEditRolFragment"
-        tools:layout="@layout/linked_trainee_edit_rol_fragment">
+        tools:layout="@layout/linked_trainee_edit_rol_fragment"
+        android:label="TraineeEditRolFragment" >
         <action
-            android:id="@+id/action_traineeEditRolFragment_to_linkedTraineeListFragment"
-            app:destination="@id/linkedTraineeListFragment" />
-        <action
-            android:id="@+id/action_traineeEditRolFragment_to_unLinkedTraineeListFragment"
-            app:destination="@id/unLinkedTraineeListFragment" />
+            android:id="@+id/action_traineeEditRolFragment_to_configTraineeFragment"
+            app:destination="@id/configTraineeFragment" />
     </fragment>
 </navigation>

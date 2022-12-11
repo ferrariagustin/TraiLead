@@ -19,7 +19,9 @@
     <string name="dialog_title_add_trainee">Agregar Trainee</string>
     <string name="dialog_message_add_trainee">Esta seguro que desea agregar a %s como su nuevo Trainee</string>
     <string name="dialog_title_removed_trainee">Eliminar Trainee</string>
+    <string name="dialog_title_unlinked_trainee">Desvincular Trainee</string>
     <string name="dialog_message_removed_trainee">Esta seguro que desea eliminar a %s de su lista de Trainees</string>
+    <string name="dialog_message_unlinked_trainee">Esta seguro que desea desvincular a %s de su lista de Trainees</string>
     <string name="welcome_home_trainee">Hola Trainee</string>
     <string name="trainee_test">Test</string>
     <string name="place_holder_name">John Doe</string>
@@ -28,6 +30,10 @@
     <string name="assigned_leader">Líder asignado</string>
     <string name="edit_trainee_profile_name">Editar nombre</string>
     <string name="edit_trainee_rol">Editar Rol</string>
+    <string name="edit_material_trainee">Configurar material del Trainee</string>
+    <string name="unlinked_trainee">Desvincular trainee</string>
+    <string name="delete_trainee">Eliminar Trainee</string>
+    <string name="config_trainee">Configuración</string>
     <string name="edit_trainee_profile_password">Editar contraseña</string>
     <string name="edit_profile_last_name">Ingrese su nuevo apellido</string>
     <string name="edit_profile_name">Ingrese su nuevo nombre</string>

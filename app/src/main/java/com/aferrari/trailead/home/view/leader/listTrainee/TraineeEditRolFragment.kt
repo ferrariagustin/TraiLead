@@ -34,13 +34,13 @@ class TraineeEditRolFragment : Fragment() {
             )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        viewModel.init()
         initListeners()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setRolSelected()
     }
 
