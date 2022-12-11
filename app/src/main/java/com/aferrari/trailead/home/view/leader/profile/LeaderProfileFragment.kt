@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.view.leader
+package com.aferrari.trailead.home.view.leader.profile
 
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
@@ -34,11 +35,18 @@ class LeaderProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initListener()
+    }
+
+    private fun initListener() {
         binding.leaderProfileToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.close_session_toolbar_menu -> logout()
             }
             return@setOnMenuItemClickListener true
+        }
+        binding.leaderImageViewEditCompleteNameIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_leaderProfileFragment_to_leaderEditNameFragment)
         }
     }
 

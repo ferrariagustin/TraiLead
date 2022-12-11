@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.view.trainee
+package com.aferrari.trailead.home.view.trainee.profile
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable

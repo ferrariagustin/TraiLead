@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.view.trainee.editProfile
+package com.aferrari.trailead.home.view.trainee.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R

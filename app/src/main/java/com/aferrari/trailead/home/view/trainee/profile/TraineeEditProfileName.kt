@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.view.trainee.editProfile
+package com.aferrari.trailead.home.view.trainee.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -38,14 +38,14 @@ class TraineeEditProfileName : Fragment() {
 
     private fun initListeners() {
         binding.traineeEditProfileNameToolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_traineeEditProfileName_to_traineeProfileFragment)
+            findNavController().navigateUp()
         }
         binding.editProfileNameButton.setOnClickListener {
             traineeViewModel.updateInformation(
                 binding.editProfileNameInputText.text.toString(),
                 binding.editProfileLastNameInputText.text.toString()
             )
-            findNavController().navigate(R.id.action_traineeEditProfileName_to_traineeProfileFragment)
+            findNavController().navigateUp()
         }
     }
 }

@@ -18,6 +18,8 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     val emailUser = MutableLiveData<String>()
 
+    val passUser = MutableLiveData<String>()
+
     val listAllTrainee = MutableLiveData<List<Trainee>>()
 
     val listLinkedTrainees = MutableLiveData<List<Trainee>>()
@@ -42,6 +44,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             nameUser.value = leader.name
             lastNameUser.value = leader.lastName
             emailUser.value = leader.email
+            passUser.value = leader.pass
         }
     }
 
@@ -121,6 +124,19 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         traineeSelected?.let { trainee ->
             viewModelScope.launch {
                 repository.deleteTrainee(trainee)
+            }
+        }
+    }
+
+    fun updateInformation(name: String, lastName: String) {
+        viewModelScope.launch {
+            if (name.isNotEmpty()) {
+                repository.updateLeaderName(leader.id, name)
+                nameUser.value = name
+            }
+            if (lastName.isNotEmpty()) {
+                repository.updateLeaderLastName(leader.id, lastName)
+                lastNameUser.value = lastName
             }
         }
     }
