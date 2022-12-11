@@ -21,6 +21,7 @@
     <string name="dialog_title_removed_trainee">Eliminar Trainee</string>
     <string name="dialog_title_unlinked_trainee">Desvincular Trainee</string>
     <string name="dialog_message_removed_trainee">Esta seguro que desea eliminar a %s de su lista de Trainees</string>
+    <string name="dialog_message_delete_trainee">Esta seguro que desea eliminar la cuenta: %s </string>
     <string name="dialog_message_unlinked_trainee">Esta seguro que desea desvincular a %s de su lista de Trainees</string>
     <string name="welcome_home_trainee">Hola Trainee</string>
     <string name="trainee_test">Test</string>

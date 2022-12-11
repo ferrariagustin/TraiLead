@@ -100,6 +100,9 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         getLinkedTrainees()
     }
 
+    /**
+     * The selected trainee rol is updated
+     */
     fun updateTraineeRol() {
         traineeSelected?.let { trainee ->
             radioRolCheck?.let { position ->
@@ -112,6 +115,14 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             }
         }
         statusUpdateTraineeRol.value = StatusUpdateInformation.FAILED
+    }
+
+    fun removeTraineeSelected() {
+        traineeSelected?.let { trainee ->
+            viewModelScope.launch {
+                repository.deleteTrainee(trainee)
+            }
+        }
     }
 
 }

@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/profile_toolbar_background.xml" value="0.236" />
         <entry key="app/src/main/res/layout/home_activity.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/layout/item_trainee_list.xml" value="0.3374862670898437" />
+        <entry key="app/src/main/res/layout/item_trainee_unlinked_list.xml" value="0.3780209325850311" />
         <entry key="app/src/main/res/layout/leader_activity.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/leader_config_trainee_fragment.xml" value="0.36259877085162423" />
         <entry key="app/src/main/res/layout/leader_home_fragment.xml" value="0.203125" />

@@ -45,12 +45,41 @@ class ConfigTraineeFragment : Fragment() {
             findNavController().navigate(R.id.action_configTraineeFragment_to_traineeEditRolFragment)
         }
         binding.configUnlinkedButton.setOnClickListener {
-            showDialog()
+            unlinkedShowDialog()
+        }
+        binding.configDeleteTraineeButton.setOnClickListener {
+            deleteShowDialog()
         }
     }
 
+    private fun deleteShowDialog() {
+        Dialog().showDialogWithAction(
+            title = resources.getString(R.string.dialog_title_removed_trainee),
+            message = resources.getString(
+                R.string.dialog_message_delete_trainee,
+                homeLeaderViewModel.traineeSelected?.email
+            ),
+            requireContext(),
+            removeTraineeAction(),
+            icon = resources.getDrawable(R.drawable.ic_delete, requireContext().theme).apply {
+                this.setTint(
+                    resources.getColor(
+                        com.aferrari.login.R.color.red,
+                        requireContext().theme
+                    )
+                )
+            }
+        )
+    }
+
+    private fun removeTraineeAction(): DialogInterface.OnClickListener =
+        DialogInterface.OnClickListener { _, _ ->
+            homeLeaderViewModel.removeTraineeSelected()
+            findNavController().navigateUp()
+        }
+
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun showDialog() {
+    private fun unlinkedShowDialog() {
         Dialog().showDialogWithAction(
             title = resources.getString(R.string.dialog_title_unlinked_trainee),
             message = resources.getString(
@@ -58,7 +87,7 @@ class ConfigTraineeFragment : Fragment() {
                 homeLeaderViewModel.traineeSelected?.name
             ),
             requireContext(),
-            getPositiveAction(),
+            unlinkedTraineeAction(),
             icon = resources.getDrawable(R.drawable.ic_unlink, requireContext().theme).apply {
                 this.setTint(
                     resources.getColor(
@@ -70,7 +99,7 @@ class ConfigTraineeFragment : Fragment() {
         )
     }
 
-    private fun getPositiveAction(): DialogInterface.OnClickListener =
+    private fun unlinkedTraineeAction(): DialogInterface.OnClickListener =
         DialogInterface.OnClickListener { _, _ ->
             homeLeaderViewModel.setUnlinkedTrainee()
             findNavController().navigateUp()
