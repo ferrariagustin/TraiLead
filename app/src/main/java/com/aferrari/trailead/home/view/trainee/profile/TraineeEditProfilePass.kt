@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.view.trainee.editProfile
+package com.aferrari.trailead.home.view.trainee.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
@@ -70,7 +69,7 @@ class TraineeEditProfilePass : Fragment() {
     private fun showSuccess() {
         Toast.makeText(
             requireContext(),
-            "Su contraseña fue actualizada correctamente",
+            resources.getString(R.string.update_pass_success),
             Toast.LENGTH_SHORT
         ).show()
         findNavController().navigate(R.id.action_traineeEditProfilePass_to_traineeProfileFragment)

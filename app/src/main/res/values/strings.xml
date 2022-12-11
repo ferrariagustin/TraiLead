@@ -23,6 +23,7 @@
     <string name="dialog_message_removed_trainee">Esta seguro que desea eliminar a %s de su lista de Trainees</string>
     <string name="dialog_message_delete_trainee">Esta seguro que desea eliminar la cuenta: %s </string>
     <string name="dialog_message_unlinked_trainee">Esta seguro que desea desvincular a %s de su lista de Trainees</string>
+
     <string name="welcome_home_trainee">Hola Trainee</string>
     <string name="trainee_test">Test</string>
     <string name="place_holder_name">John Doe</string>
@@ -45,4 +46,8 @@
     <string name="rol_junior">JUNIOR</string>
     <string name="rol_semisenior">SEMISENIOR</string>
     <string name="rol_senior">SENIOR</string>
+    <string name="update_pass_success">Su contraseña fue actualizada correctamente</string>
+    <string name="update_pass_failed">Hubo un error al actualizar la contraseña</string>
+    <string name="update_pass_failed_input">Por favor ingrese una contraseña válida</string>
+
 </resources>

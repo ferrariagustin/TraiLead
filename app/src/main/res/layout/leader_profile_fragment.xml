@@ -16,75 +16,146 @@
             android:id="@+id/leader_profile_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_small"
+            android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_item_toolbar_close_session"
-            app:title="@string/toolbar_profile" />
+            app:title="@string/profile" />
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/leader_image_view_complete_name_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_profile"
+            android:tint="@color/primaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_profile_toolbar" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/leader_label_complete_name_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/name_hint"
+            app:layout_constraintStart_toEndOf="@id/leader_image_view_complete_name_icon"
+            app:layout_constraintTop_toBottomOf="@id/leader_profile_toolbar" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/leader_complete_name_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{homeLeaderViewModel.nameUser + ' ' + homeLeaderViewModel.lastNameUser}"
+            app:layout_constraintStart_toStartOf="@id/leader_label_complete_name_textview"
+            app:layout_constraintTop_toBottomOf="@id/leader_label_complete_name_textview" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/leader_image_view_edit_complete_name_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:src="@drawable/ic_next"
+            android:tint="@color/primaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_label_complete_name_textview" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/leader_complete_name_divider_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_long"
-            android:padding="@dimen/margin_small"
-            android:theme="@style/Theme.TraiLead"
-            app:cardCornerRadius="@dimen/card_elevation_default_shadow"
-            app:cardElevation="@dimen/card_elevation_default_shadow"
-            app:cardUseCompatPadding="true"
+            android:layout_margin="@dimen/margin_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/leader_profile_toolbar">
+            app:layout_constraintTop_toBottomOf="@id/leader_complete_name_textview" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/margin_small">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/leader_image_view_email_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_email"
+            android:tint="@color/primaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_complete_name_divider_id" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/image_profile_id"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:src="@drawable/ic_profile"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                    app:strokeWidth="1dp" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/leader_label_email_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/email"
+            app:layout_constraintStart_toEndOf="@id/leader_image_view_email_icon"
+            app:layout_constraintTop_toBottomOf="@id/leader_complete_name_divider_id" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/name_label_id"
-                    style="@style/traiLead_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:text="@={homeLeaderViewModel.nameUser}"
-                    app:layout_constraintStart_toEndOf="@id/image_profile_id"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/leader_email_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{homeLeaderViewModel.emailUser}"
+            app:layout_constraintStart_toStartOf="@id/leader_label_email_textview"
+            app:layout_constraintTop_toBottomOf="@id/leader_label_email_textview" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/last_name_label_id"
-                    style="@style/traiLead_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:text="@={homeLeaderViewModel.lastNameUser}"
-                    app:layout_constraintStart_toEndOf="@id/image_profile_id"
-                    app:layout_constraintTop_toBottomOf="@id/name_label_id" />
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/leader_email_divider_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_email_textview" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/email_label_id"
-                    style="@style/traiLead_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:text="@={homeLeaderViewModel.emailUser}"
-                    app:layout_constraintStart_toEndOf="@id/image_profile_id"
-                    app:layout_constraintTop_toBottomOf="@id/last_name_label_id" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/leader_image_view_password_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_lock"
+            android:tint="@color/primaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_email_divider_id" />
 
-        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/leader_label_password_textview"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/password_hint"
+            app:layout_constraintStart_toEndOf="@id/leader_image_view_password_icon"
+            app:layout_constraintTop_toBottomOf="@id/leader_email_divider_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/leader_password_textview"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:text="@{homeLeaderViewModel.passUser}"
+            app:layout_constraintStart_toStartOf="@id/leader_label_password_textview"
+            app:layout_constraintTop_toBottomOf="@id/leader_label_password_textview" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/leader_image_view_edit_password_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:src="@drawable/ic_next"
+            android:tint="@color/primaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_label_password_textview" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/leader_divider_password_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_password_textview" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

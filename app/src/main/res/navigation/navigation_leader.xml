@@ -18,16 +18,22 @@
             app:destination="@id/linkedTraineeListFragment" />
     </fragment>
     <fragment
-        tools:layout="@layout/leader_profile_fragment"
         android:id="@+id/leaderProfileFragment"
-        android:name="com.aferrari.trailead.home.view.leader.LeaderProfileFragment"
-        android:label="LeaderProfileFragment">
+        android:name="com.aferrari.trailead.home.view.leader.profile.LeaderProfileFragment"
+        android:label="LeaderProfileFragment"
+        tools:layout="@layout/leader_profile_fragment">
         <action
             android:id="@+id/action_leaderProfileFragment_to_leaderHomeFragment"
             app:destination="@id/leaderHomeFragment" />
         <action
             android:id="@+id/action_leaderProfileFragment_to_linkedTraineeListFragment"
             app:destination="@id/linkedTraineeListFragment" />
+        <action
+            android:id="@+id/action_leaderProfileFragment_to_leaderEditNameFragment"
+            app:destination="@id/leaderEditNameFragment" />
+        <action
+            android:id="@+id/action_leaderProfileFragment_to_leaderEditPassFragment"
+            app:destination="@id/leaderEditPassFragment" />
     </fragment>
     <fragment
         android:id="@+id/unLinkedTraineeListFragment"
@@ -65,8 +71,8 @@
     <fragment
         android:id="@+id/configTraineeFragment"
         android:name="com.aferrari.trailead.home.view.leader.listTrainee.ConfigTraineeFragment"
-        tools:layout="@layout/leader_config_trainee_fragment"
-        android:label="ConfigTraineeFragment" >
+        android:label="ConfigTraineeFragment"
+        tools:layout="@layout/leader_config_trainee_fragment">
         <action
             android:id="@+id/action_configTraineeFragment_to_linkedTraineeListFragment"
             app:destination="@id/linkedTraineeListFragment" />
@@ -77,10 +83,28 @@
     <fragment
         android:id="@+id/traineeEditRolFragment"
         android:name="com.aferrari.trailead.home.view.leader.listTrainee.TraineeEditRolFragment"
-        tools:layout="@layout/linked_trainee_edit_rol_fragment"
-        android:label="TraineeEditRolFragment" >
+        android:label="TraineeEditRolFragment"
+        tools:layout="@layout/linked_trainee_edit_rol_fragment">
         <action
             android:id="@+id/action_traineeEditRolFragment_to_configTraineeFragment"
             app:destination="@id/configTraineeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderEditNameFragment"
+        android:name="com.aferrari.trailead.home.view.leader.profile.LeaderEditNameFragment"
+        android:label="LeaderEditNameFragment"
+        tools:layout="@layout/leader_edit_profile_name_fragment">
+        <action
+            android:id="@+id/action_leaderEditNameFragment_to_leaderProfileFragment"
+            app:destination="@id/leaderProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderEditPassFragment"
+        tools:layout="@layout/leader_edit_profile_pass_fragment"
+        android:name="com.aferrari.trailead.home.view.leader.profile.LeaderEditPassFragment"
+        android:label="LeaderEditPassFragment" >
+        <action
+            android:id="@+id/action_leaderEditPassFragment_to_leaderProfileFragment"
+            app:destination="@id/leaderProfileFragment" />
     </fragment>
 </navigation>
