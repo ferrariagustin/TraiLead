@@ -69,7 +69,7 @@ class TraineeEditProfilePass : Fragment() {
     private fun showSuccess() {
         Toast.makeText(
             requireContext(),
-            "Su contraseña fue actualizada correctamente",
+            resources.getString(R.string.update_pass_success),
             Toast.LENGTH_SHORT
         ).show()
         findNavController().navigate(R.id.action_traineeEditProfilePass_to_traineeProfileFragment)

@@ -1,8 +1,9 @@
 package com.aferrari.trailead.home.view.leader.profile
 
-import android.content.Intent
-import android.net.Uri
+import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.aferrari.login.session.SessionManagement
-import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderProfileFragmentBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 
 class LeaderProfileFragment : Fragment() {
     private lateinit var binding: LeaderProfileFragmentBinding
@@ -38,27 +38,39 @@ class LeaderProfileFragment : Fragment() {
         initListener()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initListener() {
-        binding.leaderProfileToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.close_session_toolbar_menu -> logout()
-            }
-            return@setOnMenuItemClickListener true
-        }
         binding.leaderImageViewEditCompleteNameIcon.setOnClickListener {
             findNavController().navigate(R.id.action_leaderProfileFragment_to_leaderEditNameFragment)
         }
+        binding.leaderImageViewEditPasswordIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_leaderProfileFragment_to_leaderEditPassFragment)
+        }
+        binding.leaderImageViewPasswordIcon.setOnClickListener {
+            when (homeLeaderViewModel.statusVisibilityPassword) {
+                StatusVisibilityPassword.INVISIBLE -> setVisibilityPassword(
+                    StatusVisibilityPassword.VISIBLE,
+                    resources.getDrawable(
+                        R.drawable.ic_unlock,
+                        requireContext().theme
+                    ), null
+                )
+                StatusVisibilityPassword.VISIBLE -> setVisibilityPassword(
+                    StatusVisibilityPassword.INVISIBLE,
+                    resources.getDrawable(R.drawable.ic_lock, requireContext().theme),
+                    PasswordTransformationMethod()
+                )
+            }
+        }
     }
 
-    private fun logout() {
-        SessionManagement(requireContext()).removeSession()
-        goLogin()
-    }
-
-    private fun goLogin() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(StringUtils.DEEPLINK_LOGIN))
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        requireActivity().finish()
+    private fun setVisibilityPassword(
+        visibilityPassword: StatusVisibilityPassword,
+        newIconPass: Drawable,
+        passwordTransformationMethod: PasswordTransformationMethod?
+    ) {
+        homeLeaderViewModel.statusVisibilityPassword = visibilityPassword
+        binding.leaderImageViewPasswordIcon.setImageDrawable(newIconPass)
+        binding.leaderPasswordTextview.transformationMethod = passwordTransformationMethod
     }
 }

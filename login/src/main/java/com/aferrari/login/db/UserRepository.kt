@@ -104,4 +104,6 @@ class UserRepository(private val dao: UserDao) {
     suspend fun updateLeaderLastName(leaderId: Int, lastName: String) =
         dao.updateLeaderLastName(leaderId, lastName)
 
+    suspend fun updateLeaderPass(leaderId: Int, pass: String) = dao.updateLeaderPassword(leaderId, pass)
+
 }

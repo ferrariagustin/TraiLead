@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_leaderProfileFragment_to_leaderEditNameFragment"
             app:destination="@id/leaderEditNameFragment" />
+        <action
+            android:id="@+id/action_leaderProfileFragment_to_leaderEditPassFragment"
+            app:destination="@id/leaderEditPassFragment" />
     </fragment>
     <fragment
         android:id="@+id/unLinkedTraineeListFragment"
@@ -93,6 +96,15 @@
         tools:layout="@layout/leader_edit_profile_name_fragment">
         <action
             android:id="@+id/action_leaderEditNameFragment_to_leaderProfileFragment"
+            app:destination="@id/leaderProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderEditPassFragment"
+        tools:layout="@layout/leader_edit_profile_pass_fragment"
+        android:name="com.aferrari.trailead.home.view.leader.profile.LeaderEditPassFragment"
+        android:label="LeaderEditPassFragment" >
+        <action
+            android:id="@+id/action_leaderEditPassFragment_to_leaderProfileFragment"
             app:destination="@id/leaderProfileFragment" />
     </fragment>
 </navigation>

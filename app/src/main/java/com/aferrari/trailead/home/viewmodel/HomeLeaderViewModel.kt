@@ -26,6 +26,10 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     val statusUpdateTraineeRol = MutableLiveData<StatusUpdateInformation>()
 
+    val statusUpdatePassword = MutableLiveData<StatusUpdateInformation>()
+
+    var statusVisibilityPassword = StatusVisibilityPassword.INVISIBLE
+
     var traineeSelected: Trainee? = null
 
     var radioRolCheck: Position? = null
@@ -36,6 +40,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     fun init() {
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
+        statusUpdatePassword.value = StatusUpdateInformation.NONE
     }
 
     fun setLeader(leader: Leader?) {
@@ -138,6 +143,22 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
                 repository.updateLeaderLastName(leader.id, lastName)
                 lastNameUser.value = lastName
             }
+        }
+    }
+
+    fun updatePassword(pass: String, repeatPass: String) {
+        if (pass.isNullOrEmpty() || repeatPass.isNullOrEmpty() || pass != repeatPass) {
+            statusUpdatePassword.value = StatusUpdateInformation.FAILED
+            return
+        }
+        updatepassword(leader.id, pass)
+    }
+
+    private fun updatepassword(leaderId: Int, pass: String) {
+        viewModelScope.launch {
+            repository.updateLeaderPass(leaderId, pass)
+            setLeader(repository.get(leaderId) as Leader)
+            statusUpdatePassword.value = StatusUpdateInformation.SUCCESS
         }
     }
 

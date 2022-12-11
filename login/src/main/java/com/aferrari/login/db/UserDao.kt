@@ -85,4 +85,7 @@ interface UserDao {
 
     @Query("UPDATE leader_data_table SET leader_last_name = :lastName WHERE leader_id =:leaderId")
     suspend fun updateLeaderLastName(leaderId: Int, lastName: String)
+
+    @Query("UPDATE leader_data_table SET leader_pass = :pass WHERE leader_id =:leaderId")
+    suspend fun updateLeaderPassword(leaderId: Int, pass: String)
 }
