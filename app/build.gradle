@@ -72,4 +72,6 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0'
 }

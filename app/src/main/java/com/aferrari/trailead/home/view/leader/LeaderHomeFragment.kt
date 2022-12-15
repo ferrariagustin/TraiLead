@@ -1,5 +1,6 @@
 package com.aferrari.trailead.home.view.leader
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,6 +15,8 @@ import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderHomeFragmentBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
 
 class LeaderHomeFragment : Fragment() {
@@ -35,6 +38,7 @@ class LeaderHomeFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun initListeners() {
         binding.leaderHomeToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -42,6 +46,12 @@ class LeaderHomeFragment : Fragment() {
             }
             return@setOnMenuItemClickListener true
         }
+        lifecycle.addObserver(binding.leaderMaterialYoutubeId)
+        binding.leaderMaterialYoutubeId.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.cueVideo("Fe57a6qpoi0", 0f)
+            }
+        })
     }
 
     private fun logout() {
