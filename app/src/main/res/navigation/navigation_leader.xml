@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/leaderHomeFragment"
-        android:name="com.aferrari.trailead.home.view.leader.LeaderHomeFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.LeaderHomeFragment"
         android:label="LeaderHomeFragment"
         tools:layout="@layout/leader_home_fragment">
         <action

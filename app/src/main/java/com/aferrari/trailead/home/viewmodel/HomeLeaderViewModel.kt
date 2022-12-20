@@ -20,7 +20,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     val passUser = MutableLiveData<String>()
 
-    val listAllTrainee = MutableLiveData<List<Trainee>>()
+    private val listAllTrainee = MutableLiveData<List<Trainee>>()
 
     val listLinkedTrainees = MutableLiveData<List<Trainee>>()
 
@@ -34,6 +34,9 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     var radioRolCheck: Position? = null
 
+    var categoryName = MutableLiveData<String>()
+
+    val listMaterialCategory = MutableLiveData<List<String>>()
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
@@ -68,7 +71,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
     fun setLinkedTrainee(trainee: Trainee) {
         viewModelScope.launch {
             repository.setLinkedTrainee(trainee, leader)
-            updateList()
+            updateTraineeList()
         }
     }
 
@@ -87,7 +90,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
     fun setUnlinkedTrainee(trainee: Trainee) {
         viewModelScope.launch {
             repository.setUnlinkedTrainee(trainee)
-            updateList()
+            updateTraineeList()
         }
     }
 
@@ -98,12 +101,12 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         traineeSelected?.let { trainee ->
             viewModelScope.launch {
                 repository.setUnlinkedTrainee(trainee)
-                updateList()
+                updateTraineeList()
             }
         }
     }
 
-    private fun updateList() {
+    private fun updateTraineeList() {
         getUnLinkedTrainees()
         getLinkedTrainees()
     }
@@ -159,6 +162,12 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             repository.updateLeaderPass(leaderId, pass)
             setLeader(repository.get(leaderId) as Leader)
             statusUpdatePassword.value = StatusUpdateInformation.SUCCESS
+        }
+    }
+
+    fun getMaterialCategory() {
+        viewModelScope.launch {
+            listMaterialCategory.value = arrayListOf("Session 1", "Session 2")
         }
     }
 
