@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
@@ -46,12 +47,16 @@ class LeaderHomeFragment : Fragment() {
             }
             return@setOnMenuItemClickListener true
         }
+        homeLeaderViewModel.init()
         binding.recyclerViewCategoryList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         homeLeaderViewModel.getMaterialCategory()
         homeLeaderViewModel.listMaterialCategory.observe(viewLifecycleOwner) {
             binding.recyclerViewCategoryList.adapter =
                 MaterialListAdapter(it)
+        }
+        binding.addMaterialCategoryLeaderHome.setOnClickListener {
+            findNavController().navigate(R.id.action_leaderHomeFragment_to_addCategoryFragment)
         }
 //        lifecycle.addObserver(binding.leaderMaterialYoutubeId)
 //        binding.leaderMaterialYoutubeId.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {

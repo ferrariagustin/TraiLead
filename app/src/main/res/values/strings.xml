@@ -49,5 +49,8 @@
     <string name="update_pass_success">Su contraseña fue actualizada correctamente</string>
     <string name="update_pass_failed">Hubo un error al actualizar la contraseña</string>
     <string name="update_pass_failed_input">Por favor ingrese una contraseña válida</string>
+    <string name="add_new_category">Agregar nueva categoría</string>
+    <string name="add_new_category_hint">Agregue la nueva categoría</string>
+    <string name="add_new_category_button">Agregar</string>
 
 </resources>

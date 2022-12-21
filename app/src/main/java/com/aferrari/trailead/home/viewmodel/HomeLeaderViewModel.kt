@@ -34,14 +34,17 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     var radioRolCheck: Position? = null
 
-    var categoryName = MutableLiveData<String>()
-
     val listMaterialCategory = MutableLiveData<List<String>>()
+
+    //    Material Category
+    private val listCategoryList = arrayListOf<String>("Session 1", "Session 2")
+    val statusUpdateNewCategory = MutableLiveData<StatusUpdateInformation>()
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
 
     fun init() {
+        statusUpdateNewCategory.value = StatusUpdateInformation.NONE
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
         statusUpdatePassword.value = StatusUpdateInformation.NONE
     }
@@ -167,8 +170,18 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     fun getMaterialCategory() {
         viewModelScope.launch {
-            listMaterialCategory.value = arrayListOf("Session 1", "Session 2")
+            listMaterialCategory.value = listCategoryList
         }
+    }
+
+    fun addCategory(newCategory: String) {
+        if (newCategory.isNullOrEmpty()) {
+            statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
+            return
+        }
+        listCategoryList.add(newCategory)
+        getMaterialCategory()
+        statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
     }
 
 }
