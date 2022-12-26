@@ -3,10 +3,7 @@ package com.aferrari.trailead.home.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.db.Leader
-import com.aferrari.login.db.Position
-import com.aferrari.login.db.Trainee
-import com.aferrari.login.db.UserRepository
+import com.aferrari.login.db.*
 import kotlinx.coroutines.launch
 
 class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() {
@@ -34,17 +31,22 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     var radioRolCheck: Position? = null
 
-    val listMaterialCategory = MutableLiveData<List<String>>()
+    var categorySelected: Category? = null
+
+    val listMaterialCategory = MutableLiveData<List<Category>>()
 
     //    Material Category
-    private val listCategoryList = arrayListOf<String>("Session 1", "Session 2")
+    private val listCategoryList =
+        arrayListOf(Category(1, "Session 1"), Category(1, "Session 2"))
     val statusUpdateNewCategory = MutableLiveData<StatusUpdateInformation>()
+    val statusUpdateEditCategory = MutableLiveData<StatusUpdateInformation>()
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
 
     fun init() {
         statusUpdateNewCategory.value = StatusUpdateInformation.NONE
+        statusUpdateEditCategory.value = StatusUpdateInformation.NONE
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
         statusUpdatePassword.value = StatusUpdateInformation.NONE
     }
@@ -174,14 +176,35 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         }
     }
 
-    fun addCategory(newCategory: String) {
-        if (newCategory.isNullOrEmpty()) {
+    fun addCategory(nameCategory: String) {
+        val newCategory = Category(3, nameCategory)
+        if (newCategory.name.isEmpty()) {
             statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
             return
         }
         listCategoryList.add(newCategory)
         getMaterialCategory()
         statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
+    }
+
+    fun removeCategory() {
+        categorySelected?.let {
+            listCategoryList.remove(categorySelected)
+            listMaterialCategory.value = listCategoryList
+        }
+    }
+
+    fun editCategory(newCategory: String) {
+        if (newCategory.isNullOrEmpty()) {
+            statusUpdateEditCategory.value = StatusUpdateInformation.FAILED
+            return
+        }
+        listCategoryList.forEach {
+            if (it == categorySelected) {
+                it.name = newCategory
+            }
+        }
+        statusUpdateEditCategory.value = StatusUpdateInformation.SUCCESS
     }
 
 }

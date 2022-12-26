@@ -1,6 +1,5 @@
 package com.aferrari.trailead.home.view.leader.home
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -39,21 +38,22 @@ class LeaderHomeFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     private fun initListeners() {
+        homeLeaderViewModel.init()
+
         binding.leaderHomeToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.close_session_toolbar_menu -> logout()
             }
             return@setOnMenuItemClickListener true
         }
-        homeLeaderViewModel.init()
+
         binding.recyclerViewCategoryList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         homeLeaderViewModel.getMaterialCategory()
         homeLeaderViewModel.listMaterialCategory.observe(viewLifecycleOwner) {
             binding.recyclerViewCategoryList.adapter =
-                MaterialListAdapter(it)
+                MaterialListAdapter(it, homeLeaderViewModel, this)
         }
         binding.addMaterialCategoryLeaderHome.setOnClickListener {
             findNavController().navigate(R.id.action_leaderHomeFragment_to_addCategoryFragment)

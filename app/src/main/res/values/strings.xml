@@ -52,5 +52,12 @@
     <string name="add_new_category">Agregar nueva categoría</string>
     <string name="add_new_category_hint">Agregue la nueva categoría</string>
     <string name="add_new_category_button">Agregar</string>
+    <string name="toolbar_setting_category">Configurar Categoría</string>
+    <string name="delete">Eliminar</string>
+    <string name="save">Guardar</string>
+    <string name="dialog_message_delete_category">Esta seguro que desea eliminar la categoría %s</string>
+    <string name="save_category_success">Se actualizó correctamente</string>
+    <string name="error">Error</string>
+    <string name="error_message_dialog_category">Ingrese un nombre de categoría diferente</string>
 
 </resources>

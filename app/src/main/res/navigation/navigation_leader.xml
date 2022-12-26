@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_leaderHomeFragment_to_addCategoryFragment"
             app:destination="@id/addCategoryFragment" />
+        <action
+            android:id="@+id/action_leaderHomeFragment_to_leaderSettingCategoryMaterial2"
+            app:destination="@id/leaderSettingCategoryMaterial" />
     </fragment>
     <fragment
         android:id="@+id/leaderProfileFragment"
@@ -117,6 +120,15 @@
         tools:layout="@layout/leader_add_material_category">
         <action
             android:id="@+id/action_addCategoryFragment_to_leaderHomeFragment"
+            app:destination="@id/leaderHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderSettingCategoryMaterial"
+        android:name="com.aferrari.trailead.home.view.leader.home.SettingCategoryMaterial"
+        android:label="LeaderSettingCategoryMaterial"
+        tools:layout="@layout/leader_setting_material_category">
+        <action
+            android:id="@+id/action_leaderSettingCategoryMaterial_to_leaderHomeFragment2"
             app:destination="@id/leaderHomeFragment" />
     </fragment>
 </navigation>
