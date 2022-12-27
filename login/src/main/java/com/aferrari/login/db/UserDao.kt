@@ -88,4 +88,18 @@ interface UserDao {
 
     @Query("UPDATE leader_data_table SET leader_pass = :pass WHERE leader_id =:leaderId")
     suspend fun updateLeaderPassword(leaderId: Int, pass: String)
+
+    //    Category
+
+    @Insert
+    suspend fun insertCategory(category: Category)
+
+    @Query("SELECT * FROM category_data_table ORDER BY category_name")
+    suspend fun getAllCategory(): List<Category>
+
+    @Delete
+    suspend fun deleteCategory(category: Category)
+
+    @Query("UPDATE category_data_table SET category_name = :categoryName WHERE category_id = :categoryId")
+    suspend fun updateCategory(categoryId: Int, categoryName: String)
 }

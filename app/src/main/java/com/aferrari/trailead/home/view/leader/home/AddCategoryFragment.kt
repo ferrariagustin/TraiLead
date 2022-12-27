@@ -43,7 +43,7 @@ class AddCategoryFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.addNewCategoryButton.setOnClickListener {
-            homeLeaderViewModel.addCategory(binding.addNewCategoryTextInput.text.toString())
+            homeLeaderViewModel.insertCategory(binding.addNewCategoryTextInput.text.toString())
         }
         homeLeaderViewModel.statusUpdateNewCategory.observe(viewLifecycleOwner) {
             when (it) {

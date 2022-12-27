@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.*
+import com.aferrari.login.utils.IntegerUtils
 import kotlinx.coroutines.launch
 
 class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() {
@@ -33,11 +34,9 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     var categorySelected: Category? = null
 
-    val listMaterialCategory = MutableLiveData<List<Category>>()
 
     //    Material Category
-    private val listCategoryList =
-        arrayListOf(Category(1, "Session 1"), Category(1, "Session 2"))
+    val listMaterialCategory = MutableLiveData<List<Category>>()
     val statusUpdateNewCategory = MutableLiveData<StatusUpdateInformation>()
     val statusUpdateEditCategory = MutableLiveData<StatusUpdateInformation>()
 
@@ -172,25 +171,37 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     fun getMaterialCategory() {
         viewModelScope.launch {
-            listMaterialCategory.value = listCategoryList
+            listMaterialCategory.value = repository.getAllCategory()
         }
     }
 
-    fun addCategory(nameCategory: String) {
-        val newCategory = Category(3, nameCategory)
-        if (newCategory.name.isEmpty()) {
+    fun insertCategory(nameCategory: String) {
+        val category = Category(IntegerUtils().getUserId(), nameCategory)
+        if (category.name.isEmpty()) {
             statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
             return
         }
-        listCategoryList.add(newCategory)
-        getMaterialCategory()
-        statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
+        insertCategory(category)
+    }
+
+    private fun insertCategory(category: Category) {
+        viewModelScope.launch {
+            repository.insertCategory(category)
+            getMaterialCategory()
+            statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
+        }
     }
 
     fun removeCategory() {
         categorySelected?.let {
-            listCategoryList.remove(categorySelected)
-            listMaterialCategory.value = listCategoryList
+            deleteCategory(it)
+        }
+    }
+
+    private fun deleteCategory(category: Category) {
+        viewModelScope.launch {
+            repository.deleteCategory(category)
+            getMaterialCategory()
         }
     }
 
@@ -199,12 +210,16 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             statusUpdateEditCategory.value = StatusUpdateInformation.FAILED
             return
         }
-        listCategoryList.forEach {
-            if (it == categorySelected) {
-                it.name = newCategory
+        updateCategory(newCategory)
+    }
+
+    private fun updateCategory(newCategory: String) {
+        viewModelScope.launch {
+            categorySelected?.let {
+                repository.updateCategory(it.id, newCategory)
+                statusUpdateEditCategory.value = StatusUpdateInformation.SUCCESS
             }
         }
-        statusUpdateEditCategory.value = StatusUpdateInformation.SUCCESS
     }
 
 }

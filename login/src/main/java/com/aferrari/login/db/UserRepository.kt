@@ -106,4 +106,12 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun updateLeaderPass(leaderId: Int, pass: String) = dao.updateLeaderPassword(leaderId, pass)
 
+    suspend fun insertCategory(category: Category) = dao.insertCategory(category)
+
+    suspend fun getAllCategory() = dao.getAllCategory()
+
+    suspend fun deleteCategory(category: Category) = dao.deleteCategory(category)
+
+    suspend fun updateCategory(categoryId: Int, categoryName: String) = dao.updateCategory(categoryId, categoryName)
+
 }
