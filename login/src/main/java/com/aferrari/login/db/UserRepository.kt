@@ -108,7 +108,7 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun insertCategory(category: Category) = dao.insertCategory(category)
 
-    suspend fun getAllCategory() = dao.getAllCategory()
+    suspend fun getAllCategory(leader: Leader) = dao.getAllCategory(leader.id)
 
     suspend fun deleteCategory(category: Category) = dao.deleteCategory(category)
 

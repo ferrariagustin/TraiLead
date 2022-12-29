@@ -9,6 +9,6 @@ data class Category(
 
     @PrimaryKey
     @ColumnInfo(name = "category_id") val id: Int = 0,
-    @ColumnInfo(name = "category_name") var name: String
-//    @ColumnInfo(name = "leader_category_id") var leaderCategoryId: String
+    @ColumnInfo(name = "category_name") var name: String,
+    @ColumnInfo(name = "leader_category_id") var leaderCategoryId: Int? = null
 )

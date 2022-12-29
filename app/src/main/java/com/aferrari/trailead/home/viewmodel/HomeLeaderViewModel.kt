@@ -171,12 +171,12 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     fun getMaterialCategory() {
         viewModelScope.launch {
-            listMaterialCategory.value = repository.getAllCategory()
+            listMaterialCategory.value = repository.getAllCategory(leader)
         }
     }
 
     fun insertCategory(nameCategory: String) {
-        val category = Category(IntegerUtils().getUserId(), nameCategory)
+        val category = Category(IntegerUtils().getUserId(), nameCategory, leader.id)
         if (category.name.isEmpty()) {
             statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
             return

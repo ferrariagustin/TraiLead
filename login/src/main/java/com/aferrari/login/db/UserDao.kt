@@ -94,8 +94,8 @@ interface UserDao {
     @Insert
     suspend fun insertCategory(category: Category)
 
-    @Query("SELECT * FROM category_data_table ORDER BY category_name")
-    suspend fun getAllCategory(): List<Category>
+    @Query("SELECT * FROM category_data_table WHERE leader_category_id = :leaderId ORDER BY category_name")
+    suspend fun getAllCategory(leaderId: Int): List<Category>
 
     @Delete
     suspend fun deleteCategory(category: Category)
