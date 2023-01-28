@@ -231,6 +231,9 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         return arrayListOf(Material(1, "Test", "Fe57a6qpoi0", categorySelected?.id))
     }
 
+    /**
+     * You can gone or visibility the bottomNavigation
+     */
     fun setBottomNavigationVisibility(newVisibility: Int) {
         bottomNavigationViewVisibility.value = when (newVisibility) {
             View.VISIBLE -> {

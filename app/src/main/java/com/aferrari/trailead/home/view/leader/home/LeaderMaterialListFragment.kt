@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderMaterialListBinding
@@ -31,6 +32,10 @@ class LeaderMaterialListFragment : Fragment() {
     }
 
     private fun initListeners() {
+        homeLeaderViewModel.init()
+        binding.leaderMaterialListToolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
         binding.recyclerViewMaterialList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewMaterialList.adapter =
