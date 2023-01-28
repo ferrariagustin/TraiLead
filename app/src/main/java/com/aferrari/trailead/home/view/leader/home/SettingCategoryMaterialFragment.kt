@@ -16,7 +16,7 @@ import com.aferrari.trailead.databinding.LeaderSettingMaterialCategoryBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
-class SettingCategoryMaterial : Fragment() {
+class SettingCategoryMaterialFragment : Fragment() {
 
     private lateinit var binding: LeaderSettingMaterialCategoryBinding
 

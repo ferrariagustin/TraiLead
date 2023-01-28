@@ -54,6 +54,9 @@ class LeaderActivity : AppCompatActivity() {
             }
             return@setOnItemSelectedListener true
         }
+        homeLeaderViewModel.bottomNavigationViewVisibility.observe(this) {
+            binding.bottomNavigationId.visibility = it
+        }
     }
 
     private fun navigateToHome() {

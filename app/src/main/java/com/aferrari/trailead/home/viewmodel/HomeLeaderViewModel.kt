@@ -1,5 +1,6 @@
 package com.aferrari.trailead.home.viewmodel
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,6 +35,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     var categorySelected: Category? = null
 
+    var materialSelected: Material? = null
 
     //    Material Category
     val listMaterialCategory = MutableLiveData<List<Category>>()
@@ -43,7 +45,10 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
 
+    val bottomNavigationViewVisibility = MutableLiveData(View.VISIBLE)
+
     fun init() {
+        bottomNavigationViewVisibility.value = View.VISIBLE
         statusUpdateNewCategory.value = StatusUpdateInformation.NONE
         statusUpdateEditCategory.value = StatusUpdateInformation.NONE
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
@@ -218,6 +223,27 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             categorySelected?.let {
                 repository.updateCategory(it.id, newCategory)
                 statusUpdateEditCategory.value = StatusUpdateInformation.SUCCESS
+            }
+        }
+    }
+
+    fun getListMaterial(): List<Material> {
+        return arrayListOf(Material(1, "Test", "Fe57a6qpoi0", categorySelected?.id))
+    }
+
+    fun setBottomNavigationVisibility(newVisibility: Int) {
+        bottomNavigationViewVisibility.value = when (newVisibility) {
+            View.VISIBLE -> {
+                View.VISIBLE
+            }
+            View.INVISIBLE -> {
+                View.INVISIBLE
+            }
+            View.GONE -> {
+                View.GONE
+            }
+            else -> {
+                View.VISIBLE
             }
         }
     }

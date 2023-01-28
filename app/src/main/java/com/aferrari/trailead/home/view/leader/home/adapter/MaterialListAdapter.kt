@@ -6,44 +6,51 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.aferrari.login.db.Category
+import com.aferrari.login.db.Material
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.ItemMaterialCategoryLeaderHomeBinding
+import com.aferrari.trailead.databinding.MaterialItemBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
 class MaterialListAdapter(
-    private val dataSet: List<Category>,
-    private val homeLeaderViewModel: HomeLeaderViewModel,
-    private val fragment: Fragment
+    private val dataSet: List<Material>,
+    private val fragment: Fragment,
+    private val viewModel: HomeLeaderViewModel
 ) :
-    RecyclerView.Adapter<MaterialListAdapter.CategoryListViewHolder>() {
+    RecyclerView.Adapter<MaterialListAdapter.MaterialListViewHolder>() {
 
-    internal lateinit var binding: ItemMaterialCategoryLeaderHomeBinding
+    private lateinit var binding: MaterialItemBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaterialListViewHolder {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.item_material_category_leader_home,
+            R.layout.material_item,
             parent,
             false
         )
-        return CategoryListViewHolder(binding)
+        return MaterialListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CategoryListViewHolder, position: Int) {
-        val category = dataSet[position]
-        holder.viewHolderBinding.textViewMaterialCategoryId.text = category.name
-        holder.viewHolderBinding.imageSettingCategoryMaterialLeader.setOnClickListener {
-            homeLeaderViewModel.categorySelected = category
-            fragment.findNavController()
-                .navigate(R.id.leaderSettingCategoryMaterial)
+    override fun onBindViewHolder(holder: MaterialListViewHolder, position: Int) {
+        val material = dataSet[position]
+        viewModel.materialSelected = material
+        fragment.lifecycle.addObserver(holder.viewHolderBinding.leaderMaterialYoutubeId)
+        holder.viewHolderBinding.leaderMaterialYoutubeId.getYouTubePlayerWhenReady(object :
+            YouTubePlayerCallback {
+            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                youTubePlayer.cueVideo(material.url, 0f)
+            }
+        })
+        holder.viewHolderBinding.imageFullScreenMaterialLeader.setOnClickListener {
+            fragment.findNavController().navigate(R.id.fullScreenVideo)
         }
     }
 
     override fun getItemCount(): Int = dataSet.size
 
-    class CategoryListViewHolder(binding: ItemMaterialCategoryLeaderHomeBinding) :
+    class MaterialListViewHolder(binding: MaterialItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val viewHolderBinding: ItemMaterialCategoryLeaderHomeBinding = binding
+        val viewHolderBinding: MaterialItemBinding = binding
     }
 }

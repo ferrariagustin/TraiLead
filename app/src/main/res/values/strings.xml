@@ -59,5 +59,6 @@
     <string name="save_category_success">Se actualizó correctamente</string>
     <string name="error">Error</string>
     <string name="error_message_dialog_category">Ingrese un nombre de categoría diferente</string>
+    <string name="leader_material_list_title">Material</string>
 
 </resources>

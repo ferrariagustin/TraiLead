@@ -12,26 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment_container_id"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/leader_material_list_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/bottom_navigation_size"
-            app:defaultNavHost="true"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/navigation_leader" />
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/primaryColor"
+            app:title="@string/leader_material_list_title" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation_id"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_material_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingBottom="@dimen/bottom_navigation_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/menu_item_navigation_leader" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/leader_material_list_toolbar" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

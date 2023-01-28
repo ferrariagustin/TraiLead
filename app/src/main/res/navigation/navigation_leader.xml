@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_leaderHomeFragment_to_leaderSettingCategoryMaterial2"
             app:destination="@id/leaderSettingCategoryMaterial" />
+        <action
+            android:id="@+id/action_leaderHomeFragment_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
     </fragment>
     <fragment
         android:id="@+id/leaderProfileFragment"
@@ -124,11 +127,32 @@
     </fragment>
     <fragment
         android:id="@+id/leaderSettingCategoryMaterial"
-        android:name="com.aferrari.trailead.home.view.leader.home.SettingCategoryMaterial"
+        android:name="com.aferrari.trailead.home.view.leader.home.SettingCategoryMaterialFragment"
         android:label="LeaderSettingCategoryMaterial"
         tools:layout="@layout/leader_setting_material_category">
         <action
             android:id="@+id/action_leaderSettingCategoryMaterial_to_leaderHomeFragment2"
             app:destination="@id/leaderHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderMaterialListFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.LeaderMaterialListFragment"
+        android:label="LeaderMaterialListFragment"
+        tools:layout="@layout/leader_material_list">
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_leaderHomeFragment"
+            app:destination="@id/leaderHomeFragment" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_fullScreenVideo"
+            app:destination="@id/fullScreenVideo" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullScreenVideo"
+        android:name="com.aferrari.trailead.home.view.leader.home.FullScreenVideo"
+        android:label="FullScreenVideo"
+        tools:layout="@layout/full_screen_video">
+        <action
+            android:id="@+id/action_fullScreenVideo_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
     </fragment>
 </navigation>

@@ -15,7 +15,7 @@ import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderHomeFragmentBinding
-import com.aferrari.trailead.home.view.leader.home.adapter.MaterialListAdapter
+import com.aferrari.trailead.home.view.leader.home.adapter.CategoryMaterialListAdapter
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 
 
@@ -53,17 +53,11 @@ class LeaderHomeFragment : Fragment() {
         homeLeaderViewModel.getMaterialCategory()
         homeLeaderViewModel.listMaterialCategory.observe(viewLifecycleOwner) {
             binding.recyclerViewCategoryList.adapter =
-                MaterialListAdapter(it, homeLeaderViewModel, this)
+                CategoryMaterialListAdapter(it, homeLeaderViewModel, this)
         }
         binding.addMaterialCategoryLeaderHome.setOnClickListener {
             findNavController().navigate(R.id.action_leaderHomeFragment_to_addCategoryFragment)
         }
-//        lifecycle.addObserver(binding.leaderMaterialYoutubeId)
-//        binding.leaderMaterialYoutubeId.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
-//            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-//                youTubePlayer.cueVideo("Fe57a6qpoi0", 0f)
-//            }
-//        })
     }
 
     private fun logout() {

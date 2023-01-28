@@ -14,6 +14,9 @@ import com.aferrari.trailead.databinding.LeaderAddMaterialCategoryBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
+/**
+ * The leader can add a new category for sort his materials.
+ */
 class AddCategoryFragment : Fragment() {
 
     private lateinit var binding: LeaderAddMaterialCategoryBinding
