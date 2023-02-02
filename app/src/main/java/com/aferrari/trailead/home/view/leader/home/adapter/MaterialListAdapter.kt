@@ -14,7 +14,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
 class MaterialListAdapter(
-    private val dataSet: List<Material>,
+    private val dataSet: MutableList<Material>,
     private val fragment: Fragment,
     private val viewModel: HomeLeaderViewModel
 ) :
@@ -34,7 +34,6 @@ class MaterialListAdapter(
 
     override fun onBindViewHolder(holder: MaterialListViewHolder, position: Int) {
         val material = dataSet[position]
-        viewModel.materialSelected = material
         fragment.lifecycle.addObserver(holder.viewHolderBinding.leaderMaterialYoutubeId)
         holder.viewHolderBinding.leaderMaterialYoutubeId.getYouTubePlayerWhenReady(object :
             YouTubePlayerCallback {
@@ -43,6 +42,7 @@ class MaterialListAdapter(
             }
         })
         holder.viewHolderBinding.imageFullScreenMaterialLeader.setOnClickListener {
+            viewModel.materialSelected = material
             fragment.findNavController().navigate(R.id.fullScreenVideo)
         }
     }

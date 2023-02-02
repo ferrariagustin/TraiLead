@@ -43,12 +43,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-
-    <!--        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView-->
-    <!--            android:id="@+id/leader_material_youtube_id"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            app:enableAutomaticInitialization="true"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintTop_toBottomOf="@id/leader_home_toolbar" />-->

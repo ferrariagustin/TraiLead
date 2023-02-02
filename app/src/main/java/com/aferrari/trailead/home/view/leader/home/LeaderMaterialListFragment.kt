@@ -40,5 +40,8 @@ class LeaderMaterialListFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewMaterialList.adapter =
             MaterialListAdapter(homeLeaderViewModel.getListMaterial(), this, homeLeaderViewModel)
+        binding.addMaterialLeader.setOnClickListener {
+            findNavController().navigate(R.id.addMaterialFragment)
+        }
     }
 }

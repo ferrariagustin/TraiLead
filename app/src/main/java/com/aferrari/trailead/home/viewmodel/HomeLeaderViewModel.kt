@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.*
 import com.aferrari.login.utils.IntegerUtils
+import com.aferrari.trailead.home.Utils.UrlUtils
 import kotlinx.coroutines.launch
 
 class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() {
@@ -38,9 +39,13 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
     var materialSelected: Material? = null
 
     //    Material Category
-    val listMaterialCategory = MutableLiveData<List<Category>>()
+    val listCategory = MutableLiveData<List<Category>>()
     val statusUpdateNewCategory = MutableLiveData<StatusUpdateInformation>()
     val statusUpdateEditCategory = MutableLiveData<StatusUpdateInformation>()
+
+    //    Material
+    val statusUpdateNewMaterial = MutableLiveData<StatusUpdateInformation>()
+    val listMaterial = MutableLiveData(mutableListOf<Material>())
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
@@ -49,6 +54,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     fun init() {
         bottomNavigationViewVisibility.value = View.VISIBLE
+        statusUpdateNewMaterial.value = StatusUpdateInformation.NONE
         statusUpdateNewCategory.value = StatusUpdateInformation.NONE
         statusUpdateEditCategory.value = StatusUpdateInformation.NONE
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
@@ -176,7 +182,7 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     fun getMaterialCategory() {
         viewModelScope.launch {
-            listMaterialCategory.value = repository.getAllCategory(leader)
+            listCategory.value = repository.getAllCategory(leader)
         }
     }
 
@@ -227,8 +233,9 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         }
     }
 
-    fun getListMaterial(): List<Material> {
-        return arrayListOf(Material(1, "Test", "Fe57a6qpoi0", categorySelected?.id))
+    fun getListMaterial(): MutableList<Material> {
+        return listMaterial.value?.filter { it.categoryId == categorySelected?.id } as MutableList<Material>
+//        return arrayListOf(Material(1, "Test", "Fe57a6qpoi0", categorySelected?.id))
     }
 
     /**
@@ -249,6 +256,33 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
                 View.VISIBLE
             }
         }
+    }
+
+    fun insertMaterial(title: String, url: String) {
+        if (!UrlUtils().isYoutubeUrl(url)) {
+            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+            return
+        }
+        val youtubeId: String? = UrlUtils().getYouTubeId(url)
+        if (youtubeId.isNullOrEmpty()) {
+            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+            return
+        }
+        if (categorySelected == null) {
+            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+            return
+        }
+        val result = addNewYoutubeMaterial(title, youtubeId)
+        if (result == true) {
+            statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
+        } else {
+            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+        }
+    }
+
+    private fun addNewYoutubeMaterial(title: String, youtubeId: String): Boolean? {
+        val newMaterial = Material(0, title, youtubeId, categorySelected?.id)
+        return listMaterial.value?.add(newMaterial)
     }
 
 }

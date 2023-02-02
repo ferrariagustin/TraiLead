@@ -60,5 +60,8 @@
     <string name="error">Error</string>
     <string name="error_message_dialog_category">Ingrese un nombre de categoría diferente</string>
     <string name="leader_material_list_title">Material</string>
+    <string name="add_new_material_hint">Ingrese la URL completa del video de youtube que desea cargar</string>
+    <string name="add_new_material">Agregar nuevo video</string>
+    <string name="add_new_material_title_hint">Ingrese un titulo descriptivo del material a compartir</string>
 
 </resources>
