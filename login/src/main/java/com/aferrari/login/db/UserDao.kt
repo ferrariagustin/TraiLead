@@ -102,4 +102,10 @@ interface UserDao {
 
     @Query("UPDATE category_data_table SET category_name = :categoryName WHERE category_id = :categoryId")
     suspend fun updateCategory(categoryId: Int, categoryName: String)
+
+    @Insert
+    suspend fun insertMaterial(newMaterial: Material)
+
+    @Query("SELECT * FROM material_data_table WHERE leader_material_id = :leaderId ORDER BY material_title")
+    suspend fun getAllMaterial(leaderId: Int): List<Material>
 }

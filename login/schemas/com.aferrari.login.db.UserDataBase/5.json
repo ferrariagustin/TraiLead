@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "2d757c20d14ddc8b73fd6889846a18d2",
+    "identityHash": "122c30138735f5f34187ce7b1ab2e9d9",
     "entities": [
       {
         "tableName": "leader_data_table",
@@ -138,7 +138,7 @@
       },
       {
         "tableName": "material_data_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`material_id` INTEGER NOT NULL, `material_title` TEXT NOT NULL, `material_url` TEXT NOT NULL, `category_material_id` INTEGER, PRIMARY KEY(`material_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`material_id` INTEGER NOT NULL, `material_title` TEXT NOT NULL, `material_url` TEXT NOT NULL, `category_material_id` INTEGER, `leader_material_id` INTEGER NOT NULL, PRIMARY KEY(`material_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -163,6 +163,12 @@
             "columnName": "category_material_id",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "leaderMaterialId",
+            "columnName": "leader_material_id",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -220,7 +226,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2d757c20d14ddc8b73fd6889846a18d2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '122c30138735f5f34187ce7b1ab2e9d9')"
     ]
   }
 }

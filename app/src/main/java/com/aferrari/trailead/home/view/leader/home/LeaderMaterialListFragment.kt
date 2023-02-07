@@ -27,8 +27,12 @@ class LeaderMaterialListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.leader_material_list, container, false)
         binding.lifecycleOwner = this
         binding.homeLeaderViewModel = homeLeaderViewModel
-        initListeners()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initListeners()
     }
 
     private fun initListeners() {
@@ -38,8 +42,11 @@ class LeaderMaterialListFragment : Fragment() {
         }
         binding.recyclerViewMaterialList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.recyclerViewMaterialList.adapter =
-            MaterialListAdapter(homeLeaderViewModel.getListMaterial(), this, homeLeaderViewModel)
+        homeLeaderViewModel.getMaterialsCategoryFilter()
+        homeLeaderViewModel.listMaterialLeader.observe(viewLifecycleOwner) {
+            binding.recyclerViewMaterialList.adapter =
+                MaterialListAdapter(it, this, homeLeaderViewModel)
+        }
         binding.addMaterialLeader.setOnClickListener {
             findNavController().navigate(R.id.addMaterialFragment)
         }

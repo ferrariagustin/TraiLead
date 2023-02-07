@@ -104,7 +104,10 @@ class UserRepository(private val dao: UserDao) {
     suspend fun updateLeaderLastName(leaderId: Int, lastName: String) =
         dao.updateLeaderLastName(leaderId, lastName)
 
-    suspend fun updateLeaderPass(leaderId: Int, pass: String) = dao.updateLeaderPassword(leaderId, pass)
+    suspend fun updateLeaderPass(leaderId: Int, pass: String) =
+        dao.updateLeaderPassword(leaderId, pass)
+
+    //    Category
 
     suspend fun insertCategory(category: Category) = dao.insertCategory(category)
 
@@ -112,6 +115,14 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun deleteCategory(category: Category) = dao.deleteCategory(category)
 
-    suspend fun updateCategory(categoryId: Int, categoryName: String) = dao.updateCategory(categoryId, categoryName)
+    suspend fun updateCategory(categoryId: Int, categoryName: String) =
+        dao.updateCategory(categoryId, categoryName)
+
+
+    //    Material
+
+    suspend fun insertMaterial(newMaterial: Material) = dao.insertMaterial(newMaterial)
+
+    suspend fun getAllMaterial(leader: Leader) = dao.getAllMaterial(leader.id)
 
 }

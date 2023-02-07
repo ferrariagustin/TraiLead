@@ -14,7 +14,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
 class MaterialListAdapter(
-    private val dataSet: MutableList<Material>,
+    private val dataSet: List<Material>,
     private val fragment: Fragment,
     private val viewModel: HomeLeaderViewModel
 ) :

@@ -38,14 +38,14 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
 
     var materialSelected: Material? = null
 
-    //    Material Category
+    //    Category
     val listCategory = MutableLiveData<List<Category>>()
     val statusUpdateNewCategory = MutableLiveData<StatusUpdateInformation>()
     val statusUpdateEditCategory = MutableLiveData<StatusUpdateInformation>()
 
     //    Material
     val statusUpdateNewMaterial = MutableLiveData<StatusUpdateInformation>()
-    val listMaterial = MutableLiveData(mutableListOf<Material>())
+    var listMaterialLeader = MutableLiveData<List<Material>>()
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
@@ -169,10 +169,10 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             statusUpdatePassword.value = StatusUpdateInformation.FAILED
             return
         }
-        updatepassword(leader.id, pass)
+        updatePassword(leader.id, pass)
     }
 
-    private fun updatepassword(leaderId: Int, pass: String) {
+    private fun updatePassword(leaderId: Int, pass: String) {
         viewModelScope.launch {
             repository.updateLeaderPass(leaderId, pass)
             setLeader(repository.get(leaderId) as Leader)
@@ -233,10 +233,6 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
         }
     }
 
-    fun getListMaterial(): MutableList<Material> {
-        return listMaterial.value?.filter { it.categoryId == categorySelected?.id } as MutableList<Material>
-//        return arrayListOf(Material(1, "Test", "Fe57a6qpoi0", categorySelected?.id))
-    }
 
     /**
      * You can gone or visibility the bottomNavigation
@@ -272,17 +268,50 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
             return
         }
-        val result = addNewYoutubeMaterial(title, youtubeId)
-        if (result == true) {
-            statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
-        } else {
-            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+        addNewYoutubeMaterial(title, youtubeId)
+    }
+
+    private fun addNewYoutubeMaterial(title: String, youtubeId: String) {
+        val newMaterial = Material(
+            id = IntegerUtils().getUserId(),
+            title = title,
+            url = youtubeId,
+            categoryId = categorySelected?.id,
+            leaderMaterialId = leader.id
+        )
+        addNewMaterial(newMaterial)
+    }
+
+    fun getMaterialsCategoryFilter() = viewModelScope.launch {
+        listMaterialLeader.value =
+            repository.getAllMaterial(leader).filter { it.categoryId == categorySelected?.id }
+    }
+
+
+    fun getAllMaterials() = viewModelScope.launch {
+        listMaterialLeader.value = repository.getAllMaterial(leader)
+    }
+
+    private fun getAllMaterial(newMaterial: Material) {
+        viewModelScope.launch {
+            val tempListMaterial = repository.getAllMaterial(leader)
+            if (tempListMaterial.contains(newMaterial)) {
+                listMaterialLeader.value = tempListMaterial.toMutableList()
+                statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
+            } else {
+                statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+            }
         }
     }
 
-    private fun addNewYoutubeMaterial(title: String, youtubeId: String): Boolean? {
-        val newMaterial = Material(0, title, youtubeId, categorySelected?.id)
-        return listMaterial.value?.add(newMaterial)
+    /**
+     * Comunicate with dataSource for insert new material to DB
+     */
+    private fun addNewMaterial(newMaterial: Material) {
+        viewModelScope.launch {
+            repository.insertMaterial(newMaterial)
+            statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
+            return@launch
+        }
     }
-
 }

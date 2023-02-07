@@ -8,10 +8,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 
 @Database(
-    version = 5,
+    version = 6,
     entities = [Leader::class, Trainee::class, Material::class, Category::class],
     autoMigrations = [
-        AutoMigration(from = 4, to = 5, spec = UserDataBase.AutoMigration4To5::class)
+        AutoMigration(from = 5, to = 6, spec = UserDataBase.AutoMigration5To6::class)
     ],
     exportSchema = true
 )
@@ -25,6 +25,8 @@ abstract class UserDataBase : RoomDatabase() {
     class AutoMigration3To4 : AutoMigrationSpec
 
     class AutoMigration4To5 : AutoMigrationSpec
+
+    class AutoMigration5To6 : AutoMigrationSpec
 
     abstract val userDao: UserDao
 
@@ -41,7 +43,7 @@ abstract class UserDataBase : RoomDatabase() {
                         UserDataBase::class.java,
                         "user_data_database"
                     )
-                        .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
+                        .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
                         .build()
                 }
                 return instance
@@ -56,6 +58,15 @@ abstract class UserDataBase : RoomDatabase() {
                 database.execSQL(
                     "ALTER TABLE category_data_table "
                             + " ADD COLUMN leader_category_id INTEGER"
+                )
+            }
+        }
+
+        private val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "ALTER TABLE material_data_table "
+                            + " ADD COLUMN leader_material_id INTEGER"
                 )
             }
         }
