@@ -1,7 +1,11 @@
 package com.aferrari.trailead.home.view.leader.home.adapter
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.annotation.SuppressLint
+import android.util.TypedValue
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -12,6 +16,7 @@ import com.aferrari.trailead.databinding.MaterialItemBinding
 import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
+
 
 class MaterialListAdapter(
     private val dataSet: List<Material>,
@@ -32,6 +37,7 @@ class MaterialListAdapter(
         return MaterialListViewHolder(binding)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindViewHolder(holder: MaterialListViewHolder, position: Int) {
         val material = dataSet[position]
         fragment.lifecycle.addObserver(holder.viewHolderBinding.leaderMaterialYoutubeId)
@@ -41,10 +47,59 @@ class MaterialListAdapter(
                 youTubePlayer.cueVideo(material.url, 0f)
             }
         })
-        holder.viewHolderBinding.imageFullScreenMaterialLeader.setOnClickListener {
-            viewModel.materialSelected = material
-            fragment.findNavController().navigate(R.id.fullScreenVideo)
+        holder.viewHolderBinding.titleMaterialItem.hint = material.title
+        holder.viewHolderBinding.imageSettingMaterialLeader.setOnClickListener { it ->
+            configMenu(it, material)
         }
+    }
+
+    private fun configMenu(it: View, material: Material) {
+        val popupMenu = PopupMenu(fragment.requireContext(), it)
+        fragment.requireActivity().menuInflater.inflate(
+            R.menu.menu_item_abm_material,
+            popupMenu.menu
+        )
+        popupMenu.setForceShowIcon(true)
+        configStyleMenu(popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            manageItemClick(menuItem, material)
+        }
+        popupMenu.show()
+    }
+
+    private fun configStyleMenu(menu: Menu) {
+        menu.children.forEach {
+            val typedValue = TypedValue()
+            fragment.activity?.theme?.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true)
+            it.icon.setTint(typedValue.data)
+        }
+    }
+
+    private fun manageItemClick(menuItem: MenuItem, material: Material): Boolean {
+        viewModel.setSelectedMaterial(material)
+        when (menuItem.itemId) {
+            R.id.material_full_screen -> navigateToFullScreenVideo()
+            R.id.material_delete -> navigateToDeleteMaterial()
+            R.id.material_edit -> navigateToEditMaterial()
+            else -> return false
+        }
+        return true
+    }
+
+    private fun navigateToEditMaterial() {
+        Toast.makeText(
+            fragment.requireContext(),
+            "Editing + ${viewModel.materialSelected?.title}",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun navigateToDeleteMaterial() {
+        viewModel.deleteMaterialSelected()
+    }
+
+    private fun navigateToFullScreenVideo() {
+        fragment.findNavController().navigate(R.id.fullScreenVideo)
     }
 
     override fun getItemCount(): Int = dataSet.size

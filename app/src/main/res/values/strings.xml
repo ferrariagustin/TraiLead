@@ -63,5 +63,9 @@
     <string name="add_new_material_hint">Ingrese la URL completa del video de youtube que desea cargar</string>
     <string name="add_new_material">Agregar nuevo video</string>
     <string name="add_new_material_title_hint">Ingrese un titulo descriptivo del material a compartir</string>
+    <string name="full_screen">Maximizar</string>
+    <string name="empty_string" />
+    <string name="place_holder_title">titulo</string>
+    <string name="edit_material">Editar</string>
 
 </resources>

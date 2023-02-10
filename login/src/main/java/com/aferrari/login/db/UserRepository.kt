@@ -125,4 +125,6 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun getAllMaterial(leader: Leader) = dao.getAllMaterial(leader.id)
 
+    suspend fun deleteMaterial(material: Material) = dao.deleteMaterial(material)
+
 }

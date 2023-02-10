@@ -314,4 +314,20 @@ class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() 
             return@launch
         }
     }
+
+    fun deleteMaterialSelected() {
+        viewModelScope.launch {
+            materialSelected?.let {
+                repository.deleteMaterial(it)
+                getMaterialsCategoryFilter()
+            }
+        }
+    }
+
+    /**
+     * is selected Material clicked
+     */
+    fun setSelectedMaterial(material: Material) {
+        materialSelected = material
+    }
 }

@@ -108,4 +108,7 @@ interface UserDao {
 
     @Query("SELECT * FROM material_data_table WHERE leader_material_id = :leaderId ORDER BY material_title")
     suspend fun getAllMaterial(leaderId: Int): List<Material>
+
+    @Delete
+    suspend fun deleteMaterial(material: Material)
 }
