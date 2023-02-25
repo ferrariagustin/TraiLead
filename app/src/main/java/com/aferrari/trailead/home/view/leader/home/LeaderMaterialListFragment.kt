@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderMaterialListBinding
 import com.aferrari.trailead.home.view.leader.home.adapter.MaterialListAdapter
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 class LeaderMaterialListFragment : Fragment() {
 

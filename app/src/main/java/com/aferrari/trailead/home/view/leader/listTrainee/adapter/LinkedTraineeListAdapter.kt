@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Trainee
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemTraineeLinkedListBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 /**
  * Trainee List that all element is linked with a leader

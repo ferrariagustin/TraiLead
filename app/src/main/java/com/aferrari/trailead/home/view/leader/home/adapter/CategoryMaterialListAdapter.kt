@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Category
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialCategoryLeaderHomeBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 class CategoryMaterialListAdapter(
     private val dataSet: List<Category>,

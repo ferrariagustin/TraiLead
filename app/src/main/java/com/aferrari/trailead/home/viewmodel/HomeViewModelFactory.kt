@@ -3,6 +3,7 @@ package com.aferrari.trailead.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.db.UserRepository
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 class HomeViewModelFactory(private val repository: UserRepository) : ViewModelProvider.Factory {
 

@@ -1,0 +1,74 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aferrari.trailead.home.viewmodel.leader.material.EditMaterialViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/edit_material_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/primaryColor"
+            app:title="@string/edit_material_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/default_toolbar_elevation" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/edit_material_title_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_material_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/edit_title_material_label" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_material_title_text_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_material_title_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@{viewModel.materialSelected != null ? viewModel.materialSelected.title.toString : ' '}"
+            android:layout_margin="@dimen/margin_medium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/edit_material_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_material_title_text_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/edit_material_url_label" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_material_url_text_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_material_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_edit_material_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_material_url_text_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:text="@string/save" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

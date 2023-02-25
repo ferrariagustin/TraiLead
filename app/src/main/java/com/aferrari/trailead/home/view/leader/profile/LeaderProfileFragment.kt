@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderProfileFragmentBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 
 class LeaderProfileFragment : Fragment() {

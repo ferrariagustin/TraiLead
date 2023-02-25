@@ -111,4 +111,10 @@ interface UserDao {
 
     @Delete
     suspend fun deleteMaterial(material: Material)
+
+    @Query("UPDATE material_data_table SET material_url = :youtubeId WHERE material_id = :materialId")
+    suspend fun updateUrlMaterial(materialId: Int, youtubeId: String)
+
+    @Query("UPDATE material_data_table SET material_title = :newTitle WHERE material_id = :materialId")
+    suspend fun updateTitleMaterial(materialId: Int, newTitle: String)
 }

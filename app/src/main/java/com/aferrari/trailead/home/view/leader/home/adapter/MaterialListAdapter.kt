@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Material
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.MaterialItemBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
@@ -87,11 +87,7 @@ class MaterialListAdapter(
     }
 
     private fun navigateToEditMaterial() {
-        Toast.makeText(
-            fragment.requireContext(),
-            "Editing + ${viewModel.materialSelected?.title}",
-            Toast.LENGTH_SHORT
-        ).show()
+        fragment.findNavController().navigate(R.id.editMaterialFragment)
     }
 
     private fun navigateToDeleteMaterial() {

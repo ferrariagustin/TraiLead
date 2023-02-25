@@ -16,7 +16,7 @@ import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderHomeFragmentBinding
 import com.aferrari.trailead.home.view.leader.home.adapter.CategoryMaterialListAdapter
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 
 class LeaderHomeFragment : Fragment() {

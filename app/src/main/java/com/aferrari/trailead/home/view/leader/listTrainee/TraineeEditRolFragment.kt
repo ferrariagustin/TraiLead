@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.aferrari.login.db.Position
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkedTraineeEditRolFragmentBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 class TraineeEditRolFragment : Fragment() {

@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderConfigTraineeFragmentBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 class ConfigTraineeFragment : Fragment() {
 

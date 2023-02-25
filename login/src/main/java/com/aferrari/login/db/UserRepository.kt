@@ -127,4 +127,8 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun deleteMaterial(material: Material) = dao.deleteMaterial(material)
 
+    suspend fun updateUrlMaterial(materialId: Int, youtubeId: String) = dao.updateUrlMaterial(materialId, youtubeId)
+
+    suspend fun updateTitleMaterial(materialId: Int, newTitle: String) = dao.updateTitleMaterial(materialId, newTitle)
+
 }

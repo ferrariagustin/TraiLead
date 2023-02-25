@@ -1,4 +1,4 @@
-package com.aferrari.trailead.home.viewmodel
+package com.aferrari.trailead.home.viewmodel.leader
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.*
 import com.aferrari.login.utils.IntegerUtils
 import com.aferrari.trailead.home.Utils.UrlUtils
+import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.launch
 
-class HomeLeaderViewModel(private val repository: UserRepository) : ViewModel() {
+open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
     private lateinit var leader: Leader
 
     val nameUser = MutableLiveData<String>()
