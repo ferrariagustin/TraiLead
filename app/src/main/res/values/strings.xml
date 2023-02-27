@@ -32,7 +32,8 @@
     <string name="assigned_leader">Líder asignado</string>
     <string name="edit_trainee_profile_name">Editar nombre</string>
     <string name="edit_trainee_rol">Editar Rol</string>
-    <string name="edit_material_trainee">Configurar material del Trainee</string>
+    <string name="edit_material_trainee">Configurar material</string>
+    <string name="config_material_trainee_toolbar">Configurar Material</string>
     <string name="unlinked_trainee">Desvincular trainee</string>
     <string name="delete_trainee">Eliminar Trainee</string>
     <string name="config_trainee">Configuración</string>

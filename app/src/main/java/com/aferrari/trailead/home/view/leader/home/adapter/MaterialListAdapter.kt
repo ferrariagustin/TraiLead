@@ -3,7 +3,6 @@ package com.aferrari.trailead.home.view.leader.home.adapter
 import android.annotation.SuppressLint
 import android.util.TypedValue
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -12,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Material
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.MaterialItemBinding
+import com.aferrari.trailead.databinding.ItemMaterialBinding
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
@@ -25,12 +24,12 @@ class MaterialListAdapter(
 ) :
     RecyclerView.Adapter<MaterialListAdapter.MaterialListViewHolder>() {
 
-    private lateinit var binding: MaterialItemBinding
+    private lateinit var binding: ItemMaterialBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaterialListViewHolder {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.material_item,
+            R.layout.item_material,
             parent,
             false
         )
@@ -100,8 +99,8 @@ class MaterialListAdapter(
 
     override fun getItemCount(): Int = dataSet.size
 
-    class MaterialListViewHolder(binding: MaterialItemBinding) :
+    class MaterialListViewHolder(binding: ItemMaterialBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val viewHolderBinding: MaterialItemBinding = binding
+        val viewHolderBinding: ItemMaterialBinding = binding
     }
 }

@@ -88,6 +88,9 @@
         <action
             android:id="@+id/action_configTraineeFragment_to_traineeEditRolFragment"
             app:destination="@id/traineeEditRolFragment" />
+        <action
+            android:id="@+id/action_configTraineeFragment_to_configMaterialTraineeFragment"
+            app:destination="@id/configMaterialTraineeFragment" />
     </fragment>
     <fragment
         android:id="@+id/traineeEditRolFragment"
@@ -178,5 +181,14 @@
         <action
             android:id="@+id/action_editMaterialFragment_to_leaderMaterialListFragment"
             app:destination="@id/leaderMaterialListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/configMaterialTraineeFragment"
+        android:name="com.aferrari.trailead.home.view.leader.listTrainee.ConfigMaterialTraineeFragment"
+        android:label="ConfigMaterialTraineeFragment"
+        tools:layout="@layout/leader_config_material_trainee_fragment">
+        <action
+            android:id="@+id/action_configMaterialTraineeFragment_to_configTraineeFragment"
+            app:destination="@id/configTraineeFragment" />
     </fragment>
 </navigation>

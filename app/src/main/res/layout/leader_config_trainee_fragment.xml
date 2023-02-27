@@ -140,6 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
             android:backgroundTint="@color/red"
+            android:visibility="gone"
             android:text="@string/delete_trainee"
             android:textAlignment="textStart"
             app:icon="@drawable/ic_delete"
