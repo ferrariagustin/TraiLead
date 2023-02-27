@@ -49,5 +49,26 @@
     <string name="update_pass_success">Su contraseña fue actualizada correctamente</string>
     <string name="update_pass_failed">Hubo un error al actualizar la contraseña</string>
     <string name="update_pass_failed_input">Por favor ingrese una contraseña válida</string>
+    <string name="add_new_category">Agregar nueva categoría</string>
+    <string name="add_new_category_hint">Agregue la nueva categoría</string>
+    <string name="add_new_category_button">Agregar</string>
+    <string name="toolbar_setting_category">Configurar Categoría</string>
+    <string name="delete">Eliminar</string>
+    <string name="save">Guardar</string>
+    <string name="dialog_message_delete_category">Esta seguro que desea eliminar la categoría %s</string>
+    <string name="save_category_success">Se actualizó correctamente</string>
+    <string name="error">Error</string>
+    <string name="error_message_dialog_category">Ingrese un nombre de categoría diferente</string>
+    <string name="leader_material_list_title">Material</string>
+    <string name="add_new_material_hint">Ingresar la URL completa del video de youtube</string>
+    <string name="add_new_material">Agregar nuevo video</string>
+    <string name="add_new_material_title_hint">Ingrese un título descriptivo del video</string>
+    <string name="full_screen">Maximizar</string>
+    <string name="empty_string" />
+    <string name="place_holder_title">titulo</string>
+    <string name="edit_material">Editar</string>
+    <string name="edit_material_title">Editar Video</string>
+    <string name="edit_title_material_label">Ingresar nuevo título del video</string>
+    <string name="edit_material_url_label">Ingresar la url del nuevo video</string>
 
 </resources>

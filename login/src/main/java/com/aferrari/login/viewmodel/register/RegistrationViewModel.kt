@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.*
+import com.aferrari.login.utils.IntegerUtils
 import com.aferrari.login.utils.StringUtils.EMPTY_STRING
 import kotlinx.coroutines.launch
 import java.util.*
@@ -90,7 +91,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private suspend fun insertLeader(): Long = repository.insertLeader(
         Leader(
-            id = getUserId(),
+            id = IntegerUtils().getUserId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,
@@ -100,22 +101,13 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private suspend fun insertTrainee(): Long = repository.insertTrainee(
         Trainee(
-            id = getUserId(),
+            id = IntegerUtils().getUserId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,
             pass = inputPass.value!!,
         )
     )
-
-    private fun getUserId(): Int {
-    val randomId = UUID.randomUUID().mostSignificantBits.toInt()
-        return if (randomId < 0 ) {
-            randomId * (-1)
-        } else {
-            randomId
-        }
-    }
 
     /**
      * Restore all components on registration fragment

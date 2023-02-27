@@ -88,4 +88,33 @@ interface UserDao {
 
     @Query("UPDATE leader_data_table SET leader_pass = :pass WHERE leader_id =:leaderId")
     suspend fun updateLeaderPassword(leaderId: Int, pass: String)
+
+    //    Category
+
+    @Insert
+    suspend fun insertCategory(category: Category)
+
+    @Query("SELECT * FROM category_data_table WHERE leader_category_id = :leaderId ORDER BY category_name")
+    suspend fun getAllCategory(leaderId: Int): List<Category>
+
+    @Delete
+    suspend fun deleteCategory(category: Category)
+
+    @Query("UPDATE category_data_table SET category_name = :categoryName WHERE category_id = :categoryId")
+    suspend fun updateCategory(categoryId: Int, categoryName: String)
+
+    @Insert
+    suspend fun insertMaterial(newMaterial: Material)
+
+    @Query("SELECT * FROM material_data_table WHERE leader_material_id = :leaderId ORDER BY material_title")
+    suspend fun getAllMaterial(leaderId: Int): List<Material>
+
+    @Delete
+    suspend fun deleteMaterial(material: Material)
+
+    @Query("UPDATE material_data_table SET material_url = :youtubeId WHERE material_id = :materialId")
+    suspend fun updateUrlMaterial(materialId: Int, youtubeId: String)
+
+    @Query("UPDATE material_data_table SET material_title = :newTitle WHERE material_id = :materialId")
+    suspend fun updateTitleMaterial(materialId: Int, newTitle: String)
 }

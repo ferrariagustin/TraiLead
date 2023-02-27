@@ -11,7 +11,7 @@ import com.aferrari.login.db.Trainee
 import com.aferrari.login.dialog.Dialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemTraineeUnlinkedListBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 /**
  * Trainee List that all element is unlinked with a leader, the trainee_leader_id is null

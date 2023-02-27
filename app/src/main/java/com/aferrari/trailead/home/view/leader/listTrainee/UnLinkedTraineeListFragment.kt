@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.UnlinkedTraineeListFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.UnLinkedTraineeListAdapter
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 
 class UnLinkedTraineeListFragment : Fragment() {

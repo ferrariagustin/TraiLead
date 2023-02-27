@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/leaderHomeFragment"
-        android:name="com.aferrari.trailead.home.view.leader.LeaderHomeFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.LeaderHomeFragment"
         android:label="LeaderHomeFragment"
         tools:layout="@layout/leader_home_fragment">
         <action
@@ -16,6 +16,15 @@
         <action
             android:id="@+id/action_leaderHomeFragment_to_linkedTraineeListFragment"
             app:destination="@id/linkedTraineeListFragment" />
+        <action
+            android:id="@+id/action_leaderHomeFragment_to_addCategoryFragment"
+            app:destination="@id/addCategoryFragment" />
+        <action
+            android:id="@+id/action_leaderHomeFragment_to_leaderSettingCategoryMaterial2"
+            app:destination="@id/leaderSettingCategoryMaterial" />
+        <action
+            android:id="@+id/action_leaderHomeFragment_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
     </fragment>
     <fragment
         android:id="@+id/leaderProfileFragment"
@@ -100,11 +109,74 @@
     </fragment>
     <fragment
         android:id="@+id/leaderEditPassFragment"
-        tools:layout="@layout/leader_edit_profile_pass_fragment"
         android:name="com.aferrari.trailead.home.view.leader.profile.LeaderEditPassFragment"
-        android:label="LeaderEditPassFragment" >
+        android:label="LeaderEditPassFragment"
+        tools:layout="@layout/leader_edit_profile_pass_fragment">
         <action
             android:id="@+id/action_leaderEditPassFragment_to_leaderProfileFragment"
             app:destination="@id/leaderProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCategoryFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.AddCategoryFragment"
+        android:label="AddCategoryFragment"
+        tools:layout="@layout/leader_add_material_category">
+        <action
+            android:id="@+id/action_addCategoryFragment_to_leaderHomeFragment"
+            app:destination="@id/leaderHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderSettingCategoryMaterial"
+        android:name="com.aferrari.trailead.home.view.leader.home.SettingCategoryMaterialFragment"
+        android:label="LeaderSettingCategoryMaterial"
+        tools:layout="@layout/leader_setting_material_category">
+        <action
+            android:id="@+id/action_leaderSettingCategoryMaterial_to_leaderHomeFragment2"
+            app:destination="@id/leaderHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leaderMaterialListFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.LeaderMaterialListFragment"
+        android:label="LeaderMaterialListFragment"
+        tools:layout="@layout/leader_material_list">
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_leaderHomeFragment"
+            app:destination="@id/leaderHomeFragment" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_fullScreenVideo"
+            app:destination="@id/fullScreenVideo" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_addMaterialFragment"
+            app:destination="@id/addMaterialFragment" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_editMaterialFragment"
+            app:destination="@id/editMaterialFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullScreenVideo"
+        android:name="com.aferrari.trailead.home.view.leader.home.FullScreenVideo"
+        android:label="FullScreenVideo"
+        tools:layout="@layout/full_screen_video">
+        <action
+            android:id="@+id/action_fullScreenVideo_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addMaterialFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.AddMaterialFragment"
+        android:label="AddMaterialFragment"
+        tools:layout="@layout/leader_add_material">
+        <action
+            android:id="@+id/action_addMaterialFragment_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editMaterialFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.EditMaterialFragment"
+        tools:layout="@layout/leader_edit_material"
+        android:label="EditMaterialFragment" >
+        <action
+            android:id="@+id/action_editMaterialFragment_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
     </fragment>
 </navigation>

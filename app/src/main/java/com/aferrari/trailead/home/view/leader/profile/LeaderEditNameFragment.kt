@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderEditProfileNameFragmentBinding
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
 class LeaderEditNameFragment : Fragment() {
 

@@ -13,7 +13,7 @@ import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.home.Utils.BundleUtils
 import com.aferrari.trailead.home.Utils.StringUtils.LEADER_KEY
 import com.aferrari.trailead.home.Utils.StringUtils.TAB_ID
-import com.aferrari.trailead.home.viewmodel.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
 class LeaderActivity : AppCompatActivity() {
@@ -53,6 +53,9 @@ class LeaderActivity : AppCompatActivity() {
                 }
             }
             return@setOnItemSelectedListener true
+        }
+        homeLeaderViewModel.bottomNavigationViewVisibility.observe(this) {
+            binding.bottomNavigationId.visibility = it
         }
     }
 

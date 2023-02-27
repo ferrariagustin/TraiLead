@@ -1,0 +1,66 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="homeLeaderViewModel"
+            type="com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/leader_category_setting_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/default_toolbar_elevation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/primaryColor"
+            app:title="@string/toolbar_setting_category" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/edit_category_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="Ingrese el nuevo nombre de categoría"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leader_category_setting_toolbar" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_category_name_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@{homeLeaderViewModel.categorySelected.name}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_category_name_label" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_new_category_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_size_large"
+            android:text="@string/save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_category_name_text_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/delete_new_category_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_size_large"
+            android:text="@string/delete"
+            app:backgroundTint="@color/red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_category_name_text_input" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
