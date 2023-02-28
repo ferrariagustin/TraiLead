@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderConfigMaterialTraineeFragmentBinding
@@ -43,11 +44,15 @@ class ConfigMaterialTraineeFragment : Fragment() {
     }
 
     private fun initListeners() {
+        binding.configMaterialTraineeToolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.recyclerViewConfigMaterialCategoryToTrainee.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         homeLeaderViewModel.listMaterialLeader.observe(viewLifecycleOwner) {
             binding.recyclerViewConfigMaterialCategoryToTrainee.adapter =
                 ConfigMaterialTraineeAdapter(it, this)
+        }
+        binding.addLinkMaterialToTrainee.setOnClickListener {
+            findNavController().navigate(R.id.action_configMaterialTraineeFragment_to_linkMaterialTraineeFragment)
         }
     }
 }

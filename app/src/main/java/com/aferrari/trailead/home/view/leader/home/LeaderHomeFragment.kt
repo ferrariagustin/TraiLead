@@ -50,7 +50,7 @@ class LeaderHomeFragment : Fragment() {
 
         binding.recyclerViewCategoryList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        homeLeaderViewModel.getMaterialCategory()
+        homeLeaderViewModel.getAllCategoryForLeader()
         homeLeaderViewModel.listCategory.observe(viewLifecycleOwner) {
             binding.recyclerViewCategoryList.adapter =
                 CategoryMaterialListAdapter(it, homeLeaderViewModel, this)

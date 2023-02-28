@@ -182,7 +182,7 @@ open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun getMaterialCategory() {
+    fun getAllCategoryForLeader() {
         viewModelScope.launch {
             listCategory.value = repository.getAllCategory(leader)
         }
@@ -200,7 +200,7 @@ open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
     private fun insertCategory(category: Category) {
         viewModelScope.launch {
             repository.insertCategory(category)
-            getMaterialCategory()
+            getAllCategoryForLeader()
             statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
         }
     }
@@ -214,7 +214,7 @@ open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
     private fun deleteCategory(category: Category) {
         viewModelScope.launch {
             repository.deleteCategory(category)
-            getMaterialCategory()
+            getAllCategoryForLeader()
         }
     }
 

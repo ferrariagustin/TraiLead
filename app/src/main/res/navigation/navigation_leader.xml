@@ -190,5 +190,17 @@
         <action
             android:id="@+id/action_configMaterialTraineeFragment_to_configTraineeFragment"
             app:destination="@id/configTraineeFragment" />
+        <action
+            android:id="@+id/action_configMaterialTraineeFragment_to_linkMaterialTraineeFragment"
+            app:destination="@id/linkMaterialTraineeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/linkMaterialTraineeFragment"
+        tools:layout="@layout/link_material_trainee_fragment"
+        android:name="com.aferrari.trailead.home.view.leader.listTrainee.LinkMaterialTraineeFragment"
+        android:label="LinkMaterialTraineeFragment" >
+        <action
+            android:id="@+id/action_linkMaterialTraineeFragment_to_configMaterialTraineeFragment"
+            app:destination="@id/configMaterialTraineeFragment" />
     </fragment>
 </navigation>
