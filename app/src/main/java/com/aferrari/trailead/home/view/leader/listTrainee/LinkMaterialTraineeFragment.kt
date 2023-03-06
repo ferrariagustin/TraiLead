@@ -9,8 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
+import com.aferrari.trailead.home.view.leader.listTrainee.adapter.ConfigMaterialTraineeAdapter
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.SpinnerAdapterCategoryLinkList
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.leader.listTrainee.ListTraineeViewModel
@@ -49,12 +51,20 @@ class LinkMaterialTraineeFragment : Fragment() {
     }
 
     private fun initComponents() {
+        binding.recyclerViewMaterialForCategoryList.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         spinnerAdapter = SpinnerAdapterCategoryLinkList(requireContext())
+        configureSpinner()
     }
 
     private fun initListeners() {
-        configureSpinner()
-        binding.linkMaterialTraineeToolbar.setNavigationOnClickListener {
+        spinnerAdapter.itemSelected.observe(viewLifecycleOwner) { categorySelected ->
+            viewModel.getMaterialsBy(categorySelected)?.let {
+                binding.recyclerViewMaterialForCategoryList.adapter =
+                    ConfigMaterialTraineeAdapter(it, this)
+            }
+        }
+        binding.linkMaterialTraineeToolbar.setNavigationOnClickListener() {
             findNavController().navigateUp()
         }
     }

@@ -4,16 +4,17 @@ import android.content.Context
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 
 
 class SpinnerAdapterCategoryLinkList(private val context: Context) :
     AdapterView.OnItemSelectedListener {
 
-    var itemSelected: String = EMPTY_STRING
+    var itemSelected: MutableLiveData<String> = MutableLiveData<String>(EMPTY_STRING)
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // On selecting a spinner item
-        itemSelected = parent?.getItemAtPosition(position)?.toString() ?: EMPTY_STRING
+        itemSelected.value = parent?.getItemAtPosition(position)?.toString() ?: EMPTY_STRING
         Toast.makeText(context, "Item Selected: $itemSelected", Toast.LENGTH_SHORT).show()
     }
 

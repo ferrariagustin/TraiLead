@@ -33,5 +33,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/link_material_trainee_toolbar" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_material_for_category_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/toolbar_size_2"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/bottom_navigation_size"
+            app:layout_constraintTop_toBottomOf="@id/link_material_selected_category_spinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
