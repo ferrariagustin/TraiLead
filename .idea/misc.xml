@@ -12,10 +12,11 @@
         <entry key="app/src/main/res/drawable/profile_app_bar_background.xml" value="0.2025" />
         <entry key="app/src/main/res/drawable/profile_background.xml" value="0.236" />
         <entry key="app/src/main/res/drawable/profile_toolbar_background.xml" value="0.236" />
+        <entry key="app/src/main/res/drawable/spinner_bg.xml" value="0.2295" />
         <entry key="app/src/main/res/layout/full_screen_video.xml" value="0.171875" />
         <entry key="app/src/main/res/layout/home_activity.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/layout/item_config_material_trainee.xml" value="0.19635416666666666" />
-        <entry key="app/src/main/res/layout/item_material.xml" value="0.13958333333333334" />
+        <entry key="app/src/main/res/layout/item_material.xml" value="0.3832463582356771" />
         <entry key="app/src/main/res/layout/item_material_category_leader_home.xml" value="0.2890625" />
         <entry key="app/src/main/res/layout/item_trainee_linked_list.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/item_trainee_list.xml" value="0.3374862670898437" />
@@ -51,6 +52,7 @@
         <entry key="app/src/main/res/menu/menu_item_abm_material.xml" value="0.165625" />
         <entry key="app/src/main/res/menu/menu_item_navigation_leader.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/menu/menu_item_navigation_trainee.xml" value="0.11614583333333334" />
+        <entry key="app/src/main/res/menu/menu_item_selected_material_toolbar.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/menu_item_toolbar_close_session.xml" value="0.13958333333333334" />
         <entry key="app/src/main/res/menu/menu_item_toolbar_close_session_leader.xml" value="0.1917180379231771" />
         <entry key="app/src/main/res/menu/menu_item_toolbar_leader.xml" value="0.18541666666666667" />

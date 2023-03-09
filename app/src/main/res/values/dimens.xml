@@ -15,5 +15,6 @@
     <dimen name="toolbar_size_2">96dp</dimen>
     <dimen name="bottom_navigation_size">48dp</dimen>
     <dimen name="default_toolbar_elevation">1dp</dimen>
+    <dimen name="spinner_margin">112dp</dimen>
 
 </resources>

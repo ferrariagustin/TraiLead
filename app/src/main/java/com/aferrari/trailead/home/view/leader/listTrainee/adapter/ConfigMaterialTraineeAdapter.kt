@@ -1,6 +1,7 @@
 package com.aferrari.trailead.home.view.leader.listTrainee.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -29,7 +30,13 @@ class ConfigMaterialTraineeAdapter(
             parent,
             false
         )
+        configureItem()
         return ConfigMaterialTraineeViewHolder(binding)
+    }
+
+    private fun configureItem() {
+        binding.imageSettingMaterialLeader.visibility = View.GONE
+        binding.selectedRadioButtonMaterial.visibility = View.VISIBLE
     }
 
     override fun onBindViewHolder(holder: ConfigMaterialTraineeViewHolder, position: Int) {
@@ -42,9 +49,6 @@ class ConfigMaterialTraineeAdapter(
             }
         })
         holder.viewHolderBinding.titleMaterialItem.hint = material.title
-        holder.viewHolderBinding.imageSettingMaterialLeader.setOnClickListener { it ->
-//            configMenu(it, material)
-        }
     }
 
     override fun getItemCount(): Int = dataSource.size

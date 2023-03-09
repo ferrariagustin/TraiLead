@@ -15,7 +15,6 @@ class SpinnerAdapterCategoryLinkList(private val context: Context) :
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // On selecting a spinner item
         itemSelected.value = parent?.getItemAtPosition(position)?.toString() ?: EMPTY_STRING
-        Toast.makeText(context, "Item Selected: $itemSelected", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>?) {

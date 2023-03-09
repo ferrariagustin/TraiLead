@@ -45,7 +45,7 @@ class ConfigTraineeFragment : Fragment() {
             findNavController().navigate(R.id.action_configTraineeFragment_to_traineeEditRolFragment)
         }
         binding.configEditMaterialButton.setOnClickListener {
-            findNavController().navigate(R.id.configMaterialTraineeFragment)
+            findNavController().navigate(R.id.action_configTraineeFragment_to_linkMaterialTraineeFragment)
         }
         binding.configUnlinkedButton.setOnClickListener {
             unlinkedShowDialog()

@@ -47,7 +47,14 @@ class LinkMaterialTraineeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initComponents()
-        initListeners()
+        configToolbar()
+        configSpinner()
+    }
+
+    private fun configToolbar() {
+        binding.linkMaterialTraineeToolbar.setNavigationOnClickListener() {
+            findNavController().navigateUp()
+        }
     }
 
     private fun initComponents() {
@@ -57,15 +64,12 @@ class LinkMaterialTraineeFragment : Fragment() {
         configureSpinner()
     }
 
-    private fun initListeners() {
+    private fun configSpinner() {
         spinnerAdapter.itemSelected.observe(viewLifecycleOwner) { categorySelected ->
             viewModel.getMaterialsBy(categorySelected)?.let {
                 binding.recyclerViewMaterialForCategoryList.adapter =
                     ConfigMaterialTraineeAdapter(it, this)
             }
-        }
-        binding.linkMaterialTraineeToolbar.setNavigationOnClickListener() {
-            findNavController().navigateUp()
         }
     }
 
