@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,8 +15,10 @@ import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.ConfigMaterialTraineeAdapter
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.SpinnerAdapterCategoryLinkList
+import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.leader.listTrainee.ListTraineeViewModel
+import com.google.android.material.radiobutton.MaterialRadioButton
 
 
 class LinkMaterialTraineeFragment : Fragment() {
@@ -49,6 +52,52 @@ class LinkMaterialTraineeFragment : Fragment() {
         initComponents()
         configToolbar()
         configSpinner()
+        configRadioButtonSelectedAll()
+        initListeners()
+    }
+
+    private fun initListeners() {
+        viewModel.statusUpdateRadioButtonSelectedAll.observe(viewLifecycleOwner) {
+            when (it) {
+                StatusUpdateInformation.SUCCESS -> {
+                    successFlow()
+                }
+                StatusUpdateInformation.FAILED -> {
+                    failedFlow()
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun successFlow() {
+        // TODO("Not yet implemented")
+    }
+
+    private fun failedFlow() {
+        // TODO("Not yet implemented")
+    }
+
+
+    private fun configRadioButtonSelectedAll() {
+        binding.linkedRadioButtonAll.setOnClickListener {
+            if ((it as MaterialRadioButton).isSelected) {
+                failedSelectedRadioButtonFlow(it)
+            } else {
+                successSelectedRadioButtonFlow(it)
+            }
+        }
+    }
+
+    private fun failedSelectedRadioButtonFlow(radioButton: MaterialRadioButton) {
+        radioButton.isSelected = false
+        radioButton.isChecked = false
+    }
+
+    private fun successSelectedRadioButtonFlow(radioButton: MaterialRadioButton) {
+        radioButton.isSelected = true
+        radioButton.isChecked = true
+        viewModel.linkedAllMaterialFromCategorySelected(spinnerAdapter.itemSelected.value)
     }
 
     private fun configToolbar() {
@@ -60,7 +109,7 @@ class LinkMaterialTraineeFragment : Fragment() {
     private fun initComponents() {
         binding.recyclerViewMaterialForCategoryList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        spinnerAdapter = SpinnerAdapterCategoryLinkList(requireContext())
+        spinnerAdapter = SpinnerAdapterCategoryLinkList()
         configureSpinner()
     }
 

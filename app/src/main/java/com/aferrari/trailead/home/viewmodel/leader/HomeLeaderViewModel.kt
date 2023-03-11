@@ -189,11 +189,15 @@ open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
     }
 
     fun insertCategory(nameCategory: String) {
-        val category = Category(IntegerUtils().getUserId(), nameCategory, leader.id)
-        if (category.name.isEmpty()) {
+        if (nameCategory.isEmpty()) {
             statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
             return
         }
+        if (getCategoryBy(nameCategory) != null) {
+            statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
+            return
+        }
+        val category = Category(IntegerUtils().getUserId(), nameCategory, leader.id)
         insertCategory(category)
     }
 
@@ -331,5 +335,12 @@ open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
      */
     fun setSelectedMaterial(material: Material) {
         materialSelected = material
+    }
+
+    fun getCategoryBy(category: String): Category? {
+        listCategory.value?.forEach {
+            if (it.name == category) return it
+        }
+        return null
     }
 }

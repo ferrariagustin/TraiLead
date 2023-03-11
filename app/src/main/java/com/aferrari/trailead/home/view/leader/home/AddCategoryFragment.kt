@@ -66,6 +66,6 @@ class AddCategoryFragment : Fragment() {
     }
 
     private fun failedFlow() {
-        Toast.makeText(requireContext(), "Ingrese una categoría válida", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Ingrese una categoría válida. Recuerde que no puede repertir", Toast.LENGTH_SHORT).show()
     }
 }

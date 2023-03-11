@@ -1,13 +1,11 @@
 package com.aferrari.trailead.home.view.leader.listTrainee.adapter
 
-import android.content.Context
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 
 
-class SpinnerAdapterCategoryLinkList(private val context: Context) :
+class SpinnerAdapterCategoryLinkList :
     AdapterView.OnItemSelectedListener {
 
     var itemSelected: MutableLiveData<String> = MutableLiveData<String>(EMPTY_STRING)
