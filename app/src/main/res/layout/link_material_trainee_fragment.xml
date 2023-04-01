@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/link_material_trainee_toolbar"
+            android:id="@+id/setting_trainee_material_toolbar_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/default_toolbar_elevation"
@@ -24,37 +24,92 @@
             app:navigationIconTint="@color/primaryColor"
             app:title="@string/config_material_trainee_toolbar" />
 
-        <LinearLayout
-            android:id="@+id/linear_container"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trainee_selected_name_icon_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_profile"
+            android:text="@string/name_hint"
+            android:theme="@style/traiLead_text"
+            android:tint="@color/primaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/setting_trainee_material_toolbar_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_selected_name_label_id"
+            style="@style/traiLead_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:hint="@{viewModel.traineeSelected.name + ' ' + viewModel.traineeSelected.lastName}"
+            android:theme="@style/traiLead_text"
+            app:layout_constraintStart_toEndOf="@id/trainee_selected_name_icon_id"
+            app:layout_constraintTop_toTopOf="@id/trainee_selected_name_icon_id" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trainee_selected_email_icon_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_email"
+            android:text="@string/email_hint"
+            android:theme="@style/traiLead_text"
+            android:tint="@color/primaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_selected_name_icon_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_selected_email_label_id"
+            style="@style/traiLead_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:hint="@{viewModel.traineeSelected.email}"
+            android:theme="@style/traiLead_text"
+            app:layout_constraintStart_toEndOf="@id/trainee_selected_email_icon_id"
+            app:layout_constraintTop_toTopOf="@id/trainee_selected_email_icon_id" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/trainee_selected_rol_icon_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:src="@drawable/ic_position"
+            android:text="@string/position"
+            android:theme="@style/traiLead_text"
+            android:tint="@color/primaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainee_selected_email_icon_id" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/trainee_selected_rol_label_id"
+            style="@style/traiLead_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:hint="@{viewModel.traineeSelected.position.name()}"
+            android:theme="@style/traiLead_text"
+            app:layout_constraintStart_toEndOf="@id/trainee_selected_rol_icon_id"
+            app:layout_constraintTop_toTopOf="@id/trainee_selected_rol_icon_id" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/trainee_selected_divider_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/margin_medium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/link_material_trainee_toolbar">
+            app:layout_constraintTop_toBottomOf="@id/trainee_selected_rol_icon_id" />
 
-            <Spinner
-                android:id="@+id/link_material_selected_category_spinner"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium"
-                android:layout_weight="1"
-                android:background="@drawable/spinner_bg"
-                android:elevation="@dimen/card_elevation_default_shadow"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/link_material_trainee_toolbar" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/linked_radio_button_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:hint="@string/selected_all"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/link_material_trainee_toolbar" />
-
-        </LinearLayout>
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/linked_radio_button_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:hint="@string/selected_all"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/setting_trainee_material_toolbar_id" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -62,11 +117,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/spinner_margin"
+            android:layout_marginTop="@dimen/card_view_presentation_size"
             android:layout_marginBottom="@dimen/bottom_navigation_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linear_container" />
+            app:layout_constraintTop_toBottomOf="@id/trainee_selected_divider_id" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

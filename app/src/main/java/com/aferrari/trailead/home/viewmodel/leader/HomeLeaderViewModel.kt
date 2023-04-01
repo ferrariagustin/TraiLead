@@ -47,7 +47,7 @@ open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
 
     //    Material
     val statusUpdateNewMaterial = MutableLiveData<StatusUpdateInformation>()
-    var listMaterialLeader = MutableLiveData<List<Material>>()
+    var listAllMaterials = MutableLiveData<List<Material>>()
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()
@@ -289,20 +289,20 @@ open class HomeLeaderViewModel(val repository: UserRepository) : ViewModel() {
     }
 
     fun getMaterialsCategoryFilter() = viewModelScope.launch {
-        listMaterialLeader.value =
+        listAllMaterials.value =
             repository.getAllMaterial(leader).filter { it.categoryId == categorySelected?.id }
     }
 
 
     fun getAllMaterials() = viewModelScope.launch {
-        listMaterialLeader.value = repository.getAllMaterial(leader)
+        listAllMaterials.value = repository.getAllMaterial(leader)
     }
 
     private fun getAllMaterial(newMaterial: Material) {
         viewModelScope.launch {
             val tempListMaterial = repository.getAllMaterial(leader)
             if (tempListMaterial.contains(newMaterial)) {
-                listMaterialLeader.value = tempListMaterial.toMutableList()
+                listAllMaterials.value = tempListMaterial.toMutableList()
                 statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
             } else {
                 statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED

@@ -43,7 +43,7 @@ class LeaderMaterialListFragment : Fragment() {
         binding.recyclerViewMaterialList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         homeLeaderViewModel.getMaterialsCategoryFilter()
-        homeLeaderViewModel.listMaterialLeader.observe(viewLifecycleOwner) {
+        homeLeaderViewModel.listAllMaterials.observe(viewLifecycleOwner) {
             binding.recyclerViewMaterialList.adapter =
                 MaterialListAdapter(it, this, homeLeaderViewModel)
         }

@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,8 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
-import com.aferrari.trailead.home.view.leader.listTrainee.adapter.ConfigMaterialTraineeAdapter
-import com.aferrari.trailead.home.view.leader.listTrainee.adapter.SpinnerAdapterCategoryLinkList
+import com.aferrari.trailead.home.view.leader.listTrainee.adapter.SettingsMaterialTraineeAdapter
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.leader.listTrainee.ListTraineeViewModel
@@ -28,8 +25,6 @@ class LinkMaterialTraineeFragment : Fragment() {
     private lateinit var viewModel: ListTraineeViewModel
 
     private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
-
-    private lateinit var spinnerAdapter: SpinnerAdapterCategoryLinkList
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +46,6 @@ class LinkMaterialTraineeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initComponents()
         configToolbar()
-        configSpinner()
         configRadioButtonSelectedAll()
         initListeners()
     }
@@ -97,11 +91,10 @@ class LinkMaterialTraineeFragment : Fragment() {
     private fun successSelectedRadioButtonFlow(radioButton: MaterialRadioButton) {
         radioButton.isSelected = true
         radioButton.isChecked = true
-        viewModel.linkedAllMaterialFromCategorySelected(spinnerAdapter.itemSelected.value)
     }
 
     private fun configToolbar() {
-        binding.linkMaterialTraineeToolbar.setNavigationOnClickListener() {
+        binding.settingTraineeMaterialToolbarId.setNavigationOnClickListener() {
             findNavController().navigateUp()
         }
     }
@@ -109,31 +102,9 @@ class LinkMaterialTraineeFragment : Fragment() {
     private fun initComponents() {
         binding.recyclerViewMaterialForCategoryList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        spinnerAdapter = SpinnerAdapterCategoryLinkList()
-        configureSpinner()
-    }
-
-    private fun configSpinner() {
-        spinnerAdapter.itemSelected.observe(viewLifecycleOwner) { categorySelected ->
-            viewModel.getMaterialsBy(categorySelected)?.let {
-                binding.recyclerViewMaterialForCategoryList.adapter =
-                    ConfigMaterialTraineeAdapter(it, this)
-            }
+        viewModel.getCategories()?.let {
+            binding.recyclerViewMaterialForCategoryList.adapter =
+                SettingsMaterialTraineeAdapter(it, this)
         }
-    }
-
-    private fun configureSpinner() {
-        binding.linkMaterialSelectedCategorySpinner.onItemSelectedListener = spinnerAdapter
-        val categories: MutableList<String> = viewModel.getAllCategoryToString()
-
-        // Creating adapter for spinner
-        val dataAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, categories)
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // attaching data adapter to spinner
-        binding.linkMaterialSelectedCategorySpinner.adapter = dataAdapter
     }
 }

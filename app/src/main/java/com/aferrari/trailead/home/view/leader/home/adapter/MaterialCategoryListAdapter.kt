@@ -8,22 +8,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.login.db.Category
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.ItemMaterialCategoryLeaderHomeBinding
+import com.aferrari.trailead.databinding.ItemMaterialCategoryListBinding
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 
-class CategoryMaterialListAdapter(
+class MaterialCategoryListAdapter(
     private val dataSet: List<Category>,
     private val homeLeaderViewModel: HomeLeaderViewModel,
     private val fragment: Fragment
 ) :
-    RecyclerView.Adapter<CategoryMaterialListAdapter.CategoryListViewHolder>() {
+    RecyclerView.Adapter<MaterialCategoryListAdapter.CategoryListViewHolder>() {
 
-    internal lateinit var binding: ItemMaterialCategoryLeaderHomeBinding
+    internal lateinit var binding: ItemMaterialCategoryListBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryListViewHolder {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.item_material_category_leader_home,
+            R.layout.item_material_category_list,
             parent,
             false
         )
@@ -37,7 +37,7 @@ class CategoryMaterialListAdapter(
             homeLeaderViewModel.categorySelected = category
             fragment.findNavController().navigate(R.id.leaderMaterialListFragment)
         }
-        holder.viewHolderBinding.imageSettingCategoryMaterialLeader.setOnClickListener {
+        holder.viewHolderBinding.imageSettingCategoryName.setOnClickListener {
             homeLeaderViewModel.categorySelected = category
             fragment.findNavController()
                 .navigate(R.id.leaderSettingCategoryMaterial)
@@ -46,8 +46,8 @@ class CategoryMaterialListAdapter(
 
     override fun getItemCount(): Int = dataSet.size
 
-    class CategoryListViewHolder(binding: ItemMaterialCategoryLeaderHomeBinding) :
+    class CategoryListViewHolder(binding: ItemMaterialCategoryListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val viewHolderBinding: ItemMaterialCategoryLeaderHomeBinding = binding
+        val viewHolderBinding: ItemMaterialCategoryListBinding = binding
     }
 }
