@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.aferrari.login.dialog.Dialog
+import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeEditProfilePasswordFragmentBinding
 import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
@@ -76,7 +76,7 @@ class TraineeEditProfilePass : Fragment() {
     }
 
     private fun showError() {
-        Dialog().showDialog(
+        TraileadDialog().showDialog(
             resources.getString(com.aferrari.login.R.string.title_error),
             "Ingrese una contraseña correcta",
             requireContext()

@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.aferrari.login.dialog.Dialog
+import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderSettingMaterialCategoryBinding
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
@@ -64,7 +64,7 @@ class SettingCategoryMaterialFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun deleteShowDialog() {
-        Dialog().showDialogWithAction(
+        TraileadDialog().showDialogWithAction(
             title = resources.getString(R.string.dialog_title_removed_trainee),
             message = resources.getString(
                 R.string.dialog_message_delete_category,

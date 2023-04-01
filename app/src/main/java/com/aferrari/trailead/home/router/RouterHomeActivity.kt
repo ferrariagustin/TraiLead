@@ -9,7 +9,7 @@ import com.aferrari.login.R
 import com.aferrari.login.db.User
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
-import com.aferrari.login.dialog.Dialog
+import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.home.Utils.StringUtils.JOIN_DEEPLINK
 import com.aferrari.trailead.home.Utils.StringUtils.LEADER_KEY
@@ -51,7 +51,7 @@ class RouterHomeActivity : AppCompatActivity() {
     }
 
     private fun goLoginScreen() {
-        Dialog().showDialog(
+        TraileadDialog().showDialog(
             resources.getString(R.string.title_error),
             resources.getString(R.string.error_login_home),
             this

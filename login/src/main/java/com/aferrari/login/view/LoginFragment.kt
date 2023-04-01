@@ -16,7 +16,7 @@ import com.aferrari.login.databinding.LoginFragmentBinding
 import com.aferrari.login.db.User
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
-import com.aferrari.login.dialog.Dialog
+import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.login.viewmodel.LoginViewModelFactory
@@ -92,7 +92,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
     }
 
     private fun errorLogin() {
-        Dialog().showDialog(
+        TraileadDialog().showDialog(
             getString(R.string.login_btn_text),
             getString(R.string.error_login),
             requireContext()

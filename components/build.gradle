@@ -1,20 +1,17 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
 }
 
 android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.aferrari.trailead"
-        minSdk 23
+        minSdk 21
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -29,19 +26,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += "-Xjvm-default=all"
-    }
-
-    dataBinding {
-        enabled = true
     }
 }
 
 dependencies {
-    implementation project(':login')
-    implementation project(':components')
 
-//    AndroidX version
+    //    AndroidX version
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
@@ -61,18 +51,4 @@ dependencies {
     testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
-
-//  ROOM
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-common:$room_version"
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-
-    kapt("androidx.room:room-compiler:$room_version")
-
-    // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
-    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0'
 }

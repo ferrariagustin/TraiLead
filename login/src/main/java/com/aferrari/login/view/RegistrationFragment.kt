@@ -15,7 +15,7 @@ import com.aferrari.login.R
 import com.aferrari.login.databinding.RegistrationFragmentBinding
 import com.aferrari.login.db.UserDataBase
 import com.aferrari.login.db.UserRepository
-import com.aferrari.login.dialog.Dialog
+import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.login.viewmodel.LoginViewModelFactory
 import com.aferrari.login.viewmodel.register.RegisterErrorState
 import com.aferrari.login.viewmodel.register.RegisterState
@@ -87,7 +87,7 @@ class RegistrationFragment : Fragment() {
 
     private fun errorRegisterExistUser() {
         showProgressBar(View.GONE)
-        Dialog().showDialog(
+        TraileadDialog().showDialog(
             getString(R.string.register_btn_text),
             getString(R.string.error_user_existe_register),
             requireContext()
@@ -96,7 +96,7 @@ class RegistrationFragment : Fragment() {
 
     private fun errorRegister() {
         showProgressBar(View.GONE)
-        Dialog().showDialog(
+        TraileadDialog().showDialog(
             getString(R.string.register_btn_text),
             getString(R.string.error_register), requireContext()
         )
@@ -104,7 +104,7 @@ class RegistrationFragment : Fragment() {
 
     private fun successRegister() {
         showProgressBar(View.GONE)
-        Dialog().showDialog(
+        TraileadDialog().showDialog(
             getString(R.string.register_btn_text),
             getString(R.string.success_register),
             requireContext()
