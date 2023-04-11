@@ -37,10 +37,12 @@ class MaterialCategoryListAdapter(
             homeLeaderViewModel.categorySelected = category
             fragment.findNavController().navigate(R.id.leaderMaterialListFragment)
         }
-        holder.viewHolderBinding.imageSettingCategoryName.setOnClickListener {
+
+        holder.viewHolderBinding.cardCategoryId.setOnLongClickListener {
             homeLeaderViewModel.categorySelected = category
             fragment.findNavController()
                 .navigate(R.id.leaderSettingCategoryMaterial)
+            return@setOnLongClickListener true
         }
     }
 

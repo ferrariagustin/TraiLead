@@ -2,11 +2,13 @@ package com.aferrari.trailead.home.viewmodel.leader.listTrainee
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.aferrari.login.db.Category
 import com.aferrari.login.db.Material
 import com.aferrari.login.db.Trainee
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import kotlinx.coroutines.launch
 
 class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel) : ViewModel() {
 
@@ -15,7 +17,7 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
     lateinit var traineeSelected: Trainee
 
     init {
-        statusUpdateRadioButtonSelectedAll.value = StatusUpdateInformation.FAILED
+        statusUpdateRadioButtonSelectedAll.value = StatusUpdateInformation.NONE
         homeLeaderViewModel.getAllMaterials()
         homeLeaderViewModel.getAllCategoryForLeader()
         homeLeaderViewModel.traineeSelected?.let {
@@ -60,7 +62,25 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
             return
         }
         categorySelected = homeLeaderViewModel.getCategoryBy(categorySpinnerSelected)
+    }
 
+    /**
+     * Selected all category card views
+     */
+    fun selectedAllCategory() {
+        statusUpdateRadioButtonSelectedAll.value = StatusUpdateInformation.SUCCESS
+    }
 
+    /**
+     * Unselected all category card views
+     */
+    fun unselectedAllCategory() {
+        statusUpdateRadioButtonSelectedAll.value = StatusUpdateInformation.FAILED
+    }
+
+    fun saveCategorySelected() {
+        viewModelScope.launch {
+//            homeLeaderViewModel.repository.setLinkedCategory()
+        }
     }
 }
