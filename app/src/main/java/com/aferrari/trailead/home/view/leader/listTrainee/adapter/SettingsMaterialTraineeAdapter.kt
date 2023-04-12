@@ -45,32 +45,43 @@ class SettingsMaterialTraineeAdapter(
         holder.viewHolderBinding.textViewMaterialCategoryId.hint = category.name
         holder.viewHolderBinding.linkedRadioButtonCategory.setOnClickListener {
             if ((it as MaterialRadioButton).isSelected) {
-                disableRadioButton(it)
+                disableRadioButton(it, category)
             } else {
-                enableRadioButton(it)
+                enableRadioButton(it, category)
             }
         }
         viewModel.statusUpdateRadioButtonSelectedAll.observe(fragment.viewLifecycleOwner) {
             when (it) {
                 StatusUpdateInformation.SUCCESS -> {
-                    enableRadioButton(holder.viewHolderBinding.linkedRadioButtonCategory)
+                    enableRadioButton(holder.viewHolderBinding.linkedRadioButtonCategory, category)
                 }
                 StatusUpdateInformation.FAILED -> {
-                    disableRadioButton(holder.viewHolderBinding.linkedRadioButtonCategory)
+                    disableRadioButton(holder.viewHolderBinding.linkedRadioButtonCategory, category)
                 }
                 else -> {}
             }
         }
+        viewModel.setCategorySelected.observe(fragment) {
+            initSelectedCateogires(category)
+        }
     }
 
-    private fun disableRadioButton(radioButton: MaterialRadioButton) {
+    private fun initSelectedCateogires(category: Category) {
+        if (viewModel.setCategorySelected.value?.contains(category) == true) {
+            enableRadioButton(binding.linkedRadioButtonCategory, category)
+        }
+    }
+
+    private fun disableRadioButton(radioButton: MaterialRadioButton, category: Category) {
         radioButton.isSelected = false
         radioButton.isChecked = false
+        viewModel.removeCategorySelected(category)
     }
 
-    private fun enableRadioButton(radioButton: MaterialRadioButton) {
+    private fun enableRadioButton(radioButton: MaterialRadioButton, category: Category) {
         radioButton.isSelected = true
         radioButton.isChecked = true
+        viewModel.addCategorySelected(category)
     }
 
     override fun getItemCount(): Int = dataSource.size

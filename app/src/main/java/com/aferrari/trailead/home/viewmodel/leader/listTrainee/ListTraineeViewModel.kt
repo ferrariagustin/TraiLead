@@ -8,12 +8,16 @@ import com.aferrari.login.db.Material
 import com.aferrari.login.db.Trainee
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel) : ViewModel() {
 
-    var categorySelected: Category? = null
     val statusUpdateRadioButtonSelectedAll = MutableLiveData<StatusUpdateInformation>()
+
+    val setCategorySelected = MutableLiveData<MutableSet<Category>>(mutableSetOf())
+
     lateinit var traineeSelected: Trainee
 
     init {
@@ -23,6 +27,8 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
         homeLeaderViewModel.traineeSelected?.let {
             traineeSelected = it
         }
+        // TODO: Enteder porque no se esta inicializando correctamente el set category selected. Aparece el set nulo
+        getCategoriesSelected()
     }
 
     fun getAllCategoryToString(): MutableList<String> {
@@ -55,16 +61,6 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
     fun getCategories(): List<Category>? = homeLeaderViewModel.listCategory.value
 
     /**
-     * Linked all material from category selected with de trainee selected
-     */
-    fun linkedAllMaterialFromCategorySelected(categorySpinnerSelected: String?) {
-        if (categorySpinnerSelected == null) {
-            return
-        }
-        categorySelected = homeLeaderViewModel.getCategoryBy(categorySpinnerSelected)
-    }
-
-    /**
      * Selected all category card views
      */
     fun selectedAllCategory() {
@@ -78,9 +74,42 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
         statusUpdateRadioButtonSelectedAll.value = StatusUpdateInformation.FAILED
     }
 
+    /**
+     * Save all category with trainee selected
+     */
     fun saveCategorySelected() {
         viewModelScope.launch {
-//            homeLeaderViewModel.repository.setLinkedCategory()
+            withContext(Dispatchers.IO) {
+                setCategorySelected.value?.let {
+                    homeLeaderViewModel.repository.setLinkedCategory(
+                        traineeSelected.id,
+                        it
+                    )
+                }
+            }
         }
+    }
+
+    /**
+     * Save all category with trainee selected
+     */
+    fun getCategoriesSelected() {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.Main) {
+                homeLeaderViewModel.repository.getCategoriesSelected(
+                    traineeSelected.id
+                )
+            }
+            setCategorySelected.value?.addAll(result)
+        }
+    }
+
+
+    fun addCategorySelected(category: Category) {
+        setCategorySelected.value?.add(category)
+    }
+
+    fun removeCategorySelected(category: Category) {
+        setCategorySelected.value?.remove(category)
     }
 }

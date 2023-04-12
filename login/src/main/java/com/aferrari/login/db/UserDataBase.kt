@@ -8,10 +8,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 
 @Database(
-    version = 6,
-    entities = [Leader::class, Trainee::class, Material::class, Category::class],
+    version = 7,
+    entities = [Leader::class, Trainee::class, Material::class, Category::class, TraineeCategoryJoin::class],
     autoMigrations = [
-        AutoMigration(from = 5, to = 6, spec = UserDataBase.AutoMigration5To6::class)
+        AutoMigration(from = 6, to = 7, spec = UserDataBase.AutoMigration6To7::class)
     ],
     exportSchema = true
 )
@@ -28,6 +28,8 @@ abstract class UserDataBase : RoomDatabase() {
 
     class AutoMigration5To6 : AutoMigrationSpec
 
+    class AutoMigration6To7 : AutoMigrationSpec
+
     abstract val userDao: UserDao
 
     companion object {
@@ -43,7 +45,7 @@ abstract class UserDataBase : RoomDatabase() {
                         UserDataBase::class.java,
                         "user_data_database"
                     )
-                        .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
+                        .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                         .build()
                 }
                 return instance
@@ -68,6 +70,19 @@ abstract class UserDataBase : RoomDatabase() {
                     "ALTER TABLE material_data_table "
                             + " ADD COLUMN leader_material_id INTEGER"
                 )
+            }
+        }
+
+        private val MIGRATION_6_7: Migration = object : Migration(6, 7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `trainee_category_join` " +
+                            "(`trainee_id` INTEGER NOT NULL, `category_id` INTEGER NOT NULL, " +
+                            "PRIMARY KEY(`trainee_id`, `category_id`), FOREIGN KEY(`trainee_id`) " +
+                            "REFERENCES `trainee_data_table`(`trainee_id`) ON UPDATE NO ACTION ON DELETE NO ACTION , " +
+                            "FOREIGN KEY(`category_id`) REFERENCES `category_data_table`(`category_id`) " +
+                            "ON UPDATE NO ACTION ON DELETE NO ACTION )"
+                );
             }
         }
     }

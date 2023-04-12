@@ -117,4 +117,10 @@ interface UserDao {
 
     @Query("UPDATE material_data_table SET material_title = :newTitle WHERE material_id = :materialId")
     suspend fun updateTitleMaterial(materialId: Int, newTitle: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllTraineeWithCategory(traineeCategoryJoin: List<TraineeCategoryJoin>)
+
+    @Query("SELECT * FROM category_data_table INNER JOIN trainee_category_join ON category_data_table.category_id = trainee_category_join.category_id WHERE trainee_category_join.trainee_id = :traineeId")
+    suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 }

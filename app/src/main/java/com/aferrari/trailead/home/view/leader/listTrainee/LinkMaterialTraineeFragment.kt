@@ -99,6 +99,7 @@ class LinkMaterialTraineeFragment : Fragment() {
             binding.recyclerViewMaterialForCategoryList.adapter =
                 SettingsMaterialTraineeAdapter(it, this, viewModel)
         }
+        viewModel.getCategoriesSelected()
     }
 
     private fun setVisibilityBottomNavigation(visibility: Int) {

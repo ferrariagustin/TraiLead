@@ -127,8 +127,18 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun deleteMaterial(material: Material) = dao.deleteMaterial(material)
 
-    suspend fun updateUrlMaterial(materialId: Int, youtubeId: String) = dao.updateUrlMaterial(materialId, youtubeId)
+    suspend fun updateUrlMaterial(materialId: Int, youtubeId: String) =
+        dao.updateUrlMaterial(materialId, youtubeId)
 
-    suspend fun updateTitleMaterial(materialId: Int, newTitle: String) = dao.updateTitleMaterial(materialId, newTitle)
+    suspend fun updateTitleMaterial(materialId: Int, newTitle: String) =
+        dao.updateTitleMaterial(materialId, newTitle)
+
+    suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>) {
+        val traineeCategoryJoinList = categorySet.map { TraineeCategoryJoin(traineeId, it.id) }
+        return dao.insertAllTraineeWithCategory(traineeCategoryJoinList)
+    }
+
+    suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
+        dao.getCategoriesFromTrainee(traineeId)
 
 }
