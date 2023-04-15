@@ -61,14 +61,17 @@ class SettingsMaterialTraineeAdapter(
                 else -> {}
             }
         }
-        viewModel.setCategorySelected.observe(fragment) {
-            initSelectedCateogires(category)
+        viewModel.setCategorySelected.observe(fragment.viewLifecycleOwner) {
+            initSelectedCateogires(holder, category)
         }
     }
 
-    private fun initSelectedCateogires(category: Category) {
+    private fun initSelectedCateogires(
+        holder: SettingsMaterialTraineeViewHolder,
+        category: Category
+    ) {
         if (viewModel.setCategorySelected.value?.contains(category) == true) {
-            enableRadioButton(binding.linkedRadioButtonCategory, category)
+            enableRadioButton(holder.viewHolderBinding.linkedRadioButtonCategory, category)
         }
     }
 

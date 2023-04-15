@@ -135,10 +135,10 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>) {
         val traineeCategoryJoinList = categorySet.map { TraineeCategoryJoin(traineeId, it.id) }
-        return dao.insertAllTraineeWithCategory(traineeCategoryJoinList)
+        dao.removeAllCategoryFromTrainee(traineeId)
+        return dao.insertAllCategoryFromTrainee(traineeCategoryJoinList)
     }
 
     suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
         dao.getCategoriesFromTrainee(traineeId)
-
 }

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
-import com.aferrari.trailead.home.Utils.BundleUtils
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.SettingsMaterialTraineeAdapter
 import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 import com.aferrari.trailead.home.viewmodel.leader.listTrainee.ListTraineeViewModel
@@ -57,17 +56,17 @@ class LinkMaterialTraineeFragment : Fragment() {
         }
         binding.linkedRadioButtonAll.setOnClickListener {
             if ((it as MaterialRadioButton).isSelected) {
-                disableRadioButton(it)
+                disableAllRadioButton()
                 viewModel.unselectedAllCategory()
             } else {
-                enableRadioButton(it)
+                enableAllRadioButton()
                 viewModel.selectedAllCategory()
             }
         }
         binding.saveLinkedCategoryTrainee.setOnClickListener {
             TraileadDialog().showDialogWithAction(
                 title = "Guardar categorías",
-                message = "Esta seguro de asignar las categorias seleccionadas a ${viewModel.traineeSelected.name + " " + viewModel.traineeSelected.lastName }",
+                message = "Esta seguro de asignar las categorias seleccionadas a ${viewModel.traineeSelected.name + " " + viewModel.traineeSelected.lastName}",
                 fragment = this,
                 positiveAction = getPositiveAction(),
                 iconRes = R.drawable.ic_link,
@@ -82,14 +81,14 @@ class LinkMaterialTraineeFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-    private fun disableRadioButton(radioButton: MaterialRadioButton) {
-        radioButton.isSelected = false
-        radioButton.isChecked = false
+    private fun disableAllRadioButton() {
+        binding.linkedRadioButtonAll.isSelected = false
+        binding.linkedRadioButtonAll.isChecked = false
     }
 
-    private fun enableRadioButton(radioButton: MaterialRadioButton) {
-        radioButton.isSelected = true
-        radioButton.isChecked = true
+    private fun enableAllRadioButton() {
+        binding.linkedRadioButtonAll.isSelected = true
+        binding.linkedRadioButtonAll.isChecked = true
     }
 
     private fun initComponents() {
@@ -100,6 +99,20 @@ class LinkMaterialTraineeFragment : Fragment() {
                 SettingsMaterialTraineeAdapter(it, this, viewModel)
         }
         viewModel.getCategoriesSelected()
+        initAllSelected()
+    }
+
+    /**
+     * Init all radio button if all categories is selected
+     */
+    private fun initAllSelected() {
+        viewModel.allCategorySelectedSize.observe(viewLifecycleOwner) {
+            if (it == viewModel.getCategories()?.size) {
+                enableAllRadioButton()
+            } else {
+                disableAllRadioButton()
+            }
+        }
     }
 
     private fun setVisibilityBottomNavigation(visibility: Int) {

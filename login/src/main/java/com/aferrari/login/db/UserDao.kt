@@ -119,8 +119,11 @@ interface UserDao {
     suspend fun updateTitleMaterial(materialId: Int, newTitle: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllTraineeWithCategory(traineeCategoryJoin: List<TraineeCategoryJoin>)
+    suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>)
 
     @Query("SELECT * FROM category_data_table INNER JOIN trainee_category_join ON category_data_table.category_id = trainee_category_join.category_id WHERE trainee_category_join.trainee_id = :traineeId")
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
+
+    @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
+    suspend fun removeAllCategoryFromTrainee(traineeId: Int)
 }

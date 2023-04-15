@@ -16,7 +16,9 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
 
     val statusUpdateRadioButtonSelectedAll = MutableLiveData<StatusUpdateInformation>()
 
-    val setCategorySelected = MutableLiveData<MutableSet<Category>>(mutableSetOf())
+    val setCategorySelected = MutableLiveData<MutableSet<Category>>()
+
+    val allCategorySelectedSize = MutableLiveData<Int>()
 
     lateinit var traineeSelected: Trainee
 
@@ -28,7 +30,7 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
             traineeSelected = it
         }
         // TODO: Enteder porque no se esta inicializando correctamente el set category selected. Aparece el set nulo
-        getCategoriesSelected()
+//        getCategoriesSelected()
     }
 
     fun getAllCategoryToString(): MutableList<String> {
@@ -95,21 +97,23 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
      */
     fun getCategoriesSelected() {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.Main) {
-                homeLeaderViewModel.repository.getCategoriesSelected(
-                    traineeSelected.id
-                )
-            }
-            setCategorySelected.value?.addAll(result)
+            val result = homeLeaderViewModel.repository.getCategoriesSelected(traineeSelected.id)
+            setCategorySelected.value = result.toMutableSet()
+            updateSizeCategorySelected()
         }
     }
 
-
     fun addCategorySelected(category: Category) {
         setCategorySelected.value?.add(category)
+        updateSizeCategorySelected()
     }
 
     fun removeCategorySelected(category: Category) {
         setCategorySelected.value?.remove(category)
+        updateSizeCategorySelected()
+    }
+
+    private fun updateSizeCategorySelected() {
+        allCategorySelectedSize.value = setCategorySelected.value?.size
     }
 }
