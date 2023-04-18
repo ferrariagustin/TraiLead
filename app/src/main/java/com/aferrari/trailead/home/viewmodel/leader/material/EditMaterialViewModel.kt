@@ -3,13 +3,13 @@ package com.aferrari.trailead.home.viewmodel.leader.material
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.db.Material
+import com.aferrari.login.data.Material
 import com.aferrari.trailead.home.Utils.UrlUtils
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import kotlinx.coroutines.launch
 
-class EditMaterialViewModel(private val homeViewModel: HomeLeaderViewModel) : ViewModel() {
+class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewModel() {
 
     val statusUpdateEditMaterial = MutableLiveData<StatusUpdateInformation>()
     var materialSelected: Material?

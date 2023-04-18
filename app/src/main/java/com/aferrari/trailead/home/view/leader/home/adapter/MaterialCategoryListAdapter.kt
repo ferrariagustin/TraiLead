@@ -6,14 +6,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.aferrari.login.db.Category
+import com.aferrari.login.data.Category
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialCategoryListBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 class MaterialCategoryListAdapter(
     private val dataSet: List<Category>,
-    private val homeLeaderViewModel: HomeLeaderViewModel,
+    private val leaderViewModel: LeaderViewModel,
     private val fragment: Fragment
 ) :
     RecyclerView.Adapter<MaterialCategoryListAdapter.CategoryListViewHolder>() {
@@ -34,12 +34,12 @@ class MaterialCategoryListAdapter(
         val category = dataSet[position]
         holder.viewHolderBinding.textViewMaterialCategoryId.text = category.name
         holder.viewHolderBinding.cardCategoryId.setOnClickListener {
-            homeLeaderViewModel.categorySelected = category
+            leaderViewModel.categorySelected = category
             fragment.findNavController().navigate(R.id.leaderMaterialListFragment)
         }
 
         holder.viewHolderBinding.cardCategoryId.setOnLongClickListener {
-            homeLeaderViewModel.categorySelected = category
+            leaderViewModel.categorySelected = category
             fragment.findNavController()
                 .navigate(R.id.leaderSettingCategoryMaterial)
             return@setOnLongClickListener true

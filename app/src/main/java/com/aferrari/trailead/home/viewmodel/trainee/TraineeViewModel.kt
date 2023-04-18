@@ -1,14 +1,16 @@
-package com.aferrari.trailead.home.viewmodel
+package com.aferrari.trailead.home.viewmodel.trainee
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.db.Leader
-import com.aferrari.login.db.Trainee
-import com.aferrari.login.db.UserRepository
+import com.aferrari.login.data.Leader
+import com.aferrari.login.data.Trainee
+import com.aferrari.login.data.UserRepository
+import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.launch
 
-class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel() {
+class TraineeViewModel(val repository: UserRepository) : ViewModel() {
 
     private lateinit var trainee: Trainee
 
@@ -77,6 +79,8 @@ class HomeTraineeViewModel(private val repository: UserRepository) : ViewModel()
             statusEditProfilePass.value = StatusUpdateInformation.SUCCESS
         }
     }
+
+    fun getTraineeSelected() = trainee
 
     fun init() {
         statusEditProfilePass.value = StatusUpdateInformation.NONE

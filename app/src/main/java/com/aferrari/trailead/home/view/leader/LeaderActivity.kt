@@ -5,22 +5,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.aferrari.login.db.Leader
-import com.aferrari.login.db.UserDataBase
-import com.aferrari.login.db.UserRepository
+import com.aferrari.login.data.Leader
+import com.aferrari.login.data.UserDataBase
+import com.aferrari.login.data.UserRepository
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.home.Utils.BundleUtils
 import com.aferrari.trailead.home.Utils.StringUtils.LEADER_KEY
 import com.aferrari.trailead.home.Utils.StringUtils.TAB_ID
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
 
 class LeaderActivity : AppCompatActivity() {
 
     lateinit var binding: LeaderActivityBinding
 
-    private lateinit var homeLeaderViewModel: HomeLeaderViewModel
+    private lateinit var leaderViewModel: LeaderViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +29,14 @@ class LeaderActivity : AppCompatActivity() {
         val dao = UserDataBase.getInstance(this).userDao
         val repository = UserRepository(dao)
         val factory = HomeViewModelFactory(repository)
-        homeLeaderViewModel = ViewModelProvider(this, factory)[HomeLeaderViewModel::class.java]
+        leaderViewModel = ViewModelProvider(this, factory)[LeaderViewModel::class.java]
         binding.lifecycleOwner = this
         initComponent()
         initListener()
     }
 
     private fun initComponent() {
-        homeLeaderViewModel.setLeader(intent.extras?.get(LEADER_KEY) as? Leader)
+        leaderViewModel.setLeader(intent.extras?.get(LEADER_KEY) as? Leader)
     }
 
     private fun initListener() {
@@ -54,7 +54,7 @@ class LeaderActivity : AppCompatActivity() {
             }
             return@setOnItemSelectedListener true
         }
-        homeLeaderViewModel.bottomNavigationViewVisibility.observe(this) {
+        leaderViewModel.bottomNavigationViewVisibility.observe(this) {
             binding.bottomNavigationId.visibility = it
         }
     }

@@ -14,14 +14,14 @@ import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeProfileFragmentBinding
 import com.aferrari.trailead.home.Utils.BundleUtils
-import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
+import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 
 
 class TraineeProfileFragment : Fragment() {
 
     private lateinit var binding: TraineeProfileFragmentBinding
-    private val homeTraineeViewModel: HomeTraineeViewModel by activityViewModels()
+    private val homeTraineeViewModel: TraineeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

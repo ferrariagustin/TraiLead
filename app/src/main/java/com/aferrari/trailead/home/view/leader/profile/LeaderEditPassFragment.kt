@@ -11,14 +11,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderEditProfilePassFragmentBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 class LeaderEditPassFragment : Fragment() {
 
     private lateinit var binding: LeaderEditProfilePassFragmentBinding
 
-    private val viewModel: HomeLeaderViewModel by activityViewModels()
+    private val viewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

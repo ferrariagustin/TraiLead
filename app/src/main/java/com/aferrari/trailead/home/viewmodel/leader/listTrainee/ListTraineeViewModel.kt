@@ -3,16 +3,16 @@ package com.aferrari.trailead.home.viewmodel.leader.listTrainee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.db.Category
-import com.aferrari.login.db.Material
-import com.aferrari.login.db.Trainee
+import com.aferrari.login.data.Category
+import com.aferrari.login.data.Material
+import com.aferrari.login.data.Trainee
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel) : ViewModel() {
+class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewModel() {
 
     val statusUpdateRadioButtonSelectedAll = MutableLiveData<StatusUpdateInformation>()
 
@@ -24,9 +24,9 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
 
     init {
         statusUpdateRadioButtonSelectedAll.value = StatusUpdateInformation.NONE
-        homeLeaderViewModel.getAllMaterials()
-        homeLeaderViewModel.getAllCategoryForLeader()
-        homeLeaderViewModel.traineeSelected?.let {
+        leaderViewModel.getAllMaterials()
+        leaderViewModel.getAllCategoryForLeader()
+        leaderViewModel.traineeSelected?.let {
             traineeSelected = it
         }
         // TODO: Enteder porque no se esta inicializando correctamente el set category selected. Aparece el set nulo
@@ -35,7 +35,7 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
 
     fun getAllCategoryToString(): MutableList<String> {
         val mutableList = mutableListOf<String>()
-        homeLeaderViewModel.listCategory.value?.forEach {
+        leaderViewModel.listCategory.value?.forEach {
             mutableList.add(it.name)
         }
         return mutableList
@@ -45,9 +45,9 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
      * Get all materials by category
      */
     fun getMaterialsBy(category: String): List<Material>? {
-        val categorySelected = homeLeaderViewModel.getCategoryBy(category)
+        val categorySelected = leaderViewModel.getCategoryBy(category)
         categorySelected?.let { categorySelected ->
-            return homeLeaderViewModel.listAllMaterials.value?.filter { it.categoryId == categorySelected.id }
+            return leaderViewModel.listAllMaterials.value?.filter { it.categoryId == categorySelected.id }
         }
         return null
     }
@@ -55,12 +55,12 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
     /**
      * Return list of materials for lider
      */
-    fun getMaterials(): List<Material>? = homeLeaderViewModel.listAllMaterials.value
+    fun getMaterials(): List<Material>? = leaderViewModel.listAllMaterials.value
 
     /**
      * Return list of category for lider
      */
-    fun getCategories(): List<Category>? = homeLeaderViewModel.listCategory.value
+    fun getCategories(): List<Category>? = leaderViewModel.listCategory.value
 
     /**
      * Selected all category card views
@@ -83,7 +83,7 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 setCategorySelected.value?.let {
-                    homeLeaderViewModel.repository.setLinkedCategory(
+                    leaderViewModel.repository.setLinkedCategory(
                         traineeSelected.id,
                         it
                     )
@@ -97,7 +97,7 @@ class ListTraineeViewModel(private val homeLeaderViewModel: HomeLeaderViewModel)
      */
     fun getCategoriesSelected() {
         viewModelScope.launch {
-            val result = homeLeaderViewModel.repository.getCategoriesSelected(traineeSelected.id)
+            val result = leaderViewModel.repository.getCategoriesSelected(traineeSelected.id)
             setCategorySelected.value = result.toMutableSet()
             updateSizeCategorySelected()
         }

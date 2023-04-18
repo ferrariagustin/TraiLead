@@ -16,14 +16,14 @@ import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderHomeFragmentBinding
 import com.aferrari.trailead.home.view.leader.home.adapter.MaterialCategoryListAdapter
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 
 class LeaderHomeFragment : Fragment() {
 
     private lateinit var binding: LeaderHomeFragmentBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,13 +33,13 @@ class LeaderHomeFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.leader_home_fragment, container, false)
         binding.lifecycleOwner = this
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         initListeners()
         return binding.root
     }
 
     private fun initListeners() {
-        homeLeaderViewModel.init()
+        leaderViewModel.init()
 
         binding.leaderHomeToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -50,10 +50,10 @@ class LeaderHomeFragment : Fragment() {
 
         binding.recyclerViewCategoryList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        homeLeaderViewModel.getAllCategoryForLeader()
-        homeLeaderViewModel.listCategory.observe(viewLifecycleOwner) {
+        leaderViewModel.getAllCategoryForLeader()
+        leaderViewModel.listCategory.observe(viewLifecycleOwner) {
             binding.recyclerViewCategoryList.adapter =
-                MaterialCategoryListAdapter(it, homeLeaderViewModel, this)
+                MaterialCategoryListAdapter(it, leaderViewModel, this)
         }
         binding.addMaterialCategoryLeaderHome.setOnClickListener {
             findNavController().navigate(R.id.action_leaderHomeFragment_to_addCategoryFragment)

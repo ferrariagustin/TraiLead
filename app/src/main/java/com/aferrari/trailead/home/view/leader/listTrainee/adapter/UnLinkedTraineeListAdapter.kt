@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.aferrari.login.db.Trainee
+import com.aferrari.login.data.Trainee
 import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemTraineeUnlinkedListBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 /**
  * Trainee List that all element is unlinked with a leader, the trainee_leader_id is null
@@ -19,7 +19,7 @@ import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 class UnLinkedTraineeListAdapter(
     private val dataSet: List<Trainee>,
     private val fragment: Fragment,
-    private val viewModel: HomeLeaderViewModel
+    private val viewModel: LeaderViewModel
 ) :
     RecyclerView.Adapter<UnLinkedTraineeListAdapter.ViewHolder>() {
 

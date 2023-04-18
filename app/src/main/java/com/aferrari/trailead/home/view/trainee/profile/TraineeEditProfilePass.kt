@@ -12,14 +12,14 @@ import androidx.navigation.fragment.findNavController
 import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeEditProfilePasswordFragmentBinding
-import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
+import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 class TraineeEditProfilePass : Fragment() {
 
     private lateinit var binding: TraineeEditProfilePasswordFragmentBinding
 
-    private val traineeViewModel: HomeTraineeViewModel by activityViewModels()
+    private val traineeViewModel: TraineeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

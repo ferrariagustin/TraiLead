@@ -11,14 +11,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderAddMaterialBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 class AddMaterialFragment : Fragment() {
 
     private lateinit var binding: LeaderAddMaterialBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +33,7 @@ class AddMaterialFragment : Fragment() {
                 false
             )
         binding.lifecycleOwner = this
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         initListeners()
         return binding.root
     }
@@ -43,12 +43,12 @@ class AddMaterialFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.addNewMaterialButton.setOnClickListener {
-            homeLeaderViewModel.insertMaterial(
+            leaderViewModel.insertMaterial(
                 binding.addNewMaterialTitleTextInput.text.toString(),
                 binding.addNewMaterialTextInput.text.toString()
             )
         }
-        homeLeaderViewModel.statusUpdateNewMaterial.observe(viewLifecycleOwner) {
+        leaderViewModel.statusUpdateNewMaterial.observe(viewLifecycleOwner) {
             when (it) {
                 StatusUpdateInformation.FAILED -> {
                     failedFlow()

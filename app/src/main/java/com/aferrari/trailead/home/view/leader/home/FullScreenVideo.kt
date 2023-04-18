@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.FullScreenVideoBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
@@ -18,7 +18,7 @@ class FullScreenVideo : Fragment() {
 
     private lateinit var binding: FullScreenVideoBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,14 +27,14 @@ class FullScreenVideo : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.full_screen_video, container, false)
         binding.lifecycleOwner = this
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         goneBottomNavigation()
         initFullScreenVideo()
         return binding.root
     }
 
     private fun goneBottomNavigation() {
-        homeLeaderViewModel.setBottomNavigationVisibility(View.INVISIBLE)
+        leaderViewModel.setBottomNavigationVisibility(View.INVISIBLE)
     }
 
     private fun initFullScreenVideo() {
@@ -42,7 +42,7 @@ class FullScreenVideo : Fragment() {
         binding.fullScreenMaterialYoutubeId.getYouTubePlayerWhenReady(object :
             YouTubePlayerCallback {
             override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.cueVideo(homeLeaderViewModel.materialSelected!!.url, 0f)
+                youTubePlayer.cueVideo(leaderViewModel.materialSelected!!.url, 0f)
             }
         })
         binding.fullScreenMaterialYoutubeId.enterFullScreen()

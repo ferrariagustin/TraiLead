@@ -1,4 +1,4 @@
-package com.aferrari.login.db
+package com.aferrari.login.data
 
 import android.content.Context
 import androidx.room.*

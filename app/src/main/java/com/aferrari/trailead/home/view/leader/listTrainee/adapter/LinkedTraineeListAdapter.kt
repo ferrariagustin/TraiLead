@@ -10,11 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.components.TraileadPopupMenu
-import com.aferrari.login.db.Trainee
+import com.aferrari.login.data.Trainee
 import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemTraineeLinkedListBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 /**
  * Trainee List that all element is linked with a leader
@@ -22,7 +22,7 @@ import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
 class LinkedTraineeListAdapter(
     private val dataSet: List<Trainee>,
     private val fragment: Fragment,
-    private val viewModel: HomeLeaderViewModel
+    private val viewModel: LeaderViewModel
 ) : RecyclerView.Adapter<LinkedTraineeListAdapter.ViewHolder>() {
 
     internal lateinit var binding: ItemTraineeLinkedListBinding

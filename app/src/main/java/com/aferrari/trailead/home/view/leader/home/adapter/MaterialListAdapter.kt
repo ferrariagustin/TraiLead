@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.components.TraileadPopupMenu
-import com.aferrari.login.db.Material
+import com.aferrari.login.data.Material
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
@@ -20,7 +20,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 class MaterialListAdapter(
     private val dataSet: List<Material>,
     private val fragment: Fragment,
-    private val viewModel: HomeLeaderViewModel
+    private val viewModel: LeaderViewModel
 ) :
     RecyclerView.Adapter<MaterialListAdapter.MaterialListViewHolder>() {
 

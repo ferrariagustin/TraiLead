@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.UnlinkedTraineeListFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.UnLinkedTraineeListAdapter
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 
 class UnLinkedTraineeListFragment : Fragment() {
     lateinit var binding: UnlinkedTraineeListFragmentBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +32,7 @@ class UnLinkedTraineeListFragment : Fragment() {
                 container,
                 false
             )
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -45,10 +45,10 @@ class UnLinkedTraineeListFragment : Fragment() {
     private fun initComponents() {
         binding.traineesLeadersNoneRecycleView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        homeLeaderViewModel.getUnLinkedTrainees()
-        homeLeaderViewModel.listunlinkedTrainees.observe(viewLifecycleOwner) {
+        leaderViewModel.getUnLinkedTrainees()
+        leaderViewModel.listunlinkedTrainees.observe(viewLifecycleOwner) {
             binding.traineesLeadersNoneRecycleView.adapter =
-                UnLinkedTraineeListAdapter(it, this, homeLeaderViewModel)
+                UnLinkedTraineeListAdapter(it, this, leaderViewModel)
         }
         binding.leaderUnlinkedTraineesToolbar.setNavigationOnClickListener {
             findNavController().navigate(R.id.action_unLinkedTraineeListFragment_to_linkedTraineeListFragment)

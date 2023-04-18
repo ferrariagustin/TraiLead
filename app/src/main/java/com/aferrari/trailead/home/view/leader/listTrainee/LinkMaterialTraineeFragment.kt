@@ -14,7 +14,7 @@ import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.SettingsMaterialTraineeAdapter
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.leader.listTrainee.ListTraineeViewModel
 import com.google.android.material.radiobutton.MaterialRadioButton
 
@@ -25,7 +25,7 @@ class LinkMaterialTraineeFragment : Fragment() {
 
     private lateinit var viewModel: ListTraineeViewModel
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +38,7 @@ class LinkMaterialTraineeFragment : Fragment() {
             container,
             false
         )
-        viewModel = ListTraineeViewModel(homeLeaderViewModel)
+        viewModel = ListTraineeViewModel(leaderViewModel)
         binding.viewModel = viewModel
         return binding.root
     }
@@ -116,7 +116,7 @@ class LinkMaterialTraineeFragment : Fragment() {
     }
 
     private fun setVisibilityBottomNavigation(visibility: Int) {
-        homeLeaderViewModel.setBottomNavigationVisibility(visibility)
+        leaderViewModel.setBottomNavigationVisibility(visibility)
     }
 
     override fun onDestroyView() {

@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderMaterialListBinding
 import com.aferrari.trailead.home.view.leader.home.adapter.MaterialListAdapter
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 class LeaderMaterialListFragment : Fragment() {
 
     private lateinit var binding: LeaderMaterialListBinding
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +26,7 @@ class LeaderMaterialListFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.leader_material_list, container, false)
         binding.lifecycleOwner = this
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         return binding.root
     }
 
@@ -36,16 +36,16 @@ class LeaderMaterialListFragment : Fragment() {
     }
 
     private fun initListeners() {
-        homeLeaderViewModel.init()
+        leaderViewModel.init()
         binding.leaderMaterialListToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
         binding.recyclerViewMaterialList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        homeLeaderViewModel.getMaterialsCategoryFilter()
-        homeLeaderViewModel.listAllMaterials.observe(viewLifecycleOwner) {
+        leaderViewModel.getMaterialsCategoryFilter()
+        leaderViewModel.listAllMaterials.observe(viewLifecycleOwner) {
             binding.recyclerViewMaterialList.adapter =
-                MaterialListAdapter(it, this, homeLeaderViewModel)
+                MaterialListAdapter(it, this, leaderViewModel)
         }
         binding.addMaterialLeader.setOnClickListener {
             findNavController().navigate(R.id.addMaterialFragment)

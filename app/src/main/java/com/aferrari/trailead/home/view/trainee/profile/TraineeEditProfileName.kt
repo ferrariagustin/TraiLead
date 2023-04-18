@@ -10,13 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeEditProfileNameFragmentBinding
-import com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel
+import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel
 
 class TraineeEditProfileName : Fragment() {
 
     private lateinit var binding: TraineeEditProfileNameFragmentBinding
 
-    private val traineeViewModel: HomeTraineeViewModel by activityViewModels()
+    private val traineeViewModel: TraineeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
