@@ -141,4 +141,6 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
         dao.getCategoriesFromTrainee(traineeId)
+
+    suspend fun getMaterialByTrainee(leaderId: Int, categoryId: Int) = dao.getMaterialByCategory(leaderId, categoryId)
 }

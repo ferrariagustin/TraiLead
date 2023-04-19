@@ -4,14 +4,20 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.*
+import com.aferrari.login.data.Category
+import com.aferrari.login.data.Leader
+import com.aferrari.login.data.Material
+import com.aferrari.login.data.Position
+import com.aferrari.login.data.Trainee
+import com.aferrari.login.data.UserRepository
 import com.aferrari.login.utils.IntegerUtils
 import com.aferrari.trailead.home.Utils.UrlUtils
+import com.aferrari.trailead.home.viewmodel.IMaterial
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.launch
 
-open class LeaderViewModel(val repository: UserRepository) : ViewModel() {
+open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMaterial {
     private lateinit var leader: Leader
 
     val nameUser = MutableLiveData<String>()
@@ -321,7 +327,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun deleteMaterialSelected() {
+    override fun deleteMaterialSelected() {
         viewModelScope.launch {
             materialSelected?.let {
                 repository.deleteMaterial(it)
@@ -333,7 +339,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel() {
     /**
      * is selected Material clicked
      */
-    fun setSelectedMaterial(material: Material) {
+    override fun setSelectedMaterial(material: Material) {
         materialSelected = material
     }
 

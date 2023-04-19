@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils
@@ -16,6 +17,7 @@ import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.TraineeHomeFragmentBinding
 import com.aferrari.trailead.home.view.trainee.home.adapter.TraineeCategoryListAdapter
 import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel
+import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModelFactory
 import com.aferrari.trailead.home.viewmodel.trainee.home.HomeTraineeViewModel
 
 class TraineeHomeFragment : Fragment() {
@@ -33,7 +35,9 @@ class TraineeHomeFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.trainee_home_fragment, container, false)
         binding.lifecycleOwner = this
-        viewModel = HomeTraineeViewModel(traineeViewModel)
+        val viewModelFactory = TraineeViewModelFactory(traineeViewModel)
+        viewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory)[HomeTraineeViewModel::class.java]
         initListeners()
         return binding.root
     }
@@ -48,7 +52,8 @@ class TraineeHomeFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         viewModel.getCategories()
         viewModel.setCategories.observe(viewLifecycleOwner) {
-            binding.categoryListRecyclerView.adapter = TraineeCategoryListAdapter(it.toList(), this)
+            binding.categoryListRecyclerView.adapter =
+                TraineeCategoryListAdapter(it.toList(), this, viewModel)
         }
     }
 

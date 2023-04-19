@@ -45,7 +45,7 @@ class LeaderMaterialListFragment : Fragment() {
         leaderViewModel.getMaterialsCategoryFilter()
         leaderViewModel.listAllMaterials.observe(viewLifecycleOwner) {
             binding.recyclerViewMaterialList.adapter =
-                MaterialListAdapter(it, this, leaderViewModel)
+                MaterialListAdapter(it, this, leaderViewModel, true)
         }
         binding.addMaterialLeader.setOnClickListener {
             findNavController().navigate(R.id.addMaterialFragment)

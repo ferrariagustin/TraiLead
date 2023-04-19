@@ -74,5 +74,6 @@
     <string name="category_selected_to_link">Seleccione una categoría</string>
     <string name="selected_all">Todo</string>
     <string name="category">Categoria</string>
+    <string name="title_training_toolbar">Material de entrenamiento</string>
 
 </resources>

@@ -1,6 +1,11 @@
 package com.aferrari.login.data
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface UserDao {
@@ -126,4 +131,7 @@ interface UserDao {
 
     @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
     suspend fun removeAllCategoryFromTrainee(traineeId: Int)
+
+    @Query("SELECT * FROM material_data_table WHERE leader_material_id=:leaderId AND category_material_id=:categoryId")
+    suspend fun getMaterialByCategory(leaderId: Int, categoryId: Int): List<Material>
 }

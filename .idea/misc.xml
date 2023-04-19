@@ -48,10 +48,12 @@
         <entry key="app/src/main/res/layout/trainee_edit_profile_name_fragment.xml" value="0.25023342670401494" />
         <entry key="app/src/main/res/layout/trainee_edit_profile_password_fragment.xml" value="0.36750488281250004" />
         <entry key="app/src/main/res/layout/trainee_home_fragment.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/trainee_material_list_from_category_selected.xml" value="0.17447916666666666" />
         <entry key="app/src/main/res/layout/trainee_profile_fragment.xml" value="0.3462532299741602" />
         <entry key="app/src/main/res/layout/unlinked_trainee_list.xml" value="0.1947463768115942" />
         <entry key="app/src/main/res/layout/unlinked_trainee_list_fragment.xml" value="0.1947463768115942" />
         <entry key="app/src/main/res/menu/menu_item_abm_material.xml" value="0.165625" />
+        <entry key="app/src/main/res/menu/menu_item_m_material.xml" value="0.14010416666666667" />
         <entry key="app/src/main/res/menu/menu_item_navigation_leader.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/menu/menu_item_navigation_trainee.xml" value="0.11614583333333334" />
         <entry key="app/src/main/res/menu/menu_item_popup_trainee_linked.xml" value="0.21822916666666667" />

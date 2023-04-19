@@ -3,6 +3,7 @@ package com.aferrari.trailead.home.view.leader.home.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -12,7 +13,7 @@ import com.aferrari.components.TraileadPopupMenu
 import com.aferrari.login.data.Material
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialBinding
-import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.home.viewmodel.IMaterial
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
@@ -20,7 +21,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 class MaterialListAdapter(
     private val dataSet: List<Material>,
     private val fragment: Fragment,
-    private val viewModel: LeaderViewModel
+    private val viewModel: IMaterial,
+    private val isEditable: Boolean = false
 ) :
     RecyclerView.Adapter<MaterialListAdapter.MaterialListViewHolder>() {
 
@@ -49,11 +51,22 @@ class MaterialListAdapter(
         holder.viewHolderBinding.titleMaterialItem.hint = material.title
         holder.viewHolderBinding.imageSettingMaterialLeader.setOnClickListener {
             TraileadPopupMenu(it, fragment)
-                .create(R.menu.menu_item_abm_material, R.color.primaryColor)
+                .create(getMenuPopUp(), R.color.primaryColor)
                 .setOnClickListener { item -> popupListener(item, material) }
                 .show()
         }
+        configureSettingEditable()
     }
+
+    private fun configureSettingEditable() {
+        binding.imageSettingMaterialLeader.visibility = if (isEditable)
+            View.VISIBLE
+        else
+            View.GONE
+    }
+
+    private fun getMenuPopUp() =
+        if (isEditable) R.menu.menu_item_abm_material else R.menu.menu_item_m_material
 
     private fun popupListener(item: MenuItem?, material: Material): Boolean {
         viewModel.setSelectedMaterial(material)
