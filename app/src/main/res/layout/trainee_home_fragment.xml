@@ -13,8 +13,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_item_toolbar_close_session"
-            app:title="@string/welcome_home_trainee" />
+            app:menu="@menu/menu_item_toolbar_close_session" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/toolbar_size"
+            android:layout_marginBottom="@dimen/bottom_navigation_size"
+            android:padding="@dimen/margin_medium" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

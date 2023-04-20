@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkedTraineeListFragmentBinding
 import com.aferrari.trailead.home.view.leader.listTrainee.adapter.LinkedTraineeListAdapter
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 class LinkedTraineeListFragment : Fragment() {
 
     private lateinit var binding: LinkedTraineeListFragmentBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +32,7 @@ class LinkedTraineeListFragment : Fragment() {
                 container,
                 false
             )
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -48,14 +48,14 @@ class LinkedTraineeListFragment : Fragment() {
     private fun initComponents() {
         binding.traineeListRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        homeLeaderViewModel.getLinkedTrainees()
-        homeLeaderViewModel.listLinkedTrainees.observe(viewLifecycleOwner) {
+        leaderViewModel.getLinkedTrainees()
+        leaderViewModel.listLinkedTrainees.observe(viewLifecycleOwner) {
             when (it.isEmpty()) {
                 true -> binding.emptyResultTextView.visibility = View.VISIBLE
                 false -> binding.emptyResultTextView.visibility = View.INVISIBLE
             }
             binding.traineeListRecyclerView.adapter =
-                LinkedTraineeListAdapter(it, this, homeLeaderViewModel)
+                LinkedTraineeListAdapter(it, this, leaderViewModel)
         }
     }
 }

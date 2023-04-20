@@ -10,17 +10,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.aferrari.login.dialog.Dialog
+import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderSettingMaterialCategoryBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 class SettingCategoryMaterialFragment : Fragment() {
 
     private lateinit var binding: LeaderSettingMaterialCategoryBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,13 +35,13 @@ class SettingCategoryMaterialFragment : Fragment() {
                 false
             )
         binding.lifecycleOwner = this
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         initListeners()
         return binding.root
     }
 
     private fun initListeners() {
-        homeLeaderViewModel.init()
+        leaderViewModel.init()
         binding.leaderCategorySettingToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -49,10 +49,10 @@ class SettingCategoryMaterialFragment : Fragment() {
             deleteShowDialog()
         }
         binding.saveNewCategoryButton.setOnClickListener {
-            homeLeaderViewModel.editCategory(binding.editCategoryNameTextInput.text.toString())
+            leaderViewModel.editCategory(binding.editCategoryNameTextInput.text.toString())
         }
 
-        homeLeaderViewModel.statusUpdateEditCategory.observe(viewLifecycleOwner) {
+        leaderViewModel.statusUpdateEditCategory.observe(viewLifecycleOwner) {
             when(it) {
                 StatusUpdateInformation.SUCCESS -> {findNavController().navigateUp()}
                 StatusUpdateInformation.FAILED -> {findNavController().navigateUp()}
@@ -64,11 +64,11 @@ class SettingCategoryMaterialFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun deleteShowDialog() {
-        Dialog().showDialogWithAction(
+        TraileadDialog().showDialogWithAction(
             title = resources.getString(R.string.dialog_title_removed_trainee),
             message = resources.getString(
                 R.string.dialog_message_delete_category,
-                homeLeaderViewModel.categorySelected?.name ?: ""
+                leaderViewModel.categorySelected?.name ?: ""
             ),
             requireContext(),
             removeCategoryAction(),
@@ -85,7 +85,7 @@ class SettingCategoryMaterialFragment : Fragment() {
 
     private fun removeCategoryAction(): DialogInterface.OnClickListener =
         DialogInterface.OnClickListener { _, _ ->
-            homeLeaderViewModel.removeCategory()
+            leaderViewModel.removeCategory()
             findNavController().navigateUp()
         }
 }

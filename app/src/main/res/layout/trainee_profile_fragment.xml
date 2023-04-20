@@ -5,7 +5,7 @@
 
         <variable
             name="traineeViewModel"
-            type="com.aferrari.trailead.home.viewmodel.HomeTraineeViewModel" />
+            type="com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

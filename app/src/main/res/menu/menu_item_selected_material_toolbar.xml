@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/selected_all_materials_label"
+        app:showAsAction="always"
+        android:title="@string/selected_all" />
+    <item
+        android:id="@+id/selected_all_materials"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_radio_button_unchecked"
+        android:title="@string/selected_all"  />
+</menu>

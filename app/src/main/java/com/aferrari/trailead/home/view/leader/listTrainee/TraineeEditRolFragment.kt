@@ -9,16 +9,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.aferrari.login.db.Position
+import com.aferrari.login.data.Position
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkedTraineeEditRolFragmentBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 class TraineeEditRolFragment : Fragment() {
     private lateinit var binding: LinkedTraineeEditRolFragmentBinding
 
-    private val viewModel: HomeLeaderViewModel by activityViewModels()
+    private val viewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -24,7 +24,7 @@
     <string name="dialog_message_delete_trainee">Esta seguro que desea eliminar la cuenta: %s </string>
     <string name="dialog_message_unlinked_trainee">Esta seguro que desea desvincular a %s de su lista de Trainees</string>
 
-    <string name="welcome_home_trainee">Hola Trainee</string>
+    <string name="welcome_home_trainee">Hola %s</string>
     <string name="trainee_test">Test</string>
     <string name="place_holder_name">John Doe</string>
     <string name="email">Email</string>
@@ -32,8 +32,9 @@
     <string name="assigned_leader">Líder asignado</string>
     <string name="edit_trainee_profile_name">Editar nombre</string>
     <string name="edit_trainee_rol">Editar Rol</string>
-    <string name="edit_material_trainee">Configurar material del Trainee</string>
-    <string name="unlinked_trainee">Desvincular trainee</string>
+    <string name="edit_material_trainee">Configurar material</string>
+    <string name="config_material_trainee_toolbar">Configurar Material</string>
+    <string name="unlinked_trainee">Desvincular</string>
     <string name="delete_trainee">Eliminar Trainee</string>
     <string name="config_trainee">Configuración</string>
     <string name="edit_trainee_profile_password">Editar contraseña</string>
@@ -70,5 +71,9 @@
     <string name="edit_material_title">Editar Video</string>
     <string name="edit_title_material_label">Ingresar nuevo título del video</string>
     <string name="edit_material_url_label">Ingresar la url del nuevo video</string>
+    <string name="category_selected_to_link">Seleccione una categoría</string>
+    <string name="selected_all">Todo</string>
+    <string name="category">Categoria</string>
+    <string name="title_training_toolbar">Material de entrenamiento</string>
 
 </resources>

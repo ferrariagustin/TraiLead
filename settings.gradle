@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "TraiLead"
 include ':app'
 include ':login'
+include ':components'

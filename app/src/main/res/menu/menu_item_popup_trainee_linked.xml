@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/trainee_linked_edit_rol"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/edit_trainee_rol"
+        app:itemIconTint="@color/primaryColor" />
+
+    <item
+        android:id="@+id/trainee_linked_setting_material"
+        android:icon="@drawable/ic_add"
+        android:title="@string/edit_material_trainee"
+        app:itemIconTint="@color/primaryColor" />
+
+    <item
+        android:id="@+id/trainee_linked_unlinked"
+        android:icon="@drawable/ic_unlink"
+        android:title="@string/unlinked_trainee"
+        app:itemIconTint="@color/primaryColor" />
+</menu>

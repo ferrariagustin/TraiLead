@@ -13,13 +13,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderProfileFragmentBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 
 class LeaderProfileFragment : Fragment() {
     private lateinit var binding: LeaderProfileFragmentBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +29,7 @@ class LeaderProfileFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.leader_profile_fragment, container, false)
         binding.lifecycleOwner = this
-        binding.homeLeaderViewModel = homeLeaderViewModel
+        binding.homeLeaderViewModel = leaderViewModel
         return binding.root
     }
 
@@ -47,7 +47,7 @@ class LeaderProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_leaderProfileFragment_to_leaderEditPassFragment)
         }
         binding.leaderImageViewPasswordIcon.setOnClickListener {
-            when (homeLeaderViewModel.statusVisibilityPassword) {
+            when (leaderViewModel.statusVisibilityPassword) {
                 StatusVisibilityPassword.INVISIBLE -> setVisibilityPassword(
                     StatusVisibilityPassword.VISIBLE,
                     resources.getDrawable(
@@ -69,7 +69,7 @@ class LeaderProfileFragment : Fragment() {
         newIconPass: Drawable,
         passwordTransformationMethod: PasswordTransformationMethod?
     ) {
-        homeLeaderViewModel.statusVisibilityPassword = visibilityPassword
+        leaderViewModel.statusVisibilityPassword = visibilityPassword
         binding.leaderImageViewPasswordIcon.setImageDrawable(newIconPass)
         binding.leaderPasswordTextview.transformationMethod = passwordTransformationMethod
     }

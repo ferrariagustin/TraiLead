@@ -1,19 +1,19 @@
 package com.aferrari.trailead.home.view.leader.home.adapter
 
 import android.annotation.SuppressLint
-import android.util.TypedValue
-import android.view.*
-import android.widget.Toast
-import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.children
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.aferrari.login.db.Material
+import com.aferrari.components.TraileadPopupMenu
+import com.aferrari.login.data.Material
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.MaterialItemBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.databinding.ItemMaterialBinding
+import com.aferrari.trailead.home.viewmodel.IMaterial
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
@@ -21,23 +21,24 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 class MaterialListAdapter(
     private val dataSet: List<Material>,
     private val fragment: Fragment,
-    private val viewModel: HomeLeaderViewModel
+    private val viewModel: IMaterial,
+    private val isEditable: Boolean = false
 ) :
     RecyclerView.Adapter<MaterialListAdapter.MaterialListViewHolder>() {
 
-    private lateinit var binding: MaterialItemBinding
+    private lateinit var binding: ItemMaterialBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaterialListViewHolder {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.material_item,
+            R.layout.item_material,
             parent,
             false
         )
         return MaterialListViewHolder(binding)
     }
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi", "ResourceType")
     override fun onBindViewHolder(holder: MaterialListViewHolder, position: Int) {
         val material = dataSet[position]
         fragment.lifecycle.addObserver(holder.viewHolderBinding.leaderMaterialYoutubeId)
@@ -48,42 +49,34 @@ class MaterialListAdapter(
             }
         })
         holder.viewHolderBinding.titleMaterialItem.hint = material.title
-        holder.viewHolderBinding.imageSettingMaterialLeader.setOnClickListener { it ->
-            configMenu(it, material)
+        holder.viewHolderBinding.imageSettingMaterialLeader.setOnClickListener {
+            TraileadPopupMenu(it, fragment)
+                .create(getMenuPopUp(), R.color.primaryColor)
+                .setOnClickListener { item -> popupListener(item, material) }
+                .show()
         }
+        configureSettingEditable()
     }
 
-    private fun configMenu(it: View, material: Material) {
-        val popupMenu = PopupMenu(fragment.requireContext(), it)
-        fragment.requireActivity().menuInflater.inflate(
-            R.menu.menu_item_abm_material,
-            popupMenu.menu
-        )
-        popupMenu.setForceShowIcon(true)
-        configStyleMenu(popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            manageItemClick(menuItem, material)
-        }
-        popupMenu.show()
+    private fun configureSettingEditable() {
+        binding.imageSettingMaterialLeader.visibility = if (isEditable)
+            View.VISIBLE
+        else
+            View.GONE
     }
 
-    private fun configStyleMenu(menu: Menu) {
-        menu.children.forEach {
-            val typedValue = TypedValue()
-            fragment.activity?.theme?.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true)
-            it.icon.setTint(typedValue.data)
-        }
-    }
+    private fun getMenuPopUp() =
+        if (isEditable) R.menu.menu_item_abm_material else R.menu.menu_item_m_material
 
-    private fun manageItemClick(menuItem: MenuItem, material: Material): Boolean {
+    private fun popupListener(item: MenuItem?, material: Material): Boolean {
         viewModel.setSelectedMaterial(material)
-        when (menuItem.itemId) {
+        when (item?.itemId) {
             R.id.material_full_screen -> navigateToFullScreenVideo()
             R.id.material_delete -> navigateToDeleteMaterial()
             R.id.material_edit -> navigateToEditMaterial()
-            else -> return false
+            else -> return true
         }
-        return true
+        return false
     }
 
     private fun navigateToEditMaterial() {
@@ -100,8 +93,8 @@ class MaterialListAdapter(
 
     override fun getItemCount(): Int = dataSet.size
 
-    class MaterialListViewHolder(binding: MaterialItemBinding) :
+    class MaterialListViewHolder(binding: ItemMaterialBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val viewHolderBinding: MaterialItemBinding = binding
+        val viewHolderBinding: ItemMaterialBinding = binding
     }
 }

@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderAddMaterialCategoryBinding
-import com.aferrari.trailead.home.viewmodel.leader.HomeLeaderViewModel
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 
 /**
@@ -21,7 +21,7 @@ class AddCategoryFragment : Fragment() {
 
     private lateinit var binding: LeaderAddMaterialCategoryBinding
 
-    private val homeLeaderViewModel: HomeLeaderViewModel by activityViewModels()
+    private val leaderViewModel: LeaderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +36,7 @@ class AddCategoryFragment : Fragment() {
                 false
             )
         binding.lifecycleOwner = this
-        binding.viewModel = homeLeaderViewModel
+        binding.viewModel = leaderViewModel
         initListeners()
         return binding.root
     }
@@ -46,9 +46,9 @@ class AddCategoryFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.addNewCategoryButton.setOnClickListener {
-            homeLeaderViewModel.insertCategory(binding.addNewCategoryTextInput.text.toString())
+            leaderViewModel.insertCategory(binding.addNewCategoryTextInput.text.toString())
         }
-        homeLeaderViewModel.statusUpdateNewCategory.observe(viewLifecycleOwner) {
+        leaderViewModel.statusUpdateNewCategory.observe(viewLifecycleOwner) {
             when (it) {
                 StatusUpdateInformation.FAILED -> {
                     failedFlow()
@@ -66,6 +66,6 @@ class AddCategoryFragment : Fragment() {
     }
 
     private fun failedFlow() {
-        Toast.makeText(requireContext(), "Ingrese una categoría válida", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Ingrese una categoría válida. Recuerde que no puede repertir", Toast.LENGTH_SHORT).show()
     }
 }
