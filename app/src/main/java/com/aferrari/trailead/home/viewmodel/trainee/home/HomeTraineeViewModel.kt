@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.data.Category
-import com.aferrari.login.data.Material
+import com.aferrari.login.data.material.YouTubeVideo
 import com.aferrari.login.data.Trainee
 import com.aferrari.trailead.home.viewmodel.IMaterial
 import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel
@@ -14,7 +14,7 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
 
     val setCategories = MutableLiveData<MutableSet<Category>>()
 
-    val materialsByCategory = MutableLiveData<MutableList<Material>>()
+    val materialsByCategory = MutableLiveData<MutableList<YouTubeVideo>>()
 
     private var categorySelected: Category? = null
 
@@ -66,7 +66,7 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
      */
     private fun hasLeader(): Boolean = traineeSelected.leaderId != null
 
-    override fun setSelectedMaterial(material: Material) {
+    override fun setSelectedMaterial(youTubeVideo: YouTubeVideo) {
         TODO("Not yet implemented")
     }
 

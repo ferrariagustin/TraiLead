@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.aferrari.login.data.material.YouTubeVideo
 
 @Dao
 interface UserDao {
@@ -109,18 +110,18 @@ interface UserDao {
     suspend fun updateCategory(categoryId: Int, categoryName: String)
 
     @Insert
-    suspend fun insertMaterial(newMaterial: Material)
+    suspend fun insertMaterial(newYouTubeVideo: YouTubeVideo)
 
-    @Query("SELECT * FROM material_data_table WHERE leader_material_id = :leaderId ORDER BY material_title")
-    suspend fun getAllMaterial(leaderId: Int): List<Material>
+    @Query("SELECT * FROM youtube_video_data_table WHERE leaderMaterialId = :leaderId ORDER BY title")
+    suspend fun getAllMaterial(leaderId: Int): List<YouTubeVideo>
 
     @Delete
-    suspend fun deleteMaterial(material: Material)
+    suspend fun deleteMaterial(youTubeVideo: YouTubeVideo)
 
-    @Query("UPDATE material_data_table SET material_url = :youtubeId WHERE material_id = :materialId")
+    @Query("UPDATE youtube_video_data_table SET url = :youtubeId WHERE id = :materialId")
     suspend fun updateUrlMaterial(materialId: Int, youtubeId: String)
 
-    @Query("UPDATE material_data_table SET material_title = :newTitle WHERE material_id = :materialId")
+    @Query("UPDATE youtube_video_data_table SET title = :newTitle WHERE id = :materialId")
     suspend fun updateTitleMaterial(materialId: Int, newTitle: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -132,6 +133,6 @@ interface UserDao {
     @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
     suspend fun removeAllCategoryFromTrainee(traineeId: Int)
 
-    @Query("SELECT * FROM material_data_table WHERE leader_material_id=:leaderId AND category_material_id=:categoryId")
-    suspend fun getMaterialByCategory(leaderId: Int, categoryId: Int): List<Material>
+    @Query("SELECT * FROM youtube_video_data_table WHERE leaderMaterialId=:leaderId AND categoryId=:categoryId")
+    suspend fun getMaterialByCategory(leaderId: Int, categoryId: Int): List<YouTubeVideo>
 }

@@ -3,7 +3,7 @@ package com.aferrari.trailead.home.viewmodel.leader.material
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.Material
+import com.aferrari.login.data.material.YouTubeVideo
 import com.aferrari.trailead.home.Utils.UrlUtils
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
@@ -12,11 +12,11 @@ import kotlinx.coroutines.launch
 class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewModel() {
 
     val statusUpdateEditMaterial = MutableLiveData<StatusUpdateInformation>()
-    var materialSelected: Material?
+    var youTubeVideoSelected: YouTubeVideo?
 
     init {
         statusUpdateEditMaterial.value = StatusUpdateInformation.NONE
-        materialSelected = homeViewModel.materialSelected
+        youTubeVideoSelected = homeViewModel.youTubeVideoSelected
     }
 
 
@@ -28,7 +28,7 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
      * @param newTitle new title to updated
      */
     fun editMaterial(newUrl: String, newTitle: String) {
-        materialSelected?.let {
+        youTubeVideoSelected?.let {
 
             if (newUrl.isNotEmpty()) {
                 if (!UrlUtils().isYoutubeUrl(newUrl)) {
@@ -52,15 +52,15 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
     }
 
 
-    private fun updateTitleMaterial(materialSelected: Material, newTitle: String) =
+    private fun updateTitleMaterial(youTubeVideoSelected: YouTubeVideo, newTitle: String) =
         viewModelScope.launch {
-            homeViewModel.repository.updateTitleMaterial(materialSelected.id, newTitle)
+            homeViewModel.repository.updateTitleMaterial(youTubeVideoSelected.id, newTitle)
         }
 
     private fun updateUrlMaterial(
-        materialSelected: Material,
+        youTubeVideoSelected: YouTubeVideo,
         youtubeId: String
     ) = viewModelScope.launch {
-        homeViewModel.repository.updateUrlMaterial(materialSelected.id, youtubeId)
+        homeViewModel.repository.updateUrlMaterial(youTubeVideoSelected.id, youtubeId)
     }
 }

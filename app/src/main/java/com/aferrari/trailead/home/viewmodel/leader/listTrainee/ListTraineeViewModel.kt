@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.data.Category
-import com.aferrari.login.data.Material
+import com.aferrari.login.data.material.YouTubeVideo
 import com.aferrari.login.data.Trainee
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
@@ -44,7 +44,7 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
     /**
      * Get all materials by category
      */
-    fun getMaterialsBy(category: String): List<Material>? {
+    fun getMaterialsBy(category: String): List<YouTubeVideo>? {
         val categorySelected = leaderViewModel.getCategoryBy(category)
         categorySelected?.let { categorySelected ->
             return leaderViewModel.listAllMaterials.value?.filter { it.categoryId == categorySelected.id }
@@ -55,7 +55,7 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
     /**
      * Return list of materials for lider
      */
-    fun getMaterials(): List<Material>? = leaderViewModel.listAllMaterials.value
+    fun getMaterials(): List<YouTubeVideo>? = leaderViewModel.listAllMaterials.value
 
     /**
      * Return list of category for lider

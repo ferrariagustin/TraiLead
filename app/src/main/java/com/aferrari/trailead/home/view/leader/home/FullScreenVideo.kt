@@ -42,7 +42,7 @@ class FullScreenVideo : Fragment() {
         binding.fullScreenMaterialYoutubeId.getYouTubePlayerWhenReady(object :
             YouTubePlayerCallback {
             override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.cueVideo(leaderViewModel.materialSelected!!.url, 0f)
+                youTubePlayer.cueVideo(leaderViewModel.youTubeVideoSelected!!.url, 0f)
             }
         })
         binding.fullScreenMaterialYoutubeId.enterFullScreen()

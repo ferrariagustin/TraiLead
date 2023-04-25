@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/edit_material_title_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@{viewModel.materialSelected != null ? viewModel.materialSelected.title.toString : ' '}"
+            android:hint="@{viewModel.youTubeVideoSelected != null ? viewModel.youTubeVideoSelected.title.toString : ' '}"
             android:layout_margin="@dimen/margin_medium" />
 
         <com.google.android.material.textview.MaterialTextView

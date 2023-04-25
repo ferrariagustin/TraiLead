@@ -1,5 +1,7 @@
 package com.aferrari.login.data
 
+import com.aferrari.login.data.material.YouTubeVideo
+
 class UserRepository(private val dao: UserDao) {
 
     private lateinit var trainees: List<Trainee>
@@ -121,11 +123,11 @@ class UserRepository(private val dao: UserDao) {
 
     //    Material
 
-    suspend fun insertMaterial(newMaterial: Material) = dao.insertMaterial(newMaterial)
+    suspend fun insertMaterial(newYouTubeVideo: YouTubeVideo) = dao.insertMaterial(newYouTubeVideo)
 
     suspend fun getAllMaterial(leader: Leader) = dao.getAllMaterial(leader.id)
 
-    suspend fun deleteMaterial(material: Material) = dao.deleteMaterial(material)
+    suspend fun deleteMaterial(youTubeVideo: YouTubeVideo) = dao.deleteMaterial(youTubeVideo)
 
     suspend fun updateUrlMaterial(materialId: Int, youtubeId: String) =
         dao.updateUrlMaterial(materialId, youtubeId)

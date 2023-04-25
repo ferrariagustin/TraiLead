@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.components.TraileadPopupMenu
-import com.aferrari.login.data.Material
+import com.aferrari.login.data.material.YouTubeVideo
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialBinding
 import com.aferrari.trailead.home.viewmodel.IMaterial
@@ -19,7 +19,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 
 
 class MaterialListAdapter(
-    private val dataSet: List<Material>,
+    private val dataSet: List<YouTubeVideo>,
     private val fragment: Fragment,
     private val viewModel: IMaterial,
     private val isEditable: Boolean = false
@@ -68,8 +68,8 @@ class MaterialListAdapter(
     private fun getMenuPopUp() =
         if (isEditable) R.menu.menu_item_abm_material else R.menu.menu_item_m_material
 
-    private fun popupListener(item: MenuItem?, material: Material): Boolean {
-        viewModel.setSelectedMaterial(material)
+    private fun popupListener(item: MenuItem?, youTubeVideo: YouTubeVideo): Boolean {
+        viewModel.setSelectedMaterial(youTubeVideo)
         when (item?.itemId) {
             R.id.material_full_screen -> navigateToFullScreenVideo()
             R.id.material_delete -> navigateToDeleteMaterial()
