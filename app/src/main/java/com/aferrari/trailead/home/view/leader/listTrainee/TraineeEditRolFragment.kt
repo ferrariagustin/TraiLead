@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.aferrari.login.data.Position
+import com.aferrari.login.data.user.Position
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LinkedTraineeEditRolFragmentBinding
 import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel

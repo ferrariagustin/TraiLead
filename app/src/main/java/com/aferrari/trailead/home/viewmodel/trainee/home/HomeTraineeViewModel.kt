@@ -3,9 +3,9 @@ package com.aferrari.trailead.home.viewmodel.trainee.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.Category
+import com.aferrari.login.data.material.Category
 import com.aferrari.login.data.material.YouTubeVideo
-import com.aferrari.login.data.Trainee
+import com.aferrari.login.data.user.Trainee
 import com.aferrari.trailead.home.viewmodel.IMaterial
 import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
         if (hasLeader()) {
             viewModelScope.launch {
                 setCategories.value =
-                    viewModel.repository.getCategoriesSelected(traineeSelected.id).toMutableSet()
+                    viewModel.materialRepository.getCategoriesSelected(traineeSelected.id).toMutableSet()
             }
         } else {
             reset()
@@ -48,7 +48,7 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
     fun getMaterials() {
         if (hasLeader() && hasCategorySelected()) {
             viewModelScope.launch {
-                materialsByCategory.value = viewModel.repository.getMaterialByTrainee(
+                materialsByCategory.value = viewModel.materialRepository.getYoutubeVideoByTrainee(
                     traineeSelected.leaderId!!,
                     categorySelected!!.id
                 ).toMutableList()

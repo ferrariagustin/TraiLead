@@ -2,7 +2,7 @@ package com.aferrari.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.aferrari.login.data.UserRepository
+import com.aferrari.login.data.user.repository.UserRepository
 import com.aferrari.login.viewmodel.login.LoginViewModel
 import com.aferrari.login.viewmodel.register.RegistrationViewModel
 

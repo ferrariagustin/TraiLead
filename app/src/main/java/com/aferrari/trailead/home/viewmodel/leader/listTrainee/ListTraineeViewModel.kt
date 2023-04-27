@@ -3,9 +3,9 @@ package com.aferrari.trailead.home.viewmodel.leader.listTrainee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.Category
+import com.aferrari.login.data.material.Category
 import com.aferrari.login.data.material.YouTubeVideo
-import com.aferrari.login.data.Trainee
+import com.aferrari.login.data.user.Trainee
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +83,7 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 setCategorySelected.value?.let {
-                    leaderViewModel.repository.setLinkedCategory(
+                    leaderViewModel.materialRepository.setLinkedCategory(
                         traineeSelected.id,
                         it
                     )
@@ -97,7 +97,7 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
      */
     fun getCategoriesSelected() {
         viewModelScope.launch {
-            val result = leaderViewModel.repository.getCategoriesSelected(traineeSelected.id)
+            val result = leaderViewModel.materialRepository.getCategoriesSelected(traineeSelected.id)
             setCategorySelected.value = result.toMutableSet()
             updateSizeCategorySelected()
         }

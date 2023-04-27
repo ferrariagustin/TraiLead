@@ -1,12 +1,14 @@
-package com.aferrari.login.data
+package com.aferrari.login.data.user.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.aferrari.login.data.material.YouTubeVideo
+import com.aferrari.login.data.user.Leader
+import com.aferrari.login.data.user.LeaderWithTrainee
+import com.aferrari.login.data.user.Position
+import com.aferrari.login.data.user.Trainee
 
 @Dao
 interface UserDao {
@@ -94,45 +96,4 @@ interface UserDao {
 
     @Query("UPDATE leader_data_table SET leader_pass = :pass WHERE leader_id =:leaderId")
     suspend fun updateLeaderPassword(leaderId: Int, pass: String)
-
-    //    Category
-
-    @Insert
-    suspend fun insertCategory(category: Category)
-
-    @Query("SELECT * FROM category_data_table WHERE leader_category_id = :leaderId ORDER BY category_name")
-    suspend fun getAllCategory(leaderId: Int): List<Category>
-
-    @Delete
-    suspend fun deleteCategory(category: Category)
-
-    @Query("UPDATE category_data_table SET category_name = :categoryName WHERE category_id = :categoryId")
-    suspend fun updateCategory(categoryId: Int, categoryName: String)
-
-    @Insert
-    suspend fun insertMaterial(newYouTubeVideo: YouTubeVideo)
-
-    @Query("SELECT * FROM youtube_video_data_table WHERE leaderMaterialId = :leaderId ORDER BY title")
-    suspend fun getAllMaterial(leaderId: Int): List<YouTubeVideo>
-
-    @Delete
-    suspend fun deleteMaterial(youTubeVideo: YouTubeVideo)
-
-    @Query("UPDATE youtube_video_data_table SET url = :youtubeId WHERE id = :materialId")
-    suspend fun updateUrlMaterial(materialId: Int, youtubeId: String)
-
-    @Query("UPDATE youtube_video_data_table SET title = :newTitle WHERE id = :materialId")
-    suspend fun updateTitleMaterial(materialId: Int, newTitle: String)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>)
-
-    @Query("SELECT * FROM category_data_table INNER JOIN trainee_category_join ON category_data_table.category_id = trainee_category_join.category_id WHERE trainee_category_join.trainee_id = :traineeId")
-    suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
-
-    @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
-    suspend fun removeAllCategoryFromTrainee(traineeId: Int)
-
-    @Query("SELECT * FROM youtube_video_data_table WHERE leaderMaterialId=:leaderId AND categoryId=:categoryId")
-    suspend fun getMaterialByCategory(leaderId: Int, categoryId: Int): List<YouTubeVideo>
 }

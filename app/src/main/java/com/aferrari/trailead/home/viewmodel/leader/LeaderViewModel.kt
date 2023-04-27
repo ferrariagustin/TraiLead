@@ -4,12 +4,13 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.Category
-import com.aferrari.login.data.Leader
+import com.aferrari.login.data.material.Category
+import com.aferrari.login.data.user.Leader
 import com.aferrari.login.data.material.YouTubeVideo
-import com.aferrari.login.data.Position
-import com.aferrari.login.data.Trainee
-import com.aferrari.login.data.UserRepository
+import com.aferrari.login.data.user.Position
+import com.aferrari.login.data.user.Trainee
+import com.aferrari.login.data.user.repository.UserRepository
+import com.aferrari.login.data.material.repository.MaterialRepository
 import com.aferrari.login.utils.IntegerUtils
 import com.aferrari.trailead.home.Utils.UrlUtils
 import com.aferrari.trailead.home.viewmodel.IMaterial
@@ -17,7 +18,7 @@ import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.launch
 
-open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMaterial {
+open class LeaderViewModel(val repository: UserRepository, val materialRepository: MaterialRepository) : ViewModel(), IMaterial {
     private lateinit var leader: Leader
 
     val nameUser = MutableLiveData<String>()
@@ -76,12 +77,6 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
             lastNameUser.value = leader.lastName
             emailUser.value = leader.email
             passUser.value = leader.pass
-        }
-    }
-
-    fun getAllTrainee() {
-        viewModelScope.launch {
-            listAllTrainee.value = repository.getAllTrainee()
         }
     }
 
@@ -190,7 +185,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
 
     fun getAllCategoryForLeader() {
         viewModelScope.launch {
-            listCategory.value = repository.getAllCategory(leader)
+            listCategory.value = materialRepository.getAllCategory(leader)
         }
     }
 
@@ -209,7 +204,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
 
     private fun insertCategory(category: Category) {
         viewModelScope.launch {
-            repository.insertCategory(category)
+            materialRepository.insertCategory(category)
             getAllCategoryForLeader()
             statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
         }
@@ -223,7 +218,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
 
     private fun deleteCategory(category: Category) {
         viewModelScope.launch {
-            repository.deleteCategory(category)
+            materialRepository.deleteCategory(category)
             getAllCategoryForLeader()
         }
     }
@@ -239,7 +234,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
     private fun updateCategory(newCategory: String) {
         viewModelScope.launch {
             categorySelected?.let {
-                repository.updateCategory(it.id, newCategory)
+                materialRepository.updateCategory(it.id, newCategory)
                 statusUpdateEditCategory.value = StatusUpdateInformation.SUCCESS
             }
         }
@@ -296,17 +291,17 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
 
     fun getMaterialsCategoryFilter() = viewModelScope.launch {
         listAllMaterials.value =
-            repository.getAllMaterial(leader).filter { it.categoryId == categorySelected?.id }
+            materialRepository.getAllYoutubeVideo(leader).filter { it.categoryId == categorySelected?.id }
     }
 
 
     fun getAllMaterials() = viewModelScope.launch {
-        listAllMaterials.value = repository.getAllMaterial(leader)
+        listAllMaterials.value = materialRepository.getAllYoutubeVideo(leader)
     }
 
     private fun getAllMaterial(newYouTubeVideo: YouTubeVideo) {
         viewModelScope.launch {
-            val tempListMaterial = repository.getAllMaterial(leader)
+            val tempListMaterial = materialRepository.getAllYoutubeVideo(leader)
             if (tempListMaterial.contains(newYouTubeVideo)) {
                 listAllMaterials.value = tempListMaterial.toMutableList()
                 statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
@@ -321,7 +316,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
      */
     private fun addNewMaterial(newYouTubeVideo: YouTubeVideo) {
         viewModelScope.launch {
-            repository.insertMaterial(newYouTubeVideo)
+            materialRepository.insertYoutubeVideo(newYouTubeVideo)
             statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
             return@launch
         }
@@ -330,7 +325,7 @@ open class LeaderViewModel(val repository: UserRepository) : ViewModel(), IMater
     override fun deleteMaterialSelected() {
         viewModelScope.launch {
             youTubeVideoSelected?.let {
-                repository.deleteMaterial(it)
+                materialRepository.deleteYoutubeVideo(it)
                 getMaterialsCategoryFilter()
             }
         }

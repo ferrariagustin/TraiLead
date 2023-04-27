@@ -3,6 +3,8 @@ package com.aferrari.login.data
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
+import com.aferrari.login.data.material.Category
+import com.aferrari.login.data.user.Trainee
 
 /**
  * List categories for trainee

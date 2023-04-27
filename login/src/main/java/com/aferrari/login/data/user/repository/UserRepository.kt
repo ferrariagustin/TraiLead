@@ -1,11 +1,12 @@
-package com.aferrari.login.data
+package com.aferrari.login.data.user.repository
 
-import com.aferrari.login.data.material.YouTubeVideo
+import com.aferrari.login.data.user.Leader
+import com.aferrari.login.data.user.Position
+import com.aferrari.login.data.user.Trainee
+import com.aferrari.login.data.user.dao.User
+import com.aferrari.login.data.user.dao.UserDao
 
 class UserRepository(private val dao: UserDao) {
-
-    private lateinit var trainees: List<Trainee>
-    private lateinit var leaders: List<Leader>
 
     suspend fun get(user_id: Int): User? {
         dao.getLeader(user_id).apply {
@@ -47,40 +48,14 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun insertTrainee(trainee: Trainee): Long = dao.insertTrainee(trainee)
 
-    suspend fun updateLeader(leader: Leader) = dao.updateLeader(leader)
-
-    suspend fun updateTrainee(trainee: Trainee) = dao.updateTrainee(trainee)
-
     suspend fun updateTraineeName(idTrainee: Int, name: String) =
         dao.updateTraineeName(idTrainee, name)
 
     suspend fun updateTraineeLastName(idTrainee: Int, lastName: String) =
         dao.updateTraineeLastName(idTrainee, lastName)
 
-    suspend fun deleteLeader(leader: Leader) {
-        dao.deleteLeader(leader)
-    }
-
     suspend fun deleteTrainee(trainee: Trainee) {
         dao.deleteTrainee(trainee)
-    }
-
-    suspend fun deleteAllLeader() {
-        dao.deleteAllLeader()
-    }
-
-    suspend fun deleteAllTrainee() {
-        dao.deleteAllTrainee()
-    }
-
-    suspend fun getAllTrainee(): List<Trainee> {
-        trainees = dao.getAllTrainee()
-        return trainees
-    }
-
-    suspend fun getAllLeader(): List<Leader> {
-        leaders = dao.getAllLeader()
-        return leaders
     }
 
     suspend fun setLinkedTrainee(trainee: Trainee, leader: Leader) {
@@ -108,41 +83,4 @@ class UserRepository(private val dao: UserDao) {
 
     suspend fun updateLeaderPass(leaderId: Int, pass: String) =
         dao.updateLeaderPassword(leaderId, pass)
-
-    //    Category
-
-    suspend fun insertCategory(category: Category) = dao.insertCategory(category)
-
-    suspend fun getAllCategory(leader: Leader) = dao.getAllCategory(leader.id)
-
-    suspend fun deleteCategory(category: Category) = dao.deleteCategory(category)
-
-    suspend fun updateCategory(categoryId: Int, categoryName: String) =
-        dao.updateCategory(categoryId, categoryName)
-
-
-    //    Material
-
-    suspend fun insertMaterial(newYouTubeVideo: YouTubeVideo) = dao.insertMaterial(newYouTubeVideo)
-
-    suspend fun getAllMaterial(leader: Leader) = dao.getAllMaterial(leader.id)
-
-    suspend fun deleteMaterial(youTubeVideo: YouTubeVideo) = dao.deleteMaterial(youTubeVideo)
-
-    suspend fun updateUrlMaterial(materialId: Int, youtubeId: String) =
-        dao.updateUrlMaterial(materialId, youtubeId)
-
-    suspend fun updateTitleMaterial(materialId: Int, newTitle: String) =
-        dao.updateTitleMaterial(materialId, newTitle)
-
-    suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>) {
-        val traineeCategoryJoinList = categorySet.map { TraineeCategoryJoin(traineeId, it.id) }
-        dao.removeAllCategoryFromTrainee(traineeId)
-        return dao.insertAllCategoryFromTrainee(traineeCategoryJoinList)
-    }
-
-    suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
-        dao.getCategoriesFromTrainee(traineeId)
-
-    suspend fun getMaterialByTrainee(leaderId: Int, categoryId: Int) = dao.getMaterialByCategory(leaderId, categoryId)
 }

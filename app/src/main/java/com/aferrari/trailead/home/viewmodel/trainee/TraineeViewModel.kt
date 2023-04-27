@@ -3,14 +3,16 @@ package com.aferrari.trailead.home.viewmodel.trainee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.Leader
-import com.aferrari.login.data.Trainee
-import com.aferrari.login.data.UserRepository
+import com.aferrari.login.data.user.Leader
+import com.aferrari.login.data.user.Trainee
+import com.aferrari.login.data.user.repository.UserRepository
+import com.aferrari.login.data.material.repository.MaterialRepository
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.launch
 
-class TraineeViewModel(val repository: UserRepository) : ViewModel() {
+class TraineeViewModel(val repository: UserRepository, val materialRepository: MaterialRepository) :
+    ViewModel() {
 
     private lateinit var trainee: Trainee
 

@@ -54,13 +54,13 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
 
     private fun updateTitleMaterial(youTubeVideoSelected: YouTubeVideo, newTitle: String) =
         viewModelScope.launch {
-            homeViewModel.repository.updateTitleMaterial(youTubeVideoSelected.id, newTitle)
+            homeViewModel.materialRepository.updateTitleYoutubeVideo(youTubeVideoSelected.id, newTitle)
         }
 
     private fun updateUrlMaterial(
         youTubeVideoSelected: YouTubeVideo,
         youtubeId: String
     ) = viewModelScope.launch {
-        homeViewModel.repository.updateUrlMaterial(youTubeVideoSelected.id, youtubeId)
+        homeViewModel.materialRepository.updateUrlYoutubeVideo(youTubeVideoSelected.id, youtubeId)
     }
 }

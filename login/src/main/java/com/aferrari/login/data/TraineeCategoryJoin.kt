@@ -3,6 +3,8 @@ package com.aferrari.login.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import com.aferrari.login.data.material.Category
+import com.aferrari.login.data.user.Trainee
 
 @Entity(
     tableName = "trainee_category_join",

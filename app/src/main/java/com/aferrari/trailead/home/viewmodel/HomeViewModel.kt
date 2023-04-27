@@ -3,9 +3,9 @@ package com.aferrari.trailead.home.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.User
-import com.aferrari.login.data.UserRepository
-import com.aferrari.login.data.UserType
+import com.aferrari.login.data.user.dao.User
+import com.aferrari.login.data.user.repository.UserRepository
+import com.aferrari.login.data.user.UserType
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: UserRepository) : ViewModel() {
