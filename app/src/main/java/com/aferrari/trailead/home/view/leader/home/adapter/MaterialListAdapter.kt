@@ -1,16 +1,23 @@
 package com.aferrari.trailead.home.view.leader.home.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.components.TraileadPopupMenu
+import com.aferrari.login.data.material.Link
+import com.aferrari.login.data.material.Pdf
 import com.aferrari.login.data.material.YouTubeVideo
+import com.aferrari.login.data.material.dao.Material
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialBinding
 import com.aferrari.trailead.home.viewmodel.IMaterial
@@ -19,7 +26,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 
 
 class MaterialListAdapter(
-    private val dataSet: List<YouTubeVideo>,
+    private val dataSet: List<Material>,
     private val fragment: Fragment,
     private val viewModel: IMaterial,
     private val isEditable: Boolean = false
@@ -38,21 +45,53 @@ class MaterialListAdapter(
         return MaterialListViewHolder(binding)
     }
 
-    @SuppressLint("RestrictedApi", "ResourceType")
     override fun onBindViewHolder(holder: MaterialListViewHolder, position: Int) {
-        val material = dataSet[position]
+        goneAllViews(holder)
+        var material = dataSet[position]
+        when (material) {
+            is YouTubeVideo -> {
+                bindingYoutubeVideo(holder, material)
+            }
+            is Link -> {
+                bindingLink(holder, material)
+            }
+            is Pdf -> {
+                bindingPdf(holder, material)
+            }
+        }
+    }
+
+    private fun bindingLink(holder: MaterialListViewHolder, link: Link) {
+        holder.viewHolderBinding.linkViewMaterial.root.visibility = VISIBLE
+        holder.viewHolderBinding.linkViewMaterial.textViewMaterialCategoryId.text = link.title
+        holder.viewHolderBinding.linkViewMaterial.cardCategoryId.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
+            fragment.startActivity(intent)
+        }
+    }
+
+    private fun bindingPdf(holder: MaterialListViewHolder, material: Pdf) {
+        TODO("Not yet implemented")
+    }
+
+    @SuppressLint("ResourceType")
+    private fun bindingYoutubeVideo(
+        holder: MaterialListViewHolder,
+        youtubeVideo: YouTubeVideo
+    ) {
+        holder.viewHolderBinding.cardMaterialId.visibility = VISIBLE
         fragment.lifecycle.addObserver(holder.viewHolderBinding.leaderMaterialYoutubeId)
         holder.viewHolderBinding.leaderMaterialYoutubeId.getYouTubePlayerWhenReady(object :
             YouTubePlayerCallback {
             override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.cueVideo(material.url, 0f)
+                youTubePlayer.cueVideo(youtubeVideo.url, 0f)
             }
         })
-        holder.viewHolderBinding.titleMaterialItem.hint = material.title
+        holder.viewHolderBinding.titleMaterialItem.hint = youtubeVideo.title
         holder.viewHolderBinding.imageSettingMaterialLeader.setOnClickListener {
             TraileadPopupMenu(it, fragment)
                 .create(getMenuPopUp(), R.color.primaryColor)
-                .setOnClickListener { item -> popupListener(item, material) }
+                .setOnClickListener { item -> popupListener(item, youtubeVideo) }
                 .show()
         }
         configureSettingEditable()
@@ -92,6 +131,11 @@ class MaterialListAdapter(
     }
 
     override fun getItemCount(): Int = dataSet.size
+
+    private fun goneAllViews(holder: MaterialListViewHolder) {
+        holder.viewHolderBinding.cardMaterialId.visibility = GONE
+        holder.viewHolderBinding.linkViewMaterial.root.visibility = GONE
+    }
 
     class MaterialListViewHolder(binding: ItemMaterialBinding) :
         RecyclerView.ViewHolder(binding.root) {

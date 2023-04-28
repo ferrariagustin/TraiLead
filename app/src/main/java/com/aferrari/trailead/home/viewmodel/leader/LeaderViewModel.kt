@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.aferrari.login.data.material.Category
 import com.aferrari.login.data.user.Leader
 import com.aferrari.login.data.material.YouTubeVideo
+import com.aferrari.login.data.material.dao.Material
 import com.aferrari.login.data.user.Position
 import com.aferrari.login.data.user.Trainee
 import com.aferrari.login.data.user.repository.UserRepository
@@ -54,7 +55,7 @@ open class LeaderViewModel(val repository: UserRepository, val materialRepositor
 
     //    Material
     val statusUpdateNewMaterial = MutableLiveData<StatusUpdateInformation>()
-    var listAllMaterials = MutableLiveData<List<YouTubeVideo>>()
+    var listAllMaterials = MutableLiveData<List<Material>>()
 
     // Use with premium mode
     val listunlinkedTrainees = MutableLiveData<List<Trainee>>()

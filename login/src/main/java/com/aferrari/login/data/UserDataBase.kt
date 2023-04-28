@@ -13,6 +13,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.aferrari.login.data.material.Category
 import com.aferrari.login.data.material.Link
+import com.aferrari.login.data.material.Pdf
 import com.aferrari.login.data.material.YouTubeVideo
 import com.aferrari.login.data.material.dao.MaterialDao
 import com.aferrari.login.data.user.Leader
@@ -22,7 +23,7 @@ import com.aferrari.login.data.user.dao.UserDao
 
 @Database(
     version = 8,
-    entities = [Leader::class, Trainee::class, YouTubeVideo::class, Category::class, TraineeCategoryJoin::class, Link::class],
+    entities = [Leader::class, Trainee::class, YouTubeVideo::class, Category::class, TraineeCategoryJoin::class, Link::class, Pdf::class],
     autoMigrations = [
         AutoMigration(from = 7, to = 8, spec = UserDataBase.AutoMigration7To8::class)
     ],
