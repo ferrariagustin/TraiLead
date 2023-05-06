@@ -19,7 +19,10 @@ import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.launch
 
-open class LeaderViewModel(val repository: UserRepository, val materialRepository: MaterialRepository) : ViewModel(), IMaterial {
+open class LeaderViewModel(
+    val repository: UserRepository,
+    val materialRepository: MaterialRepository
+) : ViewModel(), IMaterial {
     private lateinit var leader: Leader
 
     val nameUser = MutableLiveData<String>()
@@ -80,6 +83,8 @@ open class LeaderViewModel(val repository: UserRepository, val materialRepositor
             passUser.value = leader.pass
         }
     }
+
+    fun getLeaderId() = leader.id
 
     fun getUnLinkedTrainees() {
         viewModelScope.launch {
@@ -250,12 +255,15 @@ open class LeaderViewModel(val repository: UserRepository, val materialRepositor
             View.VISIBLE -> {
                 View.VISIBLE
             }
+
             View.INVISIBLE -> {
                 View.INVISIBLE
             }
+
             View.GONE -> {
                 View.GONE
             }
+
             else -> {
                 View.VISIBLE
             }
@@ -291,9 +299,18 @@ open class LeaderViewModel(val repository: UserRepository, val materialRepositor
     }
 
     fun getMaterialsCategoryFilter() = viewModelScope.launch {
-        listAllMaterials.value =
-            materialRepository.getAllYoutubeVideo(leader).filter { it.categoryId == categorySelected?.id }
+        val listAllMaterlialJoin = mutableListOf<Material>()
+        listAllMaterlialJoin.addAll(getAllYouTubeVideosCategoryFilter())
+        listAllMaterlialJoin.addAll(getAllLinkCategoryFilter())
+        listAllMaterials.value = listAllMaterlialJoin
     }
+
+    private suspend fun getAllYouTubeVideosCategoryFilter() =
+        materialRepository.getAllYoutubeVideo(leader)
+            .filter { it.categoryId == categorySelected?.id }
+
+    private suspend fun getAllLinkCategoryFilter() = materialRepository.getAllLink(leader)
+        .filter { it.categoryId == categorySelected?.id }
 
 
     fun getAllMaterials() = viewModelScope.launch {

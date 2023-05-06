@@ -73,6 +73,9 @@ class LeaderMaterialListFragment : Fragment() {
         binding.addVideoMaterial.setOnClickListener {
             findNavController().navigate(R.id.addMaterialFragment)
         }
+        binding.addLinkMaterial.setOnClickListener {
+            findNavController().navigate(R.id.action_leaderMaterialListFragment_to_addLinkFragment)
+        }
     }
 
     private fun onAddButtonClicked() {

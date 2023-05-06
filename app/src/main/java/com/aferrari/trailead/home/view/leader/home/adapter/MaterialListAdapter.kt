@@ -47,8 +47,7 @@ class MaterialListAdapter(
 
     override fun onBindViewHolder(holder: MaterialListViewHolder, position: Int) {
         goneAllViews(holder)
-        var material = dataSet[position]
-        when (material) {
+        when (val material = dataSet[position]) {
             is YouTubeVideo -> {
                 bindingYoutubeVideo(holder, material)
             }
@@ -98,10 +97,7 @@ class MaterialListAdapter(
     }
 
     private fun configureSettingEditable() {
-        binding.imageSettingMaterialLeader.visibility = if (isEditable)
-            View.VISIBLE
-        else
-            View.GONE
+        binding.imageSettingMaterialLeader.visibility = if (isEditable) VISIBLE else GONE
     }
 
     private fun getMenuPopUp() =

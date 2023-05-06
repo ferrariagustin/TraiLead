@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="homeLeaderViewModel"
-            type="com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel" />
+            name="viewModel"
+            type="com.aferrari.trailead.home.viewmodel.leader.material.LinkMaterialViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/add_new_material_toolbar"
+            android:id="@+id/add_link_material_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/default_toolbar_elevation"
@@ -25,48 +25,51 @@
             app:title="@string/add_title" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title_component_description_label"
+            android:id="@+id/title_link_description_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:hint="@string/add_new_material_title_hint"
+            android:hint="@string/add_title_new_link_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_new_material_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/add_link_material_toolbar" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/title_componet_input"
+            android:id="@+id/title_link_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
+            android:text="@={viewModel.titleLinkInput}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_component_description_label" />
+            app:layout_constraintTop_toBottomOf="@id/title_link_description_label" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/component_description_label"
+            android:id="@+id/link_description_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:hint="@string/add_new_material_hint"
+            android:hint="@string/add_new_link_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_componet_input" />
+            app:layout_constraintTop_toBottomOf="@id/title_link_input" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/component_input"
+            android:id="@+id/link_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
+            android:text="@={viewModel.linkInput}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/component_description_label" />
+            app:layout_constraintTop_toBottomOf="@id/link_description_label" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_new_material_button"
+            android:id="@+id/save_link_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
+            android:onClick="@{() -> viewModel.saveLink()}"
             android:text="@string/add_new_category_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/component_input" />
+            app:layout_constraintTop_toBottomOf="@id/link_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

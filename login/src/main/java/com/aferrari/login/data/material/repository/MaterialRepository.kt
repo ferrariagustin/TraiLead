@@ -3,11 +3,12 @@ package com.aferrari.login.data.material.repository
 import com.aferrari.login.data.material.Category
 import com.aferrari.login.data.user.Leader
 import com.aferrari.login.data.TraineeCategoryJoin
+import com.aferrari.login.data.material.Link
 import com.aferrari.login.data.material.YouTubeVideo
 import com.aferrari.login.data.material.dao.MaterialDao
 
 class MaterialRepository(private val dao: MaterialDao) {
-    //    Material
+    //  Video
     suspend fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) =
         dao.insertYouTubeVideo(newYouTubeVideo)
 
@@ -25,7 +26,12 @@ class MaterialRepository(private val dao: MaterialDao) {
     suspend fun getYoutubeVideoByTrainee(leaderId: Int, categoryId: Int) =
         dao.getYoutubeVideoByCategory(leaderId, categoryId)
 
-    //    Category
+    //  Link
+    suspend fun insertLink(link: Link) = dao.insertLink(link)
+
+    suspend fun getAllLink(leader: Leader) = dao.getAllLink(leader.id)
+
+    //  Category
     suspend fun insertCategory(category: Category) = dao.insertCategory(category)
 
     suspend fun getAllCategory(leader: Leader) = dao.getAllCategory(leader.id)

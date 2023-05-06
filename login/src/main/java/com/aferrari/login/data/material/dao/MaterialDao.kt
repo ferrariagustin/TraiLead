@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.aferrari.login.data.material.Category
 import com.aferrari.login.data.TraineeCategoryJoin
+import com.aferrari.login.data.material.Link
 import com.aferrari.login.data.material.YouTubeVideo
 
 @Dao
@@ -51,4 +52,23 @@ interface MaterialDao {
 
     @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
     suspend fun removeAllCategoryFromTrainee(traineeId: Int)
+
+    //  Link
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLink(link: Link)
+
+    @Delete
+    suspend fun deleteLink(link: Link)
+
+    @Query("SELECT * FROM link_data_table WHERE leaderMaterialId = :leaderId ORDER BY title")
+    suspend fun getAllLink(leaderId: Int): List<Link>
+
+    @Query("UPDATE link_data_table SET url = :link WHERE id = :linkId")
+    suspend fun updateUrlLink(linkId: Int, link: String)
+
+    @Query("UPDATE link_data_table SET title = :newTitle WHERE id = :linkId")
+    suspend fun updateTitleLink(linkId: Int, newTitle: String)
+
+    @Query("SELECT * FROM link_data_table WHERE leaderMaterialId=:leaderId AND categoryId=:categoryId")
+    suspend fun getLinkByCategory(leaderId: Int, categoryId: Int): List<Link>
 }

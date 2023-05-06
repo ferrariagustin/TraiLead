@@ -39,13 +39,17 @@ class AddMaterialFragment : Fragment() {
     }
 
     private fun initListeners() {
+        binding.addNewMaterialToolbar.title = resources.getString(
+            R.string.welcome_home_trainee,
+            VIDEO
+        )
         binding.addNewMaterialToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
         binding.addNewMaterialButton.setOnClickListener {
             leaderViewModel.insertMaterial(
-                binding.addNewMaterialTitleTextInput.text.toString(),
-                binding.addNewMaterialTextInput.text.toString()
+                binding.titleComponetInput.text.toString(),
+                binding.componentInput.text.toString()
             )
         }
         leaderViewModel.statusUpdateNewMaterial.observe(viewLifecycleOwner) {
@@ -53,9 +57,11 @@ class AddMaterialFragment : Fragment() {
                 StatusUpdateInformation.FAILED -> {
                     failedFlow()
                 }
+
                 StatusUpdateInformation.SUCCESS -> {
                     successFlow()
                 }
+
                 else -> {}
             }
         }
@@ -67,5 +73,9 @@ class AddMaterialFragment : Fragment() {
 
     private fun failedFlow() {
         Toast.makeText(requireContext(), "Ingrese un link válido", Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private const val VIDEO = "Video"
     }
 }

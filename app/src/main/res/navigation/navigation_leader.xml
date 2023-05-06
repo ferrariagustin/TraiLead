@@ -142,6 +142,9 @@
         <action
             android:id="@+id/action_leaderMaterialListFragment_to_editMaterialFragment"
             app:destination="@id/editMaterialFragment" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_addLinkFragment"
+            app:destination="@id/addLinkFragment" />
     </fragment>
     <fragment
         android:id="@+id/fullScreenVideo"
@@ -178,5 +181,14 @@
         <action
             android:id="@+id/action_linkMaterialTraineeFragment_to_linkedTraineeListFragment"
             app:destination="@id/linkedTraineeListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addLinkFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.AddLinkFragment"
+        android:label="AddLinkFragment"
+        tools:layout="@layout/leader_add_material_link">
+        <action
+            android:id="@+id/action_addLinkFragment_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
     </fragment>
 </navigation>
