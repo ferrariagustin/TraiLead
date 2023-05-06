@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.data.material.Category
 import com.aferrari.login.data.material.YouTubeVideo
+import com.aferrari.login.data.material.dao.Material
 import com.aferrari.login.data.user.Trainee
 import com.aferrari.trailead.home.viewmodel.IMaterial
 import com.aferrari.trailead.home.viewmodel.trainee.TraineeViewModel
@@ -14,7 +15,7 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
 
     val setCategories = MutableLiveData<MutableSet<Category>>()
 
-    val materialsByCategory = MutableLiveData<MutableList<YouTubeVideo>>()
+    val materialsByCategory = MutableLiveData<MutableList<Material>>()
 
     private var categorySelected: Category? = null
 
@@ -29,7 +30,8 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
         if (hasLeader()) {
             viewModelScope.launch {
                 setCategories.value =
-                    viewModel.materialRepository.getCategoriesSelected(traineeSelected.id).toMutableSet()
+                    viewModel.materialRepository.getCategoriesSelected(traineeSelected.id)
+                        .toMutableSet()
             }
         } else {
             reset()
@@ -48,13 +50,24 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
     fun getMaterials() {
         if (hasLeader() && hasCategorySelected()) {
             viewModelScope.launch {
-                materialsByCategory.value = viewModel.materialRepository.getYoutubeVideoByTrainee(
-                    traineeSelected.leaderId!!,
-                    categorySelected!!.id
-                ).toMutableList()
+                val materialsByCategoryJoin = mutableListOf<Material>()
+                materialsByCategoryJoin.addAll(getAllYouTubeVideoByCategory())
+                materialsByCategoryJoin.addAll(getAllLinkByTrainee())
+                materialsByCategory.value = materialsByCategoryJoin
             }
         }
     }
+
+    private suspend fun getAllYouTubeVideoByCategory() =
+        viewModel.materialRepository.getYoutubeVideoByCategory(
+            traineeSelected.leaderId!!,
+            categorySelected!!.id
+        )
+
+    private suspend fun getAllLinkByTrainee() = viewModel.materialRepository.getLinksByCategory(
+        traineeSelected.leaderId!!,
+        categorySelected!!.id
+    )
 
     /**
      * Validate if has category selected

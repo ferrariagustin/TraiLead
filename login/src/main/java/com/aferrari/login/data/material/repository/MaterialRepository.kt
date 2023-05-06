@@ -23,13 +23,16 @@ class MaterialRepository(private val dao: MaterialDao) {
     suspend fun updateTitleYoutubeVideo(materialId: Int, newTitle: String) =
         dao.updateTitleYoutubeVideo(materialId, newTitle)
 
-    suspend fun getYoutubeVideoByTrainee(leaderId: Int, categoryId: Int) =
+    suspend fun getYoutubeVideoByCategory(leaderId: Int, categoryId: Int) =
         dao.getYoutubeVideoByCategory(leaderId, categoryId)
 
     //  Link
     suspend fun insertLink(link: Link) = dao.insertLink(link)
 
     suspend fun getAllLink(leader: Leader) = dao.getAllLink(leader.id)
+
+    suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =
+        dao.getLinkByCategory(leaderId, categoryId)
 
     //  Category
     suspend fun insertCategory(category: Category) = dao.insertCategory(category)
