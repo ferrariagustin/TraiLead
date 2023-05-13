@@ -34,6 +34,8 @@ class MaterialRepository(private val dao: MaterialDao) {
     suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =
         dao.getLinkByCategory(leaderId, categoryId)
 
+    suspend fun deleteLink(link: Link) = dao.deleteLink(link)
+
     //  Category
     suspend fun insertCategory(category: Category) = dao.insertCategory(category)
 

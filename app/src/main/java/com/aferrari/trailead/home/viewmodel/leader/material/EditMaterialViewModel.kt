@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.data.material.YouTubeVideo
+import com.aferrari.login.data.material.dao.Material
 import com.aferrari.trailead.home.Utils.UrlUtils
 import com.aferrari.trailead.home.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
@@ -16,7 +17,7 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
 
     init {
         statusUpdateEditMaterial.value = StatusUpdateInformation.NONE
-        youTubeVideoSelected = homeViewModel.youTubeVideoSelected
+        youTubeVideoSelected = homeViewModel.materialSelected as? YouTubeVideo
     }
 
 
@@ -27,8 +28,8 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
      * @param newUrl new url to updated
      * @param newTitle new title to updated
      */
-    fun editMaterial(newUrl: String, newTitle: String) {
-        youTubeVideoSelected?.let {
+    fun editVideo(newUrl: String, newTitle: String) {
+        (youTubeVideoSelected as? YouTubeVideo)?.let {
 
             if (newUrl.isNotEmpty()) {
                 if (!UrlUtils().isYoutubeUrl(newUrl)) {
@@ -40,10 +41,10 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
                     statusUpdateEditMaterial.value = StatusUpdateInformation.FAILED
                     return
                 }
-                updateUrlMaterial(it, youtubeId)
+                updateUrlVideo(it, youtubeId)
             }
             if (newTitle.isNotEmpty()) {
-                updateTitleMaterial(it, newTitle)
+                updateTitleVideo(it, newTitle)
             }
             statusUpdateEditMaterial.value = StatusUpdateInformation.SUCCESS
             return
@@ -52,12 +53,15 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
     }
 
 
-    private fun updateTitleMaterial(youTubeVideoSelected: YouTubeVideo, newTitle: String) =
+    private fun updateTitleVideo(youTubeVideoSelected: YouTubeVideo, newTitle: String) =
         viewModelScope.launch {
-            homeViewModel.materialRepository.updateTitleYoutubeVideo(youTubeVideoSelected.id, newTitle)
+            homeViewModel.materialRepository.updateTitleYoutubeVideo(
+                youTubeVideoSelected.id,
+                newTitle
+            )
         }
 
-    private fun updateUrlMaterial(
+    private fun updateUrlVideo(
         youTubeVideoSelected: YouTubeVideo,
         youtubeId: String
     ) = viewModelScope.launch {

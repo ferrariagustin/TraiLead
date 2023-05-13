@@ -13,9 +13,10 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
 
     private val materialRepository = homeViewModel.materialRepository
 
-    private val urlRegex = Regex("^(https://|http://)?[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*([/?]\\S*)?\$")
+    private val urlRegex =
+        Regex("^(https://|http://)?[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*([/?]\\S*)?\$")
 
-
+    var linkSelected: Link? = null
 
     val titleLinkInput = MutableLiveData<String>()
     val linkInput = MutableLiveData<String>()
@@ -26,6 +27,7 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
 
     init {
         initStatus()
+        linkSelected = homeViewModel.materialSelected as? Link
     }
 
     private fun initStatus() {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.login.data.material.Category
+import com.aferrari.login.data.material.Link
 import com.aferrari.login.data.user.Leader
 import com.aferrari.login.data.material.YouTubeVideo
 import com.aferrari.login.data.material.dao.Material
@@ -49,7 +50,7 @@ open class LeaderViewModel(
 
     var categorySelected: Category? = null
 
-    var youTubeVideoSelected: YouTubeVideo? = null
+    var materialSelected: Material? = null
 
     //    Category
     val listCategory = MutableLiveData<List<Category>>()
@@ -342,8 +343,18 @@ open class LeaderViewModel(
 
     override fun deleteMaterialSelected() {
         viewModelScope.launch {
-            youTubeVideoSelected?.let {
-                materialRepository.deleteYoutubeVideo(it)
+            materialSelected?.let {
+                when (it) {
+                    is YouTubeVideo -> {
+                        materialRepository.deleteYoutubeVideo(it)
+                    }
+
+                    is Link -> {
+                        materialRepository.deleteLink(it)
+                    }
+
+                    else -> {}
+                }
                 getMaterialsCategoryFilter()
             }
         }
@@ -352,8 +363,8 @@ open class LeaderViewModel(
     /**
      * is selected Material clicked
      */
-    override fun setSelectedMaterial(youTubeVideo: YouTubeVideo) {
-        youTubeVideoSelected = youTubeVideo
+    override fun setSelectedMaterial(material: Material) {
+        this.materialSelected = material
     }
 
     fun getCategoryBy(category: String): Category? {

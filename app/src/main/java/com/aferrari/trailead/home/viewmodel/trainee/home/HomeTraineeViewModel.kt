@@ -79,7 +79,7 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
      */
     private fun hasLeader(): Boolean = traineeSelected.leaderId != null
 
-    override fun setSelectedMaterial(youTubeVideo: YouTubeVideo) {
+    override fun setSelectedMaterial(material: Material) {
         TODO("Not yet implemented")
     }
 

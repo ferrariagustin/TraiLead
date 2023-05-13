@@ -1,6 +1,7 @@
 package com.aferrari.components
 
 import android.annotation.SuppressLint
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.MenuRes
@@ -38,11 +39,15 @@ class TraileadPopupMenu(
         return this
     }
 
-    fun setOnClickListener(listener: PopupMenu.OnMenuItemClickListener): TraileadPopupMenu {
+    fun setOnClickListener(listener: (item: MenuItem) -> Boolean): TraileadPopupMenu {
         popupMenu.setOnMenuItemClickListener(listener)
         return this
     }
 
+    fun setVisibilityItem(@IdRes menuItem: Int, visibility: Boolean): TraileadPopupMenu {
+        popupMenu.menu.findItem(menuItem).isVisible = visibility
+        return this
+    }
 
     /**
      * Show PopupMenu

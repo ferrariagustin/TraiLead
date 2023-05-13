@@ -46,7 +46,7 @@ class EditMaterialFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.saveEditMaterialButton.setOnClickListener {
-            viewModel.editMaterial(
+            viewModel.editVideo(
                 binding.editMaterialUrlTextInput.text.toString(),
                 binding.editMaterialTitleTextInput.text.toString()
             )

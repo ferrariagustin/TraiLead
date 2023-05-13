@@ -68,6 +68,7 @@
     <string name="empty_string" />
     <string name="place_holder_title">titulo</string>
     <string name="edit_material">Editar</string>
+    <string name="edit_material_link">Editar Link</string>
     <string name="edit_material_title">Editar Video</string>
     <string name="edit_title_material_label">Ingresar nuevo título del video</string>
     <string name="edit_material_url_label">Ingresar la url del nuevo video</string>

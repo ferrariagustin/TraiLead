@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.aferrari.trailead.home.viewmodel.leader.material.EditMaterialViewModel" />
+            type="com.aferrari.trailead.home.viewmodel.leader.material.LinkMaterialViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/edit_material_toolbar"
+            android:id="@+id/edit_link_material_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/default_toolbar_elevation"
@@ -22,53 +22,53 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
             app:navigationIconTint="@color/primaryColor"
-            app:title="@string/edit_material_title" />
+            app:title="@string/edit_material_link" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/edit_material_title_label"
+            android:id="@+id/edit_link_material_title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:hint="@string/edit_title_material_label"
+            android:hint="@string/add_title_new_link_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_material_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/edit_link_material_toolbar" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_material_title_text_input"
+            android:id="@+id/edit_link_material_title_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:hint="@{viewModel.youTubeVideoSelected != null ? viewModel.youTubeVideoSelected.title.toString : ' '}"
+            android:hint="@{viewModel.linkSelected != null ? viewModel.linkSelected.title.toString : ' '}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_material_title_label" />
+            app:layout_constraintTop_toBottomOf="@id/edit_link_material_title_label" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/edit_material_label"
+            android:id="@+id/edit_link_material_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:hint="@string/edit_material_url_label"
+            android:hint="@string/add_new_link_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_material_title_text_input" />
+            app:layout_constraintTop_toBottomOf="@id/edit_link_material_title_text_input" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_material_url_text_input"
+            android:id="@+id/edit_link_material_url_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
+            android:hint="@{viewModel.linkSelected != null ? viewModel.linkSelected.url.toString : ' '}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_material_label" />
+            app:layout_constraintTop_toBottomOf="@id/edit_link_material_label" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_edit_material_button"
+            android:id="@+id/save_edit_link_material_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
             android:text="@string/save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_material_url_text_input" />
+            app:layout_constraintTop_toBottomOf="@id/edit_link_material_url_text_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

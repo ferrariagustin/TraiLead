@@ -5,12 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.components.TraileadPopupMenu
@@ -51,23 +52,52 @@ class MaterialListAdapter(
             is YouTubeVideo -> {
                 bindingYoutubeVideo(holder, material)
             }
+
             is Link -> {
                 bindingLink(holder, material)
             }
+
             is Pdf -> {
                 bindingPdf(holder, material)
             }
         }
     }
 
+    @SuppressLint("ResourceType")
     private fun bindingLink(holder: MaterialListViewHolder, link: Link) {
+        viewModel.setSelectedMaterial(link)
         holder.viewHolderBinding.linkViewMaterial.root.visibility = VISIBLE
-        holder.viewHolderBinding.linkViewMaterial.textViewMaterialCategoryId.text = link.title
-        holder.viewHolderBinding.linkViewMaterial.cardCategoryId.setOnClickListener {
+        holder.viewHolderBinding.linkViewMaterial.itemLinkTextView.text = link.title
+        holder.viewHolderBinding.linkViewMaterial.itemLinkImageView.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
             fragment.startActivity(intent)
         }
+        holder.viewHolderBinding.linkViewMaterial.itemLinkSettingImageView.setOnClickListener {
+            viewModel.setSelectedMaterial(link)
+            TraileadPopupMenu(it, fragment)
+                .create(getMenuPopUp(), R.color.primaryColor)
+                .setVisibilityItem(R.id.material_full_screen, false)
+                .setOnClickListener { item -> popupLinkListener(item) }
+                .show()
+        }
     }
+
+    private fun popupLinkListener(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.material_delete -> navigateToDeleteMaterial()
+            R.id.material_edit -> {
+                navigateToEditLinkMaterial()
+            }
+
+            else -> return true
+        }
+        return false
+    }
+
+    private fun navigateToEditLinkMaterial() {
+        fragment.findNavController().navigate(R.id.action_leaderMaterialListFragment_to_editLinkFragment)
+    }
+
 
     private fun bindingPdf(holder: MaterialListViewHolder, material: Pdf) {
         TODO("Not yet implemented")
@@ -88,9 +118,10 @@ class MaterialListAdapter(
         })
         holder.viewHolderBinding.titleMaterialItem.hint = youtubeVideo.title
         holder.viewHolderBinding.imageSettingMaterialLeader.setOnClickListener {
+            viewModel.setSelectedMaterial(youtubeVideo)
             TraileadPopupMenu(it, fragment)
                 .create(getMenuPopUp(), R.color.primaryColor)
-                .setOnClickListener { item -> popupListener(item, youtubeVideo) }
+                .setOnClickListener { item -> popupListener(item) }
                 .show()
         }
         configureSettingEditable()
@@ -103,18 +134,17 @@ class MaterialListAdapter(
     private fun getMenuPopUp() =
         if (isEditable) R.menu.menu_item_abm_material else R.menu.menu_item_m_material
 
-    private fun popupListener(item: MenuItem?, youTubeVideo: YouTubeVideo): Boolean {
-        viewModel.setSelectedMaterial(youTubeVideo)
+    private fun popupListener(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.material_full_screen -> navigateToFullScreenVideo()
             R.id.material_delete -> navigateToDeleteMaterial()
-            R.id.material_edit -> navigateToEditMaterial()
+            R.id.material_edit -> navigateToEditVideo()
             else -> return true
         }
         return false
     }
 
-    private fun navigateToEditMaterial() {
+    private fun navigateToEditVideo() {
         fragment.findNavController().navigate(R.id.editMaterialFragment)
     }
 

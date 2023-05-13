@@ -145,6 +145,9 @@
         <action
             android:id="@+id/action_leaderMaterialListFragment_to_addLinkFragment"
             app:destination="@id/addLinkFragment" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_editLinkFragment"
+            app:destination="@id/editLinkFragment" />
     </fragment>
     <fragment
         android:id="@+id/fullScreenVideo"
@@ -167,17 +170,17 @@
     <fragment
         android:id="@+id/editMaterialFragment"
         android:name="com.aferrari.trailead.home.view.leader.home.EditMaterialFragment"
-        tools:layout="@layout/leader_edit_material"
-        android:label="EditMaterialFragment" >
+        android:label="EditMaterialFragment"
+        tools:layout="@layout/leader_edit_material">
         <action
             android:id="@+id/action_editMaterialFragment_to_leaderMaterialListFragment"
             app:destination="@id/leaderMaterialListFragment" />
     </fragment>
     <fragment
         android:id="@+id/linkMaterialTraineeFragment"
-        tools:layout="@layout/link_material_trainee_fragment"
         android:name="com.aferrari.trailead.home.view.leader.listTrainee.LinkMaterialTraineeFragment"
-        android:label="LinkMaterialTraineeFragment" >
+        android:label="LinkMaterialTraineeFragment"
+        tools:layout="@layout/link_material_trainee_fragment">
         <action
             android:id="@+id/action_linkMaterialTraineeFragment_to_linkedTraineeListFragment"
             app:destination="@id/linkedTraineeListFragment" />
@@ -189,6 +192,15 @@
         tools:layout="@layout/leader_add_material_link">
         <action
             android:id="@+id/action_addLinkFragment_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editLinkFragment"
+        android:name="com.aferrari.trailead.home.view.leader.home.EditLinkFragment"
+        android:label="EditLinkFragment"
+        tools:layout="@layout/leader_edit_material_link">
+        <action
+            android:id="@+id/action_editLinkFragment_to_leaderMaterialListFragment"
             app:destination="@id/leaderMaterialListFragment" />
     </fragment>
 </navigation>
