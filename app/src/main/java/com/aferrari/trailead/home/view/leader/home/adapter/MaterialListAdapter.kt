@@ -65,7 +65,6 @@ class MaterialListAdapter(
 
     @SuppressLint("ResourceType")
     private fun bindingLink(holder: MaterialListViewHolder, link: Link) {
-        viewModel.setSelectedMaterial(link)
         holder.viewHolderBinding.linkViewMaterial.root.visibility = VISIBLE
         holder.viewHolderBinding.linkViewMaterial.itemLinkTextView.text = link.title
         holder.viewHolderBinding.linkViewMaterial.itemLinkImageView.setOnClickListener {
@@ -95,7 +94,8 @@ class MaterialListAdapter(
     }
 
     private fun navigateToEditLinkMaterial() {
-        fragment.findNavController().navigate(R.id.action_leaderMaterialListFragment_to_editLinkFragment)
+        fragment.findNavController()
+            .navigate(R.id.action_leaderMaterialListFragment_to_editLinkFragment)
     }
 
 

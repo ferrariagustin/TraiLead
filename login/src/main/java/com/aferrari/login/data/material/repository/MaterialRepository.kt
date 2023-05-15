@@ -29,6 +29,10 @@ class MaterialRepository(private val dao: MaterialDao) {
     //  Link
     suspend fun insertLink(link: Link) = dao.insertLink(link)
 
+    suspend fun updateTitleLink(linkId: Int, newTitle: String) = dao.updateTitleLink(linkId, newTitle)
+
+    suspend fun updateUrlLink(linkId: Int, newUrl: String) = dao.updateUrlLink(linkId, newUrl)
+
     suspend fun getAllLink(leader: Leader) = dao.getAllLink(leader.id)
 
     suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =

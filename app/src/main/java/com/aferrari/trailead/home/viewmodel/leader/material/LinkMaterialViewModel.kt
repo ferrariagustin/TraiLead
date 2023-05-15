@@ -14,7 +14,8 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
     private val materialRepository = homeViewModel.materialRepository
 
     private val urlRegex =
-        Regex("^(https://|http://)?[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*([/?]\\S*)?\$")
+        Regex("^(http|https)://[a-zA-Z0-9]+([\\-\\.]{1}[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(/.*)?\$")
+
 
     var linkSelected: Link? = null
 
@@ -37,12 +38,12 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
 
     fun saveLink() {
         initStatus()
-        if (titleLinkInput.value.isNullOrEmpty() || linkInput.value.isNullOrEmpty()) {
+        if (isEmptyOrNull()) {
             errorType = StatusErrorType.EMPTY
             status.value = StatusUpdateInformation.FAILED
             return
         }
-        if (!isValidLink()) {
+        if (!isValidLink(linkInput.value)) {
             errorType = StatusErrorType.INVALID
             status.value = StatusUpdateInformation.FAILED
             return
@@ -59,6 +60,39 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
         )
     }
 
+    private fun isEmptyOrNull() =
+        titleLinkInput.value.isNullOrEmpty() || linkInput.value.isNullOrEmpty()
+
+    /**
+     * Update title and url to link.
+     */
+    fun updateLink(newTitle: String, newLink: String) {
+        initStatus()
+        if (newTitle.isNullOrEmpty() and newLink.isNullOrEmpty()) {
+            status.value = StatusUpdateInformation.SUCCESS
+            return
+        }
+        if (newLink.isNotEmpty() and !isValidLink(newLink)) {
+            status.value = StatusUpdateInformation.FAILED
+            return
+        }
+        updateNewLink(newTitle, newLink)
+    }
+
+    private fun updateNewLink(newTitle: String, newLink: String) {
+        viewModelScope.launch {
+            linkSelected?.let { link ->
+                if (newTitle.isNotEmpty()) {
+                    materialRepository.updateTitleLink(link.id, newTitle)
+                }
+                if (newLink.isNotEmpty()) {
+                    materialRepository.updateUrlLink(link.id, newLink)
+                }
+                status.value = StatusUpdateInformation.SUCCESS
+            }
+        }
+    }
+
     private fun saveLinkToDB(title: String, link: String, id: Int, leaderId: Int) {
         viewModelScope.launch {
             materialRepository.insertLink(Link(0, title, link, id, leaderId))
@@ -67,6 +101,6 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
         }
     }
 
-    private fun isValidLink(): Boolean = urlRegex.matches(linkInput.value.toString())
+    private fun isValidLink(link: String?): Boolean = urlRegex.matches(link.toString())
 
 }
