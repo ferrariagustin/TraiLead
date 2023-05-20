@@ -40,7 +40,7 @@ class AddMaterialFragment : Fragment() {
 
     private fun initListeners() {
         binding.addNewMaterialToolbar.title = resources.getString(
-            R.string.welcome_home_trainee,
+            R.string.add_new_material,
             VIDEO
         )
         binding.addNewMaterialToolbar.setNavigationOnClickListener {
