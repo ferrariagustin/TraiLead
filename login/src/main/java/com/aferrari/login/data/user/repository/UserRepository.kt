@@ -1,10 +1,14 @@
 package com.aferrari.login.data.user.repository
 
+import com.aferrari.login.data.FirebaseDataBase
+import com.aferrari.login.data.StatusCode
 import com.aferrari.login.data.user.Leader
 import com.aferrari.login.data.user.Position
 import com.aferrari.login.data.user.Trainee
 import com.aferrari.login.data.user.dao.User
 import com.aferrari.login.data.user.dao.UserDao
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class UserRepository(private val dao: UserDao) {
 
@@ -44,7 +48,23 @@ class UserRepository(private val dao: UserDao) {
         }
     }
 
-    suspend fun insertLeader(leader: Leader): Long = dao.insertLeader(leader)
+    suspend fun insertLeader(leader: Leader): Long {
+        val result = suspendCoroutine { continuation ->
+            FirebaseDataBase().insertLeader(leader)?.addOnCompleteListener { task ->
+                val resultCode = if (task.isSuccessful) {
+                    StatusCode.SUCCESS.value
+                } else {
+                    StatusCode.ERROR.value
+                }
+                continuation.resume(resultCode)
+            }
+        }
+        if (result == StatusCode.SUCCESS.value) {
+            dao.insertLeader(leader)
+        }
+        return result
+    }
+
 
     suspend fun insertTrainee(trainee: Trainee): Long = dao.insertTrainee(trainee)
 
