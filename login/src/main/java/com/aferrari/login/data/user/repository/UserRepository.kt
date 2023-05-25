@@ -10,6 +10,8 @@ import com.aferrari.login.data.user.dao.UserDao
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+// TODO: change name LocalDataSource
+// class UserRepository(private val dao: UserDao, remote: RemoteDataSource) {
 class UserRepository(private val dao: UserDao) {
 
     suspend fun get(user_id: Int): User? {
@@ -49,6 +51,14 @@ class UserRepository(private val dao: UserDao) {
     }
 
     suspend fun insertLeader(leader: Leader): Long {
+
+//        val result = remote.insert(leader)
+//        if (result == SUCCESS) {
+//            localDS.insert()
+//        } else {
+//            return error
+//        }
+
         val result = suspendCoroutine { continuation ->
             FirebaseDataBase().insertLeader(leader)?.addOnCompleteListener { task ->
                 val resultCode = if (task.isSuccessful) {
@@ -60,6 +70,7 @@ class UserRepository(private val dao: UserDao) {
             }
         }
         if (result == StatusCode.SUCCESS.value) {
+            // Insert local with Room
             dao.insertLeader(leader)
         }
         return result
