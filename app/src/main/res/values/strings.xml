@@ -32,7 +32,7 @@
     <string name="assigned_leader">Líder asignado</string>
     <string name="edit_trainee_profile_name">Editar nombre</string>
     <string name="edit_trainee_rol">Editar Rol</string>
-    <string name="edit_material_trainee">Configurar material</string>
+    <string name="edit_material_trainee">Asignar categoría</string>
     <string name="config_material_trainee_toolbar">Configurar Material</string>
     <string name="unlinked_trainee">Desvincular</string>
     <string name="delete_trainee">Eliminar Trainee</string>
@@ -62,12 +62,13 @@
     <string name="error_message_dialog_category">Ingrese un nombre de categoría diferente</string>
     <string name="leader_material_list_title">Material</string>
     <string name="add_new_material_hint">Ingresar la URL completa del video de youtube</string>
-    <string name="add_new_material">Agregar nuevo video</string>
+    <string name="add_new_material">Agregar %s</string>
     <string name="add_new_material_title_hint">Ingrese un título descriptivo del video</string>
     <string name="full_screen">Maximizar</string>
     <string name="empty_string" />
     <string name="place_holder_title">titulo</string>
     <string name="edit_material">Editar</string>
+    <string name="edit_material_link">Editar Link</string>
     <string name="edit_material_title">Editar Video</string>
     <string name="edit_title_material_label">Ingresar nuevo título del video</string>
     <string name="edit_material_url_label">Ingresar la url del nuevo video</string>
@@ -75,5 +76,12 @@
     <string name="selected_all">Todo</string>
     <string name="category">Categoria</string>
     <string name="title_training_toolbar">Material de entrenamiento</string>
+    <string name="link">Link</string>
+    <string name="add_title">Agregar</string>
+    <string name="add_title_new_link_description">Agregue el título para su link</string>
+    <string name="add_new_link_description">Agregue el Link (Debe comenzar con https://)</string>
+    <string name="error_empty_field">Algunos de los campos se encuentran vacíos</string>
+    <string name="error_generic">Hubo un error,por favor vuelva a realizar la operación nuevamente.</string>
+    <string name="error_invalid_link">Ingrese un link válido. Recuerde que debe ser un dominio válido y comenzar con https://</string>
 
 </resources>

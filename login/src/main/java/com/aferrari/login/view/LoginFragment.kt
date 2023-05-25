@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.aferrari.login.R
 import com.aferrari.login.databinding.LoginFragmentBinding
-import com.aferrari.login.data.User
+import com.aferrari.login.data.user.dao.User
 import com.aferrari.login.data.UserDataBase
-import com.aferrari.login.data.UserRepository
+import com.aferrari.login.data.user.repository.UserRepository
 import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.login.session.SessionManagement
 import com.aferrari.login.utils.StringUtils

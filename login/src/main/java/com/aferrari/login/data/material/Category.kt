@@ -1,4 +1,4 @@
-package com.aferrari.login.data
+package com.aferrari.login.data.material
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

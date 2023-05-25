@@ -14,7 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.aferrari.login.R
 import com.aferrari.login.databinding.RegistrationFragmentBinding
 import com.aferrari.login.data.UserDataBase
-import com.aferrari.login.data.UserRepository
+import com.aferrari.login.data.user.repository.UserRepository
 import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.login.viewmodel.LoginViewModelFactory
 import com.aferrari.login.viewmodel.register.RegisterErrorState

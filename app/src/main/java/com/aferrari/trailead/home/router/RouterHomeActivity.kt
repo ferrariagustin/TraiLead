@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.login.R
-import com.aferrari.login.data.User
+import com.aferrari.login.data.user.dao.User
 import com.aferrari.login.data.UserDataBase
-import com.aferrari.login.data.UserRepository
+import com.aferrari.login.data.user.repository.UserRepository
 import com.aferrari.login.dialog.TraileadDialog
 import com.aferrari.login.utils.StringUtils
 import com.aferrari.trailead.home.Utils.StringUtils.JOIN_DEEPLINK

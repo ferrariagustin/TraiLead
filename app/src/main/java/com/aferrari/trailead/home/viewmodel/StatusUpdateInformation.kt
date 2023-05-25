@@ -7,3 +7,7 @@ enum class StatusUpdateInformation {
 enum class StatusVisibilityPassword {
     VISIBLE, INVISIBLE
 }
+
+enum class StatusErrorType {
+    EMPTY, INVALID, NONE
+}

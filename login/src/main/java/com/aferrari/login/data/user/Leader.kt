@@ -1,9 +1,10 @@
-package com.aferrari.login.data
+package com.aferrari.login.data.user
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.aferrari.login.data.user.dao.User
 
 // * Resoler los siguientes issues:
 // * Se pueden crear un Leader y un Trainee con el mismo mail

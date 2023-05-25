@@ -5,16 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.aferrari.login.data.Leader
+import com.aferrari.login.data.user.Leader
 import com.aferrari.login.data.UserDataBase
-import com.aferrari.login.data.UserRepository
+import com.aferrari.login.data.user.repository.UserRepository
+import com.aferrari.login.data.material.repository.MaterialRepository
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.home.Utils.BundleUtils
 import com.aferrari.trailead.home.Utils.StringUtils.LEADER_KEY
 import com.aferrari.trailead.home.Utils.StringUtils.TAB_ID
-import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.home.viewmodel.HomeViewModelFactory
+import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
 
 class LeaderActivity : AppCompatActivity() {
 
@@ -27,8 +28,8 @@ class LeaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.leader_activity)
         val dao = UserDataBase.getInstance(this).userDao
-        val repository = UserRepository(dao)
-        val factory = HomeViewModelFactory(repository)
+        val materialDao = UserDataBase.getInstance(this).materialDao
+        val factory = HomeViewModelFactory(UserRepository(dao), MaterialRepository(materialDao))
         leaderViewModel = ViewModelProvider(this, factory)[LeaderViewModel::class.java]
         binding.lifecycleOwner = this
         initComponent()

@@ -35,31 +35,34 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/selected_radio_button_material"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:visibility="gone"
-                        android:layout_height="wrap_content"/>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/item_video_image_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_video"
+                        android:tint="@color/primaryColor" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/title_material_item"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_medium"
                         android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin_medium"
                         android:layout_weight="9"
                         android:hint="@string/place_holder_title"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/image_setting_material_leader"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_margin="@dimen/margin_ultra_small"
                         android:layout_weight="1"
-                        android:padding="@dimen/margin_small"
-                        android:layout_gravity="center"
                         android:src="@drawable/ic_setting"
                         android:theme="@style/traiLead_text"
                         android:tint="@color/primaryColor"
@@ -83,6 +86,14 @@
 
 
         </com.google.android.material.card.MaterialCardView>
+
+        <include
+            android:id="@+id/link_view_material"
+            layout="@layout/item_material_link"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

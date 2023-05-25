@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "197875321402",
+    "project_id": "trailead",
+    "storage_bucket": "trailead.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197875321402:android:36b80f774100ac592f8303",
+        "android_client_info": {
+          "package_name": "com.aferrari.trailead"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197875321402-j786mcv0mtk3o0f8rohdh7eipmu52lf0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJT5IglvPTr3vBf0d2WaA9T-dFswlD48M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197875321402-j786mcv0mtk3o0f8rohdh7eipmu52lf0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

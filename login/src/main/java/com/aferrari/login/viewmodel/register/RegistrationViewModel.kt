@@ -4,11 +4,16 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.login.data.*
+import com.aferrari.login.data.user.Leader
+import com.aferrari.login.data.user.Trainee
+import com.aferrari.login.data.user.UserType
+import com.aferrari.login.data.user.dao.User
+import com.aferrari.login.data.user.repository.UserRepository
 import com.aferrari.login.utils.IntegerUtils
 import com.aferrari.login.utils.StringUtils.EMPTY_STRING
-import kotlinx.coroutines.launch
 import java.util.*
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 
 class RegistrationViewModel(private val repository: UserRepository) : ViewModel() {
     lateinit var user: User
@@ -146,6 +151,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
             UserType.TRAINEE -> {
                 UserType.LEADER
             }
+
             UserType.LEADER -> {
                 UserType.TRAINEE
             }

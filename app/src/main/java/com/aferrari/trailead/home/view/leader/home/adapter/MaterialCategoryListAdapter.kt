@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.aferrari.login.data.Category
+import com.aferrari.login.data.material.Category
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialCategoryListBinding
 import com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel
