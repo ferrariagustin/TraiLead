@@ -25,12 +25,12 @@ import javax.inject.Singleton
     version = 2,
     entities = [Leader::class, Trainee::class, YouTubeVideo::class, Category::class, TraineeCategoryJoin::class, Link::class, Pdf::class],
     autoMigrations = [
-        AutoMigration(from = 1, to = 2, spec = UserDataBase.AutoMigration1To2::class)
+        AutoMigration(from = 1, to = 2, spec = AppDataBase.AutoMigration1To2::class)
     ],
     exportSchema = true
 )
 @Singleton
-abstract class UserDataBase : RoomDatabase() {
+abstract class AppDataBase : RoomDatabase() {
 
     @RenameTable(fromTableName = "material_data_table", toTableName = "youtube_video_data_table")
     @RenameColumn(
@@ -64,15 +64,15 @@ abstract class UserDataBase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE: UserDataBase? = null
+        private var INSTANCE: AppDataBase? = null
 
-        fun getInstance(context: Context): UserDataBase {
+        fun getInstance(context: Context): AppDataBase {
             synchronized(this) {
                 var instance = INSTANCE
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        UserDataBase::class.java,
+                        AppDataBase::class.java,
                         "user_data_database"
                     )
 //                        .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)

@@ -2,21 +2,31 @@ package com.aferrari.trailead.domain.repository
 
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
-import com.aferrari.trailead.data.db.FirebaseDataBase
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.User
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
-// TODO: change name LocalDataSource
-// class UserRepository(private val dao: UserDao, remote: RemoteDataSource) {
 class UserRepository(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) {
+
+    suspend fun initLocalDataSource() {
+        val leaderList = remoteDataSource.getAllLeader()
+        leaderList.forEach {
+            if (localDataSource.getLeader(it.email) == null) {
+                localDataSource.insertLeader(it)
+            }
+        }
+        val traineeList = remoteDataSource.getAllTrainee()
+        traineeList.forEach {
+            if (localDataSource.getTrainee(it.email) == null) {
+                localDataSource.insertTrainee(it)
+            }
+        }
+    }
 
     suspend fun get(user_id: Int): User? {
         localDataSource.getLeader(user_id).apply {
@@ -55,24 +65,11 @@ class UserRepository(
     }
 
     suspend fun insertLeader(leader: Leader): Long {
-
-//        val result = remote.insert(leader)
-//        if (result == SUCCESS) {
-//            localDS.insert()
-//        } else {
-//            return error
-//        }
-
-        val result = suspendCoroutine { continuation ->
-            FirebaseDataBase().insertLeader(leader)?.addOnCompleteListener { task ->
-                val resultCode = if (task.isSuccessful) {
-                    StatusCode.SUCCESS.value
-                } else {
-                    StatusCode.ERROR.value
-                }
-                continuation.resume(resultCode)
-            }
+        if (get(leader.email) != null) {
+            // Return duplicate when exist email on db
+            return StatusCode.DUPLICATE.value
         }
+        val result = remoteDataSource.insertLeader(leader)
         if (result == StatusCode.SUCCESS.value) {
             // Insert local with Room
             localDataSource.insertLeader(leader)
@@ -81,7 +78,18 @@ class UserRepository(
     }
 
 
-    suspend fun insertTrainee(trainee: Trainee): Long = localDataSource.insertTrainee(trainee)
+    suspend fun insertTrainee(trainee: Trainee): Long {
+        if (get(trainee.email) != null) {
+            // Return duplicate when exist email on db
+            return StatusCode.DUPLICATE.value
+        }
+        val result = remoteDataSource.insertTrainee(trainee)
+        if (result == StatusCode.SUCCESS.value) {
+            // Insert local with Room
+            localDataSource.insertTrainee(trainee)
+        }
+        return result
+    }
 
     suspend fun updateTraineeName(idTrainee: Int, name: String) =
         localDataSource.updateTraineeName(idTrainee, name)

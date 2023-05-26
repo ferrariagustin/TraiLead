@@ -10,6 +10,7 @@ import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 
 interface LocalDataSource {
+
     suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo)
 
     suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo>

@@ -1,5 +1,7 @@
 package com.aferrari.trailead.common
 
+import com.aferrari.trailead.common.common_enum.UserType
+
 object StringUtils {
 
     const val JOIN_DEEPLINK = "://"
@@ -14,5 +16,13 @@ object StringUtils {
     const val USER_EMAIL_KEY = "user_email"
     const val USER_KEY = "user_key"
     const val EMPTY_STRING = ""
+
+    fun getUserType(userType: String?): UserType? {
+        when (userType) {
+            UserType.LEADER.name -> UserType.LEADER
+            UserType.TRAINEE.name -> UserType.TRAINEE
+        }
+        return null
+    }
 
 }

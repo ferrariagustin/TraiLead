@@ -12,6 +12,9 @@ class LoginViewModelFactory(private val repository: UserRepository) : ViewModelP
         if (modelClass.isAssignableFrom(RegistrationViewModel::class.java)) {
             return RegistrationViewModel(repository) as T
         }
+        if (modelClass.isAssignableFrom(SplashViewModel::class.java)) {
+            return SplashViewModel(repository) as T
+        }
         throw IllegalArgumentException("Unknown View Model class")
     }
 }

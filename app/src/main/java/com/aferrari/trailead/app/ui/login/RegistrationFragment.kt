@@ -22,9 +22,11 @@ import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 // TODO: don't working back navigation
+@AndroidEntryPoint
 class RegistrationFragment : Fragment() {
 
     private lateinit var binding: RegistrationFragmentBinding
