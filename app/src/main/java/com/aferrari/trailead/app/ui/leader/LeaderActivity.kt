@@ -11,13 +11,24 @@ import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY
 import com.aferrari.trailead.common.StringUtils.TAB_ID
-import com.aferrari.trailead.data.db.UserDataBase
 import com.aferrari.trailead.databinding.LeaderActivityBinding
+import com.aferrari.trailead.domain.datasource.LocalDataSource
+import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class LeaderActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var remoteDataSource: RemoteDataSource
+
+    @Inject
+    lateinit var localDataSource: LocalDataSource
 
     lateinit var binding: LeaderActivityBinding
 
@@ -27,9 +38,10 @@ class LeaderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.leader_activity)
-        val dao = UserDataBase.getInstance(this).userDao
-        val materialDao = UserDataBase.getInstance(this).materialDao
-        val factory = HomeViewModelFactory(UserRepository(dao), MaterialRepository(materialDao))
+        val factory = HomeViewModelFactory(
+            UserRepository(localDataSource, remoteDataSource),
+            MaterialRepository(localDataSource, remoteDataSource)
+        )
         leaderViewModel = ViewModelProvider(this, factory)[LeaderViewModel::class.java]
         binding.lifecycleOwner = this
         initComponent()

@@ -1,62 +1,67 @@
 package com.aferrari.trailead.domain.repository
 
-import com.aferrari.trailead.data.apiservices.MaterialDao
+import com.aferrari.trailead.domain.datasource.LocalDataSource
+import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 
-class MaterialRepository(private val dao: MaterialDao) {
+class MaterialRepository(
+    private val localDataSource: LocalDataSource,
+    private val remoteDataSource: RemoteDataSource
+) {
     //  Video
     suspend fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) =
-        dao.insertYouTubeVideo(newYouTubeVideo)
+        localDataSource.insertYouTubeVideo(newYouTubeVideo)
 
-    suspend fun getAllYoutubeVideo(leader: Leader) = dao.getAllYoutubeVideo(leader.id)
+    suspend fun getAllYoutubeVideo(leader: Leader) = localDataSource.getAllYoutubeVideo(leader.id)
 
     suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) =
-        dao.deleteYoutubeVideo(youTubeVideo)
+        localDataSource.deleteYoutubeVideo(youTubeVideo)
 
     suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String) =
-        dao.updateUrlYoutubeVideo(materialId, youtubeId)
+        localDataSource.updateUrlYoutubeVideo(materialId, youtubeId)
 
     suspend fun updateTitleYoutubeVideo(materialId: Int, newTitle: String) =
-        dao.updateTitleYoutubeVideo(materialId, newTitle)
+        localDataSource.updateTitleYoutubeVideo(materialId, newTitle)
 
     suspend fun getYoutubeVideoByCategory(leaderId: Int, categoryId: Int) =
-        dao.getYoutubeVideoByCategory(leaderId, categoryId)
+        localDataSource.getYoutubeVideoByCategory(leaderId, categoryId)
 
     //  Link
-    suspend fun insertLink(link: Link) = dao.insertLink(link)
+    suspend fun insertLink(link: Link) = localDataSource.insertLink(link)
 
     suspend fun updateTitleLink(linkId: Int, newTitle: String) =
-        dao.updateTitleLink(linkId, newTitle)
+        localDataSource.updateTitleLink(linkId, newTitle)
 
-    suspend fun updateUrlLink(linkId: Int, newUrl: String) = dao.updateUrlLink(linkId, newUrl)
+    suspend fun updateUrlLink(linkId: Int, newUrl: String) =
+        localDataSource.updateUrlLink(linkId, newUrl)
 
-    suspend fun getAllLink(leader: Leader) = dao.getAllLink(leader.id)
+    suspend fun getAllLink(leader: Leader) = localDataSource.getAllLink(leader.id)
 
     suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =
-        dao.getLinkByCategory(leaderId, categoryId)
+        localDataSource.getLinkByCategory(leaderId, categoryId)
 
-    suspend fun deleteLink(link: Link) = dao.deleteLink(link)
+    suspend fun deleteLink(link: Link) = localDataSource.deleteLink(link)
 
     //  Category
-    suspend fun insertCategory(category: Category) = dao.insertCategory(category)
+    suspend fun insertCategory(category: Category) = localDataSource.insertCategory(category)
 
-    suspend fun getAllCategory(leader: Leader) = dao.getAllCategory(leader.id)
+    suspend fun getAllCategory(leader: Leader) = localDataSource.getAllCategory(leader.id)
 
-    suspend fun deleteCategory(category: Category) = dao.deleteCategory(category)
+    suspend fun deleteCategory(category: Category) = localDataSource.deleteCategory(category)
 
     suspend fun updateCategory(categoryId: Int, categoryName: String) =
-        dao.updateCategory(categoryId, categoryName)
+        localDataSource.updateCategory(categoryId, categoryName)
 
     suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>) {
         val traineeCategoryJoinList = categorySet.map { TraineeCategoryJoin(traineeId, it.id) }
-        dao.removeAllCategoryFromTrainee(traineeId)
-        return dao.insertAllCategoryFromTrainee(traineeCategoryJoinList)
+        localDataSource.removeAllCategoryFromTrainee(traineeId)
+        return localDataSource.insertAllCategoryFromTrainee(traineeCategoryJoinList)
     }
 
     suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
-        dao.getCategoriesFromTrainee(traineeId)
+        localDataSource.getCategoriesFromTrainee(traineeId)
 }

@@ -18,16 +18,26 @@ import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.common_enum.LoginState
 import com.aferrari.trailead.common.session.SessionManagement
 import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.data.db.UserDataBase
 import com.aferrari.trailead.databinding.LoginFragmentBinding
+import com.aferrari.trailead.domain.datasource.LocalDataSource
+import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 // TODO: don't working back navigation
+@AndroidEntryPoint
 class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private lateinit var binding: LoginFragmentBinding
     private lateinit var loginViewModel: LoginViewModel
+
+    @Inject
+    lateinit var remoteDataSource: RemoteDataSource
+
+    @Inject
+    lateinit var localDataSource: LocalDataSource
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +45,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
-        val dao = UserDataBase.getInstance(requireActivity()).userDao
-        val repository = UserRepository(dao)
+        val repository = UserRepository(localDataSource, remoteDataSource)
         val factory = LoginViewModelFactory(repository)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
         binding.loginViewModel = loginViewModel

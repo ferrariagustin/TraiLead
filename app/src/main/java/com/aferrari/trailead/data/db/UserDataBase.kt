@@ -10,8 +10,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.aferrari.trailead.data.apiservices.MaterialDao
-import com.aferrari.trailead.data.apiservices.UserDao
+import com.aferrari.trailead.data.apiservices.LocalDataSourceDao
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
@@ -19,6 +18,7 @@ import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import javax.inject.Singleton
 
 
 @Database(
@@ -29,6 +29,7 @@ import com.aferrari.trailead.domain.models.YouTubeVideo
     ],
     exportSchema = true
 )
+@Singleton
 abstract class UserDataBase : RoomDatabase() {
 
     @RenameTable(fromTableName = "material_data_table", toTableName = "youtube_video_data_table")
@@ -59,9 +60,7 @@ abstract class UserDataBase : RoomDatabase() {
     )
     class AutoMigration1To2 : AutoMigrationSpec
 
-    abstract val userDao: UserDao
-
-    abstract val materialDao: MaterialDao
+    abstract val localDataSourceDao: LocalDataSourceDao
 
     companion object {
         @Volatile

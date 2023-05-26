@@ -14,22 +14,31 @@ import com.aferrari.trailead.common.StringUtils.JOIN_DEEPLINK
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY
 import com.aferrari.trailead.common.StringUtils.TRAINEE_KEY
 import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.data.db.UserDataBase
+import com.aferrari.trailead.domain.datasource.LocalDataSource
+import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Moved to other package or module
  */
+@AndroidEntryPoint
 class RouterHomeActivity : AppCompatActivity() {
 
     private lateinit var homeViewModel: HomeViewModel
 
+    @Inject
+    lateinit var remoteDataSource: RemoteDataSource
+
+    @Inject
+    lateinit var localDataSource: LocalDataSource
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
-        val dao = UserDataBase.getInstance(this).userDao
-        val repository = UserRepository(dao)
+        val repository = UserRepository(localDataSource, remoteDataSource)
         val factory = HomeViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
         initComponent()
