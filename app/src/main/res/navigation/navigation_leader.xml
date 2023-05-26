@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/leaderHomeFragment"
-        android:name="com.aferrari.trailead.home.view.leader.home.LeaderHomeFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.LeaderHomeFragment"
         android:label="LeaderHomeFragment"
         tools:layout="@layout/leader_home_fragment">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/leaderProfileFragment"
-        android:name="com.aferrari.trailead.home.view.leader.profile.LeaderProfileFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.profile.LeaderProfileFragment"
         android:label="LeaderProfileFragment"
         tools:layout="@layout/leader_profile_fragment">
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/unLinkedTraineeListFragment"
-        android:name="com.aferrari.trailead.home.view.leader.listTrainee.UnLinkedTraineeListFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.listTrainee.UnLinkedTraineeListFragment"
         android:label="UnLinkedTraineeListFragment"
         tools:layout="@layout/unlinked_trainee_list_fragment">
         <action
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/linkedTraineeListFragment"
-        android:name="com.aferrari.trailead.home.view.leader.listTrainee.LinkedTraineeListFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.listTrainee.LinkedTraineeListFragment"
         android:label="LinkedTraineeListFragment"
         tools:layout="@layout/linked_trainee_list_fragment">
         <action
@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/traineeEditRolFragment"
-        android:name="com.aferrari.trailead.home.view.leader.listTrainee.TraineeEditRolFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.listTrainee.TraineeEditRolFragment"
         android:label="TraineeEditRolFragment"
         tools:layout="@layout/linked_trainee_edit_rol_fragment">
         <action
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/leaderEditNameFragment"
-        android:name="com.aferrari.trailead.home.view.leader.profile.LeaderEditNameFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.profile.LeaderEditNameFragment"
         android:label="LeaderEditNameFragment"
         tools:layout="@layout/leader_edit_profile_name_fragment">
         <action
@@ -100,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/leaderEditPassFragment"
-        android:name="com.aferrari.trailead.home.view.leader.profile.LeaderEditPassFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.profile.LeaderEditPassFragment"
         android:label="LeaderEditPassFragment"
         tools:layout="@layout/leader_edit_profile_pass_fragment">
         <action
@@ -109,7 +109,7 @@
     </fragment>
     <fragment
         android:id="@+id/addCategoryFragment"
-        android:name="com.aferrari.trailead.home.view.leader.home.AddCategoryFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.AddCategoryFragment"
         android:label="AddCategoryFragment"
         tools:layout="@layout/leader_add_material_category">
         <action
@@ -118,7 +118,7 @@
     </fragment>
     <fragment
         android:id="@+id/leaderSettingCategoryMaterial"
-        android:name="com.aferrari.trailead.home.view.leader.home.SettingCategoryMaterialFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.SettingCategoryMaterialFragment"
         android:label="LeaderSettingCategoryMaterial"
         tools:layout="@layout/leader_setting_material_category">
         <action
@@ -127,7 +127,7 @@
     </fragment>
     <fragment
         android:id="@+id/leaderMaterialListFragment"
-        android:name="com.aferrari.trailead.home.view.leader.home.LeaderMaterialListFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.LeaderMaterialListFragment"
         android:label="LeaderMaterialListFragment"
         tools:layout="@layout/leader_material_list">
         <action
@@ -151,7 +151,7 @@
     </fragment>
     <fragment
         android:id="@+id/fullScreenVideo"
-        android:name="com.aferrari.trailead.home.view.leader.home.FullScreenVideo"
+        android:name="com.aferrari.trailead.app.ui.leader.home.FullScreenVideo"
         android:label="FullScreenVideo"
         tools:layout="@layout/full_screen_video">
         <action
@@ -160,7 +160,7 @@
     </fragment>
     <fragment
         android:id="@+id/addMaterialFragment"
-        android:name="com.aferrari.trailead.home.view.leader.home.AddMaterialFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.AddMaterialFragment"
         android:label="AddMaterialFragment"
         tools:layout="@layout/leader_add_material">
         <action
@@ -169,7 +169,7 @@
     </fragment>
     <fragment
         android:id="@+id/editMaterialFragment"
-        android:name="com.aferrari.trailead.home.view.leader.home.EditMaterialFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.EditMaterialFragment"
         android:label="EditMaterialFragment"
         tools:layout="@layout/leader_edit_material">
         <action
@@ -178,7 +178,7 @@
     </fragment>
     <fragment
         android:id="@+id/linkMaterialTraineeFragment"
-        android:name="com.aferrari.trailead.home.view.leader.listTrainee.LinkMaterialTraineeFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.listTrainee.LinkMaterialTraineeFragment"
         android:label="LinkMaterialTraineeFragment"
         tools:layout="@layout/link_material_trainee_fragment">
         <action
@@ -187,7 +187,7 @@
     </fragment>
     <fragment
         android:id="@+id/addLinkFragment"
-        android:name="com.aferrari.trailead.home.view.leader.home.AddLinkFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.AddLinkFragment"
         android:label="AddLinkFragment"
         tools:layout="@layout/leader_add_material_link">
         <action
@@ -196,7 +196,7 @@
     </fragment>
     <fragment
         android:id="@+id/editLinkFragment"
-        android:name="com.aferrari.trailead.home.view.leader.home.EditLinkFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.EditLinkFragment"
         android:label="EditLinkFragment"
         tools:layout="@layout/leader_edit_material_link">
         <action

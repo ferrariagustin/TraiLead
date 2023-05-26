@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TraiLead">
         <activity
-            android:name="com.aferrari.trailead.home.SplashActivity"
+            android:name="com.aferrari.trailead.app.ui.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.router.RouterHomeActivity"
+            android:name=".app.ui.RouterHomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.view.trainee.TraineeActivity"
+            android:name=".app.ui.trainee.TraineeActivity"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.view.leader.LeaderActivity"
+            android:name=".app.ui.leader.LeaderActivity"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -53,6 +53,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data
                     android:host="@string/host_leader_home"
+                    android:scheme="@string/scheme_app_name" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.aferrari.trailead.app.ui.login.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="@string/host_login"
                     android:scheme="@string/scheme_app_name" />
             </intent-filter>
         </activity>

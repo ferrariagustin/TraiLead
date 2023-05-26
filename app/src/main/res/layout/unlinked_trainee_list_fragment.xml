@@ -4,7 +4,7 @@
 
         <variable
             name="homeLeaderViewModel"
-            type="com.aferrari.trailead.home.viewmodel.leader.LeaderViewModel" />
+            type="com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

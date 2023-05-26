@@ -4,4 +4,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="traiLead_text" parent="Widget.MaterialComponents.TextView">
+        <item name="android:typeface">sans</item>
+    </style>
+
 </resources>
