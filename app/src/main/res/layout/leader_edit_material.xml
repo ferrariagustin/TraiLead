@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.aferrari.trailead.home.viewmodel.leader.material.EditMaterialViewModel" />
+            type="com.aferrari.trailead.app.viewmodel.leader.material.EditMaterialViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
