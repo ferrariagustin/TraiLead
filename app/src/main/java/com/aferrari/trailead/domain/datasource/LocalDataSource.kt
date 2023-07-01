@@ -1,6 +1,8 @@
 package com.aferrari.trailead.domain.datasource
 
 import com.aferrari.trailead.common.common_enum.Position
+import com.aferrari.trailead.common.common_enum.StatusCode
+import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.LeaderWithTrainee
@@ -70,11 +72,15 @@ interface LocalDataSource {
 
     suspend fun deleteTrainee(trainee: Trainee)
 
-    suspend fun deleteAllLeader()
+    suspend fun deleteAllLeader(): StatusCode
 
-    suspend fun deleteAllTrainee()
+    suspend fun deleteAllTrainee(): StatusCode
 
     suspend fun getLeadersWithTrainee(): List<LeaderWithTrainee>
+
+    suspend fun isEmpty(): Boolean
+
+    suspend fun getUserType(user_id: Int): UserType?
 
     suspend fun getLeader(leader_id: Int): Leader?
 
@@ -92,19 +98,19 @@ interface LocalDataSource {
 
     suspend fun getAllLeader(): List<Leader>
 
-    suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int)
+    suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int): StatusCode
 
     suspend fun getUnlinkedTrainees(): List<Trainee>
 
     suspend fun getLinkedTrainees(leader_id: Int): List<Trainee>
 
-    suspend fun setUnlinkedTrainee(trainee_id: Int)
+    suspend fun setUnlinkedTrainee(trainee_id: Int): StatusCode
 
-    suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position)
+    suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position): StatusCode
 
-    suspend fun updateLeaderName(leaderId: Int, name: String)
+    suspend fun updateLeaderName(leaderId: Int, name: String): StatusCode
 
-    suspend fun updateLeaderLastName(leaderId: Int, lastName: String)
+    suspend fun updateLeaderLastName(leaderId: Int, lastName: String): StatusCode
 
-    suspend fun updateLeaderPassword(leaderId: Int, pass: String)
+    suspend fun updateLeaderPassword(leaderId: Int, pass: String): StatusCode
 }

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.HomeViewModel
 import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
-import com.aferrari.trailead.common.HomeState
+import com.aferrari.trailead.common.UserState
 import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.StringUtils.JOIN_DEEPLINK
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY
@@ -52,9 +52,9 @@ class RouterHomeActivity : AppCompatActivity() {
     private fun initListeners() {
         homeViewModel.homeState.observe(this) {
             when (it) {
-                HomeState.LEADER -> goLeaderScreen()
-                HomeState.TRAINEE -> goTraineeScreen()
-                HomeState.ERROR -> goLoginScreen()
+                UserState.LEADER -> goLeaderScreen()
+                UserState.TRAINEE -> goTraineeScreen()
+                UserState.ERROR -> goLoginScreen()
             }
         }
     }

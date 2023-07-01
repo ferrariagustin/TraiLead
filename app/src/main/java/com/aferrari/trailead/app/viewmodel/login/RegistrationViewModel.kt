@@ -90,7 +90,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
      * Validate if exist the user in DB
      */
     private suspend fun existUser(): Boolean {
-        val result = repository.get(inputEmail.value!!)
+        val result = repository.getUser(inputEmail.value!!)
         Log.e("TRAILEAD", "Register result = $result")
         return result != null
     }

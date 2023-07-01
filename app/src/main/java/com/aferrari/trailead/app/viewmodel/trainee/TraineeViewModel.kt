@@ -44,7 +44,10 @@ class TraineeViewModel(val repository: UserRepository, val materialRepository: M
     private fun getLeaderFromTrainee(leaderId: Int?) {
         viewModelScope.launch {
             if (leaderId != null) {
-                traineeLeader.value = repository.get(leaderId) as? Leader
+                repository.getUser(leaderId)
+                    .collect {
+                        traineeLeader.value = it as? Leader
+                    }
             }
             traineeAssignedLeader.value = getAssignedLeader()
         }

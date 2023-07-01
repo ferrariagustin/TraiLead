@@ -48,7 +48,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     private fun getUser(inputEmail: String, inputPass: String) {
         viewModelScope.launch {
-            when (val user = repository.get(inputEmail, inputPass)) {
+            when (val user = repository.getUser(inputEmail, inputPass)) {
                 null -> failedLogin()
                 else -> goLogin(user)
             }
@@ -73,10 +73,13 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
      */
     fun getUser(userId: Int) {
         viewModelScope.launch {
-            when (val user = repository.get(userId)) {
-                null -> failedLogin()
-                else -> goLogin(user)
-            }
+            repository.getUser(userId)
+                .collect {
+                    when (it) {
+                        null -> failedLogin()
+                        else -> goLogin(it)
+                    }
+                }
         }
     }
 

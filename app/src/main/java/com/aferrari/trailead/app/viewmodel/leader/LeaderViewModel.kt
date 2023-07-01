@@ -144,7 +144,10 @@ open class LeaderViewModel(
             radioRolCheck?.let { position ->
                 viewModelScope.launch {
                     repository.updateTraineePosition(trainee, position)
-                    traineeSelected = repository.get(trainee.id) as Trainee
+                    repository.getUser(trainee.id)
+                        .collect {
+                            traineeSelected = it as Trainee
+                        }
                     statusUpdateTraineeRol.value = StatusUpdateInformation.SUCCESS
                 }
                 return
@@ -185,7 +188,10 @@ open class LeaderViewModel(
     private fun updatePassword(leaderId: Int, pass: String) {
         viewModelScope.launch {
             repository.updateLeaderPass(leaderId, pass)
-            setLeader(repository.get(leaderId) as Leader)
+            repository.getUser(leaderId)
+                .collect {
+                    setLeader(it as Leader)
+                }
             statusUpdatePassword.value = StatusUpdateInformation.SUCCESS
         }
     }

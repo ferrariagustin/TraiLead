@@ -2,11 +2,14 @@ package com.aferrari.trailead.domain.repository
 
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
+import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.User
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class UserRepository(
     private val localDataSource: LocalDataSource,
@@ -28,19 +31,61 @@ class UserRepository(
         }
     }
 
-    suspend fun get(user_id: Int): User? {
-        localDataSource.getLeader(user_id).apply {
-            if (this == null) {
-                localDataSource.getTrainee(user_id).let {
-                    return it
+//    suspend fun getUser(user_id: Int): User? {
+//        val resultFlow = remoteDataSource.getLeader(leader_id = user_id)
+//        resultFlow.collect() {
+//            Log.e("LOGIN", "result flow")
+//        }
+//        localDataSource.getLeader(user_id).apply {
+//            if (this == null) {
+//                localDataSource.getTrainee(user_id).let {
+//                    return it
+//                }
+//            } else {
+//                return this
+//            }
+//        }
+//    }
+
+    fun getUser(user_id: Int): Flow<User?> = flow {
+        if (localDataSource.isEmpty()) {
+            remoteDataSource.getUserType(user_id)
+                .collect { userType ->
+                    when (userType) {
+                        UserType.LEADER -> {
+                            remoteDataSource.getLeader(user_id)
+                                ?.let { localDataSource.insertLeader(it) }
+                        }
+
+                        UserType.TRAINEE -> {
+                            remoteDataSource.getTrainee(user_id)
+                                ?.let { localDataSource.insertTrainee(it) }
+                        }
+
+                        else -> {
+                            emit(null)
+                            return@collect
+                        }
+                    }
                 }
-            } else {
-                return this
+        }
+        when (localDataSource.getUserType(user_id)) {
+            UserType.LEADER -> {
+                emit(localDataSource.getLeader(user_id))
+            }
+
+            UserType.TRAINEE -> {
+                emit(localDataSource.getTrainee(user_id))
+            }
+
+            else -> {
+                emit(null)
             }
         }
+
     }
 
-    suspend fun get(user_email: String): User? {
+    suspend fun getUser(user_email: String): User? {
         localDataSource.getLeader(user_email).apply {
             if (this == null) {
                 localDataSource.getTrainee(user_email).let {
@@ -52,7 +97,7 @@ class UserRepository(
         }
     }
 
-    suspend fun get(user_email: String, user_pass: String): User? {
+    suspend fun getUser(user_email: String, user_pass: String): User? {
         localDataSource.getLeader(user_email, user_pass).apply {
             if (this == null) {
                 localDataSource.getTrainee(user_email, user_pass).let {
@@ -65,7 +110,7 @@ class UserRepository(
     }
 
     suspend fun insertLeader(leader: Leader): Long {
-        if (get(leader.email) != null) {
+        if (getUser(leader.email) != null) {
             // Return duplicate when exist email on db
             return StatusCode.DUPLICATE.value
         }
@@ -79,7 +124,7 @@ class UserRepository(
 
 
     suspend fun insertTrainee(trainee: Trainee): Long {
-        if (get(trainee.email) != null) {
+        if (getUser(trainee.email) != null) {
             // Return duplicate when exist email on db
             return StatusCode.DUPLICATE.value
         }

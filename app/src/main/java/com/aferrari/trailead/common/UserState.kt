@@ -1,5 +1,5 @@
 package com.aferrari.trailead.common
 
-enum class HomeState {
+enum class UserState {
     LEADER, TRAINEE, ERROR
 }

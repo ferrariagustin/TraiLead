@@ -3,6 +3,7 @@ package com.aferrari.trailead.data
 import android.util.Log
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
+import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.data.db.FirebaseDataBase
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
@@ -18,6 +19,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -172,8 +178,38 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getLeader(leader_id: Int): Leader? {
-        TODO("Not yet implemented")
+    override suspend fun getUserType(user_id: Int): Flow<UserType?> = flow {
+        val leader = getLeader(user_id)
+        if (leader != null) {
+            emit(leader.userType)
+            return@flow
+        }
+        val trainee = getTrainee(user_id)
+        if (trainee != null) {
+            emit(trainee.userType)
+            return@flow
+        }
+        emit(null)
+        return@flow
+    }
+
+    override suspend fun getLeader(leader_id: Int): Leader? = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+
+        if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            val leaders = hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Leader::class.java)
+            }.filter { it.id == leader_id }
+            if (leaders.isNotEmpty()) {
+                leaders[0]
+            } else {
+                null
+            }
+        } else {
+            null
+        }
     }
 
     override suspend fun getLeader(user_email: String, user_pass: String): Leader? {
@@ -184,8 +220,23 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getTrainee(trainee_id: Int): Trainee? {
-        TODO("Not yet implemented")
+    override suspend fun getTrainee(trainee_id: Int): Trainee? = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+
+        if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            val trainees = hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+            }.filter { it.id == trainee_id }
+            if (trainees.isNotEmpty()) {
+                trainees[0]
+            } else {
+                null
+            }
+        } else {
+            null
+        }
     }
 
     override suspend fun getTrainee(user_email: String, user_pass: String): Trainee? {
@@ -198,7 +249,8 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
     override suspend fun getAllTrainee(): List<Trainee> {
         return suspendCoroutine { continuation ->
-            FirebaseDataBase.database?.addListenerForSingleValueEvent(object : ValueEventListener {
+            FirebaseDataBase.database?.addListenerForSingleValueEvent(object :
+                ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val traineeList = mutableListOf<Trainee>()
                     if (dataSnapshot.exists()) {
@@ -349,7 +401,8 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
     override suspend fun getAllLeader(): List<Leader> {
         return suspendCoroutine { continuation ->
-            FirebaseDataBase.database?.addListenerForSingleValueEvent(object : ValueEventListener {
+            FirebaseDataBase.database?.addListenerForSingleValueEvent(object :
+                ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val leaderList = mutableListOf<Leader>()
                     if (dataSnapshot.exists()) {
