@@ -40,8 +40,17 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo> {
-        TODO("Not yet implemented")
+    override suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo> = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        var youtubeVideosList = mutableListOf<YouTubeVideo>()
+        if (dataSnapshot?.key == YouTubeVideo::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            youtubeVideosList.addAll(hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), YouTubeVideo::class.java)
+            }.filter { it.leaderMaterialId == leaderId })
+        }
+        youtubeVideosList
     }
 
     override suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) {
@@ -77,9 +86,19 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         resultCode
     }
 
-    override suspend fun getAllCategory(leaderId: Int): List<Category> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getAllCategory(leaderId: Int): List<Category> =
+        withContext(Dispatchers.IO) {
+            val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
+            val dataSnapshot = reference?.get()?.await()
+            var categories = mutableListOf<Category>()
+            if (dataSnapshot?.key == Category::class.simpleName.toString()) {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                categories.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Category::class.java)
+                }.filter { it.leaderCategoryId == leaderId })
+            }
+            categories
+        }
 
     override suspend fun deleteCategory(category: Category) {
         TODO("Not yet implemented")
@@ -118,8 +137,17 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAllLink(leaderId: Int): List<Link> {
-        TODO("Not yet implemented")
+    override suspend fun getAllLink(leaderId: Int): List<Link> = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        var links = mutableListOf<Link>()
+        if (dataSnapshot?.key == Link::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            links.addAll(hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Link::class.java)
+            }.filter { it.leaderMaterialId == leaderId })
+        }
+        links
     }
 
     override suspend fun updateUrlLink(linkId: Int, link: String) {
