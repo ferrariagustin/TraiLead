@@ -1,6 +1,5 @@
 package com.aferrari.trailead.data
 
-import android.util.Log
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -15,8 +14,6 @@ import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -24,14 +21,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
-    override suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(newYouTubeVideo.id.toString())?.setValue(newYouTubeVideo)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo> {
         TODO("Not yet implemented")
@@ -56,8 +63,18 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertCategory(category: Category) {
-        TODO("Not yet implemented")
+    override suspend fun insertCategory(category: Category): Long = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
+        var resultCode: Long = StatusCode.ERROR.value
+        reference?.child(category.id.toString())?.setValue(category)
+            ?.addOnCompleteListener { task ->
+                resultCode = if (task.isSuccessful) {
+                    StatusCode.SUCCESS.value
+                } else {
+                    StatusCode.ERROR.value
+                }
+            }?.await()
+        resultCode
     }
 
     override suspend fun getAllCategory(leaderId: Int): List<Category> {
@@ -84,8 +101,17 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertLink(link: Link) {
-        TODO("Not yet implemented")
+    override suspend fun insertLink(link: Link): Long = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
+        var resultCode: Long = StatusCode.ERROR.value
+        reference?.child(link.id.toString())?.setValue(link)?.addOnCompleteListener { task ->
+            resultCode = if (task.isSuccessful) {
+                StatusCode.SUCCESS.value
+            } else {
+                StatusCode.ERROR.value
+            }
+        }?.await()
+        resultCode
     }
 
     override suspend fun deleteLink(link: Link) {
@@ -108,38 +134,45 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertLeader(leader: Leader): Long {
-        return suspendCoroutine { continuation ->
-            FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
-                ?.child(leader.id.toString())
-                ?.setValue(leader)?.addOnCompleteListener { task ->
-                    val resultCode = if (task.isSuccessful) {
-                        StatusCode.SUCCESS.value
-                    } else {
-                        StatusCode.ERROR.value
-                    }
-                    continuation.resume(resultCode)
-                }
-        }
+    override suspend fun insertLeader(leader: Leader): Long = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+        var resultCode: Long = StatusCode.ERROR.value
+        reference?.child(leader.id.toString())?.setValue(leader)?.addOnCompleteListener { task ->
+            resultCode = if (task.isSuccessful) {
+                StatusCode.SUCCESS.value
+            } else {
+                StatusCode.ERROR.value
+            }
+        }?.await()
+        resultCode
     }
 
-    override suspend fun insertTrainee(trainee: Trainee): Long {
-        return suspendCoroutine { continuation ->
-            FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
-                ?.child(trainee.id.toString())
-                ?.setValue(trainee)?.addOnCompleteListener { task ->
-                    val resultCode = if (task.isSuccessful) {
-                        StatusCode.SUCCESS.value
-                    } else {
-                        StatusCode.ERROR.value
-                    }
-                    continuation.resume(resultCode)
-                }
-        }
+    override suspend fun insertTrainee(trainee: Trainee): Long = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+        var resultCode: Long = StatusCode.ERROR.value
+        reference?.child(trainee.id.toString())?.setValue(trainee)?.addOnCompleteListener { task ->
+            resultCode = if (task.isSuccessful) {
+                StatusCode.SUCCESS.value
+            } else {
+                StatusCode.ERROR.value
+            }
+        }?.await()
+        resultCode
     }
 
-    override suspend fun updateLeader(leader: Leader) {
-        TODO("Not yet implemented")
+    override suspend fun updateLeader(leader: Leader): Long = withContext(Dispatchers.IO) {
+        TODO("Buscar como actualizar un valor")
+//        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+//        var resultCode: Long = StatusCode.ERROR.value
+//        reference?.child(leader.id.toString())?.updateChildren(leader)
+//            ?.addOnCompleteListener { task ->
+//                resultCode = if (task.isSuccessful) {
+//                    StatusCode.SUCCESS.value
+//                } else {
+//                    StatusCode.ERROR.value
+//                }
+//            }?.await()
+//        resultCode
     }
 
     override suspend fun updateTrainee(trainee: Trainee) {
@@ -197,6 +230,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
 
+
         if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
             val hashMapValues = dataSnapshot.value as HashMap<String, Object>
             val leaders = hashMapValues.values.map {
@@ -213,11 +247,43 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     }
 
     override suspend fun getLeader(user_email: String, user_pass: String): Leader? {
-        TODO("Not yet implemented")
+        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+
+        if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            val leaders = hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Leader::class.java)
+            }.filter { it.email == user_email && it.pass == user_pass }
+            if (leaders.isNotEmpty()) {
+                return leaders[0]
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+        return null
     }
 
     override suspend fun getLeader(leader_email: String): Leader? {
-        TODO("Not yet implemented")
+        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+
+        if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            val leaders = hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Leader::class.java)
+            }.filter { it.email == leader_email }
+            if (leaders.isNotEmpty()) {
+                return leaders[0]
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+        return null
     }
 
     override suspend fun getTrainee(trainee_id: Int): Trainee? = withContext(Dispatchers.IO) {
@@ -240,92 +306,59 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     }
 
     override suspend fun getTrainee(user_email: String, user_pass: String): Trainee? {
-        TODO("Not yet implemented")
+        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+
+        if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            val trainees = hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+            }.filter { it.email == user_email && it.pass == user_pass }
+            if (trainees.isNotEmpty()) {
+                return trainees[0]
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+        return null
     }
 
     override suspend fun getTrainee(trainee_email: String): Trainee? {
-        TODO("Not yet implemented")
+        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+
+        if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            val trainees = hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+            }.filter { it.email == trainee_email }
+            if (trainees.isNotEmpty()) {
+                return trainees[0]
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+        return null
     }
 
     override suspend fun getAllTrainee(): List<Trainee> {
-        return suspendCoroutine { continuation ->
-            FirebaseDataBase.database?.addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val traineeList = mutableListOf<Trainee>()
-                    if (dataSnapshot.exists()) {
-                        // Recorre todos los hijos (objetos) de la referencia
-                        for (childSnapshot in dataSnapshot.children) {
-                            // Obtén los datos del objeto actual
-                            if (childSnapshot.key == Trainee::class.java.simpleName) {
-                                val traineeHashMap =
-                                    (childSnapshot.value as HashMap<String, Object>).values
+        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        val traineeList = mutableListOf<Trainee>()
 
-                                // Convierte el HashMap en un objeto User utilizando Gson
-                                traineeHashMap.forEach {
-                                    val gson = Gson()
-                                    val traineeJson = gson.toJson(it)
-                                    val trainee: Trainee =
-                                        gson.fromJson(traineeJson, Trainee::class.java)
-                                    traineeList.add(trainee)
-                                }
-                            }
-                        }
-                    }
-                    continuation.resume(traineeList)
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // El método onCancelled se llama si ocurre algún error en la consulta
-                    Log.e("Firebase", "Error al obtener los datos: " + databaseError.message)
-                    continuation.resume(emptyList())
-                }
-
+        if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            traineeList.addAll(hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
             })
         }
+        return traineeList
     }
 
-    private suspend fun uploadLeader(
-        childSnapshot: DataSnapshot,
-        localDataSource: LocalDataSource
-    ) {
-        if (childSnapshot.key == Leader::class.java.simpleName) {
-            val leaderHashMap =
-                (childSnapshot.value as HashMap<String, Object>).values
-
-            // Convierte el HashMap en un objeto User utilizando Gson
-            leaderHashMap.forEach {
-                val gson = Gson()
-                val leaderJson = gson.toJson(it)
-                val leader: Leader =
-                    gson.fromJson(leaderJson, Leader::class.java)
-                if (localDataSource.getLeader(leader.email) != null) {
-                    localDataSource.insertLeader(leader)
-                }
-            }
-        }
-    }
-
-    private suspend fun uploadTrainee(
-        childSnapshot: DataSnapshot,
-        localDataSource: LocalDataSource
-    ) {
-        if (childSnapshot.key == Trainee::class.java.simpleName) {
-            val leaderHashMap =
-                (childSnapshot.value as HashMap<String, Object>).values
-
-            // Convierte el HashMap en un objeto User utilizando Gson
-            leaderHashMap.forEach {
-                val gson = Gson()
-                val traineeJson = gson.toJson(it)
-                val trainee: Trainee =
-                    gson.fromJson(traineeJson, Trainee::class.java)
-                if (localDataSource.getLeader(trainee.email) != null) {
-                    localDataSource.insertTrainee(trainee)
-                }
-            }
-        }
-    }
 
     private suspend fun uploadLink(
         childSnapshot: DataSnapshot,
@@ -400,41 +433,17 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     }
 
     override suspend fun getAllLeader(): List<Leader> {
-        return suspendCoroutine { continuation ->
-            FirebaseDataBase.database?.addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val leaderList = mutableListOf<Leader>()
-                    if (dataSnapshot.exists()) {
-                        // Recorre todos los hijos (objetos) de la referencia
-                        for (childSnapshot in dataSnapshot.children) {
-                            // Obtén los datos del objeto actual
-                            if (childSnapshot.key == Leader::class.java.simpleName) {
-                                val leaderHashMap =
-                                    (childSnapshot.value as HashMap<String, Object>).values
+        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        val leaderList = mutableListOf<Leader>()
 
-                                // Convierte el HashMap en un objeto User utilizando Gson
-                                leaderHashMap.forEach {
-                                    val gson = Gson()
-                                    val leaderJson = gson.toJson(it)
-                                    val leader: Leader =
-                                        gson.fromJson(leaderJson, Leader::class.java)
-                                    leaderList.add(leader)
-                                }
-                            }
-                        }
-                    }
-                    continuation.resume(leaderList)
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // El método onCancelled se llama si ocurre algún error en la consulta
-                    Log.e("Firebase", "Error al obtener los datos: " + databaseError.message)
-                    continuation.resume(emptyList())
-                }
-
+        if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            leaderList.addAll(hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Leader::class.java)
             })
         }
+        return leaderList
     }
 
     override suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int) {
