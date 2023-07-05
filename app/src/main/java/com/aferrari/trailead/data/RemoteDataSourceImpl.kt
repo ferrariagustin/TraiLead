@@ -4,7 +4,6 @@ import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.data.db.FirebaseDataBase
-import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
@@ -13,7 +12,6 @@ import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
-import com.google.firebase.database.DataSnapshot
 import com.google.gson.Gson
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -40,18 +38,20 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo> = withContext(Dispatchers.IO) {
-        val reference = FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
-        val dataSnapshot = reference?.get()?.await()
-        var youtubeVideosList = mutableListOf<YouTubeVideo>()
-        if (dataSnapshot?.key == YouTubeVideo::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            youtubeVideosList.addAll(hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), YouTubeVideo::class.java)
-            }.filter { it.leaderMaterialId == leaderId })
+    override suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo> =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
+            val dataSnapshot = reference?.get()?.await()
+            var youtubeVideosList = mutableListOf<YouTubeVideo>()
+            if (dataSnapshot?.key == YouTubeVideo::class.simpleName.toString()) {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                youtubeVideosList.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), YouTubeVideo::class.java)
+                }.filter { it.leaderMaterialId == leaderId })
+            }
+            youtubeVideosList
         }
-        youtubeVideosList
-    }
 
     override suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) {
         TODO("Not yet implemented")
@@ -158,9 +158,19 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getLinkByCategory(leaderId: Int, categoryId: Int): List<Link> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getLinkByCategory(leaderId: Int, categoryId: Int): List<Link> =
+        withContext(Dispatchers.IO) {
+            val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
+            val dataSnapshot = reference?.get()?.await()
+            var links = mutableListOf<Link>()
+            if (dataSnapshot?.key == Link::class.simpleName.toString()) {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                links.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Link::class.java)
+                }.filter { it.leaderMaterialId == leaderId && it.categoryId == categoryId })
+            }
+            links
+        }
 
     override suspend fun insertLeader(leader: Leader): Long = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
@@ -388,78 +398,6 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     }
 
 
-    private suspend fun uploadLink(
-        childSnapshot: DataSnapshot,
-        localDataSource: LocalDataSource
-    ) {
-        if (childSnapshot.key == Link::class.java.simpleName) {
-            val leaderHashMap =
-                (childSnapshot.value as HashMap<String, Object>).values
-
-            // Convierte el HashMap en un objeto User utilizando Gson
-            leaderHashMap.forEach {
-                val gson = Gson()
-                val linkJson = gson.toJson(it)
-                val link: Link =
-                    gson.fromJson(linkJson, Link::class.java)
-                if (localDataSource.getLeader(link.id) != null) {
-                    localDataSource.insertLink(link)
-                }
-            }
-        }
-    }
-
-    private suspend fun uploadYouTubeVideo(
-        childSnapshot: DataSnapshot,
-        localDataSource: LocalDataSource
-    ) {
-        if (childSnapshot.key == YouTubeVideo::class.java.simpleName) {
-            val leaderHashMap =
-                (childSnapshot.value as HashMap<String, Object>).values
-
-            // Convierte el HashMap en un objeto User utilizando Gson
-            leaderHashMap.forEach {
-                val gson = Gson()
-                val youtubeVideoJson = gson.toJson(it)
-                val youTubeVideo: YouTubeVideo =
-                    gson.fromJson(youtubeVideoJson, YouTubeVideo::class.java)
-                suspend {
-                    youTubeVideo.categoryId?.let { categoryId ->
-                        if (!localDataSource.getYoutubeVideoByCategory(
-                                youTubeVideo.leaderMaterialId,
-                                categoryId
-                            ).contains(youTubeVideo)
-                        ) {
-                            localDataSource.insertYouTubeVideo(youTubeVideo)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // TODO: Resolved List
-    private fun uploadAllCategoryFromTrainee(
-        childSnapshot: DataSnapshot,
-        localDataSource: LocalDataSource
-    ) {
-        if (childSnapshot.key == TraineeCategoryJoin::class.java.simpleName) {
-            val leaderHashMap =
-                (childSnapshot.value as HashMap<String, List<Object>>).values
-
-            // Convierte el HashMap en un objeto User utilizando Gson
-            leaderHashMap.forEach {
-                val gson = Gson()
-                val traineCategoryJoinJson = gson.toJson(it)
-                val traineeCategoryJoin =
-                    gson.fromJson(traineCategoryJoinJson, TraineeCategoryJoin::class.java)
-                suspend {
-//                    localDataSource.insertAllCategoryFromTrainee(traineeCategoryJoin)
-                }
-            }
-        }
-    }
-
     override suspend fun getAllLeader(): List<Leader> {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
@@ -478,13 +416,32 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getUnlinkedTrainees(): List<Trainee> {
-        TODO("Not yet implemented")
+    override suspend fun getUnlinkedTrainees(): List<Trainee> = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        var unLinkedTraineeList = mutableListOf<Trainee>()
+        if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
+            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+            unLinkedTraineeList.addAll(hashMapValues.values.map {
+                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+            }.filter { it.leaderId == null })
+        }
+        unLinkedTraineeList
     }
 
-    override suspend fun getLinkedTrainees(leader_id: Int): List<Trainee> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getLinkedTrainees(leader_id: Int): List<Trainee> =
+        withContext(Dispatchers.IO) {
+            val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            val dataSnapshot = reference?.get()?.await()
+            var unLinkedTraineeList = mutableListOf<Trainee>()
+            if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                unLinkedTraineeList.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+                }.filter { it.leaderId == leader_id })
+            }
+            unLinkedTraineeList
+        }
 
     override suspend fun setUnlinkedTrainee(trainee_id: Int) {
         TODO("Not yet implemented")
