@@ -150,13 +150,37 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         links
     }
 
-    override suspend fun updateUrlLink(linkId: Int, link: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateUrlLink(linkId: Int, link: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(linkId.toString())?.child(Link::url.name)
+                ?.setValue(link)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun updateTitleLink(linkId: Int, newTitle: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateTitleLink(linkId: Int, newTitle: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(linkId.toString())?.child(Link::title.name)
+                ?.setValue(newTitle)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun getLinkByCategory(leaderId: Int, categoryId: Int): List<Link> =
         withContext(Dispatchers.IO) {
@@ -198,36 +222,77 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         resultCode
     }
 
+    // TODO: Entender que es updateLeader, que tengo que actualizar? tengo que actualizar el userId tambien o todos los campos
+    // Podría usar los métodos para actualizar campos directamente ?
     override suspend fun updateLeader(leader: Leader): Long = withContext(Dispatchers.IO) {
-        TODO("Buscar como actualizar un valor")
-//        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
-//        var resultCode: Long = StatusCode.ERROR.value
-//        reference?.child(leader.id.toString())?.updateChildren(leader)
-//            ?.addOnCompleteListener { task ->
-//                resultCode = if (task.isSuccessful) {
-//                    StatusCode.SUCCESS.value
-//                } else {
-//                    StatusCode.ERROR.value
-//                }
-//            }?.await()
-//        resultCode
+        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+        var resultCode: Long = StatusCode.ERROR.value
+        reference?.child(leader.id.toString())?.child(Trainee::name.name)
+            ?.setValue(leader.name)
+            ?.addOnCompleteListener { task ->
+                resultCode = if (task.isSuccessful) {
+                    StatusCode.SUCCESS.value
+                } else {
+                    StatusCode.ERROR.value
+                }
+            }?.await()
+        resultCode
     }
 
     override suspend fun updateTrainee(trainee: Trainee) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateTraineeName(idTrainee: Int, name: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateTraineeName(idTrainee: Int, name: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(idTrainee.toString())?.child(Trainee::name.name)
+                ?.setValue(name)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun updateTraineeLastName(idTrainee: Int, lastName: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateTraineeLastName(idTrainee: Int, lastName: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(idTrainee.toString())?.child(Trainee::lastName.name)
+                ?.setValue(lastName)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun updateTraineePassword(password: String, idTrainee: Int) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateTraineePassword(idTrainee: Int, pass: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(idTrainee.toString())?.child(Trainee::pass.name)
+                ?.setValue(pass)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun deleteLeader(leader: Leader) {
         TODO("Not yet implemented")
@@ -447,19 +512,71 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(trainee_id.toString())?.child(Trainee::position.name)
+                ?.setValue(trainee_position)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun updateLeaderName(leaderId: Int, name: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateLeaderName(leaderId: Int, name: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(leaderId.toString())?.child(Leader::name.name)
+                ?.setValue(name)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun updateLeaderLastName(leaderId: Int, lastName: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateLeaderLastName(leaderId: Int, lastName: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(leaderId.toString())?.child(Leader::lastName.name)
+                ?.setValue(lastName)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun updateLeaderPassword(leaderId: Int, pass: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateLeaderPassword(leaderId: Int, pass: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(leaderId.toString())?.child(Leader::pass.name)
+                ?.setValue(pass)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 }

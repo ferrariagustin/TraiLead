@@ -136,11 +136,19 @@ class UserRepository(
         return result
     }
 
-    suspend fun updateTraineeName(idTrainee: Int, name: String) =
-        localDataSource.updateTraineeName(idTrainee, name)
+    suspend fun updateTraineeName(idTrainee: Int, name: String) {
+        val result = remoteDataSource.updateTraineeName(idTrainee, name)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateTraineeName(idTrainee, name)
+        }
+    }
 
-    suspend fun updateTraineeLastName(idTrainee: Int, lastName: String) =
-        localDataSource.updateTraineeLastName(idTrainee, lastName)
+    suspend fun updateTraineeLastName(idTrainee: Int, lastName: String) {
+        val result = remoteDataSource.updateTraineeLastName(idTrainee, lastName)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateTraineeLastName(idTrainee, lastName)
+        }
+    }
 
     suspend fun deleteTrainee(trainee: Trainee) {
         localDataSource.deleteTrainee(trainee)
@@ -160,18 +168,38 @@ class UserRepository(
     suspend fun setUnlinkedTrainee(trainee: Trainee) =
         localDataSource.setUnlinkedTrainee(trainee.id)
 
-    suspend fun updateTraineePassword(password: String, id: Int) =
-        localDataSource.updateTraineePassword(password, id)
+    suspend fun updateTraineePassword(password: String, traineeId: Int) {
+        val result = remoteDataSource.updateTraineePassword(traineeId, password)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateTraineePassword(traineeId, password)
+        }
+    }
 
-    suspend fun updateTraineePosition(trainee: Trainee, position: Position) =
-        localDataSource.updateTraineePosition(trainee.id, position)
+    suspend fun updateTraineePosition(trainee: Trainee, position: Position) {
+        val result = remoteDataSource.updateTraineePosition(trainee.id, position)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateTraineePosition(trainee.id, position)
+        }
+    }
 
-    suspend fun updateLeaderName(leaderId: Int, name: String) =
-        localDataSource.updateLeaderName(leaderId, name)
+    suspend fun updateLeaderName(leaderId: Int, name: String) {
+        val result = remoteDataSource.updateLeaderName(leaderId, name)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateLeaderName(leaderId, name)
+        }
+    }
 
-    suspend fun updateLeaderLastName(leaderId: Int, lastName: String) =
-        localDataSource.updateLeaderLastName(leaderId, lastName)
+    suspend fun updateLeaderLastName(leaderId: Int, lastName: String) {
+        val result = remoteDataSource.updateLeaderLastName(leaderId, lastName)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateLeaderLastName(leaderId, lastName)
+        }
+    }
 
-    suspend fun updateLeaderPass(leaderId: Int, pass: String) =
-        localDataSource.updateLeaderPassword(leaderId, pass)
+    suspend fun updateLeaderPass(leaderId: Int, pass: String) {
+        val result = remoteDataSource.updateLeaderPassword(leaderId, pass)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateLeaderPassword(leaderId, pass)
+        }
+    }
 }

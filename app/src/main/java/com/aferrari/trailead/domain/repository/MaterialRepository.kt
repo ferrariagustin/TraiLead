@@ -1,5 +1,6 @@
 package com.aferrari.trailead.domain.repository
 
+import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Category
@@ -33,11 +34,19 @@ class MaterialRepository(
     //  Link
     suspend fun insertLink(link: Link) = localDataSource.insertLink(link)
 
-    suspend fun updateTitleLink(linkId: Int, newTitle: String) =
-        localDataSource.updateTitleLink(linkId, newTitle)
+    suspend fun updateTitleLink(linkId: Int, newTitle: String) {
+        val result = remoteDataSource.updateTitleLink(linkId, newTitle)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateTitleLink(linkId, newTitle)
+        }
+    }
 
-    suspend fun updateUrlLink(linkId: Int, newUrl: String) =
-        localDataSource.updateUrlLink(linkId, newUrl)
+    suspend fun updateUrlLink(linkId: Int, newUrl: String) {
+        val result = remoteDataSource.updateUrlLink(linkId, newUrl)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateUrlLink(linkId, newUrl)
+        }
+    }
 
     suspend fun getAllLink(leader: Leader) = localDataSource.getAllLink(leader.id)
 

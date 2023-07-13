@@ -86,7 +86,7 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
     override suspend fun updateTraineeLastName(idTrainee: Int, lastName: String) =
         localDataBase.updateTraineeLastName(idTrainee, lastName)
 
-    override suspend fun updateTraineePassword(password: String, idTrainee: Int) =
+    override suspend fun updateTraineePassword(idTrainee: Int, password: String) =
         localDataBase.updateTraineePassword(password, idTrainee)
 
     override suspend fun deleteLeader(leader: Leader) = localDataBase.deleteLeader(leader)
