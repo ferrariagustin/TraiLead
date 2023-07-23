@@ -32,7 +32,12 @@ class MaterialRepository(
         localDataSource.getYoutubeVideoByCategory(leaderId, categoryId)
 
     //  Link
-    suspend fun insertLink(link: Link) = localDataSource.insertLink(link)
+    suspend fun insertLink(link: Link) {
+        val result = remoteDataSource.insertLink(link)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.insertLink(link)
+        }
+    }
 
     suspend fun updateTitleLink(linkId: Int, newTitle: String) {
         val result = remoteDataSource.updateTitleLink(linkId, newTitle)

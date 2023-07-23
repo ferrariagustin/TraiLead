@@ -1,6 +1,7 @@
 package com.aferrari.trailead.app.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.common.UserState
@@ -9,7 +10,10 @@ import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val repository: UserRepository) : ViewModel() {
+class HomeViewModel(
+    private val repository: UserRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
     var user: User? = null
     var homeState = MutableLiveData<UserState>()
 

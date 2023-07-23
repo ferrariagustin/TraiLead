@@ -1,6 +1,7 @@
 package com.aferrari.trailead.app.viewmodel.trainee
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.domain.models.Leader
@@ -11,7 +12,11 @@ import com.aferrari.trailead.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.launch
 
-class TraineeViewModel(val repository: UserRepository, val materialRepository: MaterialRepository) :
+class TraineeViewModel(
+    val repository: UserRepository,
+    val materialRepository: MaterialRepository,
+    private val savedStateHandle: SavedStateHandle
+) :
     ViewModel() {
 
     private lateinit var trainee: Trainee

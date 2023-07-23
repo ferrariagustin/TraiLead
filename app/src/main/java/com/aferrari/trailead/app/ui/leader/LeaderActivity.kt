@@ -33,8 +33,6 @@ class LeaderActivity : AppCompatActivity() {
     lateinit var binding: LeaderActivityBinding
 
     private lateinit var leaderViewModel: LeaderViewModel
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.leader_activity)
@@ -46,6 +44,11 @@ class LeaderActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initComponent()
         initListener()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        leaderViewModel.restoreState()
     }
 
     private fun initComponent() {

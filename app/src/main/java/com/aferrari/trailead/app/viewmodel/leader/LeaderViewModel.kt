@@ -2,6 +2,7 @@ package com.aferrari.trailead.app.viewmodel.leader
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.IMaterial
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 
 open class LeaderViewModel(
     val repository: UserRepository,
-    val materialRepository: MaterialRepository
+    val materialRepository: MaterialRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel(), IMaterial {
     private lateinit var leader: Leader
 
@@ -83,6 +85,23 @@ open class LeaderViewModel(
             emailUser.value = leader.email
             passUser.value = leader.pass
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        saveState()
+    }
+
+    private fun saveState() {
+        savedStateHandle[CATEGORY_SELECTED] = categorySelected
+        savedStateHandle[TRAINEE_SELECTED] = traineeSelected
+        savedStateHandle[MATERIAL_SELECTED] = materialSelected
+    }
+
+    fun restoreState() {
+        categorySelected = savedStateHandle[CATEGORY_SELECTED]
+        traineeSelected = savedStateHandle[TRAINEE_SELECTED]
+        materialSelected = savedStateHandle[MATERIAL_SELECTED]
     }
 
     fun getLeaderId() = leader.id
@@ -378,5 +397,11 @@ open class LeaderViewModel(
             if (it.name == category) return it
         }
         return null
+    }
+
+    private companion object {
+        const val CATEGORY_SELECTED = "categorySelected"
+        const val TRAINEE_SELECTED = "traineeSelected"
+        const val MATERIAL_SELECTED = "materialSelected"
     }
 }
