@@ -59,7 +59,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String) {
+    override suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String): Long {
         TODO("Not yet implemented")
     }
 
@@ -108,9 +108,21 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateCategory(categoryId: Int, categoryName: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateCategory(categoryId: Int, categoryName: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(categoryId.toString())?.child(Category::name.name)
+                ?.setValue(categoryName)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>) {
         TODO("Not yet implemented")
