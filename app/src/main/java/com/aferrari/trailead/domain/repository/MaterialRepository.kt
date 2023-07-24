@@ -14,10 +14,14 @@ class MaterialRepository(
     private val remoteDataSource: RemoteDataSource
 ) {
     //  Video
-    suspend fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) =
-        localDataSource.insertYouTubeVideo(newYouTubeVideo)
+    suspend fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) {
+        val result = remoteDataSource.insertYouTubeVideo(newYouTubeVideo)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.insertYouTubeVideo(newYouTubeVideo)
+        }
+    }
 
-    suspend fun getAllYoutubeVideo(leader: Leader) = localDataSource.getAllYoutubeVideo(leader.id)
+    suspend fun getAllYoutubeVideo(leader: Leader) = remoteDataSource.getAllYoutubeVideo(leader.id)
 
     suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) =
         localDataSource.deleteYoutubeVideo(youTubeVideo)
@@ -53,7 +57,7 @@ class MaterialRepository(
         }
     }
 
-    suspend fun getAllLink(leader: Leader) = localDataSource.getAllLink(leader.id)
+    suspend fun getAllLink(leader: Leader) = remoteDataSource.getAllLink(leader.id)
 
     suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =
         localDataSource.getLinkByCategory(leaderId, categoryId)
@@ -61,9 +65,14 @@ class MaterialRepository(
     suspend fun deleteLink(link: Link) = localDataSource.deleteLink(link)
 
     //  Category
-    suspend fun insertCategory(category: Category) = localDataSource.insertCategory(category)
+    suspend fun insertCategory(category: Category) {
+        val result = remoteDataSource.insertCategory(category)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.insertCategory(category)
+        }
+    }
 
-    suspend fun getAllCategory(leader: Leader) = localDataSource.getAllCategory(leader.id)
+    suspend fun getAllCategory(leader: Leader) = remoteDataSource.getAllCategory(leader.id)
 
     suspend fun deleteCategory(category: Category) = localDataSource.deleteCategory(category)
 

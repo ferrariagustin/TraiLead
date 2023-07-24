@@ -45,10 +45,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val dataSnapshot = reference?.get()?.await()
             var youtubeVideosList = mutableListOf<YouTubeVideo>()
             if (dataSnapshot?.key == YouTubeVideo::class.simpleName.toString()) {
-                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                youtubeVideosList.addAll(hashMapValues.values.map {
-                    Gson().fromJson(Gson().toJson(it), YouTubeVideo::class.java)
-                }.filter { it.leaderMaterialId == leaderId })
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                    youtubeVideosList.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), YouTubeVideo::class.java)
+                    }.filter { it.leaderMaterialId == leaderId })
+                }
             }
             youtubeVideosList
         }
@@ -92,10 +94,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val dataSnapshot = reference?.get()?.await()
             var categories = mutableListOf<Category>()
             if (dataSnapshot?.key == Category::class.simpleName.toString()) {
-                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                categories.addAll(hashMapValues.values.map {
-                    Gson().fromJson(Gson().toJson(it), Category::class.java)
-                }.filter { it.leaderCategoryId == leaderId })
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                    categories.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), Category::class.java)
+                    }.filter { it.leaderCategoryId == leaderId })
+                }
             }
             categories
         }
@@ -141,11 +145,19 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
         var links = mutableListOf<Link>()
+
         if (dataSnapshot?.key == Link::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            links.addAll(hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Link::class.java)
-            }.filter { it.leaderMaterialId == leaderId })
+            try {
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Link>
+                    links.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), Link::class.java)
+                    }.filter { it.leaderMaterialId == leaderId })
+                }
+            } catch (ex: ClassCastException) {
+                // TODO: Resolved issue from classCastException with HashMap and ArrayList
+                ex.printStackTrace()
+            }
         }
         links
     }
@@ -188,10 +200,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val dataSnapshot = reference?.get()?.await()
             var links = mutableListOf<Link>()
             if (dataSnapshot?.key == Link::class.simpleName.toString()) {
-                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                links.addAll(hashMapValues.values.map {
-                    Gson().fromJson(Gson().toJson(it), Link::class.java)
-                }.filter { it.leaderMaterialId == leaderId && it.categoryId == categoryId })
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                    links.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), Link::class.java)
+                    }.filter { it.leaderMaterialId == leaderId && it.categoryId == categoryId })
+                }
             }
             links
         }
@@ -332,17 +346,17 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun getLeader(leader_id: Int): Leader? = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
-
-
         if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            val leaders = hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Leader::class.java)
-            }.filter { it.id == leader_id }
-            if (leaders.isNotEmpty()) {
-                leaders[0]
-            } else {
-                null
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                val leaders = hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Leader::class.java)
+                }.filter { it.id == leader_id }
+                if (leaders.isNotEmpty()) {
+                    leaders[0]
+                } else {
+                    null
+                }
             }
         } else {
             null
@@ -354,14 +368,16 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val dataSnapshot = reference?.get()?.await()
 
         if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            val leaders = hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Leader::class.java)
-            }.filter { it.email == user_email && it.pass == user_pass }
-            if (leaders.isNotEmpty()) {
-                return leaders[0]
-            } else {
-                null
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                val leaders = hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Leader::class.java)
+                }.filter { it.email == user_email && it.pass == user_pass }
+                if (leaders.isNotEmpty()) {
+                    return leaders[0]
+                } else {
+                    null
+                }
             }
         } else {
             null
@@ -374,14 +390,16 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val dataSnapshot = reference?.get()?.await()
 
         if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            val leaders = hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Leader::class.java)
-            }.filter { it.email == leader_email }
-            if (leaders.isNotEmpty()) {
-                return leaders[0]
-            } else {
-                null
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                val leaders = hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Leader::class.java)
+                }.filter { it.email == leader_email }
+                if (leaders.isNotEmpty()) {
+                    return leaders[0]
+                } else {
+                    null
+                }
             }
         } else {
             null
@@ -392,16 +410,17 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun getTrainee(trainee_id: Int): Trainee? = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
-
         if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            val trainees = hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-            }.filter { it.id == trainee_id }
-            if (trainees.isNotEmpty()) {
-                trainees[0]
-            } else {
-                null
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                val trainees = hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+                }.filter { it.id == trainee_id }
+                if (trainees.isNotEmpty()) {
+                    trainees[0]
+                } else {
+                    null
+                }
             }
         } else {
             null
@@ -411,16 +430,17 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun getTrainee(user_email: String, user_pass: String): Trainee? {
         val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
-
         if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            val trainees = hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-            }.filter { it.email == user_email && it.pass == user_pass }
-            if (trainees.isNotEmpty()) {
-                return trainees[0]
-            } else {
-                null
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                val trainees = hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+                }.filter { it.email == user_email && it.pass == user_pass }
+                if (trainees.isNotEmpty()) {
+                    return trainees[0]
+                } else {
+                    null
+                }
             }
         } else {
             null
@@ -433,14 +453,16 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val dataSnapshot = reference?.get()?.await()
 
         if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            val trainees = hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-            }.filter { it.email == trainee_email }
-            if (trainees.isNotEmpty()) {
-                return trainees[0]
-            } else {
-                null
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                val trainees = hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+                }.filter { it.email == trainee_email }
+                if (trainees.isNotEmpty()) {
+                    return trainees[0]
+                } else {
+                    null
+                }
             }
         } else {
             null
@@ -454,10 +476,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val traineeList = mutableListOf<Trainee>()
 
         if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            traineeList.addAll(hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-            })
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                traineeList.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+                })
+            }
         }
         return traineeList
     }
@@ -469,10 +493,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val leaderList = mutableListOf<Leader>()
 
         if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            leaderList.addAll(hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Leader::class.java)
-            })
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                leaderList.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Leader::class.java)
+                })
+            }
         }
         return leaderList
     }
@@ -486,10 +512,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val dataSnapshot = reference?.get()?.await()
         var unLinkedTraineeList = mutableListOf<Trainee>()
         if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-            val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-            unLinkedTraineeList.addAll(hashMapValues.values.map {
-                Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-            }.filter { it.leaderId == null })
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                unLinkedTraineeList.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+                }.filter { it.leaderId == null })
+            }
         }
         unLinkedTraineeList
     }
@@ -500,10 +528,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val dataSnapshot = reference?.get()?.await()
             var unLinkedTraineeList = mutableListOf<Trainee>()
             if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                unLinkedTraineeList.addAll(hashMapValues.values.map {
-                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-                }.filter { it.leaderId == leader_id })
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                    unLinkedTraineeList.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), Trainee::class.java)
+                    }.filter { it.leaderId == leader_id })
+                }
             }
             unLinkedTraineeList
         }
