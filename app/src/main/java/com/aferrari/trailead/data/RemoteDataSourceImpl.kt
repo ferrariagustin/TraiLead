@@ -147,16 +147,10 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         var links = mutableListOf<Link>()
 
         if (dataSnapshot?.key == Link::class.simpleName.toString()) {
-            try {
-                dataSnapshot.value?.let {
-                    val hashMapValues = dataSnapshot.value as HashMap<String, Link>
-                    links.addAll(hashMapValues.values.map {
-                        Gson().fromJson(Gson().toJson(it), Link::class.java)
-                    }.filter { it.leaderMaterialId == leaderId })
-                }
-            } catch (ex: ClassCastException) {
-                // TODO: Resolved issue from classCastException with HashMap and ArrayList
-                ex.printStackTrace()
+            (dataSnapshot.value as? HashMap<*, *>)?.let { hashMapValues ->
+                links.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Link::class.java)
+                }.filter { it.leaderMaterialId == leaderId })
             }
         }
         links
