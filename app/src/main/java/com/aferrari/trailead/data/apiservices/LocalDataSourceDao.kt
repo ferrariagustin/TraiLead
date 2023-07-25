@@ -59,7 +59,7 @@ interface LocalDataSourceDao {
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 
     @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
-    suspend fun removeAllCategoryFromTrainee(traineeId: Int)
+    suspend fun deleteAllCategoryFromTrainee(traineeId: Int)
 
     //  Link
     @Insert(onConflict = OnConflictStrategy.REPLACE)

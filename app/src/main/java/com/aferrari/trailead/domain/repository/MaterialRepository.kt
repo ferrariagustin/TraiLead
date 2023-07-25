@@ -23,8 +23,12 @@ class MaterialRepository(
 
     suspend fun getAllYoutubeVideo(leader: Leader) = remoteDataSource.getAllYoutubeVideo(leader.id)
 
-    suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) =
-        localDataSource.deleteYoutubeVideo(youTubeVideo)
+    suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) {
+        val result = remoteDataSource.deleteYoutubeVideo(youTubeVideo)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.deleteYoutubeVideo(youTubeVideo)
+        }
+    }
 
     suspend fun updateUrlYoutubeVideo(youtubeId: Int, youtubeUrl: String) {
         val result = remoteDataSource.updateUrlYoutubeVideo(youtubeId, youtubeUrl)
@@ -42,7 +46,7 @@ class MaterialRepository(
     }
 
     suspend fun getYoutubeVideoByCategory(leaderId: Int, categoryId: Int) =
-        localDataSource.getYoutubeVideoByCategory(leaderId, categoryId)
+        remoteDataSource.getYoutubeVideoByCategory(leaderId, categoryId)
 
     //  Link
     suspend fun insertLink(link: Link) {
@@ -71,7 +75,12 @@ class MaterialRepository(
     suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =
         localDataSource.getLinkByCategory(leaderId, categoryId)
 
-    suspend fun deleteLink(link: Link) = localDataSource.deleteLink(link)
+    suspend fun deleteLink(link: Link) {
+        val result = remoteDataSource.deleteLink(link)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.deleteLink(link)
+        }
+    }
 
     //  Category
     suspend fun insertCategory(category: Category) {
@@ -83,7 +92,12 @@ class MaterialRepository(
 
     suspend fun getAllCategory(leader: Leader) = remoteDataSource.getAllCategory(leader.id)
 
-    suspend fun deleteCategory(category: Category) = localDataSource.deleteCategory(category)
+    suspend fun deleteCategory(category: Category) {
+        val result = remoteDataSource.deleteCategory(category)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.deleteCategory(category)
+        }
+    }
 
     suspend fun updateCategory(categoryId: Int, categoryName: String) {
         val result = remoteDataSource.updateCategory(categoryId, categoryName)
@@ -94,7 +108,7 @@ class MaterialRepository(
 
     suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>) {
         val traineeCategoryJoinList = categorySet.map { TraineeCategoryJoin(traineeId, it.id) }
-        localDataSource.removeAllCategoryFromTrainee(traineeId)
+        localDataSource.deleteAllCategoryFromTrainee(traineeId)
         return localDataSource.insertAllCategoryFromTrainee(traineeCategoryJoinList)
     }
 

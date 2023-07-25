@@ -53,8 +53,8 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
     override suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category> =
         localDataBase.getCategoriesFromTrainee(traineeId)
 
-    override suspend fun removeAllCategoryFromTrainee(traineeId: Int) =
-        localDataBase.removeAllCategoryFromTrainee(traineeId)
+    override suspend fun deleteAllCategoryFromTrainee(traineeId: Int) =
+        localDataBase.deleteAllCategoryFromTrainee(traineeId)
 
     override suspend fun insertLink(link: Link) = localDataBase.insertLink(link)
 

@@ -39,7 +39,7 @@ interface LocalDataSource {
 
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 
-    suspend fun removeAllCategoryFromTrainee(traineeId: Int)
+    suspend fun deleteAllCategoryFromTrainee(traineeId: Int)
 
     //  Link
     suspend fun insertLink(link: Link)

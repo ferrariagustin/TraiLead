@@ -1,5 +1,6 @@
 package com.aferrari.trailead.data
 
+import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -55,9 +56,22 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             youtubeVideosList
         }
 
-    override suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(youTubeVideo.id.toString())
+                ?.removeValue()
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun updateUrlYoutubeVideo(youtubeId: Int, youtubeUrl: String): Long =
         withContext(Dispatchers.IO) {
@@ -96,8 +110,8 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun getYoutubeVideoByCategory(
         leaderId: Int,
         categoryId: Int
-    ): List<YouTubeVideo> {
-        TODO("Not yet implemented")
+    ): List<YouTubeVideo> = withContext(Dispatchers.IO) {
+        getAllYoutubeVideo(leaderId).filter { it.categoryId == categoryId }
     }
 
     override suspend fun insertCategory(category: Category): Long = withContext(Dispatchers.IO) {
@@ -130,9 +144,22 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             categories
         }
 
-    override suspend fun deleteCategory(category: Category) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteCategory(category: Category): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Category::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(category.id.toString())
+                ?.removeValue()
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun updateCategory(categoryId: Int, categoryName: String): Long =
         withContext(Dispatchers.IO) {
@@ -150,17 +177,64 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(TraineeCategoryJoin::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            traineeCategoryJoin.forEach {
+                reference?.child(IntegerUtils().getUserId().toString())?.setValue(it)
+                    ?.addOnCompleteListener { task ->
+                        resultCode = if (task.isSuccessful) {
+                            StatusCode.SUCCESS.value
+                        } else {
+                            StatusCode.ERROR.value
+                        }
+                    }?.await()
+            }
+            resultCode
+        }
 
-    override suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category> =
+        withContext(Dispatchers.IO) {
+            val leaderId = getTrainee(traineeId)?.leaderId
+            if (leaderId != null) {
+                getAllCategory(leaderId)
+            } else
+                emptyList()
+        }
 
-    override suspend fun removeAllCategoryFromTrainee(traineeId: Int) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteAllCategoryFromTrainee(traineeId: Int): Long =
+        withContext(Dispatchers.IO) {
+            // TODO: Entender como es la estructura e intentar replicar el Firebase
+            StatusCode.SUCCESS.value
+//            val reference = FirebaseDataBase.database?.child(TraineeCategoryJoin::class.simpleName.toString())
+//            val dataSnapshot = reference?.get()?.await()
+//            var resultCode: Long = StatusCode.ERROR.value
+//
+//            var links = mutableListOf<TraineeCategoryJoin>()
+//
+//            if (dataSnapshot?.key == TraineeCategoryJoin::class.simpleName.toString()) {
+//                (dataSnapshot.value as? HashMap<*, *>)?.let { hashMapValues ->
+//                    links.addAll(hashMapValues.values.map {
+//                        Gson().fromJson(Gson().toJson(it), Link::class.java)
+//                    }.filter { it.leaderMaterialId == leaderId })
+//                }
+//            }
+//            for (trainee in traineeList) {
+//                reference?.child(trainee.id.toString())
+//                    ?.removeValue()
+//                    ?.addOnCompleteListener { task ->
+//                        resultCode = if (task.isSuccessful) {
+//                            StatusCode.SUCCESS.value
+//                        } else {
+//                            StatusCode.ERROR.value
+//                            return@addOnCompleteListener
+//                        }
+//                    }?.await()
+//            }
+//            resultCode
+        }
 
     override suspend fun insertLink(link: Link): Long = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
@@ -175,9 +249,22 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         resultCode
     }
 
-    override suspend fun deleteLink(link: Link) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteLink(link: Link): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Link::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(link.id.toString())
+                ?.removeValue()
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun getAllLink(leaderId: Int): List<Link> = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
@@ -340,21 +427,79 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun deleteLeader(leader: Leader) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteLeader(leader: Leader): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(leader.id.toString())
+                ?.removeValue()
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun deleteTrainee(trainee: Trainee) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteTrainee(trainee: Trainee): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(trainee.id.toString())
+                ?.removeValue()
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun deleteAllLeader() {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteAllLeader(): Long =
+        withContext(Dispatchers.IO) {
+            val leaderList = getAllLeader()
+            val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            for (leader in leaderList) {
+                reference?.child(leader.id.toString())
+                    ?.removeValue()
+                    ?.addOnCompleteListener { task ->
+                        resultCode = if (task.isSuccessful) {
+                            StatusCode.SUCCESS.value
+                        } else {
+                            StatusCode.ERROR.value
+                            return@addOnCompleteListener
+                        }
+                    }?.await()
+            }
+            resultCode
+        }
 
-    override suspend fun deleteAllTrainee() {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteAllTrainee(): Long =
+        withContext(Dispatchers.IO) {
+            val traineeList = getAllTrainee()
+            val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            for (trainee in traineeList) {
+                reference?.child(trainee.id.toString())
+                    ?.removeValue()
+                    ?.addOnCompleteListener { task ->
+                        resultCode = if (task.isSuccessful) {
+                            StatusCode.SUCCESS.value
+                        } else {
+                            StatusCode.ERROR.value
+                            return@addOnCompleteListener
+                        }
+                    }?.await()
+            }
+            resultCode
+        }
 
     override suspend fun getLeadersWithTrainee(): List<LeaderWithTrainee> {
         TODO("Not yet implemented")

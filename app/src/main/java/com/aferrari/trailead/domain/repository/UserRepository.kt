@@ -151,7 +151,10 @@ class UserRepository(
     }
 
     suspend fun deleteTrainee(trainee: Trainee) {
-        localDataSource.deleteTrainee(trainee)
+        val result = remoteDataSource.deleteTrainee(trainee)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.deleteTrainee(trainee)
+        }
     }
 
     suspend fun setLinkedTrainee(trainee: Trainee, leader: Leader) {
