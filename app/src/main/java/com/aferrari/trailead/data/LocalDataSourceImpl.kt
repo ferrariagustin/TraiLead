@@ -26,8 +26,8 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
     override suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) =
         localDataBase.deleteYoutubeVideo(youTubeVideo)
 
-    override suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String) =
-        localDataBase.updateUrlYoutubeVideo(materialId, youtubeId)
+    override suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeUrl: String) =
+        localDataBase.updateUrlYoutubeVideo(materialId, youtubeUrl)
 
     override suspend fun updateTitleYoutubeVideo(youtubeVideoId: Int, newTitle: String) =
         localDataBase.updateTitleYoutubeVideo(youtubeVideoId, newTitle)

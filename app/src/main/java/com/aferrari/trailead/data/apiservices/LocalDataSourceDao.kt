@@ -26,8 +26,8 @@ interface LocalDataSourceDao {
     @Delete
     suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo)
 
-    @Query("UPDATE youtube_video_data_table SET url = :youtubeId WHERE id = :materialId")
-    suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String)
+    @Query("UPDATE youtube_video_data_table SET url = :youtubeUrl WHERE id = :materialId")
+    suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeUrl: String)
 
     @Query("UPDATE youtube_video_data_table SET title = :newTitle WHERE id = :youtubeVideoId")
     suspend fun updateTitleYoutubeVideo(youtubeVideoId: Int, newTitle: String)

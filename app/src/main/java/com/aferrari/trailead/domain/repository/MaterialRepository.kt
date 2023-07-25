@@ -26,11 +26,20 @@ class MaterialRepository(
     suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) =
         localDataSource.deleteYoutubeVideo(youTubeVideo)
 
-    suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String) =
-        localDataSource.updateUrlYoutubeVideo(materialId, youtubeId)
+    suspend fun updateUrlYoutubeVideo(youtubeId: Int, youtubeUrl: String) {
+        val result = remoteDataSource.updateUrlYoutubeVideo(youtubeId, youtubeUrl)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateUrlYoutubeVideo(youtubeId, youtubeUrl)
+        }
+    }
 
-    suspend fun updateTitleYoutubeVideo(materialId: Int, newTitle: String) =
-        localDataSource.updateTitleYoutubeVideo(materialId, newTitle)
+
+    suspend fun updateTitleYoutubeVideo(youtubeId: Int, newTitle: String) {
+        val result = remoteDataSource.updateTitleYoutubeVideo(youtubeId, newTitle)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateTitleYoutubeVideo(youtubeId, newTitle)
+        }
+    }
 
     suspend fun getYoutubeVideoByCategory(leaderId: Int, categoryId: Int) =
         localDataSource.getYoutubeVideoByCategory(leaderId, categoryId)
@@ -76,8 +85,12 @@ class MaterialRepository(
 
     suspend fun deleteCategory(category: Category) = localDataSource.deleteCategory(category)
 
-    suspend fun updateCategory(categoryId: Int, categoryName: String) =
-        localDataSource.updateCategory(categoryId, categoryName)
+    suspend fun updateCategory(categoryId: Int, categoryName: String) {
+        val result = remoteDataSource.updateCategory(categoryId, categoryName)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.updateCategory(categoryId, categoryName)
+        }
+    }
 
     suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>) {
         val traineeCategoryJoinList = categorySet.map { TraineeCategoryJoin(traineeId, it.id) }

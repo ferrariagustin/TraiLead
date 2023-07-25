@@ -19,7 +19,7 @@ interface LocalDataSource {
 
     suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo)
 
-    suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String)
+    suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeUrl: String)
 
     suspend fun updateTitleYoutubeVideo(youtubeVideoId: Int, newTitle: String)
 

@@ -59,13 +59,39 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateUrlYoutubeVideo(materialId: Int, youtubeId: String): Long {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateUrlYoutubeVideo(youtubeId: Int, youtubeUrl: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(youtubeId.toString())?.child(YouTubeVideo::url.name)
+                ?.setValue(youtubeUrl)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
-    override suspend fun updateTitleYoutubeVideo(youtubeVideoId: Int, newTitle: String) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateTitleYoutubeVideo(youtubeId: Int, newTitle: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(youtubeId.toString())?.child(YouTubeVideo::title.name)
+                ?.setValue(newTitle)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun getYoutubeVideoByCategory(
         leaderId: Int,
