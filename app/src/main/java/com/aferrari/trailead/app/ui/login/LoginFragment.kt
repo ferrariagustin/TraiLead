@@ -22,7 +22,6 @@ import com.aferrari.trailead.databinding.LoginFragmentBinding
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.User
-import com.aferrari.trailead.domain.repository.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -45,8 +44,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
-        val repository = UserRepository(localDataSource, remoteDataSource)
-        val factory = LoginViewModelFactory(repository)
+        val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
         binding.loginViewModel = loginViewModel
         binding.lifecycleOwner = this

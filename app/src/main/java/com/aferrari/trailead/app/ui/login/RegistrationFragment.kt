@@ -20,7 +20,6 @@ import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.RegistrationFragmentBinding
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
-import com.aferrari.trailead.domain.repository.UserRepository
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,8 +44,7 @@ class RegistrationFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.registration_fragment, container, false)
-        val repository = UserRepository(localDataSource, remoteDataSource)
-        val factory = LoginViewModelFactory(repository)
+        val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
         registrationViewModel = ViewModelProvider(this, factory)[RegistrationViewModel::class.java]
         binding.registrationViewModel = registrationViewModel
         binding.lifecycleOwner = this

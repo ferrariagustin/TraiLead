@@ -230,7 +230,7 @@ open class LeaderViewModel(
             statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
             return
         }
-        val category = Category(IntegerUtils().getUserId(), nameCategory, leader.id)
+        val category = Category(IntegerUtils().createObjectId(), nameCategory, leader.id)
         insertCategory(category)
     }
 
@@ -315,7 +315,7 @@ open class LeaderViewModel(
 
     private fun addNewYoutubeMaterial(title: String, youtubeId: String) {
         val newYouTubeVideo = YouTubeVideo(
-            id = IntegerUtils().getUserId(),
+            id = IntegerUtils().createObjectId(),
             title = title,
             url = youtubeId,
             categoryId = categorySelected?.id,

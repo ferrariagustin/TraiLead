@@ -98,7 +98,7 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
         viewModelScope.launch {
             materialRepository.insertLink(
                 Link(
-                    IntegerUtils().getUserId(),
+                    IntegerUtils().createObjectId(),
                     title,
                     link,
                     id,

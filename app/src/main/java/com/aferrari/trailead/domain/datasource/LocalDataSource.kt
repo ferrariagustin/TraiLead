@@ -5,7 +5,6 @@ import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
-import com.aferrari.trailead.domain.models.LeaderWithTrainee
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
@@ -35,11 +34,11 @@ interface LocalDataSource {
 
     suspend fun updateCategory(categoryId: Int, categoryName: String)
 
-    suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>)
+    suspend fun insertAllTraineeCategoryJoin(traineeCategoryJoin: List<TraineeCategoryJoin>)
 
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 
-    suspend fun deleteAllCategoryFromTrainee(traineeId: Int)
+    suspend fun deleteAllTraineeCategoryJoin(traineeId: Int)
 
     //  Link
     suspend fun insertLink(link: Link)
@@ -58,10 +57,6 @@ interface LocalDataSource {
 
     suspend fun insertTrainee(trainee: Trainee): Long
 
-    suspend fun updateLeader(leader: Leader)
-
-    suspend fun updateTrainee(trainee: Trainee)
-
     suspend fun updateTraineeName(idTrainee: Int, name: String)
 
     suspend fun updateTraineeLastName(idTrainee: Int, lastName: String)
@@ -75,8 +70,6 @@ interface LocalDataSource {
     suspend fun deleteAllLeader(): StatusCode
 
     suspend fun deleteAllTrainee(): StatusCode
-
-    suspend fun getLeadersWithTrainee(): List<LeaderWithTrainee>
 
     suspend fun isEmpty(): Boolean
 

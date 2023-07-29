@@ -31,22 +31,6 @@ class UserRepository(
         }
     }
 
-//    suspend fun getUser(user_id: Int): User? {
-//        val resultFlow = remoteDataSource.getLeader(leader_id = user_id)
-//        resultFlow.collect() {
-//            Log.e("LOGIN", "result flow")
-//        }
-//        localDataSource.getLeader(user_id).apply {
-//            if (this == null) {
-//                localDataSource.getTrainee(user_id).let {
-//                    return it
-//                }
-//            } else {
-//                return this
-//            }
-//        }
-//    }
-
     fun getUser(user_id: Int): Flow<User?> = flow {
         if (localDataSource.isEmpty()) {
             remoteDataSource.getUserType(user_id)
@@ -158,7 +142,10 @@ class UserRepository(
     }
 
     suspend fun setLinkedTrainee(trainee: Trainee, leader: Leader) {
-        localDataSource.setLinkedTrainee(trainee.id, leader.id)
+        val result = remoteDataSource.setLinkedTrainee(trainee.id, leader.id)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.setLinkedTrainee(trainee.id, leader.id)
+        }
     }
 
     suspend fun getUnlinkedTrainees(): List<Trainee> {
@@ -168,8 +155,12 @@ class UserRepository(
     suspend fun getLinkedTrainees(leader: Leader): List<Trainee> =
         localDataSource.getLinkedTrainees(leader.id)
 
-    suspend fun setUnlinkedTrainee(trainee: Trainee) =
-        localDataSource.setUnlinkedTrainee(trainee.id)
+    suspend fun setUnlinkedTrainee(trainee: Trainee) {
+        val result = remoteDataSource.setUnlinkedTrainee(trainee.id)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.setUnlinkedTrainee(trainee.id)
+        }
+    }
 
     suspend fun updateTraineePassword(password: String, traineeId: Int) {
         val result = remoteDataSource.updateTraineePassword(traineeId, password)

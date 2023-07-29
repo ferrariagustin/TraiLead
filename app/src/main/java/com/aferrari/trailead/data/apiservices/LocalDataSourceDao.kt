@@ -5,11 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
-import com.aferrari.trailead.domain.models.LeaderWithTrainee
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
@@ -17,7 +15,7 @@ import com.aferrari.trailead.domain.models.YouTubeVideo
 
 @Dao
 interface LocalDataSourceDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo)
 
     @Query("SELECT * FROM youtube_video_data_table WHERE leaderMaterialId = :leaderId ORDER BY title")
@@ -40,7 +38,7 @@ interface LocalDataSourceDao {
 
     //    Category
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category: Category)
 
     @Query("SELECT * FROM category_data_table WHERE leader_category_id = :leaderId ORDER BY category_name")
@@ -59,7 +57,7 @@ interface LocalDataSourceDao {
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 
     @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
-    suspend fun deleteAllCategoryFromTrainee(traineeId: Int)
+    suspend fun deleteAllTraineeCategoryJoin(traineeId: Int)
 
     //  Link
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -86,12 +84,6 @@ interface LocalDataSourceDao {
     @Insert
     suspend fun insertTrainee(trainee: Trainee): Long
 
-    @Update
-    suspend fun updateLeader(leader: Leader)
-
-    @Update
-    suspend fun updateTrainee(trainee: Trainee)
-
     @Query("UPDATE trainee_data_table SET trainee_name=:name WHERE trainee_id = :idTrainee")
     suspend fun updateTraineeName(idTrainee: Int, name: String)
 
@@ -112,9 +104,6 @@ interface LocalDataSourceDao {
 
     @Query("DELETE FROM trainee_data_table")
     suspend fun deleteAllTrainee()
-
-    @Query("SELECT * FROM leader_data_table")
-    suspend fun getLeadersWithTrainee(): List<LeaderWithTrainee>
 
     @Query("SELECT * FROM leader_data_table WHERE leader_id = :leader_id")
     suspend fun getLeader(leader_id: Int): Leader?

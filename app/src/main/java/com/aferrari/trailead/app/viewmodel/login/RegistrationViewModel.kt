@@ -97,7 +97,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private suspend fun insertLeader(): Long = repository.insertLeader(
         Leader(
-            id = IntegerUtils().getUserId(),
+            id = IntegerUtils().createObjectId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,
@@ -107,7 +107,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private suspend fun insertTrainee(): Long = repository.insertTrainee(
         Trainee(
-            id = IntegerUtils().getUserId(),
+            id = IntegerUtils().createObjectId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,

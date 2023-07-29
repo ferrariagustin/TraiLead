@@ -22,7 +22,7 @@ import javax.inject.Singleton
 
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [Leader::class, Trainee::class, YouTubeVideo::class, Category::class, TraineeCategoryJoin::class, Link::class, Pdf::class],
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = AppDataBase.AutoMigration1To2::class)
@@ -75,7 +75,6 @@ abstract class AppDataBase : RoomDatabase() {
                         AppDataBase::class.java,
                         "user_data_database"
                     )
-//                        .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                         .fallbackToDestructiveMigration()
                         .build()
                 }

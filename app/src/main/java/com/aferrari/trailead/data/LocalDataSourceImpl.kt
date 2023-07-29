@@ -7,7 +7,6 @@ import com.aferrari.trailead.data.db.AppDataBase
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
-import com.aferrari.trailead.domain.models.LeaderWithTrainee
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
@@ -47,14 +46,14 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
     override suspend fun updateCategory(categoryId: Int, categoryName: String) =
         localDataBase.updateCategory(categoryId, categoryName)
 
-    override suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>) =
+    override suspend fun insertAllTraineeCategoryJoin(traineeCategoryJoin: List<TraineeCategoryJoin>) =
         localDataBase.insertAllCategoryFromTrainee(traineeCategoryJoin)
 
     override suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category> =
         localDataBase.getCategoriesFromTrainee(traineeId)
 
-    override suspend fun deleteAllCategoryFromTrainee(traineeId: Int) =
-        localDataBase.deleteAllCategoryFromTrainee(traineeId)
+    override suspend fun deleteAllTraineeCategoryJoin(traineeId: Int) =
+        localDataBase.deleteAllTraineeCategoryJoin(traineeId)
 
     override suspend fun insertLink(link: Link) = localDataBase.insertLink(link)
 
@@ -75,10 +74,6 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
 
     override suspend fun insertTrainee(trainee: Trainee): Long =
         localDataBase.insertTrainee(trainee)
-
-    override suspend fun updateLeader(leader: Leader) = localDataBase.updateLeader(leader)
-
-    override suspend fun updateTrainee(trainee: Trainee) = localDataBase.updateTrainee(trainee)
 
     override suspend fun updateTraineeName(idTrainee: Int, name: String) =
         localDataBase.updateTraineeName(idTrainee, name)
@@ -102,9 +97,6 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
         localDataBase.deleteAllTrainee()
         return StatusCode.SUCCESS
     }
-
-    override suspend fun getLeadersWithTrainee(): List<LeaderWithTrainee> =
-        localDataBase.getLeadersWithTrainee()
 
     override suspend fun isEmpty(): Boolean {
         if (localDataBase.leaderCount() > 0 || localDataBase.traineeCount() > 0) {

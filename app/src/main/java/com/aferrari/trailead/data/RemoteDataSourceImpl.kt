@@ -1,6 +1,5 @@
 package com.aferrari.trailead.data
 
-import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -8,7 +7,6 @@ import com.aferrari.trailead.data.db.FirebaseDataBase
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
-import com.aferrari.trailead.domain.models.LeaderWithTrainee
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
@@ -41,6 +39,11 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
     override suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo> =
         withContext(Dispatchers.IO) {
+            getAllYoutubeVideo().filter { it.leaderMaterialId == leaderId }
+        }
+
+    override suspend fun getAllYoutubeVideo(): List<YouTubeVideo> =
+        withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
             val dataSnapshot = reference?.get()?.await()
@@ -50,7 +53,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                     val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                     youtubeVideosList.addAll(hashMapValues.values.map {
                         Gson().fromJson(Gson().toJson(it), YouTubeVideo::class.java)
-                    }.filter { it.leaderMaterialId == leaderId })
+                    })
                 }
             }
             youtubeVideosList
@@ -130,19 +133,23 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
     override suspend fun getAllCategory(leaderId: Int): List<Category> =
         withContext(Dispatchers.IO) {
-            val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
-            val dataSnapshot = reference?.get()?.await()
-            var categories = mutableListOf<Category>()
-            if (dataSnapshot?.key == Category::class.simpleName.toString()) {
-                dataSnapshot.value?.let {
-                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                    categories.addAll(hashMapValues.values.map {
-                        Gson().fromJson(Gson().toJson(it), Category::class.java)
-                    }.filter { it.leaderCategoryId == leaderId })
-                }
-            }
-            categories
+            getAllCategory().filter { it.leaderCategoryId == leaderId }
         }
+
+    override suspend fun getAllCategory(): List<Category> = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        var categories = mutableListOf<Category>()
+        if (dataSnapshot?.key == Category::class.simpleName.toString()) {
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                categories.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Category::class.java)
+                })
+            }
+        }
+        categories
+    }
 
     override suspend fun deleteCategory(category: Category): Long =
         withContext(Dispatchers.IO) {
@@ -177,21 +184,30 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun insertAllCategoryFromTrainee(traineeCategoryJoin: List<TraineeCategoryJoin>): Long =
+    override suspend fun insertAllCategoryFromTrainee(traineeCategoryJoinList: List<TraineeCategoryJoin>): Long =
+        withContext(Dispatchers.IO) {
+            traineeCategoryJoinList.forEach {
+                val result = insertCategoryFromTrainee(it)
+                if (result == StatusCode.ERROR.value) {
+                    return@withContext StatusCode.ERROR.value
+                }
+            }
+            StatusCode.SUCCESS.value
+        }
+
+    override suspend fun insertCategoryFromTrainee(traineeCategoryJoin: TraineeCategoryJoin): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(TraineeCategoryJoin::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            traineeCategoryJoin.forEach {
-                reference?.child(IntegerUtils().getUserId().toString())?.setValue(it)
-                    ?.addOnCompleteListener { task ->
-                        resultCode = if (task.isSuccessful) {
-                            StatusCode.SUCCESS.value
-                        } else {
-                            StatusCode.ERROR.value
-                        }
-                    }?.await()
-            }
+            reference?.child(traineeCategoryJoin.id.toString())?.setValue(traineeCategoryJoin)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
             resultCode
         }
 
@@ -204,36 +220,51 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 emptyList()
         }
 
-    override suspend fun deleteAllCategoryFromTrainee(traineeId: Int): Long =
+    override suspend fun deleteAllTraineeCategoryJoin(traineeId: Int): Long =
         withContext(Dispatchers.IO) {
-            // TODO: Entender como es la estructura e intentar replicar el Firebase
+            val getAllCategoryFromTraineeFilter =
+                getAllTraineeCategoryJoin().filter { it.idTrainee == traineeId }
+            getAllCategoryFromTraineeFilter.forEach {
+                val result = deleteTraineeCategoryJoin(it.id)
+                if (result == StatusCode.ERROR.value) {
+                    return@withContext StatusCode.ERROR.value
+                }
+            }
             StatusCode.SUCCESS.value
-//            val reference = FirebaseDataBase.database?.child(TraineeCategoryJoin::class.simpleName.toString())
-//            val dataSnapshot = reference?.get()?.await()
-//            var resultCode: Long = StatusCode.ERROR.value
-//
-//            var links = mutableListOf<TraineeCategoryJoin>()
-//
-//            if (dataSnapshot?.key == TraineeCategoryJoin::class.simpleName.toString()) {
-//                (dataSnapshot.value as? HashMap<*, *>)?.let { hashMapValues ->
-//                    links.addAll(hashMapValues.values.map {
-//                        Gson().fromJson(Gson().toJson(it), Link::class.java)
-//                    }.filter { it.leaderMaterialId == leaderId })
-//                }
-//            }
-//            for (trainee in traineeList) {
-//                reference?.child(trainee.id.toString())
-//                    ?.removeValue()
-//                    ?.addOnCompleteListener { task ->
-//                        resultCode = if (task.isSuccessful) {
-//                            StatusCode.SUCCESS.value
-//                        } else {
-//                            StatusCode.ERROR.value
-//                            return@addOnCompleteListener
-//                        }
-//                    }?.await()
-//            }
-//            resultCode
+        }
+
+    override suspend fun deleteTraineeCategoryJoin(traineeCategoryJoinId: Int): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(TraineeCategoryJoin::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(traineeCategoryJoinId.toString())
+                ?.removeValue()
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
+
+    override suspend fun getAllTraineeCategoryJoin(): List<TraineeCategoryJoin> =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(TraineeCategoryJoin::class.simpleName.toString())
+            val dataSnapshot = reference?.get()?.await()
+            var traineeCategoryJoinList = mutableListOf<TraineeCategoryJoin>()
+            if (dataSnapshot?.key == TraineeCategoryJoin::class.simpleName.toString()) {
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                    traineeCategoryJoinList.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), TraineeCategoryJoin::class.java)
+                    })
+                }
+            }
+            traineeCategoryJoinList
         }
 
     override suspend fun insertLink(link: Link): Long = withContext(Dispatchers.IO) {
@@ -267,6 +298,10 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         }
 
     override suspend fun getAllLink(leaderId: Int): List<Link> = withContext(Dispatchers.IO) {
+        getAllLink().filter { it.leaderMaterialId == leaderId }
+    }
+
+    override suspend fun getAllLink(): List<Link> = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
         var links = mutableListOf<Link>()
@@ -275,7 +310,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             (dataSnapshot.value as? HashMap<*, *>)?.let { hashMapValues ->
                 links.addAll(hashMapValues.values.map {
                     Gson().fromJson(Gson().toJson(it), Link::class.java)
-                }.filter { it.leaderMaterialId == leaderId })
+                })
             }
         }
         links
@@ -353,27 +388,6 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             }
         }?.await()
         resultCode
-    }
-
-    // TODO: Entender que es updateLeader, que tengo que actualizar? tengo que actualizar el userId tambien o todos los campos
-    // Podría usar los métodos para actualizar campos directamente ?
-    override suspend fun updateLeader(leader: Leader): Long = withContext(Dispatchers.IO) {
-        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
-        var resultCode: Long = StatusCode.ERROR.value
-        reference?.child(leader.id.toString())?.child(Trainee::name.name)
-            ?.setValue(leader.name)
-            ?.addOnCompleteListener { task ->
-                resultCode = if (task.isSuccessful) {
-                    StatusCode.SUCCESS.value
-                } else {
-                    StatusCode.ERROR.value
-                }
-            }?.await()
-        resultCode
-    }
-
-    override suspend fun updateTrainee(trainee: Trainee) {
-        TODO("Not yet implemented")
     }
 
     override suspend fun updateTraineeName(idTrainee: Int, name: String): Long =
@@ -500,10 +514,6 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             }
             resultCode
         }
-
-    override suspend fun getLeadersWithTrainee(): List<LeaderWithTrainee> {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun getUserType(user_id: Int): Flow<UserType?> = flow {
         val leader = getLeader(user_id)
@@ -680,9 +690,22 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         return leaderList
     }
 
-    override suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(trainee_id.toString())?.child(Trainee::leaderId.name)
+                ?.setValue(leader_id)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun getUnlinkedTrainees(): List<Trainee> = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
@@ -715,9 +738,22 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             unLinkedTraineeList
         }
 
-    override suspend fun setUnlinkedTrainee(trainee_id: Int) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun setUnlinkedTrainee(trainee_id: Int): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(trainee_id.toString())?.child(Trainee::leaderId.name)
+                ?.setValue(null)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
 
     override suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position): Long =
         withContext(Dispatchers.IO) {

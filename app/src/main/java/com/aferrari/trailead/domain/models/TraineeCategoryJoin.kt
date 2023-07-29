@@ -3,6 +3,7 @@ package com.aferrari.trailead.domain.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
     tableName = "trainee_category_join",
@@ -18,9 +19,14 @@ import androidx.room.ForeignKey
             parentColumns = ["category_id"],
             childColumns = ["category_id"]
         )
-    ]
+    ],
+    indices = [Index(
+        value = ["trainee_category_join_id"],
+        unique = true
+    )]
 )
 data class TraineeCategoryJoin(
+    @ColumnInfo(name = "trainee_category_join_id", defaultValue = "0") val id: Int,
     @ColumnInfo(name = "trainee_id") val idTrainee: Int,
     @ColumnInfo(name = "category_id") val idCategory: Int
 )

@@ -1,5 +1,6 @@
 package com.aferrari.trailead.domain.repository
 
+import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
@@ -8,11 +9,32 @@ import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MaterialRepository(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) {
+
+    suspend fun initLocalDataSource() =
+        withContext(Dispatchers.IO) {
+            val categoryList = remoteDataSource.getAllCategory()
+            categoryList.forEach {
+                localDataSource.insertCategory(it)
+            }
+            val linkList = remoteDataSource.getAllLink()
+            linkList.forEach {
+                localDataSource.insertLink(it)
+            }
+            val youtubeVideoList = remoteDataSource.getAllYoutubeVideo()
+            youtubeVideoList.forEach {
+                localDataSource.insertYouTubeVideo(it)
+            }
+            val traineeCategoryJoinList = remoteDataSource.getAllTraineeCategoryJoin()
+            localDataSource.insertAllTraineeCategoryJoin(traineeCategoryJoinList)
+        }
+
     //  Video
     suspend fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) {
         val result = remoteDataSource.insertYouTubeVideo(newYouTubeVideo)
@@ -106,10 +128,27 @@ class MaterialRepository(
         }
     }
 
-    suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>) {
-        val traineeCategoryJoinList = categorySet.map { TraineeCategoryJoin(traineeId, it.id) }
-        localDataSource.deleteAllCategoryFromTrainee(traineeId)
-        return localDataSource.insertAllCategoryFromTrainee(traineeCategoryJoinList)
+    suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>): Long {
+        val traineeCategoryJoinList = categorySet.map {
+            TraineeCategoryJoin(
+                IntegerUtils().createObjectId(),
+                traineeId,
+                it.id
+            )
+        }
+        var result = remoteDataSource.deleteAllTraineeCategoryJoin(traineeId)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.deleteAllTraineeCategoryJoin(traineeId)
+        } else {
+            return StatusCode.ERROR.value
+        }
+        result = remoteDataSource.insertAllCategoryFromTrainee(traineeCategoryJoinList)
+        if (result == StatusCode.SUCCESS.value) {
+            localDataSource.insertAllTraineeCategoryJoin(traineeCategoryJoinList)
+        } else {
+            return StatusCode.ERROR.value
+        }
+        return StatusCode.SUCCESS.value
     }
 
     suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
