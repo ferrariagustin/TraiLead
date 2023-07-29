@@ -148,12 +148,11 @@ class UserRepository(
         }
     }
 
-    suspend fun getUnlinkedTrainees(): List<Trainee> {
-        return localDataSource.getUnlinkedTrainees()
-    }
+    suspend fun getUnlinkedTrainees(): List<Trainee> = remoteDataSource.getUnlinkedTrainees()
 
     suspend fun getLinkedTrainees(leader: Leader): List<Trainee> =
-        localDataSource.getLinkedTrainees(leader.id)
+        remoteDataSource.getLinkedTrainees(leader.id)
+
 
     suspend fun setUnlinkedTrainee(trainee: Trainee) {
         val result = remoteDataSource.setUnlinkedTrainee(trainee.id)

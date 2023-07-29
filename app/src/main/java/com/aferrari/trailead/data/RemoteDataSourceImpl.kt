@@ -214,16 +214,55 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category> =
         withContext(Dispatchers.IO) {
             val leaderId = getTrainee(traineeId)?.leaderId
+            val categoryList = arrayListOf<Category>()
             if (leaderId != null) {
-                getAllCategory(leaderId)
+                val allTraineeCategoryJoinList =
+                    getAllTraineeCategoryJoin().filter { it.idTrainee == traineeId }
+                allTraineeCategoryJoinList.forEach { traineeCategoryJoin ->
+                    getCategory(traineeCategoryJoin.idCategory)?.let { categoryList.add(it) }
+                }
+                return@withContext categoryList
             } else
                 emptyList()
         }
 
-    override suspend fun deleteAllTraineeCategoryJoin(traineeId: Int): Long =
+    override suspend fun getCategory(categoryId: Int): Category? = withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        if (dataSnapshot?.key == Category::class.simpleName.toString()) {
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                val category = hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Category::class.java)
+                }.filter { it.id == categoryId }
+                if (category.isNotEmpty()) {
+                    category[0]
+                } else {
+                    null
+                }
+            }
+        } else {
+            null
+        }
+    }
+
+    override suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: Int): Long =
         withContext(Dispatchers.IO) {
             val getAllCategoryFromTraineeFilter =
                 getAllTraineeCategoryJoin().filter { it.idTrainee == traineeId }
+            getAllCategoryFromTraineeFilter.forEach {
+                val result = deleteTraineeCategoryJoin(it.id)
+                if (result == StatusCode.ERROR.value) {
+                    return@withContext StatusCode.ERROR.value
+                }
+            }
+            StatusCode.SUCCESS.value
+        }
+
+    override suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int): Long =
+        withContext(Dispatchers.IO) {
+            val getAllCategoryFromTraineeFilter =
+                getAllTraineeCategoryJoin().filter { it.idCategory == categoryId }
             getAllCategoryFromTraineeFilter.forEach {
                 val result = deleteTraineeCategoryJoin(it.id)
                 if (result == StatusCode.ERROR.value) {

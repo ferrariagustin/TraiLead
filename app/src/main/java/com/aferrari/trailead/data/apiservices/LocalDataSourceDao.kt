@@ -56,8 +56,13 @@ interface LocalDataSourceDao {
     @Query("SELECT * FROM category_data_table INNER JOIN trainee_category_join ON category_data_table.category_id = trainee_category_join.category_id WHERE trainee_category_join.trainee_id = :traineeId")
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 
+
     @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.trainee_id = :traineeId")
-    suspend fun deleteAllTraineeCategoryJoin(traineeId: Int)
+    suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: Int)
+
+    @Query("DELETE FROM trainee_category_join WHERE trainee_category_join.category_id = :categoryId")
+    suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int)
+
 
     //  Link
     @Insert(onConflict = OnConflictStrategy.REPLACE)

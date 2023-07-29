@@ -38,7 +38,9 @@ interface LocalDataSource {
 
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 
-    suspend fun deleteAllTraineeCategoryJoin(traineeId: Int)
+    suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: Int)
+
+    suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int)
 
     //  Link
     suspend fun insertLink(link: Link)

@@ -44,7 +44,11 @@ interface RemoteDataSource {
 
     suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
 
-    suspend fun deleteAllTraineeCategoryJoin(traineeId: Int): Long
+    suspend fun getCategory(categoryId: Int): Category?
+
+    suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: Int): Long
+
+    suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int): Long
 
     suspend fun getAllTraineeCategoryJoin(): List<TraineeCategoryJoin>
 

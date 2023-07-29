@@ -77,6 +77,7 @@ class MaterialListAdapter(
                 .setOnClickListener { item -> popupLinkListener(item) }
                 .show()
         }
+        configureSettingEditable()
     }
 
     private fun popupLinkListener(item: MenuItem): Boolean {
@@ -127,6 +128,8 @@ class MaterialListAdapter(
 
     private fun configureSettingEditable() {
         binding.imageSettingMaterialLeader.visibility = if (isEditable) VISIBLE else GONE
+        binding.linkViewMaterial.itemLinkSettingImageView.visibility =
+            if (isEditable) VISIBLE else GONE
     }
 
     private fun getMenuPopUp() =

@@ -95,7 +95,7 @@ class MaterialRepository(
     suspend fun getAllLink(leader: Leader) = remoteDataSource.getAllLink(leader.id)
 
     suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =
-        localDataSource.getLinkByCategory(leaderId, categoryId)
+        remoteDataSource.getLinkByCategory(leaderId, categoryId)
 
     suspend fun deleteLink(link: Link) {
         val result = remoteDataSource.deleteLink(link)
@@ -115,9 +115,13 @@ class MaterialRepository(
     suspend fun getAllCategory(leader: Leader) = remoteDataSource.getAllCategory(leader.id)
 
     suspend fun deleteCategory(category: Category) {
-        val result = remoteDataSource.deleteCategory(category)
+        var result = remoteDataSource.deleteAllTraineeCategoryJoinForCategory(category.id)
         if (result == StatusCode.SUCCESS.value) {
-            localDataSource.deleteCategory(category)
+            localDataSource.deleteAllTraineeCategoryJoinForCategory(category.id)
+            result = remoteDataSource.deleteCategory(category)
+            if (result == StatusCode.SUCCESS.value) {
+                localDataSource.deleteCategory(category)
+            }
         }
     }
 
@@ -136,9 +140,9 @@ class MaterialRepository(
                 it.id
             )
         }
-        var result = remoteDataSource.deleteAllTraineeCategoryJoin(traineeId)
+        var result = remoteDataSource.deleteAllTraineeCategoryJoinForTrainee(traineeId)
         if (result == StatusCode.SUCCESS.value) {
-            localDataSource.deleteAllTraineeCategoryJoin(traineeId)
+            localDataSource.deleteAllTraineeCategoryJoinForTrainee(traineeId)
         } else {
             return StatusCode.ERROR.value
         }
@@ -152,5 +156,5 @@ class MaterialRepository(
     }
 
     suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
-        localDataSource.getCategoriesFromTrainee(traineeId)
+        remoteDataSource.getCategoriesFromTrainee(traineeId)
 }
