@@ -1,6 +1,7 @@
 package com.aferrari.trailead.app.viewmodel.login
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,8 +21,11 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     var loginState = MutableLiveData<LoginState>()
 
+    var visibilityPassDrawable = MutableLiveData<Int>()
+
     init {
         loginState.value = LoginState.STARTED
+        visibilityPassDrawable.value = View.GONE
     }
 
     fun login() {
@@ -80,6 +84,15 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
                         else -> goLogin(it)
                     }
                 }
+        }
+    }
+
+
+    fun setDrawableVisibilityPass() {
+        if (visibilityPassDrawable.value == View.GONE) {
+            visibilityPassDrawable.value = View.VISIBLE
+        } else {
+            visibilityPassDrawable.value = View.GONE
         }
     }
 

@@ -1,8 +1,11 @@
 package com.aferrari.trailead.app.ui.login
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +74,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         requireActivity().finish()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun observeLogin() {
         loginViewModel.loginState.observe(viewLifecycleOwner) {
             when (it!!) {
@@ -81,6 +85,31 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
                 LoginState.REGISTER -> goRegister()
             }
         }
+        loginViewModel.visibilityPassDrawable.observe(viewLifecycleOwner) {
+            when (it) {
+                View.GONE -> {
+                    setVisibilityPassword(
+                        resources.getDrawable(R.drawable.ic_gone_text, requireContext().theme),
+                        PasswordTransformationMethod()
+                    )
+                }
+
+                View.VISIBLE -> {
+                    setVisibilityPassword(
+                        resources.getDrawable(R.drawable.ic_show_text, requireContext().theme),
+                        null
+                    )
+                }
+            }
+        }
+    }
+
+    private fun setVisibilityPassword(
+        newIconPass: Drawable,
+        passwordTransformationMethod: PasswordTransformationMethod?
+    ) {
+        binding.loginVisibilityPasswordImageView.setImageDrawable(newIconPass)
+        binding.passwordInputText.transformationMethod = passwordTransformationMethod
     }
 
     private fun goRegister() {
