@@ -2,7 +2,9 @@ package com.aferrari.trailead.app.ui.login
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,6 +80,34 @@ class RegistrationFragment : Fragment() {
                     ColorStateList.valueOf(Color.GRAY)
             }
         }
+        registrationViewModel.visibilityPassDrawable.observe(viewLifecycleOwner) {
+            when (it) {
+                View.GONE -> {
+                    setVisibilityPassword(
+                        resources.getDrawable(R.drawable.ic_gone_text, requireContext().theme),
+                        PasswordTransformationMethod()
+                    )
+                }
+
+                View.VISIBLE -> {
+                    setVisibilityPassword(
+                        resources.getDrawable(R.drawable.ic_show_text, requireContext().theme),
+                        null
+                    )
+                }
+            }
+        }
+    }
+
+    private fun setVisibilityPassword(
+        drawable: Drawable?,
+        passwordTransformationMethod: PasswordTransformationMethod?
+    ) {
+        binding.registerVisibilityPasswordImageView.setImageDrawable(drawable)
+        binding.passwordRgInputText.transformationMethod =
+            passwordTransformationMethod
+        binding.repeatPasswordRgInputText.transformationMethod =
+            passwordTransformationMethod
     }
 
     private fun observeLogin() {

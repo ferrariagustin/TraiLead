@@ -85,7 +85,9 @@
                     style="@style/traiLead_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
+                    android:layout_marginVertical="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_extra_long"
                     android:hint="@string/password_hint"
                     android:inputType="textPassword"
                     android:minHeight="@dimen/min_height"
@@ -93,6 +95,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/email_rg_input_text" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/register_visibility_password_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_gone_text"
+                    android:tint="@color/primaryColor"
+                    android:onClick="@{()->registrationViewModel.setDrawableVisibilityPass()}"
+                    app:layout_constraintBottom_toBottomOf="@id/password_rg_input_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/password_rg_input_text"
+                    app:layout_constraintTop_toTopOf="@id/password_rg_input_text" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/repeat_password_rg_input_text"
