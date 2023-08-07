@@ -8,28 +8,37 @@ import androidx.lifecycle.ViewModelProvider
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.HomeViewModel
 import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
-import com.aferrari.trailead.common.HomeState
+import com.aferrari.trailead.common.UserState
 import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.StringUtils.JOIN_DEEPLINK
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY
 import com.aferrari.trailead.common.StringUtils.TRAINEE_KEY
 import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.data.db.UserDataBase
+import com.aferrari.trailead.domain.datasource.LocalDataSource
+import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Moved to other package or module
  */
+@AndroidEntryPoint
 class RouterHomeActivity : AppCompatActivity() {
 
     private lateinit var homeViewModel: HomeViewModel
 
+    @Inject
+    lateinit var remoteDataSource: RemoteDataSource
+
+    @Inject
+    lateinit var localDataSource: LocalDataSource
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
-        val dao = UserDataBase.getInstance(this).userDao
-        val repository = UserRepository(dao)
+        super.onCreate(savedInstanceState)
+        val repository = UserRepository(localDataSource, remoteDataSource)
         val factory = HomeViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
         initComponent()
@@ -43,9 +52,9 @@ class RouterHomeActivity : AppCompatActivity() {
     private fun initListeners() {
         homeViewModel.homeState.observe(this) {
             when (it) {
-                HomeState.LEADER -> goLeaderScreen()
-                HomeState.TRAINEE -> goTraineeScreen()
-                HomeState.ERROR -> goLoginScreen()
+                UserState.LEADER -> goLeaderScreen()
+                UserState.TRAINEE -> goTraineeScreen()
+                UserState.ERROR -> goLoginScreen()
             }
         }
     }

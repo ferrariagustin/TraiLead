@@ -2,6 +2,7 @@ package com.aferrari.trailead.app.viewmodel.leader
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.IMaterial
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 
 open class LeaderViewModel(
     val repository: UserRepository,
-    val materialRepository: MaterialRepository
+    val materialRepository: MaterialRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel(), IMaterial {
     private lateinit var leader: Leader
 
@@ -85,6 +87,23 @@ open class LeaderViewModel(
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        saveState()
+    }
+
+    private fun saveState() {
+        savedStateHandle[CATEGORY_SELECTED] = categorySelected
+        savedStateHandle[TRAINEE_SELECTED] = traineeSelected
+        savedStateHandle[MATERIAL_SELECTED] = materialSelected
+    }
+
+    fun restoreState() {
+        categorySelected = savedStateHandle[CATEGORY_SELECTED]
+        traineeSelected = savedStateHandle[TRAINEE_SELECTED]
+        materialSelected = savedStateHandle[MATERIAL_SELECTED]
+    }
+
     fun getLeaderId() = leader.id
 
     fun getUnLinkedTrainees() {
@@ -144,7 +163,10 @@ open class LeaderViewModel(
             radioRolCheck?.let { position ->
                 viewModelScope.launch {
                     repository.updateTraineePosition(trainee, position)
-                    traineeSelected = repository.get(trainee.id) as Trainee
+                    repository.getUser(trainee.id)
+                        .collect {
+                            traineeSelected = it as Trainee
+                        }
                     statusUpdateTraineeRol.value = StatusUpdateInformation.SUCCESS
                 }
                 return
@@ -185,7 +207,10 @@ open class LeaderViewModel(
     private fun updatePassword(leaderId: Int, pass: String) {
         viewModelScope.launch {
             repository.updateLeaderPass(leaderId, pass)
-            setLeader(repository.get(leaderId) as Leader)
+            repository.getUser(leaderId)
+                .collect {
+                    setLeader(it as Leader)
+                }
             statusUpdatePassword.value = StatusUpdateInformation.SUCCESS
         }
     }
@@ -205,7 +230,7 @@ open class LeaderViewModel(
             statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
             return
         }
-        val category = Category(IntegerUtils().getUserId(), nameCategory, leader.id)
+        val category = Category(IntegerUtils().createObjectId(), nameCategory, leader.id)
         insertCategory(category)
     }
 
@@ -290,7 +315,7 @@ open class LeaderViewModel(
 
     private fun addNewYoutubeMaterial(title: String, youtubeId: String) {
         val newYouTubeVideo = YouTubeVideo(
-            id = IntegerUtils().getUserId(),
+            id = IntegerUtils().createObjectId(),
             title = title,
             url = youtubeId,
             categoryId = categorySelected?.id,
@@ -372,5 +397,11 @@ open class LeaderViewModel(
             if (it.name == category) return it
         }
         return null
+    }
+
+    private companion object {
+        const val CATEGORY_SELECTED = "categorySelected"
+        const val TRAINEE_SELECTED = "traineeSelected"
+        const val MATERIAL_SELECTED = "materialSelected"
     }
 }

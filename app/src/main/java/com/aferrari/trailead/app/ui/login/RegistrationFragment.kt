@@ -12,21 +12,30 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.RegistrationFragmentBinding
 import com.aferrari.trailead.app.viewmodel.login.LoginViewModelFactory
 import com.aferrari.trailead.app.viewmodel.login.RegistrationViewModel
 import com.aferrari.trailead.common.common_enum.RegisterErrorState
 import com.aferrari.trailead.common.common_enum.RegisterState
 import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.data.db.UserDataBase
-import com.aferrari.trailead.domain.repository.UserRepository
+import com.aferrari.trailead.databinding.RegistrationFragmentBinding
+import com.aferrari.trailead.domain.datasource.LocalDataSource
+import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 // TODO: don't working back navigation
+@AndroidEntryPoint
 class RegistrationFragment : Fragment() {
 
     private lateinit var binding: RegistrationFragmentBinding
     private lateinit var registrationViewModel: RegistrationViewModel
+
+    @Inject
+    lateinit var remoteDataSource: RemoteDataSource
+
+    @Inject
+    lateinit var localDataSource: LocalDataSource
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +44,7 @@ class RegistrationFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.registration_fragment, container, false)
-        val dao = UserDataBase.getInstance(requireActivity()).userDao
-        val repository = UserRepository(dao)
-        val factory = LoginViewModelFactory(repository)
+        val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
         registrationViewModel = ViewModelProvider(this, factory)[RegistrationViewModel::class.java]
         binding.registrationViewModel = registrationViewModel
         binding.lifecycleOwner = this

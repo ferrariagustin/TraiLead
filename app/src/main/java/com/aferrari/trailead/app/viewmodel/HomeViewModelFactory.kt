@@ -1,5 +1,7 @@
 package com.aferrari.trailead.app.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
@@ -14,13 +16,13 @@ class HomeViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            return HomeViewModel(repository) as T
+            return HomeViewModel(repository, SavedStateHandle()) as T
         }
         if (materialRepository != null && modelClass.isAssignableFrom(LeaderViewModel::class.java)) {
-            return LeaderViewModel(repository, materialRepository) as T
+            return LeaderViewModel(repository, materialRepository, SavedStateHandle()) as T
         }
         if (materialRepository != null && modelClass.isAssignableFrom(TraineeViewModel::class.java)) {
-            return TraineeViewModel(repository, materialRepository) as T
+            return TraineeViewModel(repository, materialRepository, SavedStateHandle()) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

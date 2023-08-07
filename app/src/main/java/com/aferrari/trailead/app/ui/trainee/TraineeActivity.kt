@@ -6,28 +6,40 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.aferrari.trailead.R
+import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
+import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.databinding.TraineeActivityBinding
-import com.aferrari.trailead.data.db.UserDataBase
+import com.aferrari.trailead.domain.datasource.LocalDataSource
+import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
-import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
-import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class TraineeActivity : AppCompatActivity() {
 
     private lateinit var binding: TraineeActivityBinding
 
     private lateinit var homeTraineeViewModel: TraineeViewModel
 
+    @Inject
+    lateinit var remoteDataSource: RemoteDataSource
+
+    @Inject
+    lateinit var localDataSource: LocalDataSource
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.trainee_activity)
-        val dao = UserDataBase.getInstance(this).userDao
-        val materialDao = UserDataBase.getInstance(this).materialDao
-        val factory = HomeViewModelFactory(UserRepository(dao), MaterialRepository(materialDao))
+        val factory = HomeViewModelFactory(
+            UserRepository(localDataSource, remoteDataSource),
+            MaterialRepository(localDataSource, remoteDataSource)
+        )
         homeTraineeViewModel = ViewModelProvider(this, factory)[TraineeViewModel::class.java]
         binding.lifecycleOwner = this
         initComponent()

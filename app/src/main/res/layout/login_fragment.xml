@@ -36,8 +36,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_medium"
-                    android:inputType="textEmailAddress"
                     android:hint="@string/email_hint"
+                    android:inputType="textEmailAddress"
                     android:text="@={loginViewModel.inputEmail}"
                     app:layout_constraintBottom_toTopOf="@id/password_input_text"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -50,14 +50,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:layout_marginEnd="@dimen/margin_medium"
-                    android:inputType="textPassword"
+                    android:layout_marginEnd="@dimen/margin_extra_long"
                     android:hint="@string/password_hint"
+                    android:inputType="textPassword"
                     android:text="@={loginViewModel.inputPass}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/user_email_input_text" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/login_visibility_password_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->loginViewModel.setDrawableVisibilityPass()}"
+                    android:src="@drawable/ic_gone_text"
+                    android:tint="@color/primaryColor"
+                    app:layout_constraintBottom_toBottomOf="@id/password_input_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/password_input_text"
+                    app:layout_constraintTop_toTopOf="@id/password_input_text" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/login_btn"

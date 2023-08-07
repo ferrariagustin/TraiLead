@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "c1edeb1ad02cc666441f4f13bac80b92",
+    "version": 3,
+    "identityHash": "10acfbcf5fff220023111bc715bc43ef",
     "entities": [
       {
         "tableName": "leader_data_table",
@@ -214,8 +214,15 @@
       },
       {
         "tableName": "trainee_category_join",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trainee_id` INTEGER NOT NULL, `category_id` INTEGER NOT NULL, PRIMARY KEY(`trainee_id`, `category_id`), FOREIGN KEY(`trainee_id`) REFERENCES `trainee_data_table`(`trainee_id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`category_id`) REFERENCES `category_data_table`(`category_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trainee_category_join_id` INTEGER NOT NULL DEFAULT 0, `trainee_id` INTEGER NOT NULL, `category_id` INTEGER NOT NULL, PRIMARY KEY(`trainee_id`, `category_id`), FOREIGN KEY(`trainee_id`) REFERENCES `trainee_data_table`(`trainee_id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`category_id`) REFERENCES `category_data_table`(`category_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "trainee_category_join_id",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
           {
             "fieldPath": "idTrainee",
             "columnName": "trainee_id",
@@ -236,7 +243,17 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_trainee_category_join_trainee_category_join_id",
+            "unique": true,
+            "columnNames": [
+              "trainee_category_join_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_trainee_category_join_trainee_category_join_id` ON `${TABLE_NAME}` (`trainee_category_join_id`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "trainee_data_table",
@@ -360,7 +377,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c1edeb1ad02cc666441f4f13bac80b92')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '10acfbcf5fff220023111bc715bc43ef')"
     ]
   }
 }

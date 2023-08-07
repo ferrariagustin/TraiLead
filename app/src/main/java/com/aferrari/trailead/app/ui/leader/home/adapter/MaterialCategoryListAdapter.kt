@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.trailead.R
+import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.databinding.ItemMaterialCategoryListBinding
 import com.aferrari.trailead.domain.models.Category
-import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 
 class MaterialCategoryListAdapter(
     private val dataSet: List<Category>,

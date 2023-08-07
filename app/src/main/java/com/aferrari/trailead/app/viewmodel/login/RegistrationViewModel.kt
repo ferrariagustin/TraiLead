@@ -90,14 +90,14 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
      * Validate if exist the user in DB
      */
     private suspend fun existUser(): Boolean {
-        val result = repository.get(inputEmail.value!!)
+        val result = repository.getUser(inputEmail.value!!)
         Log.e("TRAILEAD", "Register result = $result")
         return result != null
     }
 
     private suspend fun insertLeader(): Long = repository.insertLeader(
         Leader(
-            id = IntegerUtils().getUserId(),
+            id = IntegerUtils().createObjectId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,
@@ -107,7 +107,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private suspend fun insertTrainee(): Long = repository.insertTrainee(
         Trainee(
-            id = IntegerUtils().getUserId(),
+            id = IntegerUtils().createObjectId(),
             name = inputName.value!!,
             lastName = inputLastName.value!!,
             email = inputEmail.value!!,

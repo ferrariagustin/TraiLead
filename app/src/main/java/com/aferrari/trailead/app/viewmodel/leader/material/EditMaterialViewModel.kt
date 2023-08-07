@@ -35,12 +35,12 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
                     statusUpdateEditMaterial.value = StatusUpdateInformation.FAILED
                     return
                 }
-                val youtubeId: String? = UrlUtils().getYouTubeId(newUrl)
-                if (youtubeId.isNullOrEmpty()) {
+                val youtubeUrl: String? = UrlUtils().getYouTubeId(newUrl)
+                if (youtubeUrl.isNullOrEmpty()) {
                     statusUpdateEditMaterial.value = StatusUpdateInformation.FAILED
                     return
                 }
-                updateUrlVideo(it, youtubeId)
+                updateUrlVideo(it, youtubeUrl)
             }
             if (newTitle.isNotEmpty()) {
                 updateTitleVideo(it, newTitle)
@@ -62,8 +62,8 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
 
     private fun updateUrlVideo(
         youTubeVideoSelected: YouTubeVideo,
-        youtubeId: String
+        youtubeUrl: String
     ) = viewModelScope.launch {
-        homeViewModel.materialRepository.updateUrlYoutubeVideo(youTubeVideoSelected.id, youtubeId)
+        homeViewModel.materialRepository.updateUrlYoutubeVideo(youTubeVideoSelected.id, youtubeUrl)
     }
 }

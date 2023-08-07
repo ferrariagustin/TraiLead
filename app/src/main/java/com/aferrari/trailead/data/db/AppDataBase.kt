@@ -10,8 +10,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.aferrari.trailead.data.apiservices.MaterialDao
-import com.aferrari.trailead.data.apiservices.UserDao
+import com.aferrari.trailead.data.apiservices.LocalDataSourceDao
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
@@ -19,17 +18,19 @@ import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import javax.inject.Singleton
 
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [Leader::class, Trainee::class, YouTubeVideo::class, Category::class, TraineeCategoryJoin::class, Link::class, Pdf::class],
     autoMigrations = [
-        AutoMigration(from = 1, to = 2, spec = UserDataBase.AutoMigration1To2::class)
+        AutoMigration(from = 1, to = 2, spec = AppDataBase.AutoMigration1To2::class)
     ],
     exportSchema = true
 )
-abstract class UserDataBase : RoomDatabase() {
+@Singleton
+abstract class AppDataBase : RoomDatabase() {
 
     @RenameTable(fromTableName = "material_data_table", toTableName = "youtube_video_data_table")
     @RenameColumn(
@@ -59,24 +60,21 @@ abstract class UserDataBase : RoomDatabase() {
     )
     class AutoMigration1To2 : AutoMigrationSpec
 
-    abstract val userDao: UserDao
-
-    abstract val materialDao: MaterialDao
+    abstract val localDataSourceDao: LocalDataSourceDao
 
     companion object {
         @Volatile
-        private var INSTANCE: UserDataBase? = null
+        private var INSTANCE: AppDataBase? = null
 
-        fun getInstance(context: Context): UserDataBase {
+        fun getInstance(context: Context): AppDataBase {
             synchronized(this) {
                 var instance = INSTANCE
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        UserDataBase::class.java,
+                        AppDataBase::class.java,
                         "user_data_database"
                     )
-//                        .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                         .fallbackToDestructiveMigration()
                         .build()
                 }

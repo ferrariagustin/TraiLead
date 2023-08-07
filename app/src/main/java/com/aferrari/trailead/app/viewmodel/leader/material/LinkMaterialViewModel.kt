@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.viewmodel.StatusErrorType
 import com.aferrari.trailead.viewmodel.StatusUpdateInformation
@@ -95,7 +96,15 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
 
     private fun saveLinkToDB(title: String, link: String, id: Int, leaderId: Int) {
         viewModelScope.launch {
-            materialRepository.insertLink(Link(0, title, link, id, leaderId))
+            materialRepository.insertLink(
+                Link(
+                    IntegerUtils().createObjectId(),
+                    title,
+                    link,
+                    id,
+                    leaderId
+                )
+            )
             status.value = StatusUpdateInformation.SUCCESS
             return@launch
         }
