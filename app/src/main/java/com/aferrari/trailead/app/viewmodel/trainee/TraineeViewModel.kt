@@ -97,6 +97,10 @@ class TraineeViewModel(
         statusVisibilityPassword.value = StatusVisibilityPassword.INVISIBLE
     }
 
+    fun refresh() {
+        getLeaderFromTrainee(trainee.leaderId)
+    }
+
     companion object {
         private const val EMPTY_LEADER = "No tiene líder asignado"
         private const val SPACE_STRING = " "

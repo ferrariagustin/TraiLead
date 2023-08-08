@@ -57,6 +57,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayout")
 
     //  Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"

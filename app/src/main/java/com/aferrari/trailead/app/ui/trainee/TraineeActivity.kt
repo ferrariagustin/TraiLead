@@ -67,6 +67,11 @@ class TraineeActivity : AppCompatActivity() {
             }
             return@setOnItemSelectedListener true
         }
+        binding.traineeSwipeToRefresh.setOnRefreshListener {
+            homeTraineeViewModel.refresh()
+            binding.traineeSwipeToRefresh.setColorSchemeResources(R.color.primaryColor)
+            binding.traineeSwipeToRefresh.isRefreshing = false
+        }
     }
 
     private fun navigateToHome() {
