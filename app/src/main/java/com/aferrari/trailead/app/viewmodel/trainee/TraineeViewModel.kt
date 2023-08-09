@@ -98,7 +98,9 @@ class TraineeViewModel(
     }
 
     fun refresh() {
-        getLeaderFromTrainee(trainee.leaderId)
+        viewModelScope.launch {
+            setTrainee(repository.getTrainee(traineeId = trainee.id))
+        }
     }
 
     companion object {

@@ -399,6 +399,12 @@ open class LeaderViewModel(
         return null
     }
 
+    fun refresh() {
+        viewModelScope.launch {
+            setLeader(repository.getLeader(leader.id))
+        }
+    }
+
     private companion object {
         const val CATEGORY_SELECTED = "categorySelected"
         const val TRAINEE_SELECTED = "traineeSelected"

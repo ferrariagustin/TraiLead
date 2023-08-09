@@ -195,4 +195,7 @@ class UserRepository(
             localDataSource.updateLeaderPassword(leaderId, pass)
         }
     }
+
+    suspend fun getTrainee(traineeId: Int): Trainee? = remoteDataSource.getTrainee(traineeId)
+    suspend fun getLeader(leaderId: Int): Leader? = remoteDataSource.getLeader(leaderId)
 }

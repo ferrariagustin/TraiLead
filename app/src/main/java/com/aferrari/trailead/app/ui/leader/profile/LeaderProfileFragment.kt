@@ -12,11 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderProfileFragmentBinding
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.databinding.LeaderProfileFragmentBinding
 import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
 
-class LeaderProfileFragment : Fragment() {
+class LeaderProfileFragment : Fragment(), RefreshListener {
     private lateinit var binding: LeaderProfileFragmentBinding
 
     private val leaderViewModel: LeaderViewModel by activityViewModels()
@@ -55,6 +56,7 @@ class LeaderProfileFragment : Fragment() {
                         requireContext().theme
                     ), null
                 )
+
                 StatusVisibilityPassword.VISIBLE -> setVisibilityPassword(
                     StatusVisibilityPassword.INVISIBLE,
                     resources.getDrawable(R.drawable.ic_lock, requireContext().theme),
@@ -72,5 +74,9 @@ class LeaderProfileFragment : Fragment() {
         leaderViewModel.statusVisibilityPassword = visibilityPassword
         binding.leaderImageViewPasswordIcon.setImageDrawable(newIconPass)
         binding.leaderPasswordTextview.transformationMethod = passwordTransformationMethod
+    }
+
+    override fun refresh() {
+        leaderViewModel.refresh()
     }
 }

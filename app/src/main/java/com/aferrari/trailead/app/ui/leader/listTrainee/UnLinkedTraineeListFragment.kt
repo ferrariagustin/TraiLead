@@ -10,12 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.UnlinkedTraineeListFragmentBinding
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.ui.leader.listTrainee.adapter.UnLinkedTraineeListAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.databinding.UnlinkedTraineeListFragmentBinding
 
 
-class UnLinkedTraineeListFragment : Fragment() {
+class UnLinkedTraineeListFragment : Fragment(), RefreshListener {
     lateinit var binding: UnlinkedTraineeListFragmentBinding
 
     private val leaderViewModel: LeaderViewModel by activityViewModels()
@@ -53,5 +54,9 @@ class UnLinkedTraineeListFragment : Fragment() {
         binding.leaderUnlinkedTraineesToolbar.setNavigationOnClickListener {
             findNavController().navigate(R.id.action_unLinkedTraineeListFragment_to_linkedTraineeListFragment)
         }
+    }
+
+    override fun refresh() {
+        leaderViewModel.getUnLinkedTrainees()
     }
 }
