@@ -6,21 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.TraineeMaterialListFromCategorySelectedBinding
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.ui.leader.home.adapter.MaterialListAdapter
-import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.app.viewmodel.trainee.home.HomeTraineeViewModel
+import com.aferrari.trailead.databinding.TraineeMaterialListFromCategorySelectedBinding
 
-class TraineeMaterialFragment : Fragment() {
+class TraineeMaterialFragment : Fragment(), RefreshListener {
 
     private lateinit var binding: TraineeMaterialListFromCategorySelectedBinding
-
-    private val traineeViewModel: TraineeViewModel by activityViewModels()
 
     private lateinit var viewModel: HomeTraineeViewModel
 
@@ -57,5 +54,9 @@ class TraineeMaterialFragment : Fragment() {
         viewModel.materialsByCategory.observe(viewLifecycleOwner) {
             binding.traineeMaterialRecyclerView.adapter = MaterialListAdapter(it, this, viewModel)
         }
+    }
+
+    override fun refresh() {
+        viewModel.getMaterials()
     }
 }

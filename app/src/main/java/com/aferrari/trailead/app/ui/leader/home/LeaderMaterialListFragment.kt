@@ -14,11 +14,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.databinding.LeaderMaterialListBinding
 import com.aferrari.trailead.app.ui.leader.home.adapter.MaterialListAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 
-class LeaderMaterialListFragment : Fragment() {
+class LeaderMaterialListFragment : Fragment(), RefreshListener {
 
     private lateinit var binding: LeaderMaterialListBinding
     private val leaderViewModel: LeaderViewModel by activityViewModels()
@@ -126,5 +127,9 @@ class LeaderMaterialListFragment : Fragment() {
             binding.addPdfMaterial.isClickable = false
             binding.addVideoMaterial.isClickable = false
         }
+    }
+
+    override fun refresh() {
+        leaderViewModel.getMaterialsCategoryFilter()
     }
 }

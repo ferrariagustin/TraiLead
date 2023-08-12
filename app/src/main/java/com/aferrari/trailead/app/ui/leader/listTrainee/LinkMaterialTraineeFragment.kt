@@ -10,16 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.ui.leader.listTrainee.adapter.SettingsMaterialTraineeAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.app.viewmodel.leader.listTrainee.ListTraineeViewModel
+import com.aferrari.trailead.common.ui.TraileadDialog
+import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
 import com.google.android.material.radiobutton.MaterialRadioButton
 
 
-class LinkMaterialTraineeFragment : Fragment() {
+class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
 
     private lateinit var binding: LinkMaterialTraineeFragmentBinding
 
@@ -94,11 +95,11 @@ class LinkMaterialTraineeFragment : Fragment() {
     private fun initComponents() {
         binding.recyclerViewMaterialForCategoryList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        viewModel.getCategoriesSelected()
         viewModel.getCategories()?.let {
             binding.recyclerViewMaterialForCategoryList.adapter =
                 SettingsMaterialTraineeAdapter(it, this, viewModel)
         }
-        viewModel.getCategoriesSelected()
         initAllSelected()
     }
 
@@ -122,5 +123,9 @@ class LinkMaterialTraineeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         setVisibilityBottomNavigation(View.VISIBLE)
+    }
+
+    override fun refresh() {
+        viewModel.getCategoriesSelected()
     }
 }

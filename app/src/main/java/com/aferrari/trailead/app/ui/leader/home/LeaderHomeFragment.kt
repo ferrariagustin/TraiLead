@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.ui.leader.home.adapter.MaterialCategoryListAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.StringUtils
@@ -19,7 +20,7 @@ import com.aferrari.trailead.common.session.SessionManagement
 import com.aferrari.trailead.databinding.LeaderHomeFragmentBinding
 
 
-class LeaderHomeFragment : Fragment() {
+class LeaderHomeFragment : Fragment(), RefreshListener {
 
     private lateinit var binding: LeaderHomeFragmentBinding
 
@@ -70,6 +71,10 @@ class LeaderHomeFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    override fun refresh() {
+        leaderViewModel.getAllCategoryForLeader()
     }
 
 }

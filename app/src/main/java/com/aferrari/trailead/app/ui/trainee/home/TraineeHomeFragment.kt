@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.ui.trainee.home.adapter.TraineeCategoryListAdapter
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModelFactory
@@ -20,7 +21,7 @@ import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.session.SessionManagement
 import com.aferrari.trailead.databinding.TraineeHomeFragmentBinding
 
-class TraineeHomeFragment : Fragment() {
+class TraineeHomeFragment : Fragment(), RefreshListener {
     private lateinit var binding: TraineeHomeFragmentBinding
 
     private val traineeViewModel: TraineeViewModel by activityViewModels()
@@ -85,5 +86,9 @@ class TraineeHomeFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    override fun refresh() {
+        viewModel.getCategories()
     }
 }

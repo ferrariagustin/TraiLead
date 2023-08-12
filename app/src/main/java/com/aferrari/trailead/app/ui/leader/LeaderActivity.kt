@@ -3,9 +3,11 @@ package com.aferrari.trailead.app.ui.leader
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.aferrari.trailead.R
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.BundleUtils
@@ -75,6 +77,11 @@ class LeaderActivity : AppCompatActivity() {
         leaderViewModel.bottomNavigationViewVisibility.observe(this) {
             binding.bottomNavigationId.visibility = it
         }
+        binding.leaderSwipeToRefresh.setOnRefreshListener {
+            refresh()
+            binding.leaderSwipeToRefresh.setColorSchemeResources(R.color.primaryColor)
+            binding.leaderSwipeToRefresh.isRefreshing = false
+        }
     }
 
     private fun navigateToHome() {
@@ -90,6 +97,17 @@ class LeaderActivity : AppCompatActivity() {
     private fun navigateToProfile() {
         binding.fragmentLeaderContainerId.findNavController()
             .navigate(R.id.leaderProfileFragment, BundleUtils().getBundleTab(2))
+    }
+
+    private fun refresh() {
+        binding.fragmentLeaderContainerId.getFragment<Fragment>().childFragmentManager.fragments.forEach {
+            (it as? RefreshListener)?.refresh()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refresh()
     }
 
     override fun onBackPressed() {

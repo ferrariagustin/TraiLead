@@ -12,13 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
+import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.databinding.TraineeProfileFragmentBinding
 import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
 
 
-class TraineeProfileFragment : Fragment() {
+class TraineeProfileFragment : Fragment(), RefreshListener {
 
     private lateinit var binding: TraineeProfileFragmentBinding
     private val homeTraineeViewModel: TraineeViewModel by activityViewModels()
@@ -92,5 +93,9 @@ class TraineeProfileFragment : Fragment() {
             R.id.action_traineeProfileFragment_to_traineeEditProfileName,
             BundleUtils().getBundleTab(1)
         )
+    }
+
+    override fun refresh() {
+        homeTraineeViewModel.refresh()
     }
 }

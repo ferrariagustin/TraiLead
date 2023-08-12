@@ -32,47 +32,47 @@ class UserRepository(
     }
 
     fun getUser(user_id: Int): Flow<User?> = flow {
-        if (localDataSource.isEmpty()) {
-            remoteDataSource.getUserType(user_id)
-                .collect { userType ->
-                    when (userType) {
-                        UserType.LEADER -> {
-                            remoteDataSource.getLeader(user_id)
-                                ?.let { localDataSource.insertLeader(it) }
-                        }
+        remoteDataSource.getUserType(user_id)
+            .collect { userType ->
+                when (userType) {
+                    UserType.LEADER -> {
+                        remoteDataSource.getLeader(user_id)
+                            ?.let { emit(it) }
+                    }
 
-                        UserType.TRAINEE -> {
-                            remoteDataSource.getTrainee(user_id)
-                                ?.let { localDataSource.insertTrainee(it) }
-                        }
+                    UserType.TRAINEE -> {
+                        remoteDataSource.getTrainee(user_id)
+                            ?.let { emit(it) }
+                    }
 
-                        else -> {
-                            emit(null)
-                            return@collect
-                        }
+                    else -> {
+                        emit(null)
+                        return@collect
                     }
                 }
-        }
-        when (localDataSource.getUserType(user_id)) {
-            UserType.LEADER -> {
-                emit(localDataSource.getLeader(user_id))
             }
-
-            UserType.TRAINEE -> {
-                emit(localDataSource.getTrainee(user_id))
-            }
-
-            else -> {
-                emit(null)
-            }
-        }
+//        if (localDataSource.isEmpty()) {
+//        }
+//        when (localDataSource.getUserType(user_id)) {
+//            UserType.LEADER -> {
+//                emit(localDataSource.getLeader(user_id))
+//            }
+//
+//            UserType.TRAINEE -> {
+//                emit(localDataSource.getTrainee(user_id))
+//            }
+//
+//            else -> {
+//                emit(null)
+//            }
+//        }
 
     }
 
     suspend fun getUser(user_email: String): User? {
-        localDataSource.getLeader(user_email).apply {
+        remoteDataSource.getLeader(user_email).apply {
             if (this == null) {
-                localDataSource.getTrainee(user_email).let {
+                remoteDataSource.getTrainee(user_email).let {
                     return it
                 }
             } else {
@@ -82,9 +82,9 @@ class UserRepository(
     }
 
     suspend fun getUser(user_email: String, user_pass: String): User? {
-        localDataSource.getLeader(user_email, user_pass).apply {
+        remoteDataSource.getLeader(user_email, user_pass).apply {
             if (this == null) {
-                localDataSource.getTrainee(user_email, user_pass).let {
+                remoteDataSource.getTrainee(user_email, user_pass).let {
                     return it
                 }
             } else {
@@ -195,4 +195,7 @@ class UserRepository(
             localDataSource.updateLeaderPassword(leaderId, pass)
         }
     }
+
+    suspend fun getTrainee(traineeId: Int): Trainee? = remoteDataSource.getTrainee(traineeId)
+    suspend fun getLeader(leaderId: Int): Leader? = remoteDataSource.getLeader(leaderId)
 }

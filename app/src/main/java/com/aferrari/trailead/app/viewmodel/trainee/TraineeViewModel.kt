@@ -97,6 +97,12 @@ class TraineeViewModel(
         statusVisibilityPassword.value = StatusVisibilityPassword.INVISIBLE
     }
 
+    fun refresh() {
+        viewModelScope.launch {
+            setTrainee(repository.getTrainee(traineeId = trainee.id))
+        }
+    }
+
     companion object {
         private const val EMPTY_LEADER = "No tiene líder asignado"
         private const val SPACE_STRING = " "
