@@ -59,6 +59,7 @@ class LeaderHomeFragment : Fragment(), RefreshListener {
         binding.addMaterialCategoryLeaderHome.setOnClickListener {
             findNavController().navigate(R.id.action_leaderHomeFragment_to_addCategoryFragment)
         }
+        refresh()
     }
 
     private fun logout() {
@@ -74,7 +75,10 @@ class LeaderHomeFragment : Fragment(), RefreshListener {
     }
 
     override fun refresh() {
-        leaderViewModel.getAllCategoryForLeader()
+        leaderViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) {
+                leaderViewModel.getAllCategoryForLeader()
+            }
+        }
     }
-
 }

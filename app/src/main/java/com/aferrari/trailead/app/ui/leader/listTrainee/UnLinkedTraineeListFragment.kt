@@ -54,9 +54,12 @@ class UnLinkedTraineeListFragment : Fragment(), RefreshListener {
         binding.leaderUnlinkedTraineesToolbar.setNavigationOnClickListener {
             findNavController().navigate(R.id.action_unLinkedTraineeListFragment_to_linkedTraineeListFragment)
         }
+        refresh()
     }
 
     override fun refresh() {
-        leaderViewModel.getUnLinkedTrainees()
+        leaderViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) leaderViewModel.getUnLinkedTrainees()
+        }
     }
 }

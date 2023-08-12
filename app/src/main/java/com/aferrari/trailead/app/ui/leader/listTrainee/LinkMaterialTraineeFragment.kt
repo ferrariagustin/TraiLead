@@ -74,6 +74,7 @@ class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
                 colorRes = R.color.primaryColor
             )
         }
+        refresh()
     }
 
     private fun getPositiveAction(): DialogInterface.OnClickListener =
@@ -126,6 +127,8 @@ class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
     }
 
     override fun refresh() {
-        viewModel.getCategoriesSelected()
+        leaderViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) viewModel.getCategoriesSelected()
+        }
     }
 }

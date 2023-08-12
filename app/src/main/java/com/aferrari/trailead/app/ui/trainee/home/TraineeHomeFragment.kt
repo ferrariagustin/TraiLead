@@ -66,6 +66,7 @@ class TraineeHomeFragment : Fragment(), RefreshListener {
             }
             return@setOnMenuItemClickListener true
         }
+        refresh()
     }
 
     private fun setTitleToolbar() {
@@ -89,6 +90,8 @@ class TraineeHomeFragment : Fragment(), RefreshListener {
     }
 
     override fun refresh() {
-        viewModel.getCategories()
+        traineeViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) viewModel.getCategories()
+        }
     }
 }

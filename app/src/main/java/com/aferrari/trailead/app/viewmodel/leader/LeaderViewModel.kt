@@ -19,6 +19,7 @@ import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.aferrari.trailead.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 open class LeaderViewModel(
@@ -54,6 +55,8 @@ open class LeaderViewModel(
 
     var materialSelected: Material? = null
 
+    val refresh = MutableLiveData<Boolean>()
+
     //    Category
     val listCategory = MutableLiveData<List<Category>>()
     val statusUpdateNewCategory = MutableLiveData<StatusUpdateInformation>()
@@ -69,6 +72,7 @@ open class LeaderViewModel(
     val bottomNavigationViewVisibility = MutableLiveData(View.VISIBLE)
 
     fun init() {
+        refresh.value = false
         bottomNavigationViewVisibility.value = View.VISIBLE
         statusUpdateNewMaterial.value = StatusUpdateInformation.NONE
         statusUpdateNewCategory.value = StatusUpdateInformation.NONE
@@ -400,6 +404,14 @@ open class LeaderViewModel(
     }
 
     fun refresh() {
+        viewModelScope.launch {
+            refresh.value = true
+            delay(3000)
+            refresh.value = false
+        }
+    }
+
+    fun updateProfile() {
         viewModelScope.launch {
             setLeader(repository.getLeader(leader.id))
         }

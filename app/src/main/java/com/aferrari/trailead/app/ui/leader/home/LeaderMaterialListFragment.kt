@@ -15,9 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.ui.RefreshListener
-import com.aferrari.trailead.databinding.LeaderMaterialListBinding
 import com.aferrari.trailead.app.ui.leader.home.adapter.MaterialListAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.databinding.LeaderMaterialListBinding
 
 class LeaderMaterialListFragment : Fragment(), RefreshListener {
 
@@ -77,6 +77,7 @@ class LeaderMaterialListFragment : Fragment(), RefreshListener {
         binding.addLinkMaterial.setOnClickListener {
             findNavController().navigate(R.id.action_leaderMaterialListFragment_to_addLinkFragment)
         }
+        refresh()
     }
 
     private fun onAddButtonClicked() {
@@ -130,6 +131,8 @@ class LeaderMaterialListFragment : Fragment(), RefreshListener {
     }
 
     override fun refresh() {
-        leaderViewModel.getMaterialsCategoryFilter()
+        leaderViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) leaderViewModel.getMaterialsCategoryFilter()
+        }
     }
 }

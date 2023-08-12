@@ -10,6 +10,7 @@ import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.aferrari.trailead.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TraineeViewModel(
@@ -32,6 +33,8 @@ class TraineeViewModel(
     val traineePosition = MutableLiveData<String>()
     val traineePassword = MutableLiveData<String>()
     val traineeAssignedLeader = MutableLiveData<String>()
+
+    val refresh = MutableLiveData<Boolean>()
 
     fun setTrainee(trainee: Trainee?) {
         trainee?.let {
@@ -98,6 +101,14 @@ class TraineeViewModel(
     }
 
     fun refresh() {
+        viewModelScope.launch {
+            refresh.value = true
+            delay(3000)
+            refresh.value = false
+        }
+    }
+
+    fun updateProfile() {
         viewModelScope.launch {
             setTrainee(repository.getTrainee(traineeId = trainee.id))
         }

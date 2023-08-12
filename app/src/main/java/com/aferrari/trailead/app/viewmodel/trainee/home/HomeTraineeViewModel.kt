@@ -86,4 +86,6 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
         TODO("Not yet implemented")
     }
 
+    fun getRefresh() = viewModel.refresh
+
 }

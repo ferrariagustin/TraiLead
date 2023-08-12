@@ -11,9 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.ui.RefreshListener
-import com.aferrari.trailead.databinding.LinkedTraineeListFragmentBinding
 import com.aferrari.trailead.app.ui.leader.listTrainee.adapter.LinkedTraineeListAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.databinding.LinkedTraineeListFragmentBinding
 
 class LinkedTraineeListFragment : Fragment(), RefreshListener {
 
@@ -58,9 +58,12 @@ class LinkedTraineeListFragment : Fragment(), RefreshListener {
             binding.traineeListRecyclerView.adapter =
                 LinkedTraineeListAdapter(it, this, leaderViewModel)
         }
+        refresh()
     }
 
     override fun refresh() {
-        leaderViewModel.getLinkedTrainees()
+        leaderViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) leaderViewModel.getLinkedTrainees()
+        }
     }
 }

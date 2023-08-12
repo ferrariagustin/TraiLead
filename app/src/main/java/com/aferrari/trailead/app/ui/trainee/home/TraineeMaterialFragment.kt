@@ -54,9 +54,12 @@ class TraineeMaterialFragment : Fragment(), RefreshListener {
         viewModel.materialsByCategory.observe(viewLifecycleOwner) {
             binding.traineeMaterialRecyclerView.adapter = MaterialListAdapter(it, this, viewModel)
         }
+        refresh()
     }
 
     override fun refresh() {
-        viewModel.getMaterials()
+        viewModel.getRefresh().observe(viewLifecycleOwner) {
+            if (it) viewModel.getMaterials()
+        }
     }
 }

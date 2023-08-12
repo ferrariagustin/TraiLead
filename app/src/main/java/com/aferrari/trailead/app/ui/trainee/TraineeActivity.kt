@@ -3,11 +3,9 @@ package com.aferrari.trailead.app.ui.trainee
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.common.BundleUtils
@@ -70,7 +68,7 @@ class TraineeActivity : AppCompatActivity() {
             return@setOnItemSelectedListener true
         }
         binding.traineeSwipeToRefresh.setOnRefreshListener {
-            refresh()
+            homeTraineeViewModel.refresh()
             binding.traineeSwipeToRefresh.setColorSchemeResources(R.color.primaryColor)
             binding.traineeSwipeToRefresh.isRefreshing = false
         }
@@ -92,13 +90,7 @@ class TraineeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refresh()
-    }
-
-    private fun refresh() {
-        binding.fragmentContainerId.getFragment<Fragment>().childFragmentManager.fragments.forEach {
-            (it as? RefreshListener)?.refresh()
-        }
+        homeTraineeViewModel.refresh()
     }
 
     override fun onBackPressed() {

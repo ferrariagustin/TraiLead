@@ -64,6 +64,7 @@ class LeaderProfileFragment : Fragment(), RefreshListener {
                 )
             }
         }
+        refresh()
     }
 
     private fun setVisibilityPassword(
@@ -77,6 +78,8 @@ class LeaderProfileFragment : Fragment(), RefreshListener {
     }
 
     override fun refresh() {
-        leaderViewModel.refresh()
+        leaderViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) leaderViewModel.updateProfile()
+        }
     }
 }

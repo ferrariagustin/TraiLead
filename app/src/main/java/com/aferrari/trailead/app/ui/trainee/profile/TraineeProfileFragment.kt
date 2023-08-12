@@ -69,6 +69,7 @@ class TraineeProfileFragment : Fragment(), RefreshListener {
                 else -> {}
             }
         }
+        refresh()
     }
 
     private fun setVisibilityPassword(
@@ -96,6 +97,8 @@ class TraineeProfileFragment : Fragment(), RefreshListener {
     }
 
     override fun refresh() {
-        homeTraineeViewModel.refresh()
+        homeTraineeViewModel.refresh.observe(viewLifecycleOwner) {
+            if (it) homeTraineeViewModel.updateProfile()
+        }
     }
 }
