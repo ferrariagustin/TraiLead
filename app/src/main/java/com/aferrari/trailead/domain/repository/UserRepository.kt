@@ -1,5 +1,6 @@
 package com.aferrari.trailead.domain.repository
 
+import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -93,11 +94,17 @@ class UserRepository(
         }
     }
 
-    suspend fun insertLeader(leader: Leader): Long {
-        if (getUser(leader.email) != null) {
-            // Return duplicate when exist email on db
+    suspend fun insertLeader(
+        id: Int,
+        name: String,
+        lastName: String,
+        email: String,
+        pass: String
+    ): Long {
+        if (getUser(email) != null) {
             return StatusCode.DUPLICATE.value
         }
+        val leader = Leader(id, name, lastName, email, PasswordUtil.hashPassword(pass))
         val result = remoteDataSource.insertLeader(leader)
         if (result == StatusCode.SUCCESS.value) {
             // Insert local with Room
@@ -107,11 +114,18 @@ class UserRepository(
     }
 
 
-    suspend fun insertTrainee(trainee: Trainee): Long {
-        if (getUser(trainee.email) != null) {
+    suspend fun insertTrainee(
+        id: Int,
+        name: String,
+        lastName: String,
+        email: String,
+        pass: String
+    ): Long {
+        if (getUser(email) != null) {
             // Return duplicate when exist email on db
             return StatusCode.DUPLICATE.value
         }
+        val trainee = Trainee(id, name, lastName, email, PasswordUtil.hashPassword(pass))
         val result = remoteDataSource.insertTrainee(trainee)
         if (result == StatusCode.SUCCESS.value) {
             // Insert local with Room
@@ -162,9 +176,10 @@ class UserRepository(
     }
 
     suspend fun updateTraineePassword(password: String, traineeId: Int) {
-        val result = remoteDataSource.updateTraineePassword(traineeId, password)
+        val passwordHash = PasswordUtil.hashPassword(password)
+        val result = remoteDataSource.updateTraineePassword(traineeId, passwordHash)
         if (result == StatusCode.SUCCESS.value) {
-            localDataSource.updateTraineePassword(traineeId, password)
+            localDataSource.updateTraineePassword(traineeId, passwordHash)
         }
     }
 
@@ -190,9 +205,10 @@ class UserRepository(
     }
 
     suspend fun updateLeaderPass(leaderId: Int, pass: String) {
-        val result = remoteDataSource.updateLeaderPassword(leaderId, pass)
+        val hashPassword = PasswordUtil.hashPassword(pass)
+        val result = remoteDataSource.updateLeaderPassword(leaderId, hashPassword)
         if (result == StatusCode.SUCCESS.value) {
-            localDataSource.updateLeaderPassword(leaderId, pass)
+            localDataSource.updateLeaderPassword(leaderId, hashPassword)
         }
     }
 

@@ -10,8 +10,6 @@ import com.aferrari.trailead.common.StringUtils.EMPTY_STRING
 import com.aferrari.trailead.common.common_enum.RegisterErrorState
 import com.aferrari.trailead.common.common_enum.RegisterState
 import com.aferrari.trailead.common.common_enum.UserType
-import com.aferrari.trailead.domain.models.Leader
-import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
 import java.util.*
@@ -76,12 +74,9 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
                 registerState.value = RegisterState.FAILED_USER_EXIST
                 return@launch
             }
-            var result: Long? = null
-            if (userType == UserType.TRAINEE) {
-                result = insertTrainee()
-            }
-            if (userType == UserType.LEADER) {
-                result = insertLeader()
+            val result = when (userType) {
+                UserType.TRAINEE -> insertTrainee()
+                UserType.LEADER -> insertLeader()
             }
             Log.e("TRAILEAD", "Register result = $result")
             registerState.value = RegisterState.SUCCESS
@@ -100,23 +95,19 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
     }
 
     private suspend fun insertLeader(): Long = repository.insertLeader(
-        Leader(
-            id = IntegerUtils().createObjectId(),
-            name = inputName.value!!,
-            lastName = inputLastName.value!!,
-            email = inputEmail.value!!,
-            pass = inputPass.value!!
-        )
+        id = IntegerUtils().createObjectId(),
+        name = inputName.value!!,
+        lastName = inputLastName.value!!,
+        email = inputEmail.value!!,
+        pass = inputPass.value!!
     )
 
     private suspend fun insertTrainee(): Long = repository.insertTrainee(
-        Trainee(
-            id = IntegerUtils().createObjectId(),
-            name = inputName.value!!,
-            lastName = inputLastName.value!!,
-            email = inputEmail.value!!,
-            pass = inputPass.value!!,
-        )
+        id = IntegerUtils().createObjectId(),
+        name = inputName.value!!,
+        lastName = inputLastName.value!!,
+        email = inputEmail.value!!,
+        pass = inputPass.value!!,
     )
 
     /**
