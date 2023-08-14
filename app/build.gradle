@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-//    AndroidX version
+    //  AndroidX version
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
@@ -68,15 +68,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$androidx_lifecycle"
 
-//    UI Version
+    //  UI Version
     implementation "com.google.android.material:material:$material"
 
-//    Test version
+    //  Test version
     testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
 
-//  ROOM
+    //  ROOM
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-common:$room_version"
     implementation("androidx.room:room-runtime:$room_version")
@@ -97,11 +97,15 @@ dependencies {
     // FireBase
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
-    implementation 'com.google.firebase:firebase-database:20.2.1'
+    implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
+    implementation 'com.google.firebase:firebase-database:20.2.2'
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.9'
+
+    // bcrypt
+    implementation 'at.favre.lib:bcrypt:0.4.1'
+
 }
 
 // Allow references to generated code

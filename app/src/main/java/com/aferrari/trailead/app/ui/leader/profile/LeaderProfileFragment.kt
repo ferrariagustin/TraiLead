@@ -1,9 +1,7 @@
 package com.aferrari.trailead.app.ui.leader.profile
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +13,6 @@ import com.aferrari.trailead.R
 import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.databinding.LeaderProfileFragmentBinding
-import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
 
 class LeaderProfileFragment : Fragment(), RefreshListener {
     private lateinit var binding: LeaderProfileFragmentBinding
@@ -47,34 +44,7 @@ class LeaderProfileFragment : Fragment(), RefreshListener {
         binding.leaderImageViewEditPasswordIcon.setOnClickListener {
             findNavController().navigate(R.id.action_leaderProfileFragment_to_leaderEditPassFragment)
         }
-        binding.leaderImageViewPasswordIcon.setOnClickListener {
-            when (leaderViewModel.statusVisibilityPassword) {
-                StatusVisibilityPassword.INVISIBLE -> setVisibilityPassword(
-                    StatusVisibilityPassword.VISIBLE,
-                    resources.getDrawable(
-                        R.drawable.ic_unlock,
-                        requireContext().theme
-                    ), null
-                )
-
-                StatusVisibilityPassword.VISIBLE -> setVisibilityPassword(
-                    StatusVisibilityPassword.INVISIBLE,
-                    resources.getDrawable(R.drawable.ic_lock, requireContext().theme),
-                    PasswordTransformationMethod()
-                )
-            }
-        }
         refresh()
-    }
-
-    private fun setVisibilityPassword(
-        visibilityPassword: StatusVisibilityPassword,
-        newIconPass: Drawable,
-        passwordTransformationMethod: PasswordTransformationMethod?
-    ) {
-        leaderViewModel.statusVisibilityPassword = visibilityPassword
-        binding.leaderImageViewPasswordIcon.setImageDrawable(newIconPass)
-        binding.leaderPasswordTextview.transformationMethod = passwordTransformationMethod
     }
 
     override fun refresh() {

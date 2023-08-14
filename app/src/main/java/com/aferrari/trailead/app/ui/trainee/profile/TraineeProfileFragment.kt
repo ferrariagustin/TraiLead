@@ -1,9 +1,7 @@
 package com.aferrari.trailead.app.ui.trainee.profile
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.databinding.TraineeProfileFragmentBinding
-import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
 
 
 class TraineeProfileFragment : Fragment(), RefreshListener {
@@ -46,40 +43,8 @@ class TraineeProfileFragment : Fragment(), RefreshListener {
         binding.imageViewEditPasswordIcon.setOnClickListener {
             navigateToEditPassword()
         }
-
-        binding.imageViewPasswordIcon.setOnClickListener {
-            when (homeTraineeViewModel.statusVisibilityPassword.value) {
-                StatusVisibilityPassword.INVISIBLE -> {
-                    setVisibilityPassword(
-                        StatusVisibilityPassword.VISIBLE,
-                        resources.getDrawable(R.drawable.ic_unlock, requireContext().theme),
-                        null,
-                    )
-                }
-
-                StatusVisibilityPassword.VISIBLE -> {
-                    setVisibilityPassword(
-                        StatusVisibilityPassword.INVISIBLE,
-                        resources.getDrawable(R.drawable.ic_lock, requireContext().theme),
-                        PasswordTransformationMethod()
-                    )
-
-                }
-
-                else -> {}
-            }
-        }
+        
         refresh()
-    }
-
-    private fun setVisibilityPassword(
-        newVisibility: StatusVisibilityPassword,
-        drawable: Drawable,
-        passwordTransformationMethod: PasswordTransformationMethod?,
-    ) {
-        homeTraineeViewModel.statusVisibilityPassword.value = newVisibility
-        binding.imageViewPasswordIcon.setImageDrawable(drawable)
-        binding.traineePasswordTextview.transformationMethod = passwordTransformationMethod
     }
 
     private fun navigateToEditPassword() {

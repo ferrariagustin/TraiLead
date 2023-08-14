@@ -1,5 +1,6 @@
 package com.aferrari.trailead.data
 
+import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -598,7 +599,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                 val leaders = hashMapValues.values.map {
                     Gson().fromJson(Gson().toJson(it), Leader::class.java)
-                }.filter { it.email == user_email && it.pass == user_pass }
+                }.filter {
+                    it.email == user_email && PasswordUtil.verifyPassword(
+                        user_pass,
+                        it.pass
+                    )
+                }
                 if (leaders.isNotEmpty()) {
                     return leaders[0]
                 } else {
@@ -661,7 +667,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                 val trainees = hashMapValues.values.map {
                     Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-                }.filter { it.email == user_email && it.pass == user_pass }
+                }.filter {
+                    it.email == user_email && PasswordUtil.verifyPassword(
+                        user_pass,
+                        it.pass
+                    )
+                }
                 if (trainees.isNotEmpty()) {
                     return trainees[0]
                 } else {
