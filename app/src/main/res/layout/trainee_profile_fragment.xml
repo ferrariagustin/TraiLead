@@ -128,16 +128,6 @@
             app:layout_constraintStart_toEndOf="@id/image_view_password_icon"
             app:layout_constraintTop_toBottomOf="@id/email_divider_id" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/trainee_password_textview"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:text="@={traineeViewModel.traineePassword}"
-            app:layout_constraintStart_toStartOf="@id/trainee_label_password_textview"
-            app:layout_constraintTop_toBottomOf="@id/trainee_label_password_textview" />
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_edit_password_icon"
             android:layout_width="wrap_content"
@@ -146,7 +136,7 @@
             android:src="@drawable/ic_next"
             android:tint="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trainee_label_password_textview" />
+            app:layout_constraintTop_toTopOf="@id/trainee_label_password_textview" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_password_id"
@@ -155,7 +145,7 @@
             android:layout_margin="@dimen/margin_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trainee_password_textview" />
+            app:layout_constraintTop_toBottomOf="@id/image_view_edit_password_icon" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_position_icon"

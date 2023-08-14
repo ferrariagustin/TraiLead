@@ -18,7 +18,6 @@ import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.aferrari.trailead.viewmodel.StatusUpdateInformation
-import com.aferrari.trailead.viewmodel.StatusVisibilityPassword
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -44,8 +43,6 @@ open class LeaderViewModel(
     val statusUpdateTraineeRol = MutableLiveData<StatusUpdateInformation>()
 
     val statusUpdatePassword = MutableLiveData<StatusUpdateInformation>()
-
-    var statusVisibilityPassword = StatusVisibilityPassword.INVISIBLE
 
     var traineeSelected: Trainee? = null
 

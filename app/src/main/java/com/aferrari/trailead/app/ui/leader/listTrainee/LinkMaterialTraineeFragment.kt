@@ -55,6 +55,10 @@ class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
         binding.settingTraineeMaterialToolbarId.setNavigationOnClickListener() {
             findNavController().navigateUp()
         }
+        binding.settingTraineeMaterialToolbarId.title = resources.getString(
+            R.string.config_material_trainee_toolbar,
+            viewModel.traineeSelected.name
+        )
         binding.linkedRadioButtonAll.setOnClickListener {
             if ((it as MaterialRadioButton).isSelected) {
                 disableAllRadioButton()

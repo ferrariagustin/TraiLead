@@ -128,16 +128,6 @@
             app:layout_constraintStart_toEndOf="@id/leader_image_view_password_icon"
             app:layout_constraintTop_toBottomOf="@id/leader_email_divider_id" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/leader_password_textview"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:text="@{homeLeaderViewModel.passUser}"
-            app:layout_constraintStart_toStartOf="@id/leader_label_password_textview"
-            app:layout_constraintTop_toBottomOf="@id/leader_label_password_textview" />
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/leader_image_view_edit_password_icon"
             android:layout_width="wrap_content"
@@ -146,7 +136,7 @@
             android:src="@drawable/ic_next"
             android:tint="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/leader_label_password_textview" />
+            app:layout_constraintTop_toTopOf="@id/leader_label_password_textview" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/leader_divider_password_id"
@@ -155,7 +145,7 @@
             android:layout_margin="@dimen/margin_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/leader_password_textview" />
+            app:layout_constraintTop_toBottomOf="@id/leader_image_view_edit_password_icon" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
