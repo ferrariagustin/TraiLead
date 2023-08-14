@@ -50,11 +50,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
                     android:layout_marginEnd="@dimen/margin_extra_long"
                     android:hint="@string/password_hint"
                     android:inputType="textPassword"
                     android:text="@={loginViewModel.inputPass}"
-                    app:layout_constraintBottom_toTopOf="@id/login_btn"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/user_email_input_text" />
@@ -77,9 +77,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_small"
+                    android:layout_marginVertical="@dimen/margin_extra_long"
                     android:onClick="@{()->loginViewModel.login()}"
                     android:text="@string/login_btn_text"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/password_input_text" />
@@ -94,10 +94,25 @@
                     android:text="@string/register_btn_text"
                     android:textColor="@color/primaryColor"
                     app:backgroundTint="@android:color/transparent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.562"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/login_btn" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/restore_password_btn"
+                    style="@style/Theme.TraiLead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@android:color/transparent"
+                    android:text="@string/restore_password"
+                    android:textColor="@color/primaryColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/register_btn"
+                    app:rippleColor="@color/primaryColor" />
 
 
                 <ProgressBar

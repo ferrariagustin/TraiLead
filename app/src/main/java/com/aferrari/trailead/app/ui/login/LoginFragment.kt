@@ -102,6 +102,10 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
                 }
             }
         }
+        binding.restorePasswordBtn.setOnClickListener {
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_loginFragment_to_restorePasswordFragment)
+        }
     }
 
     private fun setVisibilityPassword(

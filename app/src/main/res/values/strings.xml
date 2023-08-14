@@ -114,5 +114,8 @@
     <!--    Deeplinks    -->
     <string name="host_trainee_home">trainee_home</string>
     <string name="host_leader_home">leader_home</string>
+    <string name="restore_password">Recuperar contraseña</string>
+    <string name="restore_password_label">Ingrese email para recuperar su contraseña</string>
+    <string name="restore">Recuperar</string>
 
 </resources>
