@@ -50,6 +50,13 @@ android {
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
+    
+    packagingOptions {
+        resources {
+            exclude 'META-INF/NOTICE.md'
+            exclude 'META-INF/LICENSE.md'
+        }
+    }
 }
 
 dependencies {
@@ -105,6 +112,11 @@ dependencies {
 
     // bcrypt
     implementation 'at.favre.lib:bcrypt:0.4.1'
+
+    // email
+    implementation 'com.sun.mail:android-mail:1.6.6'
+    implementation 'com.sun.mail:android-activation:1.6.6'
+
 
 }
 

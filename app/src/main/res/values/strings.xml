@@ -117,5 +117,6 @@
     <string name="restore_password">Recuperar contraseña</string>
     <string name="restore_password_label">Ingrese email para recuperar su contraseña</string>
     <string name="restore">Recuperar</string>
+    <string name="input_hint_restore_password">Ingresa el email de tu cuenta</string>
 
 </resources>
