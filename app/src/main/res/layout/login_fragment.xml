@@ -105,15 +105,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_small"
                     android:background="@android:color/transparent"
                     android:text="@string/restore_password"
                     android:textColor="@color/primaryColor"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/register_btn"
                     app:rippleColor="@color/primaryColor" />
 
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/signIn_google_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/restore_password_btn" />
 
                 <ProgressBar
                     android:id="@+id/progressBar"

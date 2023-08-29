@@ -1,6 +1,7 @@
 package com.aferrari.trailead.app.ui.login
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -9,6 +10,9 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -25,8 +29,13 @@ import com.aferrari.trailead.databinding.LoginFragmentBinding
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 // TODO: don't working back navigation
 @AndroidEntryPoint
@@ -34,6 +43,15 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private lateinit var binding: LoginFragmentBinding
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                Toast.makeText(requireContext(), "Is Logged!", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
@@ -56,12 +74,28 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        validateSignGoogle()
         observeLogin()
+    }
+
+    private fun validateSignGoogle() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
     }
 
     override fun onStart() {
         super.onStart()
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        updateUI(account)
         checkSession()
+    }
+
+    private fun updateUI(account: GoogleSignInAccount?) {
+        Toast.makeText(requireContext(), "Email Logged is = ${account?.email}", Toast.LENGTH_SHORT)
+            .show()
     }
 
     override fun goHome(user: User) {
@@ -106,6 +140,14 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_loginFragment_to_restorePasswordFragment)
         }
+        binding.signInGoogleBtn.setOnClickListener {
+            signIn()
+        }
+    }
+
+    private fun signIn() {
+        val signInIntent = mGoogleSignInClient.signInIntent
+        startForResult.launch(signInIntent)
     }
 
     private fun setVisibilityPassword(
@@ -149,6 +191,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
      * If exist a session, redirect to home
      */
     private fun checkSession() {
+
         val userId = SessionManagement(requireContext()).getSession()
         if (userId != -1) {
             loginViewModel.getUser(userId)

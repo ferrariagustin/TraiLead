@@ -1,6 +1,7 @@
 package com.aferrari.trailead.app.ui.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.login.LoginViewModel
 import com.aferrari.trailead.app.viewmodel.login.LoginViewModelFactory
-import com.aferrari.trailead.common.email.EmailUtils
+import com.aferrari.trailead.common.email.GMailSender
 import com.aferrari.trailead.databinding.RestorePasswordFragmentBinding
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
@@ -55,10 +56,18 @@ class RestorePasswordFragment : Fragment() {
         binding.restorePasswordSendEmailBtn.setOnClickListener {
             lifecycleScope.launch {
                 // ver como enviar mail
-//                EmailUtils.sendEmail(
-//                    binding.emailRestorePasswordInput.text.toString(),
-//                    requireContext()
-//                )
+                try {
+                    val sender = GMailSender("trailead.ar@gmail.com", "xrykimnglzyeoglc")
+                    sender.sendMail(
+                        "TraiLead",
+                        "Welcome to TraiLead",
+                        "ferrariagustin93@gmail.com",
+                        "ferrariagustin93@gmail.com"
+                    )
+                } catch (e: Exception) {
+                    Log.e("SendMail", e.message, e)
+                }
+//                EmailUtils.sendEmail()
             }
         }
     }
