@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderAddMaterialCategoryBinding
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 
 /**
  * The leader can add a new category for sort his materials.

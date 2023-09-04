@@ -214,4 +214,14 @@ class UserRepository(
 
     suspend fun getTrainee(traineeId: Int): Trainee? = remoteDataSource.getTrainee(traineeId)
     suspend fun getLeader(leaderId: Int): Leader? = remoteDataSource.getLeader(leaderId)
+    suspend fun validateAccessKey(user: User, accessKey: Int): Long = when (user.userType) {
+        UserType.LEADER -> remoteDataSource.validateLeaderAccessKey(user.id, accessKey)
+        UserType.TRAINEE -> remoteDataSource.validateTraineeAccessKey(user.id, accessKey)
+    }
+
+    suspend fun updateAccessKey(user: User, accessKey: Int) = when (user.userType) {
+        UserType.LEADER -> remoteDataSource.updateLeaderAccessKey(user.id, accessKey)
+        UserType.TRAINEE -> remoteDataSource.updateTraineeAccessKey(user.id, accessKey)
+    }
+
 }

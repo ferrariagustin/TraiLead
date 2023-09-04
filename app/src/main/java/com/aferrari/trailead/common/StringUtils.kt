@@ -25,4 +25,9 @@ object StringUtils {
         return null
     }
 
+    fun isValidEmail(email: String?): Boolean {
+        return !email.isNullOrEmpty()
+                && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
 }

@@ -872,4 +872,28 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 }?.await()
             resultCode
         }
+
+
+    // Access Key Flow
+
+    override suspend fun validateLeaderAccessKey(leaderId: Int, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
+    override suspend fun validateTraineeAccessKey(traineeId: Int, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
+    override suspend fun updateLeaderAccessKey(leaderId: Int, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
+    override suspend fun updateTraineeAccessKey(traineeIds: Int, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.StringUtils.EMPTY_STRING
+import com.aferrari.trailead.common.StringUtils.isValidEmail
 import com.aferrari.trailead.common.common_enum.RegisterErrorState
 import com.aferrari.trailead.common.common_enum.RegisterState
 import com.aferrari.trailead.common.common_enum.UserType
@@ -177,7 +178,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
             inputLastNameError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
-        if (!isValidEmail()) {
+        if (!isValidEmail(inputEmail.value)) {
             inputEmailError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
@@ -194,11 +195,6 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private fun isValidRepeatPass(): Boolean =
         !inputRepeatPass.value.isNullOrEmpty() && inputRepeatPass.value.equals(inputPass.value)
-
-    private fun isValidEmail(): Boolean {
-        return !inputEmail.value.isNullOrEmpty()
-                && android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail.value).matches()
-    }
 
     private fun isValidInput(input: MutableLiveData<String>): Boolean {
         if (input.value.isNullOrEmpty()) {

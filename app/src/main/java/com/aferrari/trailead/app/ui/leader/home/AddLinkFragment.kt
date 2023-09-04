@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.LeaderAddMaterialLinkBinding
 import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.viewmodel.StatusErrorType
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusErrorType
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.app.viewmodel.leader.material.LinkMaterialViewModel
 

@@ -118,5 +118,8 @@
     <string name="restore_password_label">Ingrese email para recuperar su contraseña</string>
     <string name="restore">Recuperar</string>
     <string name="input_hint_restore_password">Ingresa el email de tu cuenta</string>
+    <string name="restore_password_key_access_hint">Ingrese el código de seguridad</string>
+    <string name="user_not_found">\"El usuario no se encuentra registrado\"</string>
+    <string name="invalid_email">\"Ingrese un email válido\"</string>
 
 </resources>

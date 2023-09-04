@@ -7,7 +7,7 @@ import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Material
 import com.aferrari.trailead.domain.models.Trainee
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

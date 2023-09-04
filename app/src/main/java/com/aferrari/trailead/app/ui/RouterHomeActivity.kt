@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.HomeViewModel
 import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
-import com.aferrari.trailead.common.UserState
+import com.aferrari.trailead.common.common_enum.UserState
 import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.StringUtils.JOIN_DEEPLINK
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY

@@ -8,7 +8,7 @@ import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

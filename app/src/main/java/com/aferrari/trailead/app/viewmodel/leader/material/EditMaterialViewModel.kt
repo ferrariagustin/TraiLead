@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.UrlUtils
 import com.aferrari.trailead.domain.models.YouTubeVideo
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import kotlinx.coroutines.launch
 
 class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewModel() {

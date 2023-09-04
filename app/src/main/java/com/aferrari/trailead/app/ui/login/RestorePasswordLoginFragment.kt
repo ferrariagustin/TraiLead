@@ -12,19 +12,17 @@ import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.login.LoginViewModel
 import com.aferrari.trailead.app.viewmodel.login.LoginViewModelFactory
 import com.aferrari.trailead.common.common_enum.ErrorView
-import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.ui.TraiLeadSnackbar
-import com.aferrari.trailead.databinding.RestorePasswordFragmentBinding
+import com.aferrari.trailead.databinding.EditProfilePassFragmentBinding
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class RestorePasswordFragment : Fragment() {
+class RestorePasswordLoginFragment : Fragment() {
 
-    private lateinit var binding: RestorePasswordFragmentBinding
+    private lateinit var binding: EditProfilePassFragmentBinding
     private lateinit var loginViewModel: LoginViewModel
 
     @Inject
@@ -39,10 +37,9 @@ class RestorePasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.restore_password_fragment, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.edit_profile_pass_fragment, container, false)
         val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
-        binding.viewModel = loginViewModel
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -53,40 +50,22 @@ class RestorePasswordFragment : Fragment() {
     }
 
     private fun initComponents() {
-        binding.toolbarRestorePassword.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-        binding.restorePasswordSendEmailBtn.setOnClickListener {
-            loginViewModel.sendMail()
-        }
-        loginViewModel.sendEmailStatus.observe(viewLifecycleOwner) {
-            when (it) {
-                StatusCode.SUCCESS -> {
-                    successFlow()
-                }
-
-                StatusCode.ERROR -> {
-                    failedFlow(resources.getString(R.string.invalid_email))
-                }
-
-                StatusCode.NOT_FOUND -> {
-                    failedFlow(resources.getString(R.string.user_not_found))
-                }
-
-                else -> {}
-            }
+        binding.editProfilePasswordToolbar.title = resources.getString(R.string.restore_password)
+        binding.editProfilePasswordToolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.editProfilePasswordButton.setOnClickListener {
+            loginViewModel.restorePassword()
         }
     }
 
     private fun successFlow() {
-        findNavController().navigate(R.id.action_restorePasswordFragment_to_restorePasswordValidateKeyAccessFragment)
+        TODO("Not yet implemented")
     }
 
-    private fun failedFlow(message: String) {
+    private fun failedFlow() {
         TraiLeadSnackbar().init(
             requireContext(),
             requireView(),
-            message,
+            "Ingrese un email válido",
             type = ErrorView.ERROR
         )
     }

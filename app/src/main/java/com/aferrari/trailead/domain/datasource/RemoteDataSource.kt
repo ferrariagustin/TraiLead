@@ -121,4 +121,8 @@ interface RemoteDataSource {
     suspend fun updateLeaderLastName(leaderId: Int, lastName: String): Long
 
     suspend fun updateLeaderPassword(leaderId: Int, pass: String): Long
+    suspend fun validateLeaderAccessKey(leaderId: Int, accessKey: Int): Long
+    suspend fun validateTraineeAccessKey(traineeId: Int, accessKey: Int): Long
+    suspend fun updateLeaderAccessKey(leaderId: Int, accessKey: Int): Long
+    suspend fun updateTraineeAccessKey(traineeIds: Int, accessKey: Int): Long
 }

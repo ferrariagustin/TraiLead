@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderEditProfilePassFragmentBinding
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.databinding.EditProfilePassFragmentBinding
 
 class LeaderEditPassFragment : Fragment() {
 
-    private lateinit var binding: LeaderEditProfilePassFragmentBinding
+    private lateinit var binding: EditProfilePassFragmentBinding
 
     private val viewModel: LeaderViewModel by activityViewModels()
 
@@ -28,7 +28,7 @@ class LeaderEditPassFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.leader_edit_profile_pass_fragment,
+                R.layout.edit_profile_pass_fragment,
                 container,
                 false
             )
@@ -43,13 +43,13 @@ class LeaderEditPassFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.leaderEditProfilePasswordToolbar.setNavigationOnClickListener {
+        binding.editProfilePasswordToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-        binding.leaderEditProfilePasswordButton.setOnClickListener {
+        binding.editProfilePasswordButton.setOnClickListener {
             viewModel.updatePassword(
-                binding.leaderEditProfilePasswordInputText.text.toString(),
-                binding.leaderEditProfilePasswordRepeatInputText.text.toString()
+                binding.editProfilePasswordInputText.text.toString(),
+                binding.editProfilePasswordRepeatInputText.text.toString()
             )
         }
         viewModel.statusUpdatePassword.observe(viewLifecycleOwner) {

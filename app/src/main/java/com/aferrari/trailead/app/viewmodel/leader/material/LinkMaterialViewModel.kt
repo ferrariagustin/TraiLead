@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.domain.models.Link
-import com.aferrari.trailead.viewmodel.StatusErrorType
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusErrorType
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import kotlinx.coroutines.launch
 
 class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewModel() {

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.trailead.R
 import com.aferrari.trailead.databinding.ItemMaterialCategoryListBinding
 import com.aferrari.trailead.domain.models.Category
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.app.viewmodel.leader.listTrainee.ListTraineeViewModel
 import com.google.android.material.radiobutton.MaterialRadioButton
 

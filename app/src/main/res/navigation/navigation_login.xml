@@ -38,5 +38,17 @@
         <action
             android:id="@+id/action_restorePasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_restorePasswordFragment_to_restorePasswordValidateKeyAccessFragment"
+            app:destination="@id/restorePasswordValidateKeyAccessFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/restorePasswordValidateKeyAccessFragment"
+        android:name="com.aferrari.trailead.app.ui.login.RestorePasswordValidateKeyAccessFragment"
+        tools:layout="@layout/restore_password_key_access_fragment"
+        android:label="RestorePasswordValidateKeyAccessFragment" >
+        <action
+            android:id="@+id/action_restorePasswordValidateKeyAccessFragment_to_restorePasswordFragment"
+            app:destination="@id/restorePasswordFragment" />
     </fragment>
 </navigation>

@@ -102,7 +102,7 @@
         android:id="@+id/leaderEditPassFragment"
         android:name="com.aferrari.trailead.app.ui.leader.profile.LeaderEditPassFragment"
         android:label="LeaderEditPassFragment"
-        tools:layout="@layout/leader_edit_profile_pass_fragment">
+        tools:layout="@layout/edit_profile_pass_fragment">
         <action
             android:id="@+id/action_leaderEditPassFragment_to_leaderProfileFragment"
             app:destination="@id/leaderProfileFragment" />
