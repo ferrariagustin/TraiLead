@@ -94,7 +94,7 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
         }
     }
 
-    private fun saveLinkToDB(title: String, link: String, id: Int, leaderId: Int) {
+    private fun saveLinkToDB(title: String, link: String, id: Int, leaderId: String) {
         viewModelScope.launch {
             materialRepository.insertLink(
                 Link(

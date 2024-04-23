@@ -19,8 +19,8 @@ object DataModule {
     @Provides
     fun provideRemoteDataSource(): RemoteDataSource = RemoteDataSourceImpl()
 
-    @Provides
-    fun provideLocalDataSource(@ApplicationContext context: Context): LocalDataSource {
-        return LocalDataSourceImpl(AppDataBase.getInstance(context))
-    }
+//    @Provides
+//    fun provideLocalDataSource(@ApplicationContext context: Context): LocalDataSource {
+//        return LocalDataSourceImpl(AppDataBase.getInstance(context))
+//    }
 }

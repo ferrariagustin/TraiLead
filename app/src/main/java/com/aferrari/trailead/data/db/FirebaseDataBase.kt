@@ -10,7 +10,7 @@ class FirebaseDataBase {
     }
 
     fun insertLeader(leader: Leader) =
-        database?.child(Leader::class.simpleName.toString())?.child(leader.id.toString())
+        database?.child(Leader::class.simpleName.toString())?.child(leader.userId.toString())
             ?.setValue(leader)
 
 }

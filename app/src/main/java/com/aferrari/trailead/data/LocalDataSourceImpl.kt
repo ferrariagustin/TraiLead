@@ -84,8 +84,6 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
     override suspend fun updateTraineeLastName(idTrainee: Int, lastName: String) =
         localDataBase.updateTraineeLastName(idTrainee, lastName)
 
-    override suspend fun updateTraineePassword(idTrainee: Int, password: String) =
-        localDataBase.updateTraineePassword(password, idTrainee)
 
     override suspend fun deleteLeader(leader: Leader) = localDataBase.deleteLeader(leader)
 
@@ -109,21 +107,27 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
     }
 
     override suspend fun getUserType(user_id: Int): UserType? {
-        val leader = localDataBase.getLeader(user_id)
-        if (leader != null) {
-            return leader.userType
-        }
-        val trainee = localDataBase.getTrainee(user_id)
-        if (trainee != null) {
-            return trainee.userType
-        }
-        return null
+        TODO()
+//        val leader = localDataBase.getLeader(user_id)
+//        if (leader != null) {
+//            return leader.userType
+//        }
+//        val trainee = localDataBase.getTrainee(user_id)
+//        if (trainee != null) {
+//            return trainee.userType
+//        }
+//        return null
     }
 
-    override suspend fun getLeader(leader_id: Int): Leader? = localDataBase.getLeader(leader_id)
+    override suspend fun getLeader(leader_id: Int): Leader? {
+        TODO()
+//        localDataBase.getLeader(leader_id)
+    }
 
-    override suspend fun getLeader(user_email: String, user_pass: String): Leader? =
-        localDataBase.getLeader(user_email, user_pass)
+    override suspend fun getLeader(user_email: String, user_pass: String): Leader? {
+        TODO()
+//        localDataBase.getLeader(user_email, user_pass)
+    }
 
     override suspend fun getLeader(leader_email: String): Leader? =
         localDataBase.getLeader(leader_email)
@@ -132,8 +136,10 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
     override suspend fun getTrainee(trainee_id: Int): Trainee? =
         localDataBase.getTrainee(trainee_id)
 
-    override suspend fun getTrainee(user_email: String, user_pass: String): Trainee? =
-        localDataBase.getTrainee(user_email, user_pass)
+    override suspend fun getTrainee(user_email: String, user_pass: String): Trainee? {
+        TODO()
+//        localDataBase.getTrainee(user_email, user_pass)
+    }
 
     override suspend fun getTrainee(trainee_email: String): Trainee? =
         localDataBase.getTrainee(trainee_email)
@@ -176,9 +182,9 @@ class LocalDataSourceImpl(db: AppDataBase) : LocalDataSource {
         localDataBase.updateLeaderLastName(leaderId, lastName)
         return StatusCode.SUCCESS
     }
-
-    override suspend fun updateLeaderPassword(leaderId: Int, pass: String): StatusCode {
-        localDataBase.updateLeaderPassword(leaderId, pass)
-        return StatusCode.SUCCESS
-    }
+//
+//    override suspend fun updateLeaderPassword(leaderId: Int, pass: String): StatusCode {
+//        localDataBase.updateLeaderPassword(leaderId, pass)
+//        return StatusCode.SUCCESS
+//    }
 }

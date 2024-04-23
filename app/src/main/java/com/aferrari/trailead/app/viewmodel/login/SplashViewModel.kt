@@ -17,7 +17,7 @@ class SplashViewModel(
     var initDatabase: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        initLocalDataBase()
+//        initLocalDataBase()
     }
 
     private fun initLocalDataBase() {

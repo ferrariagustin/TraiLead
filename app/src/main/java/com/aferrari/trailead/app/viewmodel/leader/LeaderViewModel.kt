@@ -9,6 +9,8 @@ import com.aferrari.trailead.app.viewmodel.IMaterial
 import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.UrlUtils
 import com.aferrari.trailead.common.common_enum.Position
+import com.aferrari.trailead.common.common_enum.StatusCode
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
@@ -17,7 +19,6 @@ import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
-import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -78,19 +79,20 @@ open class LeaderViewModel(
         statusUpdatePassword.value = StatusUpdateInformation.NONE
     }
 
+    // TODO: remove comment lines
     fun setLeader(leader: Leader?) {
         leader?.let {
             this.leader = it
             nameUser.value = leader.name
             lastNameUser.value = leader.lastName
             emailUser.value = leader.email
-            passUser.value = leader.pass
+//            passUser.value = leader.pass
         }
     }
 
     override fun onCleared() {
-        super.onCleared()
         saveState()
+        super.onCleared()
     }
 
     private fun saveState() {
@@ -105,7 +107,7 @@ open class LeaderViewModel(
         materialSelected = savedStateHandle[MATERIAL_SELECTED]
     }
 
-    fun getLeaderId() = leader.id
+    fun getLeaderId() = leader.userId
 
     fun getUnLinkedTrainees() {
         viewModelScope.launch {
@@ -164,7 +166,7 @@ open class LeaderViewModel(
             radioRolCheck?.let { position ->
                 viewModelScope.launch {
                     repository.updateTraineePosition(trainee, position)
-                    repository.getUser(trainee.id)
+                    repository.getUser(trainee.userId)
                         .collect {
                             traineeSelected = it as Trainee
                         }
@@ -187,11 +189,11 @@ open class LeaderViewModel(
     fun updateInformation(name: String, lastName: String) {
         viewModelScope.launch {
             if (name.isNotEmpty()) {
-                repository.updateLeaderName(leader.id, name)
+                repository.updateLeaderName(leader.userId, name)
                 nameUser.value = name
             }
             if (lastName.isNotEmpty()) {
-                repository.updateLeaderLastName(leader.id, lastName)
+                repository.updateLeaderLastName(leader.userId, lastName)
                 lastNameUser.value = lastName
             }
         }
@@ -202,17 +204,26 @@ open class LeaderViewModel(
             statusUpdatePassword.value = StatusUpdateInformation.FAILED
             return
         }
-        updatePassword(leader.id, pass)
+        setPassword(pass)
     }
 
-    private fun updatePassword(leaderId: Int, pass: String) {
+    private fun setPassword(pass: String) {
         viewModelScope.launch {
-            repository.updateLeaderPass(leaderId, pass)
-            repository.getUser(leaderId)
-                .collect {
-                    setLeader(it as Leader)
+            repository.updateUserPass(pass).apply {
+                when (this) {
+                    StatusCode.SUCCESS -> {
+                        statusUpdatePassword.value = StatusUpdateInformation.SUCCESS
+                    }
+
+                    StatusCode.ERROR -> {
+                        statusUpdatePassword.value = StatusUpdateInformation.FAILED
+                    }
+
+                    else -> {
+                        statusUpdatePassword.value = StatusUpdateInformation.FAILED
+                    }
                 }
-            statusUpdatePassword.value = StatusUpdateInformation.SUCCESS
+            }
         }
     }
 
@@ -231,7 +242,7 @@ open class LeaderViewModel(
             statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
             return
         }
-        val category = Category(IntegerUtils().createObjectId(), nameCategory, leader.id)
+        val category = Category(IntegerUtils().createObjectId(), nameCategory, leader.userId)
         insertCategory(category)
     }
 
@@ -320,7 +331,7 @@ open class LeaderViewModel(
             title = title,
             url = youtubeId,
             categoryId = categorySelected?.id,
-            leaderMaterialId = leader.id
+            leaderMaterialId = leader.userId
         )
         addNewMaterial(newYouTubeVideo)
     }
@@ -410,7 +421,7 @@ open class LeaderViewModel(
 
     fun updateProfile() {
         viewModelScope.launch {
-            setLeader(repository.getLeader(leader.id))
+            setLeader(repository.getLeader(leader.userId))
         }
     }
 

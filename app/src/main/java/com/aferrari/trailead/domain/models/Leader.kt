@@ -18,10 +18,9 @@ import com.aferrari.trailead.common.common_enum.UserType
 )
 data class Leader(
     @PrimaryKey
-    @ColumnInfo(name = "leader_id") override val id: Int,
+    @ColumnInfo(name = "leader_id") override val userId: String,
     @ColumnInfo(name = "leader_name") override val name: String,
     @ColumnInfo(name = "leader_last_name") override val lastName: String,
     @ColumnInfo(name = "leader_email") override val email: String,
-    @ColumnInfo(name = "leader_pass") override val pass: String,
     override val userType: UserType = UserType.LEADER
 ) : User

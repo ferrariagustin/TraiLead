@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "197875321402",
+    "firebase_url": "https://trailead-default-rtdb.firebaseio.com",
     "project_id": "trailead",
     "storage_bucket": "trailead.appspot.com"
   },

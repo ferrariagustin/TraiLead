@@ -7,5 +7,5 @@ interface Material : Serializable {
     val title: String
     val url: String
     var categoryId: Int?
-    val leaderMaterialId: Int
+    val leaderMaterialId: String
 }

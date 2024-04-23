@@ -36,9 +36,6 @@ class RegistrationFragment : Fragment() {
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
 
-    @Inject
-    lateinit var localDataSource: LocalDataSource
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +43,7 @@ class RegistrationFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.registration_fragment, container, false)
-        val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
+        val factory = LoginViewModelFactory(remoteDataSource)
         registrationViewModel = ViewModelProvider(this, factory)[RegistrationViewModel::class.java]
         binding.registrationViewModel = registrationViewModel
         binding.lifecycleOwner = this

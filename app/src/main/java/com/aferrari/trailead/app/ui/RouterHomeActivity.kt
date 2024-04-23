@@ -32,13 +32,10 @@ class RouterHomeActivity : AppCompatActivity() {
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
 
-    @Inject
-    lateinit var localDataSource: LocalDataSource
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
-        val repository = UserRepository(localDataSource, remoteDataSource)
+        val repository = UserRepository(remoteDataSource)
         val factory = HomeViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
         initComponent()

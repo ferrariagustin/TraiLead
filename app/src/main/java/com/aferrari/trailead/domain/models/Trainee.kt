@@ -15,12 +15,11 @@ import com.aferrari.trailead.common.common_enum.UserType
 )
 data class Trainee(
     @PrimaryKey
-    @ColumnInfo(name = "trainee_id") override val id: Int,
+    @ColumnInfo(name = "trainee_id") override val userId: String,
     @ColumnInfo(name = "trainee_name") override val name: String,
     @ColumnInfo(name = "trainee_last_name") override val lastName: String,
     @ColumnInfo(name = "trainee_email") override val email: String,
-    @ColumnInfo(name = "trainee_pass") override val pass: String,
-    @ColumnInfo(name = "trainee_leader_id") val leaderId: Int? = null,
+    @ColumnInfo(name = "trainee_leader_id") val leaderId: String? = null,
     val position: Position = Position.JUNIOR,
     override val userType: UserType = UserType.TRAINEE
 ) : User

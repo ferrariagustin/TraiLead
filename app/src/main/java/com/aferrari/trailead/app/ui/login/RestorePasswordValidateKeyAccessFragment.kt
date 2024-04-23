@@ -25,9 +25,6 @@ class RestorePasswordValidateKeyAccessFragment : Fragment() {
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
 
-    @Inject
-    lateinit var localDataSource: LocalDataSource
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,7 +37,7 @@ class RestorePasswordValidateKeyAccessFragment : Fragment() {
                 container,
                 false
             )
-        val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
+        val factory = LoginViewModelFactory(remoteDataSource)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
         binding.lifecycleOwner = this
         return binding.root

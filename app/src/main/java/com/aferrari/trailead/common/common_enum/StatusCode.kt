@@ -8,3 +8,13 @@ enum class StatusCode(val value: Long) {
     INIT(-1),
 
 }
+
+fun Long.toStatusCode(): StatusCode {
+    return when (this) {
+        StatusCode.SUCCESS.value -> StatusCode.SUCCESS
+        StatusCode.ERROR.value -> StatusCode.ERROR
+        StatusCode.NOT_FOUND.value -> StatusCode.NOT_FOUND
+        StatusCode.DUPLICATE.value -> StatusCode.DUPLICATE
+        else -> StatusCode.INIT
+    }
+}

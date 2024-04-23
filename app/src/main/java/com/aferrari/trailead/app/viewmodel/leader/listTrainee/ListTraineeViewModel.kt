@@ -84,7 +84,7 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
             withContext(Dispatchers.IO) {
                 setCategorySelected.value?.let {
                     leaderViewModel.materialRepository.setLinkedCategory(
-                        traineeSelected.id,
+                        traineeSelected.userId,
                         it
                     )
                 }
@@ -98,7 +98,7 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
     fun getCategoriesSelected() {
         viewModelScope.launch {
             val result =
-                leaderViewModel.materialRepository.getCategoriesSelected(traineeSelected.id)
+                leaderViewModel.materialRepository.getCategoriesSelected(traineeSelected.userId)
             setCategorySelected.value = result.toMutableSet()
             updateSizeCategorySelected()
         }

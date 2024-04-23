@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface RemoteDataSource {
     suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long
 
-    suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo>
+    suspend fun getAllYoutubeVideo(leaderId: String): List<YouTubeVideo>
 
     suspend fun getAllYoutubeVideo(): List<YouTubeVideo>
 
@@ -24,13 +24,13 @@ interface RemoteDataSource {
 
     suspend fun updateTitleYoutubeVideo(youtubeId: Int, newTitle: String): Long
 
-    suspend fun getYoutubeVideoByCategory(leaderId: Int, categoryId: Int): List<YouTubeVideo>
+    suspend fun getYoutubeVideoByCategory(leaderId: String, categoryId: Int): List<YouTubeVideo>
 
     //    Category
 
     suspend fun insertCategory(category: Category): Long
 
-    suspend fun getAllCategory(leaderId: Int): List<Category>
+    suspend fun getAllCategory(leaderId: String): List<Category>
 
     suspend fun getAllCategory(): List<Category>
 
@@ -42,11 +42,11 @@ interface RemoteDataSource {
 
     suspend fun insertCategoryFromTrainee(traineeCategoryJoin: TraineeCategoryJoin): Long
 
-    suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category>
+    suspend fun getCategoriesFromTrainee(traineeId: String): List<Category>
 
     suspend fun getCategory(categoryId: Int): Category?
 
-    suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: Int): Long
+    suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: String): Long
 
     suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int): Long
 
@@ -59,7 +59,7 @@ interface RemoteDataSource {
 
     suspend fun deleteLink(link: Link): Long
 
-    suspend fun getAllLink(leaderId: Int): List<Link>
+    suspend fun getAllLink(leaderId: String): List<Link>
 
     suspend fun getAllLink(): List<Link>
 
@@ -67,17 +67,19 @@ interface RemoteDataSource {
 
     suspend fun updateTitleLink(linkId: Int, newTitle: String): Long
 
-    suspend fun getLinkByCategory(leaderId: Int, categoryId: Int): List<Link>
+    suspend fun getLinkByCategory(leaderId: String, categoryId: Int): List<Link>
 
     suspend fun insertLeader(leader: Leader): Long
 
     suspend fun insertTrainee(trainee: Trainee): Long
 
-    suspend fun updateTraineeName(idTrainee: Int, name: String): Long
+    suspend fun updateTraineeName(idTrainee: String, name: String): Long
 
-    suspend fun updateTraineeLastName(idTrainee: Int, lastName: String): Long
+    suspend fun updateTraineeLastName(idTrainee: String, lastName: String): Long
 
-    suspend fun updateTraineePassword(idTrainee: Int, pass: String): Long
+    suspend fun updateTraineePassword(idTrainee: String, pass: String): Long
+
+    suspend fun updateUserPassword(pass: String): Long
 
     suspend fun deleteLeader(leader: Leader): Long
 
@@ -88,41 +90,41 @@ interface RemoteDataSource {
     suspend fun deleteAllTrainee(): Long
 
 
-    suspend fun getUserType(user_id: Int): Flow<UserType?>
+    suspend fun getUserType(userId: String): Flow<UserType?>
 
-    suspend fun getLeader(leader_id: Int): Leader?
+    suspend fun getLeader(leaderId: String): Leader?
 
-    suspend fun getTrainee(trainee_id: Int): Trainee?
+    suspend fun getTrainee(traineeId: String): Trainee?
 
-    suspend fun getLeader(user_email: String, user_pass: String): Leader?
+//    suspend fun getLeader(userEmail: String, userPass: String): Leader?
 
-    suspend fun getTrainee(user_email: String, user_pass: String): Trainee?
+//    suspend fun getTrainee(userEmail: String, userPass: String): Trainee?
 
-    suspend fun getLeader(leader_email: String): Leader?
+    suspend fun getLeaderByEmail(leaderEmail: String): Leader?
 
-    suspend fun getTrainee(trainee_email: String): Trainee?
+    suspend fun getTraineeByEmail(traineeEmail: String): Trainee?
 
     suspend fun getAllTrainee(): List<Trainee>
 
     suspend fun getAllLeader(): List<Leader>
 
-    suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int): Long
+    suspend fun setLinkedTrainee(traineeId: String, leaderId: String): Long
 
     suspend fun getUnlinkedTrainees(): List<Trainee>
 
-    suspend fun getLinkedTrainees(leader_id: Int): List<Trainee>
+    suspend fun getLinkedTrainees(leaderId: String): List<Trainee>
 
-    suspend fun setUnlinkedTrainee(trainee_id: Int): Long
+    suspend fun setUnlinkedTrainee(traineeId: String): Long
 
-    suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position): Long
+    suspend fun updateTraineePosition(traineeId: String, trainee_position: Position): Long
 
-    suspend fun updateLeaderName(leaderId: Int, name: String): Long
+    suspend fun updateLeaderName(leaderId: String, name: String): Long
 
-    suspend fun updateLeaderLastName(leaderId: Int, lastName: String): Long
+    suspend fun updateLeaderLastName(leaderId: String, lastName: String): Long
 
-    suspend fun updateLeaderPassword(leaderId: Int, pass: String): Long
-    suspend fun validateLeaderAccessKey(leaderId: Int, accessKey: Int): Long
-    suspend fun validateTraineeAccessKey(traineeId: Int, accessKey: Int): Long
-    suspend fun updateLeaderAccessKey(leaderId: Int, accessKey: Int): Long
-    suspend fun updateTraineeAccessKey(traineeIds: Int, accessKey: Int): Long
+//    suspend fun updateLeaderPassword(leaderId: String, pass: String): Long
+    suspend fun validateLeaderAccessKey(leaderId: String, accessKey: Int): Long
+    suspend fun validateTraineeAccessKey(traineeId: String, accessKey: Int): Long
+    suspend fun updateLeaderAccessKey(leaderId: String, accessKey: Int): Long
+    suspend fun updateTraineeAccessKey(traineeIds: String, accessKey: Int): Long
 }

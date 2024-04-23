@@ -63,8 +63,6 @@ interface LocalDataSource {
 
     suspend fun updateTraineeLastName(idTrainee: Int, lastName: String)
 
-    suspend fun updateTraineePassword(idTrainee: Int, password: String)
-
     suspend fun deleteLeader(leader: Leader)
 
     suspend fun deleteTrainee(trainee: Trainee)
@@ -107,5 +105,5 @@ interface LocalDataSource {
 
     suspend fun updateLeaderLastName(leaderId: Int, lastName: String): StatusCode
 
-    suspend fun updateLeaderPassword(leaderId: Int, pass: String): StatusCode
+//    suspend fun updateLeaderPassword(leaderId: Int, pass: String): StatusCode
 }

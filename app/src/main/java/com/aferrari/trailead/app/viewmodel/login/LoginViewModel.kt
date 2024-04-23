@@ -42,7 +42,20 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
 
     fun login() {
         if (validateInput()) return
-        getUser(inputEmail.value!!, inputPass.value!!)
+        signIn(inputEmail.value!!, inputPass.value!!)
+//        getUser(inputEmail.value!!, inputPass.value!!)
+    }
+
+    private fun signIn(email: String, pass: String) {
+        viewModelScope.launch {
+            repository.signIn(email, pass).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    goLogin(it.result.user!!.uid)
+                } else {
+                    goLoginError()
+                }
+            }
+        }
     }
 
     private fun validateInput(): Boolean {
@@ -50,12 +63,12 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
         if (inputEmail.value.isNullOrEmpty()) {
             // TODO: handle case
             Log.e("TRAILEAD", "Debe agregar ingresar un email")
-            failedLogin()
+            goLoginError()
             return true
         }
         if (inputPass.value.isNullOrEmpty()) {
             // TODO: handle case
-            failedLogin()
+            goLoginError()
             Log.e("TRAILEAD", "Debe agregar ingresar un password")
             return true
         }
@@ -64,9 +77,9 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
 
     private fun getUser(inputEmail: String, inputPass: String) {
         viewModelScope.launch {
-            when (val user = repository.getUser(inputEmail, inputPass)) {
-                null -> failedLogin()
-                else -> goLogin(user)
+            when (val user = repository.getUserByEmail(inputEmail)) {
+                null -> goLoginError()
+                else -> goLoginSuccess(user)
             }
         }
     }
@@ -75,27 +88,67 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
         loginState.value = LoginState.REGISTER
     }
 
-    private fun failedLogin() {
+    private fun goLoginError() {
         loginState.value = LoginState.FAILED
     }
 
-    private fun goLogin(user: User) {
+    private fun goLogin(userId: String) {
+        viewModelScope.launch {
+            repository.getUser(userId).collect {
+                it?.let {
+                    goLoginSuccess(it)
+                }
+            }.runCatching { goLoginError() }
+        }
+    }
+
+    private fun goLoginSuccess(user: User) {
         this.user = user
         loginState.value = LoginState.SUCCESS
     }
 
+
+
+//    /**
+//     * return User for userId
+//     */
+//    fun getUser(userId: String) {
+//        viewModelScope.launch {
+//            repository.getUser(userId)
+//                .collect {
+//                    when (it) {
+//                        null -> goLoginError()
+//                        else -> goLogin(it)
+//                    }
+//                }
+//        }
+//    }
+
+//    /**
+//     * return User for userId
+//     */
+//    fun getUser(userId: String): User {
+//        viewModelScope.launch {
+//            repository.getUser(userId)
+//                .collect {
+//                    when (it) {
+//                        null -> goLoginError()
+//                        else -> goLogin(it)
+//                    }
+//                }
+//        }
+//    }
+
     /**
      * return User for userId
      */
-    fun getUser(userId: Int) {
+    fun getUser(userId: String) {
         viewModelScope.launch {
-            repository.getUser(userId)
-                .collect {
-                    when (it) {
-                        null -> failedLogin()
-                        else -> goLogin(it)
-                    }
+            repository.getUser(userId).collect {
+                it?.let {
+                    user = it
                 }
+            }
         }
     }
 
@@ -116,7 +169,7 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
                     sendEmailStatus.value = StatusCode.ERROR
                     return@launch
                 }
-                val resultUser = repository.getUser(restorePasswordEmail.value!!)
+                val resultUser = repository.getUserByEmail(restorePasswordEmail.value!!)
                 if (resultUser == null) {
                     sendEmailStatus.value = StatusCode.NOT_FOUND
                     return@launch

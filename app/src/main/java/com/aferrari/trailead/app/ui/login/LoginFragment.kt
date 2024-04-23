@@ -2,11 +2,13 @@ package com.aferrari.trailead.app.ui.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,15 +26,18 @@ import com.aferrari.trailead.app.viewmodel.login.LoginViewModelFactory
 import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.common_enum.LoginState
 import com.aferrari.trailead.common.session.SessionManagement
+import com.aferrari.trailead.common.session.SessionManagement.Companion.DEFAULT_SESSION
 import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.LoginFragmentBinding
 import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.User
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,7 +48,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private lateinit var binding: LoginFragmentBinding
     private lateinit var loginViewModel: LoginViewModel
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
+//    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -53,11 +58,15 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
             }
         }
 
-    @Inject
-    lateinit var remoteDataSource: RemoteDataSource
+    // See: https://developer.android.com/training/basics/intents/result
+    private val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract(),
+    ) { res ->
+        this.onSignInResult(res)
+    }
 
     @Inject
-    lateinit var localDataSource: LocalDataSource
+    lateinit var remoteDataSource: RemoteDataSource
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,7 +74,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
-        val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
+        val factory = LoginViewModelFactory(remoteDataSource)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
         binding.loginViewModel = loginViewModel
         binding.lifecycleOwner = this
@@ -74,16 +83,40 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        validateSignGoogle()
+//        validateSignGoogle()
+//        validateFirebaseEmail()
         observeLogin()
     }
 
-    private fun validateSignGoogle() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
+    private fun validateFirebaseEmail() {
+        // Choose authentication providers
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+        )
+
+// Create and launch sign-in intent
+        val signInIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
             .build()
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
+        signInLauncher.launch(signInIntent)
+    }
+
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        val response = result.idpResponse
+        if (result.resultCode == RESULT_OK) {
+            // Successfully signed in
+            val user = FirebaseAuth.getInstance().currentUser
+            Toast.makeText(requireContext(), "Email Logged is = ${user?.email}", Toast.LENGTH_SHORT)
+                .show()
+            // ...
+        } else {
+            Toast.makeText(requireContext(), "Error Logged", Toast.LENGTH_SHORT).show()
+            // Sign in failed. If response is null the user canceled the
+            // sign-in flow using the back button. Otherwise check
+            // response.getError().getErrorCode() and handle the error.
+            // ...
+        }
     }
 
     override fun onStart() {
@@ -140,14 +173,14 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_loginFragment_to_restorePasswordFragment)
         }
-        binding.signInGoogleBtn.setOnClickListener {
-            signIn()
-        }
+//        binding.signInGoogleBtn.setOnClickListener {
+//            signIn()
+//        }
     }
 
     private fun signIn() {
-        val signInIntent = mGoogleSignInClient.signInIntent
-        startForResult.launch(signInIntent)
+//        val signInIntent = mGoogleSignInClient.signInIntent
+//        startForResult.launch(signInIntent)
     }
 
     private fun setVisibilityPassword(
@@ -169,7 +202,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private fun successLogin() {
         binding.progressBar.visibility = View.GONE
-        SessionManagement(requireContext()).saveSession(loginViewModel.user.id)
+        SessionManagement(requireContext()).saveSession(loginViewModel.user.userId)
         goHome(loginViewModel.user)
     }
 
@@ -191,9 +224,10 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
      * If exist a session, redirect to home
      */
     private fun checkSession() {
-
+        Log.e("TRAILEAD", "LoginFragment - check session")
         val userId = SessionManagement(requireContext()).getSession()
-        if (userId != -1) {
+        if (userId != null && userId != DEFAULT_SESSION) {
+            Log.e("TRAILEAD", "LoginFragment - userId: $userId")
             loginViewModel.getUser(userId)
         }
     }

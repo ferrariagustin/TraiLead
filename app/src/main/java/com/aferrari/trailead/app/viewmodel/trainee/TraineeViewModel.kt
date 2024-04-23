@@ -4,11 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aferrari.trailead.common.common_enum.StatusCode
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
-import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -34,6 +35,7 @@ class TraineeViewModel(
 
     val refresh = MutableLiveData<Boolean>()
 
+    // TODO: Remove comment lines
     fun setTrainee(trainee: Trainee?) {
         trainee?.let {
             this.trainee = trainee
@@ -41,13 +43,13 @@ class TraineeViewModel(
             traineeLastName.value = trainee.lastName
             traineeEmail.value = trainee.email
             traineePosition.value = trainee.position.name
-            traineePassword.value = trainee.pass
-            traineeCompleteName.value = trainee.name + " " + trainee.lastName
+//            traineePassword.value = trainee.pass
+            traineeCompleteName.value = trainee.name
             getLeaderFromTrainee(trainee.leaderId)
         }
     }
 
-    private fun getLeaderFromTrainee(leaderId: Int?) {
+    private fun getLeaderFromTrainee(leaderId: String?) {
         viewModelScope.launch {
             if (leaderId != null) {
                 repository.getUser(leaderId)
@@ -60,7 +62,7 @@ class TraineeViewModel(
     }
 
     private fun getAssignedLeader(): String = if (traineeLeader.value != null) {
-        traineeLeader.value?.name + " " + traineeLeader.value?.lastName
+        traineeLeader.value?.name.toString()
     } else {
         EMPTY_LEADER
     }
@@ -68,11 +70,11 @@ class TraineeViewModel(
     fun updateInformation(name: String, lastName: String) {
         viewModelScope.launch {
             if (name.isNotEmpty()) {
-                repository.updateTraineeName(trainee.id, name)
+                repository.updateTraineeName(trainee.userId, name)
                 traineeName.value = name
             }
             if (lastName.isNotEmpty()) {
-                repository.updateTraineeLastName(trainee.id, lastName)
+                repository.updateTraineeLastName(trainee.userId, lastName)
                 traineeLastName.value = lastName
             }
             traineeCompleteName.value = traineeName.value + SPACE_STRING + traineeLastName.value
@@ -85,9 +87,21 @@ class TraineeViewModel(
             return
         }
         viewModelScope.launch {
-            repository.updateTraineePassword(password, trainee.id)
-            traineePassword.value = password
-            statusEditProfilePass.value = StatusUpdateInformation.SUCCESS
+            repository.updateUserPass(password).apply {
+                when (this) {
+                    StatusCode.SUCCESS -> {
+                        statusEditProfilePass.value = StatusUpdateInformation.SUCCESS
+                    }
+
+                    StatusCode.ERROR -> {
+                        statusEditProfilePass.value = StatusUpdateInformation.FAILED
+                    }
+
+                    else -> {
+                        statusEditProfilePass.value = StatusUpdateInformation.FAILED
+                    }
+                }
+            }
         }
     }
 
@@ -107,7 +121,7 @@ class TraineeViewModel(
 
     fun updateProfile() {
         viewModelScope.launch {
-            setTrainee(repository.getTrainee(traineeId = trainee.id))
+            setTrainee(repository.getTrainee(traineeId = trainee.userId))
         }
     }
 
