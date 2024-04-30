@@ -14,7 +14,6 @@ import com.aferrari.trailead.app.viewmodel.login.LoginViewModelFactory
 import com.aferrari.trailead.common.common_enum.ErrorView
 import com.aferrari.trailead.common.ui.TraiLeadSnackbar
 import com.aferrari.trailead.databinding.EditProfilePassFragmentBinding
-import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

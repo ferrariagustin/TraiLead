@@ -94,11 +94,15 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
 
     private fun goLogin(userId: String) {
         viewModelScope.launch {
-            repository.getUser(userId).collect {
-                it?.let {
-                    goLoginSuccess(it)
+            try {
+                repository.getUser(userId).collect {
+                    it?.let {
+                        goLoginSuccess(it)
+                    }
                 }
-            }.runCatching { goLoginError() }
+            } catch (e: Exception) {
+                goLoginError()
+            }
         }
     }
 
@@ -106,7 +110,6 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
         this.user = user
         loginState.value = LoginState.SUCCESS
     }
-
 
 
 //    /**

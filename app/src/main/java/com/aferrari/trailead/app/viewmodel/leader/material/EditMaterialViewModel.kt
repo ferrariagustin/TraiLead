@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.UrlUtils
-import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
+import com.aferrari.trailead.domain.models.YouTubeVideo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewModel() {
 
@@ -28,42 +31,47 @@ class EditMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
      * @param newTitle new title to updated
      */
     fun editVideo(newUrl: String, newTitle: String) {
-        (youTubeVideoSelected as? YouTubeVideo)?.let {
-
-            if (newUrl.isNotEmpty()) {
+        viewModelScope.launch {
+            youTubeVideoSelected?.let {
+                if (newUrl.isEmpty() || newTitle.isEmpty()) {
+                    statusUpdateEditMaterial.value = StatusUpdateInformation.FAILED
+                    return@launch
+                }
                 if (!UrlUtils().isYoutubeUrl(newUrl)) {
                     statusUpdateEditMaterial.value = StatusUpdateInformation.FAILED
-                    return
+                    return@launch
                 }
                 val youtubeUrl: String? = UrlUtils().getYouTubeId(newUrl)
                 if (youtubeUrl.isNullOrEmpty()) {
                     statusUpdateEditMaterial.value = StatusUpdateInformation.FAILED
-                    return
+                    return@launch
                 }
-                updateUrlVideo(it, youtubeUrl)
+                val result = updateUrlVideo(it, youtubeUrl)
+                if (result == StatusUpdateInformation.SUCCESS) {
+                    statusUpdateEditMaterial.value = updateTitleVideo(it, newTitle)
+                } else {
+                    statusUpdateEditMaterial.value = result
+                }
             }
-            if (newTitle.isNotEmpty()) {
-                updateTitleVideo(it, newTitle)
-            }
-            statusUpdateEditMaterial.value = StatusUpdateInformation.SUCCESS
-            return
+
         }
 
     }
 
 
-    private fun updateTitleVideo(youTubeVideoSelected: YouTubeVideo, newTitle: String) =
-        viewModelScope.launch {
+    private suspend fun updateTitleVideo(youTubeVideoSelected: YouTubeVideo, newTitle: String) =
+        withContext(Dispatchers.IO) {
             homeViewModel.materialRepository.updateTitleYoutubeVideo(
                 youTubeVideoSelected.id,
                 newTitle
-            )
+            ).toStatusUpdateInformation()
         }
 
-    private fun updateUrlVideo(
+    private suspend fun updateUrlVideo(
         youTubeVideoSelected: YouTubeVideo,
         youtubeUrl: String
-    ) = viewModelScope.launch {
+    ) = withContext(Dispatchers.IO) {
         homeViewModel.materialRepository.updateUrlYoutubeVideo(youTubeVideoSelected.id, youtubeUrl)
+            .toStatusUpdateInformation()
     }
 }

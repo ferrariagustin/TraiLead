@@ -15,7 +15,6 @@ import com.aferrari.trailead.common.common_enum.ErrorView
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.ui.TraiLeadSnackbar
 import com.aferrari.trailead.databinding.RestorePasswordFragmentBinding
-import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

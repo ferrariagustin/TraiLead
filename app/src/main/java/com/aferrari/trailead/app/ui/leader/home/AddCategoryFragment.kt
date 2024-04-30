@@ -10,9 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderAddMaterialCategoryBinding
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
+import com.aferrari.trailead.databinding.LeaderAddMaterialCategoryBinding
 
 /**
  * The leader can add a new category for sort his materials.
@@ -53,12 +54,42 @@ class AddCategoryFragment : Fragment() {
                 StatusUpdateInformation.FAILED -> {
                     failedFlow()
                 }
+
                 StatusUpdateInformation.SUCCESS -> {
                     successFlow()
                 }
+
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    failedInternetConectionFlow()
+                }
+
                 else -> {}
             }
         }
+
+        leaderViewModel.statusUpdateDeleteCategory.observe(viewLifecycleOwner) {
+            when (it) {
+                StatusUpdateInformation.FAILED -> {
+                    failedFlow()
+                }
+
+                StatusUpdateInformation.SUCCESS -> {
+                    successFlow()
+                }
+
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    failedInternetConectionFlow()
+                }
+
+                else -> {
+                    failedFlow()
+                }
+            }
+        }
+    }
+
+    private fun failedInternetConectionFlow() {
+        TraiLeadSnackbar().errorConection(requireContext(), binding.root)
     }
 
     private fun successFlow() {
@@ -66,6 +97,10 @@ class AddCategoryFragment : Fragment() {
     }
 
     private fun failedFlow() {
-        Toast.makeText(requireContext(), "Ingrese una categoría válida. Recuerde que no puede repertir", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            requireContext(),
+            "Ingrese una categoría válida. Recuerde que no puede repertir",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

@@ -121,5 +121,6 @@
     <string name="restore_password_key_access_hint">Ingrese el código de seguridad</string>
     <string name="user_not_found">\"El usuario no se encuentra registrado\"</string>
     <string name="invalid_email">\"Ingrese un email válido\"</string>
+    <string name="internet_connection">No hay conexión a internet</string>
 
 </resources>

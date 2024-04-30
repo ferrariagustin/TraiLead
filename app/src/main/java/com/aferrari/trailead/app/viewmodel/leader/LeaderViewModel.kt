@@ -11,6 +11,7 @@ import com.aferrari.trailead.common.UrlUtils
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
@@ -19,8 +20,10 @@ import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 open class LeaderViewModel(
     val repository: UserRepository,
@@ -28,7 +31,6 @@ open class LeaderViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel(), IMaterial {
     private lateinit var leader: Leader
-
     val nameUser = MutableLiveData<String>()
 
     val lastNameUser = MutableLiveData<String>()
@@ -57,11 +59,14 @@ open class LeaderViewModel(
 
     //    Category
     val listCategory = MutableLiveData<List<Category>>()
+
     val statusUpdateNewCategory = MutableLiveData<StatusUpdateInformation>()
     val statusUpdateEditCategory = MutableLiveData<StatusUpdateInformation>()
+    val statusUpdateDeleteCategory = MutableLiveData<StatusUpdateInformation>()
 
     //    Material
-    val statusUpdateNewMaterial = MutableLiveData<StatusUpdateInformation>()
+    val statusUpdateYoutubeVideo = MutableLiveData<StatusUpdateInformation>()
+    val statusUpdateDeleteMaterial = MutableLiveData<StatusUpdateInformation>()
     var listAllMaterials = MutableLiveData<List<Material>>()
 
     // Use with premium mode
@@ -72,7 +77,8 @@ open class LeaderViewModel(
     fun init() {
         refresh.value = false
         bottomNavigationViewVisibility.value = View.VISIBLE
-        statusUpdateNewMaterial.value = StatusUpdateInformation.NONE
+        statusUpdateDeleteCategory.value = StatusUpdateInformation.NONE
+        statusUpdateYoutubeVideo.value = StatusUpdateInformation.NONE
         statusUpdateNewCategory.value = StatusUpdateInformation.NONE
         statusUpdateEditCategory.value = StatusUpdateInformation.NONE
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
@@ -248,42 +254,46 @@ open class LeaderViewModel(
 
     private fun insertCategory(category: Category) {
         viewModelScope.launch {
-            materialRepository.insertCategory(category)
-            getAllCategoryForLeader()
-            statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
-        }
-    }
-
-    fun removeCategory() {
-        categorySelected?.let {
-            deleteCategory(it)
-        }
-    }
-
-    private fun deleteCategory(category: Category) {
-        viewModelScope.launch {
-            materialRepository.deleteCategory(category)
-            getAllCategoryForLeader()
-        }
-    }
-
-    fun editCategory(newCategory: String) {
-        if (newCategory.isNullOrEmpty()) {
-            statusUpdateEditCategory.value = StatusUpdateInformation.FAILED
-            return
-        }
-        updateCategory(newCategory)
-    }
-
-    private fun updateCategory(newCategory: String) {
-        viewModelScope.launch {
-            categorySelected?.let {
-                materialRepository.updateCategory(it.id, newCategory)
-                statusUpdateEditCategory.value = StatusUpdateInformation.SUCCESS
+            val result = materialRepository.insertCategory(category).toStatusUpdateInformation()
+            if (result == StatusUpdateInformation.SUCCESS) {
+                getAllCategoryForLeader()
+                statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
+            } else {
+                statusUpdateNewCategory.value = result
             }
         }
     }
 
+    fun removeCategory() {
+        viewModelScope.launch {
+            categorySelected?.let {
+                deleteCategory(it)
+            }
+        }
+    }
+
+    private suspend fun deleteCategory(category: Category) = withContext(Dispatchers.IO) {
+        val result = materialRepository.deleteCategory(category).toStatusUpdateInformation()
+        if (result == StatusUpdateInformation.SUCCESS) {
+            getAllCategoryForLeader()
+            statusUpdateDeleteCategory.value = StatusUpdateInformation.SUCCESS
+        } else statusUpdateDeleteCategory.value = result
+    }
+
+    fun editCategory(newCategory: String) = viewModelScope.launch {
+        if (newCategory.isNullOrEmpty() || categorySelected == null) {
+            statusUpdateEditCategory.value = StatusUpdateInformation.FAILED
+            return@launch
+        }
+        updateCategory(newCategory)
+    }
+
+
+    private suspend fun updateCategory(newCategory: String) = withContext(Dispatchers.IO) {
+        statusUpdateEditCategory.value =
+            materialRepository.updateCategory(categorySelected!!.id, newCategory)
+                .toStatusUpdateInformation()
+    }
 
     /**
      * You can gone or visibility the bottomNavigation
@@ -308,18 +318,18 @@ open class LeaderViewModel(
         }
     }
 
-    fun insertMaterial(title: String, url: String) {
+    fun insertYoutubeVideo(title: String, url: String) {
         if (!UrlUtils().isYoutubeUrl(url)) {
-            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+            statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             return
         }
         val youtubeId: String? = UrlUtils().getYouTubeId(url)
         if (youtubeId.isNullOrEmpty()) {
-            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+            statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             return
         }
         if (categorySelected == null) {
-            statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+            statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             return
         }
         addNewYoutubeMaterial(title, youtubeId)
@@ -333,10 +343,10 @@ open class LeaderViewModel(
             categoryId = categorySelected?.id,
             leaderMaterialId = leader.userId
         )
-        addNewMaterial(newYouTubeVideo)
+        insertYoutubeVideo(newYouTubeVideo)
     }
 
-    fun getMaterialsCategoryFilter() = viewModelScope.launch {
+    fun updateMaterialsCategoryFilter() = viewModelScope.launch {
         val listAllMaterlialJoin = mutableListOf<Material>()
         listAllMaterlialJoin.addAll(getAllYouTubeVideosCategoryFilter())
         listAllMaterlialJoin.addAll(getAllLinkCategoryFilter())
@@ -355,14 +365,14 @@ open class LeaderViewModel(
         listAllMaterials.value = materialRepository.getAllYoutubeVideo(leader)
     }
 
-    private fun getAllMaterial(newYouTubeVideo: YouTubeVideo) {
+    private fun getAllYoutubeVideo(newYouTubeVideo: YouTubeVideo) {
         viewModelScope.launch {
             val tempListMaterial = materialRepository.getAllYoutubeVideo(leader)
             if (tempListMaterial.contains(newYouTubeVideo)) {
                 listAllMaterials.value = tempListMaterial.toMutableList()
-                statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
+                statusUpdateYoutubeVideo.value = StatusUpdateInformation.SUCCESS
             } else {
-                statusUpdateNewMaterial.value = StatusUpdateInformation.FAILED
+                statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             }
         }
     }
@@ -370,18 +380,32 @@ open class LeaderViewModel(
     /**
      * Comunicate with dataSource for insert new material to DB
      */
-    private fun addNewMaterial(newYouTubeVideo: YouTubeVideo) {
+    private fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) {
         viewModelScope.launch {
-            materialRepository.insertYoutubeVideo(newYouTubeVideo)
-            statusUpdateNewMaterial.value = StatusUpdateInformation.SUCCESS
-            return@launch
+            when (materialRepository.insertYoutubeVideo(newYouTubeVideo)) {
+                StatusCode.SUCCESS.value -> {
+                    getAllYoutubeVideo(newYouTubeVideo)
+                }
+
+                StatusCode.ERROR.value -> {
+                    statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
+                }
+
+                StatusCode.INTERNET_CONECTION.value -> {
+                    statusUpdateYoutubeVideo.value = StatusUpdateInformation.INTERNET_CONECTION
+                }
+
+                else -> {
+                    statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
+                }
+            }
         }
     }
 
     override fun deleteMaterialSelected() {
         viewModelScope.launch {
             materialSelected?.let {
-                when (it) {
+                val result = when (it) {
                     is YouTubeVideo -> {
                         materialRepository.deleteYoutubeVideo(it)
                     }
@@ -390,9 +414,32 @@ open class LeaderViewModel(
                         materialRepository.deleteLink(it)
                     }
 
-                    else -> {}
+                    else -> {
+                        StatusCode.SUCCESS.value
+                    }
                 }
-                getMaterialsCategoryFilter()
+                updateStatusDeleteMaterial(result)
+            }
+        }
+    }
+
+    private suspend fun updateStatusDeleteMaterial(result: Long) = withContext(Dispatchers.IO) {
+        when (result) {
+            StatusCode.SUCCESS.value -> {
+                updateMaterialsCategoryFilter()
+                statusUpdateDeleteMaterial.value = StatusUpdateInformation.SUCCESS
+            }
+
+            StatusCode.ERROR.value -> {
+                statusUpdateDeleteMaterial.value = StatusUpdateInformation.FAILED
+            }
+
+            StatusCode.INTERNET_CONECTION.value -> {
+                statusUpdateDeleteMaterial.value = StatusUpdateInformation.INTERNET_CONECTION
+            }
+
+            else -> {
+                statusUpdateDeleteMaterial.value = StatusUpdateInformation.FAILED
             }
         }
     }

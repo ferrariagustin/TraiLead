@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@id/component_description_label" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_new_material_button"
+            android:id="@+id/add_new_youtube_video_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"

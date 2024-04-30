@@ -9,12 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderAddMaterialLinkBinding
-import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.common.common_enum.StatusErrorType
-import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.app.viewmodel.leader.material.LinkMaterialViewModel
+import com.aferrari.trailead.common.common_enum.StatusErrorType
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
+import com.aferrari.trailead.common.ui.TraileadDialog
+import com.aferrari.trailead.databinding.LeaderAddMaterialLinkBinding
 
 class AddLinkFragment : Fragment() {
 
@@ -48,9 +49,14 @@ class AddLinkFragment : Fragment() {
             when (it) {
                 StatusUpdateInformation.SUCCESS -> successFlow()
                 StatusUpdateInformation.FAILED -> failedFlow()
+                StatusUpdateInformation.INTERNET_CONECTION -> failedInternetContectionFlow()
                 else -> {}
             }
         }
+    }
+
+    private fun failedInternetContectionFlow() {
+        TraiLeadSnackbar().errorConection(requireContext(), binding.root)
     }
 
     private fun successFlow() {

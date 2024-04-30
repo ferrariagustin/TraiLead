@@ -48,7 +48,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val reference =
                 FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
             val dataSnapshot = reference?.get()?.await()
-            var youtubeVideosList = mutableListOf<YouTubeVideo>()
+            val youtubeVideosList = mutableListOf<YouTubeVideo>()
             if (dataSnapshot?.key == YouTubeVideo::class.simpleName.toString()) {
                 dataSnapshot.value?.let {
                     val hashMapValues = dataSnapshot.value as HashMap<String, Object>
@@ -602,33 +602,6 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         }
     }
 
-//    override suspend fun getLeader(userEmail: String, userPass: String): Leader? {
-//        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
-//        val dataSnapshot = reference?.get()?.await()
-//
-//        if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
-//            dataSnapshot.value?.let {
-//                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-//                val leaders = hashMapValues.values.map {
-//                    Gson().fromJson(Gson().toJson(it), Leader::class.java)
-//                }.filter {
-//                    it.email == userEmail && PasswordUtil.verifyPassword(
-//                        userPass,
-//                        it.pass
-//                    )
-//                }
-//                if (leaders.isNotEmpty()) {
-//                    return leaders[0]
-//                } else {
-//                    null
-//                }
-//            }
-//        } else {
-//            null
-//        }
-//        return null
-//    }
-
     override suspend fun getLeaderByEmail(leaderEmail: String): Leader? {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
@@ -670,32 +643,6 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             null
         }
     }
-
-//    override suspend fun getTrainee(userEmail: String, userPass: String): Trainee? {
-//        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
-//        val dataSnapshot = reference?.get()?.await()
-//        if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-//            dataSnapshot.value?.let {
-//                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-//                val trainees = hashMapValues.values.map {
-//                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-//                }.filter {
-//                    it.email == userEmail && PasswordUtil.verifyPassword(
-//                        userPass,
-//                        it.pass
-//                    )
-//                }
-//                if (trainees.isNotEmpty()) {
-//                    return trainees[0]
-//                } else {
-//                    null
-//                }
-//            }
-//        } else {
-//            null
-//        }
-//        return null
-//    }
 
     override suspend fun getTraineeByEmail(traineeEmail: String): Trainee? {
         val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
@@ -867,25 +814,6 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 }?.await()
             resultCode
         }
-
-    // TODO: remove this method, update pass for user not por usertype
-//    override suspend fun updateLeaderPassword(leaderId: String, pass: String): Long =
-//        withContext(Dispatchers.IO) {
-//            val reference =
-//                FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
-//            var resultCode: Long = StatusCode.ERROR.value
-//            reference?.child(leaderId.toString())?.child(Leader::pass.name)
-//                ?.setValue(pass)
-//                ?.addOnCompleteListener { task ->
-//                    resultCode = if (task.isSuccessful) {
-//                        StatusCode.SUCCESS.value
-//                    } else {
-//                        StatusCode.ERROR.value
-//                    }
-//                }?.await()
-//            resultCode
-//        }
-
 
     // Access Key Flow
 

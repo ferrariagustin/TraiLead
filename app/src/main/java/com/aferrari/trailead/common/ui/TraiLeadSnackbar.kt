@@ -48,6 +48,10 @@ class TraiLeadSnackbar() {
         snackbar.show()
     }
 
+    fun errorConection(context: Context, view: View) {
+        init(context, view, context.getString(R.string.internet_connection), ErrorView.ERROR)
+    }
+
     private fun getBackgroundColor(type: ErrorView) = when (type) {
         ErrorView.ERROR -> {
             R.color.red

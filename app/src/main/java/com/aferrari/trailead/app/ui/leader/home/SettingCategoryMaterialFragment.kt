@@ -12,9 +12,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
 import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.LeaderSettingMaterialCategoryBinding
-import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 
 class SettingCategoryMaterialFragment : Fragment() {
 
@@ -60,6 +61,10 @@ class SettingCategoryMaterialFragment : Fragment() {
 
                 StatusUpdateInformation.FAILED -> {
                     findNavController().navigateUp()
+                }
+
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    TraiLeadSnackbar().errorConection(requireContext(), binding.root)
                 }
 
                 else -> {}
