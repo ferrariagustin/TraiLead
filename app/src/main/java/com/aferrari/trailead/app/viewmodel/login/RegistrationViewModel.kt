@@ -4,6 +4,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.StringUtils.EMPTY_STRING
 import com.aferrari.trailead.common.StringUtils.isValidEmail
 import com.aferrari.trailead.common.common_enum.RegisterErrorState
@@ -74,7 +75,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
                 inputName.value!!,
                 inputLastName.value!!,
                 inputEmail.value!!,
-                inputPass.value!!
+                PasswordUtil.hashSHA256Base36(inputPass.value!!)
             ).collect { state ->
                 registerState.value = state
             }

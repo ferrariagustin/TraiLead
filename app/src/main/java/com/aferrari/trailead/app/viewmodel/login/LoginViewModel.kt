@@ -1,21 +1,27 @@
 package com.aferrari.trailead.app.viewmodel.login
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.common.IntegerUtils
+import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.StringUtils.isValidEmail
 import com.aferrari.trailead.common.common_enum.LoginState
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
 import com.aferrari.trailead.common.email.GMailSender
+import com.aferrari.trailead.common.session.SessionManagement
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
-open class LoginViewModel(private val repository: UserRepository) : ViewModel() {
+open class LoginViewModel(val repository: UserRepository) :
+    ViewModel() {
 
     lateinit var user: User
         private set
@@ -40,22 +46,58 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
         visibilityPassDrawable.value = View.GONE
     }
 
-    fun login() {
+    fun login(context: Context) {
         if (validateInput()) return
-        signIn(inputEmail.value!!, inputPass.value!!)
-//        getUser(inputEmail.value!!, inputPass.value!!)
+        signInWithEmail(inputEmail.value!!, inputPass.value!!, context)
     }
 
-    private fun signIn(email: String, pass: String) {
+    fun login(email: String, token: String) {
+        signInWithToken(email, token)
+    }
+
+    private fun signInWithToken(email: String, token: String) {
         viewModelScope.launch {
-            repository.signIn(email, pass).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    goLogin(it.result.user!!.uid)
-                } else {
-                    goLoginError()
+            repository.signInWithToken(email, token).collect { state ->
+                when (state.value.toStatusUpdateInformation()) {
+                    StatusUpdateInformation.SUCCESS -> {
+                        val uId = FirebaseAuth.getInstance().currentUser?.uid
+                        if (uId != null)
+                            goLogin(uId)
+                        else
+                            goLoginError()
+                    }
+
+                    StatusUpdateInformation.FAILED -> goLoginError()
+                    StatusUpdateInformation.INTERNET_CONECTION -> goLoginError()
+                    else -> goLoginError()
                 }
             }
         }
+    }
+
+    private fun signInWithEmail(email: String, pass: String, context: Context) {
+        viewModelScope.launch {
+            val hashPassword = PasswordUtil.hashSHA256Base36(pass)
+            repository.signInWithEmail(email, hashPassword).collect { status ->
+                when (status.value.toStatusUpdateInformation()) {
+                    StatusUpdateInformation.SUCCESS -> {
+                        val uId = FirebaseAuth.getInstance().currentUser?.uid
+                        if (uId != null) {
+                            saveSession(context, email, hashPassword)
+                            goLogin(uId)
+                        } else goLoginError()
+                    }
+
+                    StatusUpdateInformation.FAILED -> goLoginError()
+                    StatusUpdateInformation.INTERNET_CONECTION -> goLoginErrorInternetConection()
+                    else -> goLoginError()
+                }
+            }
+        }
+    }
+
+    private fun goLoginErrorInternetConection() {
+        loginState.value = LoginState.INTERNET_CONECTION
     }
 
     private fun validateInput(): Boolean {
@@ -73,15 +115,6 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
             return true
         }
         return false
-    }
-
-    private fun getUser(inputEmail: String, inputPass: String) {
-        viewModelScope.launch {
-            when (val user = repository.getUserByEmail(inputEmail)) {
-                null -> goLoginError()
-                else -> goLoginSuccess(user)
-            }
-        }
     }
 
     fun goRegister() {
@@ -110,37 +143,6 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
         this.user = user
         loginState.value = LoginState.SUCCESS
     }
-
-
-//    /**
-//     * return User for userId
-//     */
-//    fun getUser(userId: String) {
-//        viewModelScope.launch {
-//            repository.getUser(userId)
-//                .collect {
-//                    when (it) {
-//                        null -> goLoginError()
-//                        else -> goLogin(it)
-//                    }
-//                }
-//        }
-//    }
-
-//    /**
-//     * return User for userId
-//     */
-//    fun getUser(userId: String): User {
-//        viewModelScope.launch {
-//            repository.getUser(userId)
-//                .collect {
-//                    when (it) {
-//                        null -> goLoginError()
-//                        else -> goLogin(it)
-//                    }
-//                }
-//        }
-//    }
 
     /**
      * return User for userId
@@ -234,4 +236,24 @@ open class LoginViewModel(private val repository: UserRepository) : ViewModel() 
         }
     }
 
+    /**
+     * Save session in shared preferences
+     */
+    private fun saveSession(context: Context, email: String, hashPassword: String) {
+        SessionManagement(context).saveSession(email, hashPassword)
+    }
+
+    /**
+     * Validate if exist some session in sharedPrefernce.
+     * If exist a session, redirect to home
+     */
+    fun validateSession(context: Context) {
+        loginState.value = LoginState.IN_PROGRESS
+        val pairSession = SessionManagement(context).getSession()
+        if (pairSession != null && pairSession.first.isNotEmpty() && pairSession.second.isNotEmpty()) {
+            login(pairSession.first, pairSession.second)
+        } else {
+            loginState.value = LoginState.STARTED
+        }
+    }
 }

@@ -88,3 +88,4 @@ lint/tmp/
 
 # Other
 .DS_Store
+.app/credentials.json

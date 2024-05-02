@@ -1,5 +1,7 @@
 package com.aferrari.trailead.domain.repository
 
+import android.util.Log
+import com.aferrari.trailead.app.configurer.NetworkManager
 import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.RegisterState
@@ -10,37 +12,18 @@ import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.User
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class UserRepository(
     private val remoteDataSource: RemoteDataSource
 ) {
-
-    suspend fun initLocalDataSource() {
-//        val leaderList = remoteDataSource.getAllLeader()
-//        leaderList.forEach {
-//            if (localDataSource.getLeader(it.email) == null) {
-//                localDataSource.insertLeader(it)
-//            }
-//        }
-//        val traineeList = remoteDataSource.getAllTrainee()
-//        traineeList.forEach {
-//            if (localDataSource.getTrainee(it.email) == null) {
-//                localDataSource.insertTrainee(it)
-//            }
-//        }
-    }
 
     suspend fun getUser(userId: String): Flow<User?> = flow {
         remoteDataSource.getUserType(userId)
@@ -62,29 +45,8 @@ class UserRepository(
                     }
                 }
             }
-//        if (localDataSource.isEmpty()) {
-//        }
-//        when (localDataSource.getUserType(user_id)) {
-//            UserType.LEADER -> {
-//                emit(localDataSource.getLeader(user_id))
-//            }
-//
-//            UserType.TRAINEE -> {
-//                emit(localDataSource.getTrainee(user_id))
-//            }
-//
-//            else -> {
-//                emit(null)
-//            }
-//        }
 
     }
-
-    suspend fun signIn(email: String, pass: String): Task<AuthResult> =
-        withContext(Dispatchers.IO) {
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
-        }
-
 
     suspend fun getUserByEmail(userEmail: String): User? {
         remoteDataSource.getLeaderByEmail(userEmail).apply {
@@ -98,51 +60,6 @@ class UserRepository(
         }
     }
 
-    // TODO: Remove this method
-//    suspend fun getUser(user_email: String, user_pass: String): User? {
-//        remoteDataSource.getLeader(user_email, user_pass).apply {
-//            if (this == null) {
-//                remoteDataSource.getTrainee(user_email, user_pass).let {
-//                    return it
-//                }
-//            } else {
-//                return this
-//            }
-//        }
-//    }
-
-    suspend fun createUser2(
-        userType: UserType,
-        name: String,
-        lastName: String,
-        email: String,
-        pass: String
-    ): Flow<RegisterState> =
-        withContext(Dispatchers.IO) {
-            var registerResult: Flow<RegisterState> = MutableStateFlow(RegisterState.STARTED)
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, pass)
-                .addOnCompleteListener {
-                    launch {
-                        registerResult = if (it.isSuccessful) {
-                            MutableStateFlow(
-                                getSuccessRegisterResult(
-                                    it.result,
-                                    userType,
-                                    name,
-                                    lastName
-                                )
-                            )
-                        } else {
-                            MutableStateFlow(RegisterState.FAILED)
-                        }
-                        registerResult.collect()
-                    }
-
-                }
-
-            return@withContext registerResult
-        }
-
     suspend fun createUser(
         userType: UserType,
         name: String,
@@ -150,19 +67,13 @@ class UserRepository(
         email: String,
         pass: String
     ): Flow<RegisterState> =
-        withContext(Dispatchers.IO) {
-            val registerResult = MutableStateFlow(RegisterState.STARTED)
+        flow {
             try {
-                var wasSuccessCreatedUser = false
                 val authResult =
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, pass)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                wasSuccessCreatedUser = true
-                            }
-                        }.await()
-                if (wasSuccessCreatedUser) {
-                    registerResult.emit(
+                        .addOnCompleteListener {}.await()
+                if (authResult.user != null) {
+                    emit(
                         getSuccessRegisterResult(
                             authResult,
                             userType,
@@ -170,20 +81,14 @@ class UserRepository(
                             lastName
                         )
                     )
-                } else {
-                    registerResult.emit(RegisterState.FAILED)
-                }
+                } else emit(RegisterState.FAILED)
             } catch (e: Exception) {
                 if (e.message != null && e.message!!.contains(
                         FIREBASE_CREATE_USER_DUPLICATE_ERROR_MESSAGE
                     )
-                ) {
-                    registerResult.emit(RegisterState.FAILED_USER_EXIST)
-                } else {
-                    registerResult.emit(RegisterState.FAILED)
-                }
+                ) emit(RegisterState.FAILED_USER_EXIST)
+                else emit(RegisterState.FAILED)
             }
-            return@withContext registerResult
         }
 
     private suspend fun UserRepository.getSuccessRegisterResult(
@@ -196,40 +101,19 @@ class UserRepository(
             if (authResult.additionalUserInfo?.isNewUser == false) {
                 return RegisterState.FAILED_USER_EXIST
             }
-            when (userType) {
+            return when (userType) {
                 UserType.LEADER -> {
-                    return createLeader(authResult.user!!, name, lastName, userType)
+                    createLeader(authResult.user!!, name, lastName, userType)
                 }
 
                 UserType.TRAINEE -> {
-                    return createTrainee(authResult.user!!, name, lastName, userType)
+                    createTrainee(authResult.user!!, name, lastName, userType)
                 }
             }
         } else {
             return RegisterState.FAILED
         }
     }
-//        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, pass).await().apply {
-//            user?.let {
-//                additionalUserInfo?.isNewUser?.let { isNewUser ->
-//                    if (isNewUser.not()) {
-//                        return RegisterState.FAILED_USER_EXIST
-//                    }
-//                }
-//                when (userType) {
-//                    UserType.LEADER -> {
-//                        return createLeader(it, name, lastName, userType)
-//                    }
-//
-//                    UserType.TRAINEE -> {
-//                        return createTrainee(it, name, lastName, userType)
-//                    }
-//                }
-//            } ?: run {
-//                return RegisterState.FAILED
-//            }
-//            return RegisterState.FAILED
-//        }
 
     private suspend fun createTrainee(
         it: FirebaseUser,
@@ -315,7 +199,7 @@ class UserRepository(
     }
 
     suspend fun updateTraineePassword(traineeId: String, password: String) {
-        val passwordHash = PasswordUtil.hashPassword(password)
+        val passwordHash = PasswordUtil.hashSHA256Base36(password)
         val result = remoteDataSource.updateTraineePassword(traineeId, passwordHash)
         if (result == StatusCode.SUCCESS.value) {
 //            localDataSource.updateTraineePassword(traineeId, passwordHash)
@@ -366,6 +250,29 @@ class UserRepository(
         UserType.LEADER -> remoteDataSource.updateLeaderAccessKey(user.userId, accessKey)
         UserType.TRAINEE -> remoteDataSource.updateTraineeAccessKey(user.userId, accessKey)
     }
+
+    suspend fun signInWithEmail(email: String, pass: String): Flow<StatusCode> =
+        if (!NetworkManager.isOnline()) {
+            MutableStateFlow(StatusCode.INTERNET_CONECTION)
+        } else {
+            remoteDataSource.signInWithEmailAndPassword(email, pass)
+        }
+
+    suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode> =
+        if (!NetworkManager.isOnline()) {
+            flowOf(StatusCode.INTERNET_CONECTION)
+        } else {
+            remoteDataSource.signInWithToken(userId, token)
+        }
+
+    suspend fun getTokenId() = flow {
+        emit(FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
+            if (it.isSuccessful)
+                Log.e("TRAILEAD TOKEN", it.result?.token ?: "")
+        }
+            ?.await()?.token ?: "")
+    }
+
 
     private companion object {
         private const val FIREBASE_CREATE_USER_DUPLICATE_ERROR_MESSAGE =

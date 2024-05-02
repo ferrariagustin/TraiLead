@@ -102,7 +102,9 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // FireBase
-    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+
+    implementation("com.google.firebase:firebase-auth-ktx")
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database-ktx:20.3.1'
     implementation 'com.google.firebase:firebase-database:20.3.1'

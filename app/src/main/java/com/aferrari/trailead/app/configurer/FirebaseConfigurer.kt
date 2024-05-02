@@ -1,6 +1,5 @@
 package com.aferrari.trailead.app.configurer
 
-import android.content.Context
 import com.aferrari.trailead.data.db.FirebaseDataBase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database

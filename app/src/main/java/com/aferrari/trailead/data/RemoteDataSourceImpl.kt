@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-
 class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long =
         withContext(Dispatchers.IO) {
@@ -836,5 +835,57 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         // TODO: "Not yet implemented"
         return StatusCode.SUCCESS.value
     }
+
+    override suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode> =
+        flow {
+            try {
+                if (FirebaseAuth.getInstance().signInWithEmailAndPassword(userId, token)
+                        .addOnCompleteListener {}.await().user != null
+                ) {
+                    emit(StatusCode.SUCCESS)
+                } else
+                    emit(StatusCode.ERROR)
+
+            } catch (exception: Exception) {
+                emit(StatusCode.ERROR)
+            }
+
+        }
+
+//    override suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode> =
+//        withContext(Dispatchers.IO) {
+//            val signInResult = MutableStateFlow(StatusCode.INIT)
+//            try {
+//                var resultSignInWithEmailAndPassword = false
+//                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
+//                    .addOnCompleteListener {
+//                        if (it.isSuccessful) {
+//                            resultSignInWithEmailAndPassword = true
+//                        }
+//                    }.await()
+//                if (resultSignInWithEmailAndPassword) {
+//                    signInResult.emit(StatusCode.SUCCESS)
+//                } else {
+//                    signInResult.emit(StatusCode.ERROR)
+//                }
+//            } catch (exception: Exception) {
+//                signInResult.emit(StatusCode.ERROR)
+//            }
+//            return@withContext signInResult
+//        }
+
+    override suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode> =
+        flow {
+            try {
+                if (FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
+                        .addOnCompleteListener {}.await().user != null
+                )
+                    emit(StatusCode.SUCCESS)
+                else
+                    emit(StatusCode.ERROR)
+            } catch (exception: Exception) {
+                emit(StatusCode.ERROR)
+            }
+        }
 
 }

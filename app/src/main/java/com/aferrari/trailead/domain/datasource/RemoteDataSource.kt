@@ -1,6 +1,7 @@
 package com.aferrari.trailead.domain.datasource
 
 import com.aferrari.trailead.common.common_enum.Position
+import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
@@ -122,9 +123,11 @@ interface RemoteDataSource {
 
     suspend fun updateLeaderLastName(leaderId: String, lastName: String): Long
 
-//    suspend fun updateLeaderPassword(leaderId: String, pass: String): Long
+    //    suspend fun updateLeaderPassword(leaderId: String, pass: String): Long
     suspend fun validateLeaderAccessKey(leaderId: String, accessKey: Int): Long
     suspend fun validateTraineeAccessKey(traineeId: String, accessKey: Int): Long
     suspend fun updateLeaderAccessKey(leaderId: String, accessKey: Int): Long
     suspend fun updateTraineeAccessKey(traineeIds: String, accessKey: Int): Long
+    suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode>
+    suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode>
 }
