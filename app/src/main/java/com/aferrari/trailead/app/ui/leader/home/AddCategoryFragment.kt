@@ -38,8 +38,12 @@ class AddCategoryFragment : Fragment() {
             )
         binding.lifecycleOwner = this
         binding.viewModel = leaderViewModel
-        initListeners()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initListeners()
     }
 
     private fun initListeners() {
@@ -81,9 +85,7 @@ class AddCategoryFragment : Fragment() {
                     failedInternetConectionFlow()
                 }
 
-                else -> {
-                    failedFlow()
-                }
+                else -> {}
             }
         }
     }

@@ -74,7 +74,7 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
      */
     fun updateLink(newTitle: String, newLink: String) {
         initStatus()
-        if (newTitle.isNullOrEmpty() || newLink.isNullOrEmpty()) {
+        if (newTitle.isEmpty() && newLink.isEmpty()) {
             status.value = StatusUpdateInformation.SUCCESS
             return
         }
@@ -82,7 +82,9 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
             status.value = StatusUpdateInformation.FAILED
             return
         }
-        updateNewLink(newTitle, newLink)
+        val newTitleUpdated = newTitle.ifEmpty { linkSelected?.title ?: "" }
+        val newLinkUpdated = newLink.ifEmpty { linkSelected?.url ?: "" }
+        updateNewLink(newTitleUpdated, newLinkUpdated)
     }
 
     private fun updateNewLink(newTitle: String, newLink: String) {

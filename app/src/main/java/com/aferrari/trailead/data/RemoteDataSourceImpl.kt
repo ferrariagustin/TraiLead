@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -117,24 +118,27 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         getAllYoutubeVideo(leaderId).filter { it.categoryId == categoryId }
     }
 
-    override suspend fun insertCategory(category: Category): Long = withContext(Dispatchers.IO) {
+    override suspend fun insertCategory(category: Category): Flow<StatusCode> = flow {
         val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
-        var resultCode: Long = StatusCode.ERROR.value
-        reference?.child(category.id.toString())?.setValue(category)
-            ?.addOnCompleteListener { task ->
-                resultCode = if (task.isSuccessful) {
-                    StatusCode.SUCCESS.value
-                } else {
-                    StatusCode.ERROR.value
-                }
-            }?.await()
-        resultCode
+        var resultCode = StatusCode.ERROR
+        try {
+            reference?.child(category.id.toString())?.setValue(category)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS
+                    } else {
+                        StatusCode.ERROR
+                    }
+                }?.await()
+            delay(500)
+            emit(resultCode)
+        } catch (exception: Exception) {
+            emit(StatusCode.ERROR)
+        }
     }
 
     override suspend fun getAllCategory(leaderId: String): List<Category> =
-        withContext(Dispatchers.IO) {
-            getAllCategory().filter { it.leaderCategoryId == leaderId }
-        }
+        getAllCategory().filter { it.leaderCategoryId == leaderId }
 
     override suspend fun getAllCategory(): List<Category> = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
@@ -151,12 +155,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         categories
     }
 
-    override suspend fun deleteCategory(category: Category): Long =
+    override suspend fun deleteCategory(idCategory: Int): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Category::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(category.id.toString())
+            reference?.child(idCategory.toString())
                 ?.removeValue()
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
@@ -165,6 +169,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                         StatusCode.ERROR.value
                     }
                 }?.await()
+            delay(500)
             resultCode
         }
 
@@ -259,17 +264,15 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             StatusCode.SUCCESS.value
         }
 
-    override suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int): Long =
+    override suspend fun deleteAllTraineeCategoryJoinForCategory(idCategory: Int): Long =
         withContext(Dispatchers.IO) {
-            val getAllCategoryFromTraineeFilter =
-                getAllTraineeCategoryJoin().filter { it.idCategory == categoryId }
-            getAllCategoryFromTraineeFilter.forEach {
+            getAllTraineeCategoryJoin().filter { it.idCategory == idCategory }.forEach {
                 val result = deleteTraineeCategoryJoin(it.id)
                 if (result == StatusCode.ERROR.value) {
                     return@withContext StatusCode.ERROR.value
                 }
             }
-            StatusCode.SUCCESS.value
+            deleteCategory(idCategory)
         }
 
     override suspend fun deleteTraineeCategoryJoin(traineeCategoryJoinId: Int): Long =
@@ -286,6 +289,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                         StatusCode.ERROR.value
                     }
                 }?.await()
+            delay(500)
             resultCode
         }
 

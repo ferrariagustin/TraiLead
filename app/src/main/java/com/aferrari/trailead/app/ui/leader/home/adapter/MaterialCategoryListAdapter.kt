@@ -35,13 +35,14 @@ class MaterialCategoryListAdapter(
         holder.viewHolderBinding.textViewMaterialCategoryId.text = category.name
         holder.viewHolderBinding.cardCategoryId.setOnClickListener {
             leaderViewModel.categorySelected = category
-            fragment.findNavController().navigate(R.id.leaderMaterialListFragment)
+            fragment.findNavController()
+                .navigate(R.id.action_leaderHomeFragment_to_leaderMaterialListFragment)
         }
 
         holder.viewHolderBinding.cardCategoryId.setOnLongClickListener {
             leaderViewModel.categorySelected = category
             fragment.findNavController()
-                .navigate(R.id.leaderSettingCategoryMaterial)
+                .navigate(R.id.action_leaderHomeFragment_to_leaderSettingCategoryMaterial2)
             return@setOnLongClickListener true
         }
     }

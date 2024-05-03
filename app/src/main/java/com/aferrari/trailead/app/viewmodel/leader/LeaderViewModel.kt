@@ -22,8 +22,8 @@ import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 open class LeaderViewModel(
     val repository: UserRepository,
@@ -85,14 +85,12 @@ open class LeaderViewModel(
         statusUpdatePassword.value = StatusUpdateInformation.NONE
     }
 
-    // TODO: remove comment lines
     fun setLeader(leader: Leader?) {
         leader?.let {
             this.leader = it
             nameUser.value = leader.name
             lastNameUser.value = leader.lastName
             emailUser.value = leader.email
-//            passUser.value = leader.pass
         }
     }
 
@@ -173,7 +171,7 @@ open class LeaderViewModel(
                 viewModelScope.launch {
                     repository.updateTraineePosition(trainee, position)
                     repository.getUser(trainee.userId)
-                        .collect {
+                        .flowOn(Dispatchers.IO).collect {
                             traineeSelected = it as Trainee
                         }
                     statusUpdateTraineeRol.value = StatusUpdateInformation.SUCCESS
@@ -254,12 +252,25 @@ open class LeaderViewModel(
 
     private fun insertCategory(category: Category) {
         viewModelScope.launch {
-            val result = materialRepository.insertCategory(category).toStatusUpdateInformation()
-            if (result == StatusUpdateInformation.SUCCESS) {
-                getAllCategoryForLeader()
-                statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
-            } else {
-                statusUpdateNewCategory.value = result
+            materialRepository.insertCategory(category).flowOn(Dispatchers.IO).collect { state ->
+                when (state.value.toStatusUpdateInformation()) {
+                    StatusUpdateInformation.SUCCESS -> {
+                        getAllCategoryForLeader()
+                        statusUpdateNewCategory.value = StatusUpdateInformation.SUCCESS
+                    }
+
+                    StatusUpdateInformation.FAILED -> {
+                        statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
+                    }
+
+                    StatusUpdateInformation.INTERNET_CONECTION -> {
+                        statusUpdateNewCategory.value = StatusUpdateInformation.INTERNET_CONECTION
+                    }
+
+                    else -> {
+                        statusUpdateNewCategory.value = StatusUpdateInformation.FAILED
+                    }
+                }
             }
         }
     }
@@ -267,17 +278,30 @@ open class LeaderViewModel(
     fun removeCategory() {
         viewModelScope.launch {
             categorySelected?.let {
-                deleteCategory(it)
+                deleteCategory(it.id)
             }
         }
     }
 
-    private suspend fun deleteCategory(category: Category) = withContext(Dispatchers.IO) {
-        val result = materialRepository.deleteCategory(category).toStatusUpdateInformation()
-        if (result == StatusUpdateInformation.SUCCESS) {
-            getAllCategoryForLeader()
-            statusUpdateDeleteCategory.value = StatusUpdateInformation.SUCCESS
-        } else statusUpdateDeleteCategory.value = result
+    private suspend fun deleteCategory(idCategory: Int) {
+        when (materialRepository.deleteCategory(idCategory).toStatusUpdateInformation()) {
+            StatusUpdateInformation.SUCCESS -> {
+                getAllCategoryForLeader()
+                statusUpdateDeleteCategory.value = StatusUpdateInformation.SUCCESS
+            }
+
+            StatusUpdateInformation.FAILED -> {
+                statusUpdateDeleteCategory.value = StatusUpdateInformation.FAILED
+            }
+
+            StatusUpdateInformation.INTERNET_CONECTION -> {
+                statusUpdateDeleteCategory.value = StatusUpdateInformation.INTERNET_CONECTION
+            }
+
+            else -> {
+                statusUpdateDeleteCategory.value = StatusUpdateInformation.FAILED
+            }
+        }
     }
 
     fun editCategory(newCategory: String) = viewModelScope.launch {
@@ -289,7 +313,7 @@ open class LeaderViewModel(
     }
 
 
-    private suspend fun updateCategory(newCategory: String) = withContext(Dispatchers.IO) {
+    private suspend fun updateCategory(newCategory: String) {
         statusUpdateEditCategory.value =
             materialRepository.updateCategory(categorySelected!!.id, newCategory)
                 .toStatusUpdateInformation()
@@ -423,7 +447,7 @@ open class LeaderViewModel(
         }
     }
 
-    private suspend fun updateStatusDeleteMaterial(result: Long) = withContext(Dispatchers.IO) {
+    private fun updateStatusDeleteMaterial(result: Long) {
         when (result) {
             StatusCode.SUCCESS.value -> {
                 updateMaterialsCategoryFilter()

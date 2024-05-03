@@ -29,13 +29,13 @@ interface RemoteDataSource {
 
     //    Category
 
-    suspend fun insertCategory(category: Category): Long
+    suspend fun insertCategory(category: Category): Flow<StatusCode>
 
     suspend fun getAllCategory(leaderId: String): List<Category>
 
     suspend fun getAllCategory(): List<Category>
 
-    suspend fun deleteCategory(category: Category): Long
+    suspend fun deleteCategory(idCategory: Int): Long
 
     suspend fun updateCategory(categoryId: Int, categoryName: String): Long
 
@@ -49,7 +49,10 @@ interface RemoteDataSource {
 
     suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: String): Long
 
-    suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int): Long
+    /**
+     * Delete all Trainee linked with a category and delete Category
+     */
+    suspend fun deleteAllTraineeCategoryJoinForCategory(idCategory: Int): Long
 
     suspend fun getAllTraineeCategoryJoin(): List<TraineeCategoryJoin>
 

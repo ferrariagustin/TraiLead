@@ -9,6 +9,8 @@ import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
 
@@ -82,25 +84,20 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
     }
 
     //  Category
-    suspend fun insertCategory(category: Category) =
+    suspend fun insertCategory(category: Category): Flow<StatusCode> =
         if (!NetworkManager.isOnline()) {
-            StatusCode.INTERNET_CONECTION.value
+            flowOf(StatusCode.INTERNET_CONECTION)
         } else {
             remoteDataSource.insertCategory(category)
         }
 
     suspend fun getAllCategory(leader: Leader) = remoteDataSource.getAllCategory(leader.userId)
 
-    suspend fun deleteCategory(category: Category) =
+    suspend fun deleteCategory(idCategory: Int) =
         if (!NetworkManager.isOnline()) {
             StatusCode.INTERNET_CONECTION.value
         } else {
-            val result = remoteDataSource.deleteAllTraineeCategoryJoinForCategory(category.id)
-            if (result == StatusCode.SUCCESS.value) {
-                remoteDataSource.deleteCategory(category)
-            } else {
-                result
-            }
+            remoteDataSource.deleteAllTraineeCategoryJoinForCategory(idCategory)
         }
 
     suspend fun updateCategory(categoryId: Int, categoryName: String) =
