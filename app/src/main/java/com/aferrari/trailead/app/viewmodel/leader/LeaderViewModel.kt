@@ -100,15 +100,17 @@ open class LeaderViewModel(
     }
 
     private fun saveState() {
-        savedStateHandle[CATEGORY_SELECTED] = categorySelected
-        savedStateHandle[TRAINEE_SELECTED] = traineeSelected
-        savedStateHandle[MATERIAL_SELECTED] = materialSelected
+        // TODO: review if is neccesary
+//        savedStateHandle[CATEGORY_SELECTED] = categorySelected
+//        savedStateHandle[TRAINEE_SELECTED] = traineeSelected
+//        savedStateHandle[MATERIAL_SELECTED] = materialSelected
     }
 
     fun restoreState() {
-        categorySelected = savedStateHandle[CATEGORY_SELECTED]
-        traineeSelected = savedStateHandle[TRAINEE_SELECTED]
-        materialSelected = savedStateHandle[MATERIAL_SELECTED]
+        // TODO: review if is neccesary
+//        categorySelected = savedStateHandle[CATEGORY_SELECTED]
+//        traineeSelected = savedStateHandle[TRAINEE_SELECTED]
+//        materialSelected = savedStateHandle[MATERIAL_SELECTED]
     }
 
     fun getLeaderId() = leader.userId
