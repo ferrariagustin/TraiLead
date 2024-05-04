@@ -215,23 +215,19 @@ class UserRepository(
         }
     }
 
-    suspend fun updateLeaderLastName(leaderId: String, lastName: String) {
-        val result = remoteDataSource.updateLeaderLastName(leaderId, lastName)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.updateLeaderLastName(leaderId, lastName)
+    suspend fun updateLeaderLastName(leaderId: String, lastName: String) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.updateLeaderLastName(leaderId, lastName)
         }
-    }
-
-    suspend fun updateLeaderPass(leaderId: String, pass: String) {
-//        val hashPassword = PasswordUtil.hashPassword(pass)
-//        val result = remoteDataSource.updateLeaderPassword(leaderId, hashPassword)
-//        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.updateLeaderPassword(leaderId, hashPassword)
-//        }
-    }
 
     suspend fun updateUserPass(pass: String): StatusCode =
-        remoteDataSource.updateUserPassword(pass).toStatusCode()
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.updateUserPassword(pass).toStatusCode()
+        }
 
 
     suspend fun getTrainee(traineeId: String): Trainee? = remoteDataSource.getTrainee(traineeId)

@@ -11,7 +11,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
+import com.aferrari.trailead.common.common_enum.ErrorView
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
 import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.EditProfilePassFragmentBinding
 
@@ -58,26 +60,32 @@ class TraineeEditProfilePass : Fragment() {
             )
         }
         traineeViewModel.statusEditProfilePass.observe(viewLifecycleOwner) {
-            when (it.name) {
-                StatusUpdateInformation.FAILED.name -> showError()
-                StatusUpdateInformation.SUCCESS.name -> showSuccess()
+            when (it) {
+                StatusUpdateInformation.FAILED -> showError()
+                StatusUpdateInformation.SUCCESS -> showSuccess()
+                StatusUpdateInformation.INTERNET_CONECTION -> showFailedInternetConnection()
+                else -> {}
             }
         }
     }
 
+    private fun showFailedInternetConnection() {
+        TraiLeadSnackbar().errorConection(requireContext(), binding.root)
+    }
+
     private fun showSuccess() {
-        Toast.makeText(
+        TraiLeadSnackbar().init(
             requireContext(),
-            resources.getString(R.string.update_pass_success),
-            Toast.LENGTH_SHORT
-        ).show()
+            binding.root,
+            resources.getString(R.string.update_pass_success), type = ErrorView.SUCCESS
+        )
         findNavController().navigate(R.id.action_traineeEditProfilePass_to_traineeProfileFragment)
     }
 
     private fun showError() {
         TraileadDialog().showDialog(
             resources.getString(R.string.title_error),
-            "Ingrese una contraseña correcta",
+            resources.getString(R.string.update_pass_failed_input),
             requireContext()
         )
     }

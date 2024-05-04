@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
@@ -82,26 +82,13 @@ class TraineeViewModel(
     }
 
     fun updatePassword(password: String, repeatPassword: String) {
-        if (password.isEmpty() or repeatPassword.isEmpty() or (password != repeatPassword)) {
+        if (password.isEmpty() or repeatPassword.isEmpty() or (password != repeatPassword) or (password.length < 6) or (repeatPassword.length < 6)) {
             statusEditProfilePass.value = StatusUpdateInformation.FAILED
             return
         }
         viewModelScope.launch {
-            repository.updateUserPass(password).apply {
-                when (this) {
-                    StatusCode.SUCCESS -> {
-                        statusEditProfilePass.value = StatusUpdateInformation.SUCCESS
-                    }
-
-                    StatusCode.ERROR -> {
-                        statusEditProfilePass.value = StatusUpdateInformation.FAILED
-                    }
-
-                    else -> {
-                        statusEditProfilePass.value = StatusUpdateInformation.FAILED
-                    }
-                }
-            }
+            statusEditProfilePass.value =
+                repository.updateUserPass(password).value.toStatusUpdateInformation()
         }
     }
 

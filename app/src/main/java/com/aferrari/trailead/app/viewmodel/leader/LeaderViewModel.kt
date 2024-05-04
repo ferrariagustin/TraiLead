@@ -206,7 +206,7 @@ open class LeaderViewModel(
     }
 
     fun updatePassword(pass: String, repeatPass: String) {
-        if (pass.isNullOrEmpty() || repeatPass.isNullOrEmpty() || pass != repeatPass) {
+        if (pass.isEmpty() || repeatPass.isEmpty() || pass != repeatPass || (pass.length < 6) or (repeatPass.length < 6)) {
             statusUpdatePassword.value = StatusUpdateInformation.FAILED
             return
         }
@@ -215,21 +215,8 @@ open class LeaderViewModel(
 
     private fun setPassword(pass: String) {
         viewModelScope.launch {
-            repository.updateUserPass(pass).apply {
-                when (this) {
-                    StatusCode.SUCCESS -> {
-                        statusUpdatePassword.value = StatusUpdateInformation.SUCCESS
-                    }
-
-                    StatusCode.ERROR -> {
-                        statusUpdatePassword.value = StatusUpdateInformation.FAILED
-                    }
-
-                    else -> {
-                        statusUpdatePassword.value = StatusUpdateInformation.FAILED
-                    }
-                }
-            }
+            statusUpdatePassword.value =
+                repository.updateUserPass(pass).value.toStatusUpdateInformation()
         }
     }
 

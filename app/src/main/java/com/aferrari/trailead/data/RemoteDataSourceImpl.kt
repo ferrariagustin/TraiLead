@@ -806,7 +806,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val reference =
                 FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(leaderId.toString())?.child(Leader::lastName.name)
+            reference?.child(leaderId)?.child(Leader::lastName.name)
                 ?.setValue(lastName)
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {

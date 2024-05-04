@@ -14,7 +14,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">@android:color/holo_red_light</color>
     <color name="error">@android:color/holo_red_light</color>
-    <color name="success">@android:color/holo_green_light</color>
+    <color name="success">@android:color/holo_green_dark</color>
     <color name="warning">@android:color/holo_orange_light</color>
     <color name="gray">@android:color/darker_gray</color>
     <color name="translucent_black">#80000000</color>
