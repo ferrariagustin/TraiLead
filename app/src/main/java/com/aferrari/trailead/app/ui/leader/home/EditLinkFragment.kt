@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderEditMaterialLinkBinding
-import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.app.viewmodel.leader.material.LinkMaterialViewModel
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
+import com.aferrari.trailead.common.ui.TraileadDialog
+import com.aferrari.trailead.databinding.LeaderEditMaterialLinkBinding
 
 class EditLinkFragment : Fragment() {
 
@@ -53,9 +53,14 @@ class EditLinkFragment : Fragment() {
             when (it) {
                 StatusUpdateInformation.SUCCESS -> navigateToSuccessFlow()
                 StatusUpdateInformation.FAILED -> navigateToFailedFlow()
+                StatusUpdateInformation.INTERNET_CONECTION -> navigateToFailedInternetContectionFlow()
                 else -> {}
             }
         }
+    }
+
+    private fun navigateToFailedInternetContectionFlow() {
+        TraiLeadSnackbar().errorConection(requireContext(), binding.root)
     }
 
     private fun navigateToFailedFlow() {
@@ -67,8 +72,6 @@ class EditLinkFragment : Fragment() {
     }
 
     private fun navigateToSuccessFlow() {
-        Toast.makeText(requireContext(), "Su Link fue editado correctamente", Toast.LENGTH_SHORT)
-            .show()
         findNavController().navigateUp()
     }
 }

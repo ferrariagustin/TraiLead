@@ -19,14 +19,14 @@ import com.aferrari.trailead.app.viewmodel.login.LoginViewModel
 import com.aferrari.trailead.app.viewmodel.login.LoginViewModelFactory
 import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.common_enum.LoginState
-import com.aferrari.trailead.common.session.SessionManagement
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
 import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.LoginFragmentBinding
-import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.User
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 // TODO: don't working back navigation
 @AndroidEntryPoint
@@ -38,16 +38,13 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
 
-    @Inject
-    lateinit var localDataSource: LocalDataSource
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
-        val factory = LoginViewModelFactory(localDataSource, remoteDataSource)
+        val factory = LoginViewModelFactory(remoteDataSource)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
         binding.loginViewModel = loginViewModel
         binding.lifecycleOwner = this
@@ -61,7 +58,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     override fun onStart() {
         super.onStart()
-        checkSession()
+        loginViewModel.validateSession(requireContext())
     }
 
     override fun goHome(user: User) {
@@ -83,6 +80,7 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
                 LoginState.FAILED -> errorLogin()
                 LoginState.SUCCESS -> successLogin()
                 LoginState.REGISTER -> goRegister()
+                LoginState.INTERNET_CONECTION -> errorInternetConection()
             }
         }
         loginViewModel.visibilityPassDrawable.observe(viewLifecycleOwner) {
@@ -102,6 +100,17 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
                 }
             }
         }
+        binding.restorePasswordBtn.setOnClickListener {
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_loginFragment_to_restorePasswordFragment)
+        }
+        binding.loginBtn.setOnClickListener {
+            loginViewModel.login(requireContext())
+        }
+    }
+
+    private fun errorInternetConection() {
+        TraiLeadSnackbar().errorConection(requireContext(), binding.root)
     }
 
     private fun setVisibilityPassword(
@@ -123,7 +132,6 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private fun successLogin() {
         binding.progressBar.visibility = View.GONE
-        SessionManagement(requireContext()).saveSession(loginViewModel.user.id)
         goHome(loginViewModel.user)
     }
 
@@ -138,16 +146,5 @@ class LoginFragment : Fragment(), Login, LifecycleOwner {
 
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
-    }
-
-    /**
-     * Validate if exist some session in sharedPrefernce.
-     * If exist a session, redirect to home
-     */
-    private fun checkSession() {
-        val userId = SessionManagement(requireContext()).getSession()
-        if (userId != -1) {
-            loginViewModel.getUser(userId)
-        }
     }
 }

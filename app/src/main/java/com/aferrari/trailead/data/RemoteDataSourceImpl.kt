@@ -1,6 +1,5 @@
 package com.aferrari.trailead.data
 
-import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -12,14 +11,15 @@ import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-
 
 class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long =
@@ -38,7 +38,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getAllYoutubeVideo(leaderId: Int): List<YouTubeVideo> =
+    override suspend fun getAllYoutubeVideo(leaderId: String): List<YouTubeVideo> =
         withContext(Dispatchers.IO) {
             getAllYoutubeVideo().filter { it.leaderMaterialId == leaderId }
         }
@@ -48,7 +48,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val reference =
                 FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
             val dataSnapshot = reference?.get()?.await()
-            var youtubeVideosList = mutableListOf<YouTubeVideo>()
+            val youtubeVideosList = mutableListOf<YouTubeVideo>()
             if (dataSnapshot?.key == YouTubeVideo::class.simpleName.toString()) {
                 dataSnapshot.value?.let {
                     val hashMapValues = dataSnapshot.value as HashMap<String, Object>
@@ -112,30 +112,33 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         }
 
     override suspend fun getYoutubeVideoByCategory(
-        leaderId: Int,
+        leaderId: String,
         categoryId: Int
     ): List<YouTubeVideo> = withContext(Dispatchers.IO) {
         getAllYoutubeVideo(leaderId).filter { it.categoryId == categoryId }
     }
 
-    override suspend fun insertCategory(category: Category): Long = withContext(Dispatchers.IO) {
+    override suspend fun insertCategory(category: Category): Flow<StatusCode> = flow {
         val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
-        var resultCode: Long = StatusCode.ERROR.value
-        reference?.child(category.id.toString())?.setValue(category)
-            ?.addOnCompleteListener { task ->
-                resultCode = if (task.isSuccessful) {
-                    StatusCode.SUCCESS.value
-                } else {
-                    StatusCode.ERROR.value
-                }
-            }?.await()
-        resultCode
+        var resultCode = StatusCode.ERROR
+        try {
+            reference?.child(category.id.toString())?.setValue(category)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS
+                    } else {
+                        StatusCode.ERROR
+                    }
+                }?.await()
+            delay(500)
+            emit(resultCode)
+        } catch (exception: Exception) {
+            emit(StatusCode.ERROR)
+        }
     }
 
-    override suspend fun getAllCategory(leaderId: Int): List<Category> =
-        withContext(Dispatchers.IO) {
-            getAllCategory().filter { it.leaderCategoryId == leaderId }
-        }
+    override suspend fun getAllCategory(leaderId: String): List<Category> =
+        getAllCategory().filter { it.leaderCategoryId == leaderId }
 
     override suspend fun getAllCategory(): List<Category> = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Category::class.simpleName.toString())
@@ -152,12 +155,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         categories
     }
 
-    override suspend fun deleteCategory(category: Category): Long =
+    override suspend fun deleteCategory(idCategory: Int): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Category::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(category.id.toString())
+            reference?.child(idCategory.toString())
                 ?.removeValue()
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
@@ -166,6 +169,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                         StatusCode.ERROR.value
                     }
                 }?.await()
+            delay(500)
             resultCode
         }
 
@@ -212,7 +216,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getCategoriesFromTrainee(traineeId: Int): List<Category> =
+    override suspend fun getCategoriesFromTrainee(traineeId: String): List<Category> =
         withContext(Dispatchers.IO) {
             val leaderId = getTrainee(traineeId)?.leaderId
             val categoryList = arrayListOf<Category>()
@@ -247,7 +251,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         }
     }
 
-    override suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: Int): Long =
+    override suspend fun deleteAllTraineeCategoryJoinForTrainee(traineeId: String): Long =
         withContext(Dispatchers.IO) {
             val getAllCategoryFromTraineeFilter =
                 getAllTraineeCategoryJoin().filter { it.idTrainee == traineeId }
@@ -260,17 +264,15 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             StatusCode.SUCCESS.value
         }
 
-    override suspend fun deleteAllTraineeCategoryJoinForCategory(categoryId: Int): Long =
+    override suspend fun deleteAllTraineeCategoryJoinForCategory(idCategory: Int): Long =
         withContext(Dispatchers.IO) {
-            val getAllCategoryFromTraineeFilter =
-                getAllTraineeCategoryJoin().filter { it.idCategory == categoryId }
-            getAllCategoryFromTraineeFilter.forEach {
+            getAllTraineeCategoryJoin().filter { it.idCategory == idCategory }.forEach {
                 val result = deleteTraineeCategoryJoin(it.id)
                 if (result == StatusCode.ERROR.value) {
                     return@withContext StatusCode.ERROR.value
                 }
             }
-            StatusCode.SUCCESS.value
+            deleteCategory(idCategory)
         }
 
     override suspend fun deleteTraineeCategoryJoin(traineeCategoryJoinId: Int): Long =
@@ -287,6 +289,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                         StatusCode.ERROR.value
                     }
                 }?.await()
+            delay(500)
             resultCode
         }
 
@@ -337,7 +340,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getAllLink(leaderId: Int): List<Link> = withContext(Dispatchers.IO) {
+    override suspend fun getAllLink(leaderId: String): List<Link> = withContext(Dispatchers.IO) {
         getAllLink().filter { it.leaderMaterialId == leaderId }
     }
 
@@ -388,7 +391,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getLinkByCategory(leaderId: Int, categoryId: Int): List<Link> =
+    override suspend fun getLinkByCategory(leaderId: String, categoryId: Int): List<Link> =
         withContext(Dispatchers.IO) {
             val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
             val dataSnapshot = reference?.get()?.await()
@@ -407,7 +410,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun insertLeader(leader: Leader): Long = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
         var resultCode: Long = StatusCode.ERROR.value
-        reference?.child(leader.id.toString())?.setValue(leader)?.addOnCompleteListener { task ->
+        reference?.child(leader.userId)?.setValue(leader)?.addOnCompleteListener { task ->
             resultCode = if (task.isSuccessful) {
                 StatusCode.SUCCESS.value
             } else {
@@ -420,7 +423,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun insertTrainee(trainee: Trainee): Long = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
         var resultCode: Long = StatusCode.ERROR.value
-        reference?.child(trainee.id.toString())?.setValue(trainee)?.addOnCompleteListener { task ->
+        reference?.child(trainee.userId)?.setValue(trainee)?.addOnCompleteListener { task ->
             resultCode = if (task.isSuccessful) {
                 StatusCode.SUCCESS.value
             } else {
@@ -430,7 +433,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         resultCode
     }
 
-    override suspend fun updateTraineeName(idTrainee: Int, name: String): Long =
+    override suspend fun updateTraineeName(idTrainee: String, name: String): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
@@ -447,7 +450,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun updateTraineeLastName(idTrainee: Int, lastName: String): Long =
+    override suspend fun updateTraineeLastName(idTrainee: String, lastName: String): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
@@ -464,21 +467,33 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun updateTraineePassword(idTrainee: Int, pass: String): Long =
+    // TODO: remove this method, update pass for user not por usertype
+    override suspend fun updateTraineePassword(idTrainee: String, pass: String): Long =
         withContext(Dispatchers.IO) {
-            val reference =
-                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
-            var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(idTrainee.toString())?.child(Trainee::pass.name)
-                ?.setValue(pass)
+            var result: StatusCode = StatusCode.ERROR
+            FirebaseAuth.getInstance().currentUser?.updatePassword(pass)
                 ?.addOnCompleteListener { task ->
-                    resultCode = if (task.isSuccessful) {
-                        StatusCode.SUCCESS.value
+                    if (task.isSuccessful) {
+                        result = StatusCode.SUCCESS
                     } else {
-                        StatusCode.ERROR.value
+                        result = StatusCode.ERROR
                     }
                 }?.await()
-            resultCode
+            return@withContext result.value
+        }
+
+    override suspend fun updateUserPassword(pass: String): Long =
+        withContext(Dispatchers.IO) {
+            var result: StatusCode = StatusCode.ERROR
+            FirebaseAuth.getInstance().currentUser?.updatePassword(pass)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        result = StatusCode.SUCCESS
+                    } else {
+                        result = StatusCode.ERROR
+                    }
+                }?.await()
+            return@withContext result.value
         }
 
     override suspend fun deleteLeader(leader: Leader): Long =
@@ -486,7 +501,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val reference =
                 FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(leader.id.toString())
+            reference?.child(leader.userId.toString())
                 ?.removeValue()
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
@@ -503,7 +518,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val reference =
                 FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(trainee.id.toString())
+            reference?.child(trainee.userId.toString())
                 ?.removeValue()
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
@@ -521,7 +536,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
             for (leader in leaderList) {
-                reference?.child(leader.id.toString())
+                reference?.child(leader.userId.toString())
                     ?.removeValue()
                     ?.addOnCompleteListener { task ->
                         resultCode = if (task.isSuccessful) {
@@ -541,7 +556,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
             for (trainee in traineeList) {
-                reference?.child(trainee.id.toString())
+                reference?.child(trainee.userId.toString())
                     ?.removeValue()
                     ?.addOnCompleteListener { task ->
                         resultCode = if (task.isSuccessful) {
@@ -555,13 +570,13 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getUserType(user_id: Int): Flow<UserType?> = flow {
-        val leader = getLeader(user_id)
+    override suspend fun getUserType(userId: String): Flow<UserType?> = flow {
+        val leader = getLeader(userId)
         if (leader != null) {
             emit(leader.userType)
             return@flow
         }
-        val trainee = getTrainee(user_id)
+        val trainee = getTrainee(userId)
         if (trainee != null) {
             emit(trainee.userType)
             return@flow
@@ -570,7 +585,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         return@flow
     }
 
-    override suspend fun getLeader(leader_id: Int): Leader? = withContext(Dispatchers.IO) {
+    override suspend fun getLeader(leaderId: String): Leader? = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
         if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
@@ -578,7 +593,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                 val leaders = hashMapValues.values.map {
                     Gson().fromJson(Gson().toJson(it), Leader::class.java)
-                }.filter { it.id == leader_id }
+                }.filter { it.userId == leaderId }
                 if (leaders.isNotEmpty()) {
                     leaders[0]
                 } else {
@@ -590,7 +605,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         }
     }
 
-    override suspend fun getLeader(user_email: String, user_pass: String): Leader? {
+    override suspend fun getLeaderByEmail(leaderEmail: String): Leader? {
         val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
 
@@ -599,12 +614,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                 val leaders = hashMapValues.values.map {
                     Gson().fromJson(Gson().toJson(it), Leader::class.java)
-                }.filter {
-                    it.email == user_email && PasswordUtil.verifyPassword(
-                        user_pass,
-                        it.pass
-                    )
-                }
+                }.filter { it.email == leaderEmail }
                 if (leaders.isNotEmpty()) {
                     return leaders[0]
                 } else {
@@ -617,29 +627,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         return null
     }
 
-    override suspend fun getLeader(leader_email: String): Leader? {
-        val reference = FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
-        val dataSnapshot = reference?.get()?.await()
-
-        if (dataSnapshot?.key == Leader::class.simpleName.toString()) {
-            dataSnapshot.value?.let {
-                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                val leaders = hashMapValues.values.map {
-                    Gson().fromJson(Gson().toJson(it), Leader::class.java)
-                }.filter { it.email == leader_email }
-                if (leaders.isNotEmpty()) {
-                    return leaders[0]
-                } else {
-                    null
-                }
-            }
-        } else {
-            null
-        }
-        return null
-    }
-
-    override suspend fun getTrainee(trainee_id: Int): Trainee? = withContext(Dispatchers.IO) {
+    override suspend fun getTrainee(traineeId: String): Trainee? = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
         if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
@@ -647,7 +635,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                 val trainees = hashMapValues.values.map {
                     Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-                }.filter { it.id == trainee_id }
+                }.filter { it.userId == traineeId }
                 if (trainees.isNotEmpty()) {
                     trainees[0]
                 } else {
@@ -659,33 +647,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         }
     }
 
-    override suspend fun getTrainee(user_email: String, user_pass: String): Trainee? {
-        val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
-        val dataSnapshot = reference?.get()?.await()
-        if (dataSnapshot?.key == Trainee::class.simpleName.toString()) {
-            dataSnapshot.value?.let {
-                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                val trainees = hashMapValues.values.map {
-                    Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-                }.filter {
-                    it.email == user_email && PasswordUtil.verifyPassword(
-                        user_pass,
-                        it.pass
-                    )
-                }
-                if (trainees.isNotEmpty()) {
-                    return trainees[0]
-                } else {
-                    null
-                }
-            }
-        } else {
-            null
-        }
-        return null
-    }
-
-    override suspend fun getTrainee(trainee_email: String): Trainee? {
+    override suspend fun getTraineeByEmail(traineeEmail: String): Trainee? {
         val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
         val dataSnapshot = reference?.get()?.await()
 
@@ -694,7 +656,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                 val trainees = hashMapValues.values.map {
                     Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-                }.filter { it.email == trainee_email }
+                }.filter { it.email == traineeEmail }
                 if (trainees.isNotEmpty()) {
                     return trainees[0]
                 } else {
@@ -740,13 +702,13 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         return leaderList
     }
 
-    override suspend fun setLinkedTrainee(trainee_id: Int, leader_id: Int): Long =
+    override suspend fun setLinkedTrainee(traineeId: String, leaderId: String): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(trainee_id.toString())?.child(Trainee::leaderId.name)
-                ?.setValue(leader_id)
+            reference?.child(traineeId.toString())?.child(Trainee::leaderId.name)
+                ?.setValue(leaderId)
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
                         StatusCode.SUCCESS.value
@@ -772,7 +734,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         unLinkedTraineeList
     }
 
-    override suspend fun getLinkedTrainees(leader_id: Int): List<Trainee> =
+    override suspend fun getLinkedTrainees(leaderId: String): List<Trainee> =
         withContext(Dispatchers.IO) {
             val reference = FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
             val dataSnapshot = reference?.get()?.await()
@@ -782,18 +744,18 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                     val hashMapValues = dataSnapshot.value as HashMap<String, Object>
                     unLinkedTraineeList.addAll(hashMapValues.values.map {
                         Gson().fromJson(Gson().toJson(it), Trainee::class.java)
-                    }.filter { it.leaderId == leader_id })
+                    }.filter { it.leaderId == leaderId })
                 }
             }
             unLinkedTraineeList
         }
 
-    override suspend fun setUnlinkedTrainee(trainee_id: Int): Long =
+    override suspend fun setUnlinkedTrainee(traineeId: String): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(trainee_id.toString())?.child(Trainee::leaderId.name)
+            reference?.child(traineeId.toString())?.child(Trainee::leaderId.name)
                 ?.setValue(null)
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
@@ -805,13 +767,13 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun updateTraineePosition(trainee_id: Int, trainee_position: Position): Long =
+    override suspend fun updateTraineePosition(traineeId: String, traineePosition: Position): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(trainee_id.toString())?.child(Trainee::position.name)
-                ?.setValue(trainee_position)
+            reference?.child(traineeId.toString())?.child(Trainee::position.name)
+                ?.setValue(traineePosition)
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
                         StatusCode.SUCCESS.value
@@ -822,7 +784,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun updateLeaderName(leaderId: Int, name: String): Long =
+    override suspend fun updateLeaderName(leaderId: String, name: String): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
@@ -839,12 +801,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun updateLeaderLastName(leaderId: Int, lastName: String): Long =
+    override suspend fun updateLeaderLastName(leaderId: String, lastName: String): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
             var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(leaderId.toString())?.child(Leader::lastName.name)
+            reference?.child(leaderId)?.child(Leader::lastName.name)
                 ?.setValue(lastName)
                 ?.addOnCompleteListener { task ->
                     resultCode = if (task.isSuccessful) {
@@ -856,20 +818,78 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun updateLeaderPassword(leaderId: Int, pass: String): Long =
-        withContext(Dispatchers.IO) {
-            val reference =
-                FirebaseDataBase.database?.child(Leader::class.simpleName.toString())
-            var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(leaderId.toString())?.child(Leader::pass.name)
-                ?.setValue(pass)
-                ?.addOnCompleteListener { task ->
-                    resultCode = if (task.isSuccessful) {
-                        StatusCode.SUCCESS.value
-                    } else {
-                        StatusCode.ERROR.value
-                    }
-                }?.await()
-            resultCode
+    // Access Key Flow
+
+    override suspend fun validateLeaderAccessKey(leaderId: String, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
+    override suspend fun validateTraineeAccessKey(traineeId: String, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
+    override suspend fun updateLeaderAccessKey(leaderId: String, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
+    override suspend fun updateTraineeAccessKey(traineeIds: String, accessKey: Int): Long {
+        // TODO: "Not yet implemented"
+        return StatusCode.SUCCESS.value
+    }
+
+    override suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode> =
+        flow {
+            try {
+                if (FirebaseAuth.getInstance().signInWithEmailAndPassword(userId, token)
+                        .addOnCompleteListener {}.await().user != null
+                ) {
+                    emit(StatusCode.SUCCESS)
+                } else
+                    emit(StatusCode.ERROR)
+
+            } catch (exception: Exception) {
+                emit(StatusCode.ERROR)
+            }
+
         }
+
+//    override suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode> =
+//        withContext(Dispatchers.IO) {
+//            val signInResult = MutableStateFlow(StatusCode.INIT)
+//            try {
+//                var resultSignInWithEmailAndPassword = false
+//                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
+//                    .addOnCompleteListener {
+//                        if (it.isSuccessful) {
+//                            resultSignInWithEmailAndPassword = true
+//                        }
+//                    }.await()
+//                if (resultSignInWithEmailAndPassword) {
+//                    signInResult.emit(StatusCode.SUCCESS)
+//                } else {
+//                    signInResult.emit(StatusCode.ERROR)
+//                }
+//            } catch (exception: Exception) {
+//                signInResult.emit(StatusCode.ERROR)
+//            }
+//            return@withContext signInResult
+//        }
+
+    override suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode> =
+        flow {
+            try {
+                if (FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
+                        .addOnCompleteListener {}.await().user != null
+                )
+                    emit(StatusCode.SUCCESS)
+                else
+                    emit(StatusCode.ERROR)
+            } catch (exception: Exception) {
+                emit(StatusCode.ERROR)
+            }
+        }
+
 }

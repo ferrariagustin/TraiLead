@@ -29,7 +29,7 @@ class HomeTraineeViewModel(val viewModel: TraineeViewModel) : ViewModel(), IMate
         if (hasLeader()) {
             viewModelScope.launch {
                 setCategories.value =
-                    viewModel.materialRepository.getCategoriesSelected(traineeSelected.id)
+                    viewModel.materialRepository.getCategoriesSelected(traineeSelected.userId)
                         .toMutableSet()
             }
         } else {

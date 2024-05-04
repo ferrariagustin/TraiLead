@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="roundedImageViewRounded">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
     <style name="traiLead_text" parent="Widget.MaterialComponents.TextView">
         <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="UnderlineText">
+        <item name="android:textColorLink">@color/primaryColor</item>
+        <item name="android:background">@drawable/underline_text</item>
     </style>
 
 </resources>

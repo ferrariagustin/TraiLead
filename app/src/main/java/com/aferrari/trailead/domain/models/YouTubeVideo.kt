@@ -10,5 +10,5 @@ data class YouTubeVideo(
     override val title: String,
     override val url: String,
     override var categoryId: Int? = null,
-    override val leaderMaterialId: Int
+    override val leaderMaterialId: String
 ) : Material

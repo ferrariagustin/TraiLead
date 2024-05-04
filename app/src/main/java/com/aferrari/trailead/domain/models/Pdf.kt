@@ -10,6 +10,6 @@ data class Pdf(
     override val title: String,
     override val url: String,
     override var categoryId: Int?,
-    override val leaderMaterialId: Int,
+    override val leaderMaterialId: String,
     val path: String
 ) : Material

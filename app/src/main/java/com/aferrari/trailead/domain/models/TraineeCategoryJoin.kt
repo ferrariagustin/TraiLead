@@ -27,6 +27,6 @@ import androidx.room.Index
 )
 data class TraineeCategoryJoin(
     @ColumnInfo(name = "trainee_category_join_id", defaultValue = "0") val id: Int,
-    @ColumnInfo(name = "trainee_id") val idTrainee: Int,
+    @ColumnInfo(name = "trainee_id") val idTrainee: String,
     @ColumnInfo(name = "category_id") val idCategory: Int
 )

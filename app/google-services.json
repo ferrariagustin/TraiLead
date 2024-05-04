@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "197875321402",
+    "firebase_url": "https://trailead-default-rtdb.firebaseio.com",
     "project_id": "trailead",
     "storage_bucket": "trailead.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "197875321402-ukoutpk3dtaahf1glacrrs6t1r9pbk48.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aferrari.trailead",
+            "certificate_hash": "1243346fe1bf762d6c2e1afaccc88101201ebf1e"
+          }
+        },
         {
           "client_id": "197875321402-j786mcv0mtk3o0f8rohdh7eipmu52lf0.apps.googleusercontent.com",
           "client_type": 3

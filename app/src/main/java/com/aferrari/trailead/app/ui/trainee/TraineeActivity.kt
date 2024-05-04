@@ -29,16 +29,13 @@ class TraineeActivity : AppCompatActivity() {
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
 
-    @Inject
-    lateinit var localDataSource: LocalDataSource
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.trainee_activity)
         val factory = HomeViewModelFactory(
-            UserRepository(localDataSource, remoteDataSource),
-            MaterialRepository(localDataSource, remoteDataSource)
+            UserRepository(remoteDataSource),
+            MaterialRepository(remoteDataSource)
         )
         homeTraineeViewModel = ViewModelProvider(this, factory)[TraineeViewModel::class.java]
         binding.lifecycleOwner = this

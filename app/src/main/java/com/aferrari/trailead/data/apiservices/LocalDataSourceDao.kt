@@ -95,8 +95,6 @@ interface LocalDataSourceDao {
     @Query("UPDATE trainee_data_table SET trainee_last_name=:lastName WHERE trainee_id = :idTrainee")
     suspend fun updateTraineeLastName(idTrainee: Int, lastName: String)
 
-    @Query("UPDATE trainee_data_table SET trainee_pass=:password WHERE trainee_id = :idTrainee")
-    suspend fun updateTraineePassword(password: String, idTrainee: Int)
 
     @Delete
     suspend fun deleteLeader(leader: Leader)
@@ -110,17 +108,17 @@ interface LocalDataSourceDao {
     @Query("DELETE FROM trainee_data_table")
     suspend fun deleteAllTrainee()
 
-    @Query("SELECT * FROM leader_data_table WHERE leader_id = :leader_id")
-    suspend fun getLeader(leader_id: Int): Leader?
+//    @Query("SELECT * FROM leader_data_table WHERE leader_id = :leader_id")
+//    suspend fun getLeader(leader_id: Int): Leader?
 
     @Query("SELECT * FROM trainee_data_table WHERE trainee_id = :trainee_id")
     suspend fun getTrainee(trainee_id: Int): Trainee?
 
-    @Query("SELECT * FROM leader_data_table WHERE leader_email = :user_email and leader_pass = :user_pass")
-    suspend fun getLeader(user_email: String, user_pass: String): Leader?
+//    @Query("SELECT * FROM leader_data_table WHERE leader_email = :user_email and leader_pass = :user_pass")
+//    suspend fun getLeader(user_email: String, user_pass: String): Leader?
 
-    @Query("SELECT * FROM trainee_data_table WHERE trainee_email = :user_email and trainee_pass = :user_pass")
-    suspend fun getTrainee(user_email: String, user_pass: String): Trainee?
+//    @Query("SELECT * FROM trainee_data_table WHERE trainee_email = :user_email and trainee_pass = :user_pass")
+//    suspend fun getTrainee(user_email: String, user_pass: String): Trainee?
 
     @Query("SELECT * FROM leader_data_table WHERE leader_email = :leader_email")
     suspend fun getLeader(leader_email: String): Leader?
@@ -161,6 +159,6 @@ interface LocalDataSourceDao {
     @Query("UPDATE leader_data_table SET leader_last_name = :lastName WHERE leader_id =:leaderId")
     suspend fun updateLeaderLastName(leaderId: Int, lastName: String)
 
-    @Query("UPDATE leader_data_table SET leader_pass = :pass WHERE leader_id =:leaderId")
-    suspend fun updateLeaderPassword(leaderId: Int, pass: String)
+//    @Query("UPDATE leader_data_table SET leader_pass = :pass WHERE leader_id =:leaderId")
+//    suspend fun updateLeaderPassword(leaderId: Int, pass: String)
 }

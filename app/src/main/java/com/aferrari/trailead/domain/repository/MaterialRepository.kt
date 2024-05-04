@@ -1,160 +1,129 @@
 package com.aferrari.trailead.domain.repository
 
+import com.aferrari.trailead.app.configurer.NetworkManager
 import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.StatusCode
-import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-class MaterialRepository(
-    private val localDataSource: LocalDataSource,
-    private val remoteDataSource: RemoteDataSource
-) {
-
-    suspend fun initLocalDataSource() =
-        withContext(Dispatchers.IO) {
-            val categoryList = remoteDataSource.getAllCategory()
-            categoryList.forEach {
-                localDataSource.insertCategory(it)
-            }
-            val linkList = remoteDataSource.getAllLink()
-            linkList.forEach {
-                localDataSource.insertLink(it)
-            }
-            val youtubeVideoList = remoteDataSource.getAllYoutubeVideo()
-            youtubeVideoList.forEach {
-                localDataSource.insertYouTubeVideo(it)
-            }
-            val traineeCategoryJoinList = remoteDataSource.getAllTraineeCategoryJoin()
-            localDataSource.insertAllTraineeCategoryJoin(traineeCategoryJoinList)
-        }
+class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
 
     //  Video
-    suspend fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) {
-        val result = remoteDataSource.insertYouTubeVideo(newYouTubeVideo)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.insertYouTubeVideo(newYouTubeVideo)
+    suspend fun insertYoutubeVideo(newYouTubeVideo: YouTubeVideo) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.insertYouTubeVideo(newYouTubeVideo)
         }
-    }
 
-    suspend fun getAllYoutubeVideo(leader: Leader) = remoteDataSource.getAllYoutubeVideo(leader.id)
+    suspend fun getAllYoutubeVideo(leader: Leader) =
+        remoteDataSource.getAllYoutubeVideo(leader.userId)
 
-    suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) {
-        val result = remoteDataSource.deleteYoutubeVideo(youTubeVideo)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.deleteYoutubeVideo(youTubeVideo)
+    suspend fun deleteYoutubeVideo(youTubeVideo: YouTubeVideo) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.deleteYoutubeVideo(youTubeVideo)
         }
-    }
 
-    suspend fun updateUrlYoutubeVideo(youtubeId: Int, youtubeUrl: String) {
-        val result = remoteDataSource.updateUrlYoutubeVideo(youtubeId, youtubeUrl)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.updateUrlYoutubeVideo(youtubeId, youtubeUrl)
+
+    suspend fun updateUrlYoutubeVideo(youtubeId: Int, youtubeUrl: String) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.updateUrlYoutubeVideo(youtubeId, youtubeUrl)
         }
-    }
 
-
-    suspend fun updateTitleYoutubeVideo(youtubeId: Int, newTitle: String) {
-        val result = remoteDataSource.updateTitleYoutubeVideo(youtubeId, newTitle)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.updateTitleYoutubeVideo(youtubeId, newTitle)
+    suspend fun updateTitleYoutubeVideo(youtubeId: Int, newTitle: String) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.updateTitleYoutubeVideo(youtubeId, newTitle)
         }
-    }
 
-    suspend fun getYoutubeVideoByCategory(leaderId: Int, categoryId: Int) =
+    suspend fun getYoutubeVideoByCategory(leaderId: String, categoryId: Int) =
         remoteDataSource.getYoutubeVideoByCategory(leaderId, categoryId)
 
     //  Link
-    suspend fun insertLink(link: Link) {
-        val result = remoteDataSource.insertLink(link)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.insertLink(link)
+    suspend fun insertLink(link: Link) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.insertLink(link)
         }
-    }
 
-    suspend fun updateTitleLink(linkId: Int, newTitle: String) {
-        val result = remoteDataSource.updateTitleLink(linkId, newTitle)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.updateTitleLink(linkId, newTitle)
+    suspend fun updateTitleLink(linkId: Int, newTitle: String) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.updateTitleLink(linkId, newTitle)
         }
-    }
 
-    suspend fun updateUrlLink(linkId: Int, newUrl: String) {
-        val result = remoteDataSource.updateUrlLink(linkId, newUrl)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.updateUrlLink(linkId, newUrl)
+    suspend fun updateUrlLink(linkId: Int, newUrl: String) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.updateUrlLink(linkId, newUrl)
         }
-    }
 
-    suspend fun getAllLink(leader: Leader) = remoteDataSource.getAllLink(leader.id)
+    suspend fun getAllLink(leader: Leader) = remoteDataSource.getAllLink(leader.userId)
 
-    suspend fun getLinksByCategory(leaderId: Int, categoryId: Int) =
+    suspend fun getLinksByCategory(leaderId: String, categoryId: Int) =
         remoteDataSource.getLinkByCategory(leaderId, categoryId)
 
-    suspend fun deleteLink(link: Link) {
-        val result = remoteDataSource.deleteLink(link)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.deleteLink(link)
-        }
+    suspend fun deleteLink(link: Link) = if (!NetworkManager.isOnline()) {
+        StatusCode.INTERNET_CONECTION.value
+    } else {
+        remoteDataSource.deleteLink(link)
     }
 
     //  Category
-    suspend fun insertCategory(category: Category) {
-        val result = remoteDataSource.insertCategory(category)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.insertCategory(category)
+    suspend fun insertCategory(category: Category): Flow<StatusCode> =
+        if (!NetworkManager.isOnline()) {
+            flowOf(StatusCode.INTERNET_CONECTION)
+        } else {
+            remoteDataSource.insertCategory(category)
         }
-    }
 
-    suspend fun getAllCategory(leader: Leader) = remoteDataSource.getAllCategory(leader.id)
+    suspend fun getAllCategory(leader: Leader) = remoteDataSource.getAllCategory(leader.userId)
 
-    suspend fun deleteCategory(category: Category) {
-        var result = remoteDataSource.deleteAllTraineeCategoryJoinForCategory(category.id)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.deleteAllTraineeCategoryJoinForCategory(category.id)
-            result = remoteDataSource.deleteCategory(category)
-            if (result == StatusCode.SUCCESS.value) {
-                localDataSource.deleteCategory(category)
+    suspend fun deleteCategory(idCategory: Int) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.deleteAllTraineeCategoryJoinForCategory(idCategory)
+        }
+
+    suspend fun updateCategory(categoryId: Int, categoryName: String) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.updateCategory(categoryId, categoryName)
+        }
+
+    suspend fun setLinkedCategory(traineeId: String, categorySet: MutableSet<Category>): Long =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            val traineeCategoryJoinList = categorySet.map {
+                TraineeCategoryJoin(
+                    IntegerUtils().createObjectId(),
+                    traineeId,
+                    it.id
+                )
             }
+            if (remoteDataSource.deleteAllTraineeCategoryJoinForTrainee(traineeId) == StatusCode.SUCCESS.value)
+                remoteDataSource.insertAllCategoryFromTrainee(traineeCategoryJoinList)
+            else
+                StatusCode.ERROR.value
         }
-    }
 
-    suspend fun updateCategory(categoryId: Int, categoryName: String) {
-        val result = remoteDataSource.updateCategory(categoryId, categoryName)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.updateCategory(categoryId, categoryName)
-        }
-    }
-
-    suspend fun setLinkedCategory(traineeId: Int, categorySet: MutableSet<Category>): Long {
-        val traineeCategoryJoinList = categorySet.map {
-            TraineeCategoryJoin(
-                IntegerUtils().createObjectId(),
-                traineeId,
-                it.id
-            )
-        }
-        var result = remoteDataSource.deleteAllTraineeCategoryJoinForTrainee(traineeId)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.deleteAllTraineeCategoryJoinForTrainee(traineeId)
-        } else {
-            return StatusCode.ERROR.value
-        }
-        result = remoteDataSource.insertAllCategoryFromTrainee(traineeCategoryJoinList)
-        if (result == StatusCode.SUCCESS.value) {
-            localDataSource.insertAllTraineeCategoryJoin(traineeCategoryJoinList)
-        } else {
-            return StatusCode.ERROR.value
-        }
-        return StatusCode.SUCCESS.value
-    }
-
-    suspend fun getCategoriesSelected(traineeId: Int): List<Category> =
+    suspend fun getCategoriesSelected(traineeId: String): List<Category> =
         remoteDataSource.getCategoriesFromTrainee(traineeId)
 }

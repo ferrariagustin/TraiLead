@@ -5,10 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.IntegerUtils
+import com.aferrari.trailead.common.common_enum.StatusErrorType
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
 import com.aferrari.trailead.domain.models.Link
-import com.aferrari.trailead.viewmodel.StatusErrorType
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewModel() {
 
@@ -38,27 +41,29 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
     }
 
     fun saveLink() {
-        initStatus()
-        if (isEmptyOrNull()) {
-            errorType = StatusErrorType.EMPTY
-            status.value = StatusUpdateInformation.FAILED
-            return
+        viewModelScope.launch {
+            initStatus()
+            if (isEmptyOrNull()) {
+                errorType = StatusErrorType.EMPTY
+                status.value = StatusUpdateInformation.FAILED
+                return@launch
+            }
+            if (!isValidLink(linkInput.value)) {
+                errorType = StatusErrorType.INVALID
+                status.value = StatusUpdateInformation.FAILED
+                return@launch
+            }
+            if (homeViewModel.categorySelected == null) {
+                status.value = StatusUpdateInformation.FAILED
+                return@launch
+            }
+            status.value = saveLinkToDB(
+                titleLinkInput.value.toString(),
+                linkInput.value.toString(),
+                homeViewModel.categorySelected!!.id,
+                homeViewModel.getLeaderId()
+            )
         }
-        if (!isValidLink(linkInput.value)) {
-            errorType = StatusErrorType.INVALID
-            status.value = StatusUpdateInformation.FAILED
-            return
-        }
-        if (homeViewModel.categorySelected == null) {
-            status.value = StatusUpdateInformation.FAILED
-            return
-        }
-        saveLinkToDB(
-            titleLinkInput.value.toString(),
-            linkInput.value.toString(),
-            homeViewModel.categorySelected!!.id,
-            homeViewModel.getLeaderId()
-        )
     }
 
     private fun isEmptyOrNull() =
@@ -69,7 +74,7 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
      */
     fun updateLink(newTitle: String, newLink: String) {
         initStatus()
-        if (newTitle.isNullOrEmpty() and newLink.isNullOrEmpty()) {
+        if (newTitle.isEmpty() && newLink.isEmpty()) {
             status.value = StatusUpdateInformation.SUCCESS
             return
         }
@@ -77,25 +82,27 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
             status.value = StatusUpdateInformation.FAILED
             return
         }
-        updateNewLink(newTitle, newLink)
+        val newTitleUpdated = newTitle.ifEmpty { linkSelected?.title ?: "" }
+        val newLinkUpdated = newLink.ifEmpty { linkSelected?.url ?: "" }
+        updateNewLink(newTitleUpdated, newLinkUpdated)
     }
 
     private fun updateNewLink(newTitle: String, newLink: String) {
         viewModelScope.launch {
             linkSelected?.let { link ->
-                if (newTitle.isNotEmpty()) {
-                    materialRepository.updateTitleLink(link.id, newTitle)
+                val result = materialRepository.updateTitleLink(link.id, newTitle)
+                    .toStatusUpdateInformation()
+                status.value = if (result == StatusUpdateInformation.SUCCESS) {
+                    materialRepository.updateUrlLink(link.id, newLink).toStatusUpdateInformation()
+                } else {
+                    result
                 }
-                if (newLink.isNotEmpty()) {
-                    materialRepository.updateUrlLink(link.id, newLink)
-                }
-                status.value = StatusUpdateInformation.SUCCESS
             }
         }
     }
 
-    private fun saveLinkToDB(title: String, link: String, id: Int, leaderId: Int) {
-        viewModelScope.launch {
+    private suspend fun saveLinkToDB(title: String, link: String, id: Int, leaderId: String) =
+        withContext(Dispatchers.IO) {
             materialRepository.insertLink(
                 Link(
                     IntegerUtils().createObjectId(),
@@ -104,11 +111,8 @@ class LinkMaterialViewModel(private val homeViewModel: LeaderViewModel) : ViewMo
                     id,
                     leaderId
                 )
-            )
-            status.value = StatusUpdateInformation.SUCCESS
-            return@launch
+            ).toStatusUpdateInformation()
         }
-    }
 
     private fun isValidLink(link: String?): Boolean = urlRegex.matches(link.toString())
 

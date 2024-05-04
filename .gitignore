@@ -85,3 +85,7 @@ lint/tmp/
 # lint/reports/
 
 .idea
+
+# Other
+.DS_Store
+.app/credentials.json

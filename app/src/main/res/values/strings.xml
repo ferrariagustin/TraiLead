@@ -49,7 +49,7 @@
     <string name="rol_senior">SENIOR</string>
     <string name="update_pass_success">Su contraseña fue actualizada correctamente</string>
     <string name="update_pass_failed">Hubo un error al actualizar la contraseña</string>
-    <string name="update_pass_failed_input">Por favor ingrese una contraseña válida</string>
+    <string name="update_pass_failed_input">Por favor ingrese una contraseña válida.\nRecuerde que debe tener más de 6 caracteres.</string>
     <string name="add_new_category">Agregar nueva categoría</string>
     <string name="add_new_category_hint">Agregue la nueva categoría</string>
     <string name="add_new_category_button">Agregar</string>
@@ -114,5 +114,14 @@
     <!--    Deeplinks    -->
     <string name="host_trainee_home">trainee_home</string>
     <string name="host_leader_home">leader_home</string>
+    <string name="restore_password">Recuperar contraseña</string>
+    <string name="restore_password_label">Ingrese email para recuperar su contraseña</string>
+    <string name="restore">Recuperar</string>
+    <string name="input_hint_restore_password">Ingresa el email de tu cuenta</string>
+    <string name="restore_password_key_access_hint">Ingrese el código de seguridad</string>
+    <string name="user_not_found">\"El usuario no se encuentra registrado\"</string>
+    <string name="invalid_email">\"Ingrese un email válido\"</string>
+    <string name="internet_connection">No hay conexión a internet</string>
+    <string name="email_sent">Te enviamos un email para restaurar la contraseña</string>
 
 </resources>

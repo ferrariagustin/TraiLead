@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.trailead.common.UserState
+import com.aferrari.trailead.common.common_enum.UserState
 import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository

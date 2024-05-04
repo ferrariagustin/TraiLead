@@ -10,9 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.LeaderAddMaterialBinding
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
-import com.aferrari.trailead.viewmodel.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
+import com.aferrari.trailead.databinding.LeaderAddMaterialBinding
 
 class AddMaterialFragment : Fragment() {
 
@@ -46,13 +47,13 @@ class AddMaterialFragment : Fragment() {
         binding.addNewMaterialToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-        binding.addNewMaterialButton.setOnClickListener {
-            leaderViewModel.insertMaterial(
+        binding.addNewYoutubeVideoButton.setOnClickListener {
+            leaderViewModel.insertYoutubeVideo(
                 binding.titleComponetInput.text.toString(),
                 binding.componentInput.text.toString()
             )
         }
-        leaderViewModel.statusUpdateNewMaterial.observe(viewLifecycleOwner) {
+        leaderViewModel.statusUpdateYoutubeVideo.observe(viewLifecycleOwner) {
             when (it) {
                 StatusUpdateInformation.FAILED -> {
                     failedFlow()
@@ -62,9 +63,17 @@ class AddMaterialFragment : Fragment() {
                     successFlow()
                 }
 
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    failedInternetFlow()
+                }
+
                 else -> {}
             }
         }
+    }
+
+    private fun failedInternetFlow() {
+        TraiLeadSnackbar().errorConection(requireContext(), binding.root)
     }
 
     private fun successFlow() {

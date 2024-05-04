@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
 
@@ -8,22 +9,46 @@
         android:id="@+id/loginFragment"
         android:name="com.aferrari.trailead.app.ui.login.LoginFragment"
         android:label="LoginFragment"
-        app:layout="@layout/login_fragment">
+        tools:layout="@layout/login_fragment">
         <action
             android:id="@+id/action_loginFragment_to_registrationFragment"
             app:destination="@id/registrationFragment"
             app:enterAnim="@android:anim/fade_in"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_loginFragment_to_restorePasswordFragment"
+            app:destination="@id/restorePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.aferrari.trailead.app.ui.login.RegistrationFragment"
         android:label="RegistrationFragment"
-        app:layout="@layout/registration_fragment">
+        tools:layout="@layout/registration_fragment">
         <action
             android:id="@+id/action_registrationFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@android:anim/fade_in"
             app:popUpTo="@id/registrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/restorePasswordFragment"
+        android:name="com.aferrari.trailead.app.ui.login.RestorePasswordFragment"
+        android:label="RestorePasswordFragment"
+        tools:layout="@layout/restore_password_fragment">
+        <action
+            android:id="@+id/action_restorePasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_restorePasswordFragment_to_restorePasswordValidateKeyAccessFragment"
+            app:destination="@id/restorePasswordValidateKeyAccessFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/restorePasswordValidateKeyAccessFragment"
+        android:name="com.aferrari.trailead.app.ui.login.RestorePasswordValidateKeyAccessFragment"
+        tools:layout="@layout/restore_password_key_access_fragment"
+        android:label="RestorePasswordValidateKeyAccessFragment" >
+        <action
+            android:id="@+id/action_restorePasswordValidateKeyAccessFragment_to_restorePasswordFragment"
+            app:destination="@id/restorePasswordFragment" />
     </fragment>
 </navigation>

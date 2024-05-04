@@ -63,7 +63,7 @@ class LeaderMaterialListFragment : Fragment(), RefreshListener {
         }
         binding.recyclerViewMaterialList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        leaderViewModel.getMaterialsCategoryFilter()
+        leaderViewModel.updateMaterialsCategoryFilter()
         leaderViewModel.listAllMaterials.observe(viewLifecycleOwner) {
             binding.recyclerViewMaterialList.adapter =
                 MaterialListAdapter(it, this, leaderViewModel, true)
@@ -132,7 +132,7 @@ class LeaderMaterialListFragment : Fragment(), RefreshListener {
 
     override fun refresh() {
         leaderViewModel.refresh.observe(viewLifecycleOwner) {
-            if (it) leaderViewModel.getMaterialsCategoryFilter()
+            if (it) leaderViewModel.updateMaterialsCategoryFilter()
         }
     }
 }

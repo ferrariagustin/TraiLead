@@ -1,12 +1,12 @@
 package com.aferrari.trailead.app.viewmodel.login
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aferrari.trailead.common.IntegerUtils
+import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.StringUtils.EMPTY_STRING
+import com.aferrari.trailead.common.StringUtils.isValidEmail
 import com.aferrari.trailead.common.common_enum.RegisterErrorState
 import com.aferrari.trailead.common.common_enum.RegisterState
 import com.aferrari.trailead.common.common_enum.UserType
@@ -70,45 +70,19 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private fun register() {
         viewModelScope.launch {
-            if (existUser()) {
-                registerState.value = RegisterState.FAILED_USER_EXIST
-                return@launch
+            repository.createUser(
+                userType,
+                inputName.value!!,
+                inputLastName.value!!,
+                inputEmail.value!!,
+                inputPass.value!!
+            ).collect { state ->
+                registerState.value = state
             }
-            val result = when (userType) {
-                UserType.TRAINEE -> insertTrainee()
-                UserType.LEADER -> insertLeader()
-            }
-            Log.e("TRAILEAD", "Register result = $result")
-            registerState.value = RegisterState.SUCCESS
             restoreInputState()
             restoreInputStateValues()
         }
     }
-
-    /**
-     * Validate if exist the user in DB
-     */
-    private suspend fun existUser(): Boolean {
-        val result = repository.getUser(inputEmail.value!!)
-        Log.e("TRAILEAD", "Register result = $result")
-        return result != null
-    }
-
-    private suspend fun insertLeader(): Long = repository.insertLeader(
-        id = IntegerUtils().createObjectId(),
-        name = inputName.value!!,
-        lastName = inputLastName.value!!,
-        email = inputEmail.value!!,
-        pass = inputPass.value!!
-    )
-
-    private suspend fun insertTrainee(): Long = repository.insertTrainee(
-        id = IntegerUtils().createObjectId(),
-        name = inputName.value!!,
-        lastName = inputLastName.value!!,
-        email = inputEmail.value!!,
-        pass = inputPass.value!!,
-    )
 
     /**
      * Restore all components on registration fragment
@@ -177,7 +151,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
             inputLastNameError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
-        if (!isValidEmail()) {
+        if (!isValidEmail(inputEmail.value)) {
             inputEmailError.value = RegisterErrorState.ERROR
             isValidInput = false
         }
@@ -194,11 +168,6 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
 
     private fun isValidRepeatPass(): Boolean =
         !inputRepeatPass.value.isNullOrEmpty() && inputRepeatPass.value.equals(inputPass.value)
-
-    private fun isValidEmail(): Boolean {
-        return !inputEmail.value.isNullOrEmpty()
-                && android.util.Patterns.EMAIL_ADDRESS.matcher(inputEmail.value).matches()
-    }
 
     private fun isValidInput(input: MutableLiveData<String>): Boolean {
         if (input.value.isNullOrEmpty()) {

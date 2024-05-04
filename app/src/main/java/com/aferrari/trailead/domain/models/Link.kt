@@ -9,5 +9,5 @@ data class Link(
     override val title: String,
     override val url: String,
     override var categoryId: Int?,
-    override val leaderMaterialId: Int
+    override val leaderMaterialId: String
 ) : Material

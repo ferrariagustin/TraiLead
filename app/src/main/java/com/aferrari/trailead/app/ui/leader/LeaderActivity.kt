@@ -27,9 +27,6 @@ class LeaderActivity : AppCompatActivity() {
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
 
-    @Inject
-    lateinit var localDataSource: LocalDataSource
-
     lateinit var binding: LeaderActivityBinding
 
     private lateinit var leaderViewModel: LeaderViewModel
@@ -37,8 +34,8 @@ class LeaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.leader_activity)
         val factory = HomeViewModelFactory(
-            UserRepository(localDataSource, remoteDataSource),
-            MaterialRepository(localDataSource, remoteDataSource)
+            UserRepository(remoteDataSource),
+            MaterialRepository(remoteDataSource)
         )
         leaderViewModel = ViewModelProvider(this, factory)[LeaderViewModel::class.java]
         binding.lifecycleOwner = this
