@@ -23,7 +23,7 @@ object PasswordUtil {
         return Base64.encodeToString(digest.digest(), Base64.DEFAULT)
     }
 
-    fun hashSHA256Base36(text: String): String {
+    fun hashSHA256Base36_(text: String): String {
         val digest = MessageDigest.getInstance("SHA-256")
         digest.update(text.toByteArray())
         val bytes = digest.digest()

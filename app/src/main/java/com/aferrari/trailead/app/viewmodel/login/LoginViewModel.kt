@@ -7,13 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.common.IntegerUtils
-import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.StringUtils.isValidEmail
 import com.aferrari.trailead.common.common_enum.LoginState
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
-import com.aferrari.trailead.common.email.GMailSender
 import com.aferrari.trailead.common.session.SessionManagement
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
@@ -77,13 +75,12 @@ open class LoginViewModel(val repository: UserRepository) :
 
     private fun signInWithEmail(email: String, pass: String, context: Context) {
         viewModelScope.launch {
-            val hashPassword = PasswordUtil.hashSHA256Base36(pass)
-            repository.signInWithEmail(email, hashPassword).collect { status ->
+            repository.signInWithEmail(email, pass).collect { status ->
                 when (status.value.toStatusUpdateInformation()) {
                     StatusUpdateInformation.SUCCESS -> {
                         val uId = FirebaseAuth.getInstance().currentUser?.uid
                         if (uId != null) {
-                            saveSession(context, email, hashPassword)
+                            saveSession(context, email, pass)
                             goLogin(uId)
                         } else goLoginError()
                     }
@@ -180,7 +177,7 @@ open class LoginViewModel(val repository: UserRepository) :
                     return@launch
                 }
                 user = resultUser
-                sendAccessKey()
+                sendEmailRestorePasswordLinkFirebase()
             } catch (e: Exception) {
                 Log.e("SendMail", e.message, e)
                 sendEmailStatus.value = StatusCode.ERROR
@@ -188,26 +185,34 @@ open class LoginViewModel(val repository: UserRepository) :
         }
     }
 
-    private suspend fun sendAccessKey() {
-        val accessKey = IntegerUtils().getRandomInteger()
-        repository.updateAccessKey(user, accessKey).let {
-            when (it) {
-                StatusCode.SUCCESS.value -> {
-                    val sender = GMailSender("trailead.ar@gmail.com", "xrykimnglzyeoglc")
-                    sender.sendMail(
-                        "TraiLead",
-                        "Bienvenido a TraiLead, ingrese el siguiente código de seguridad para poder restaurar su contraseña: $accessKey",
-                        restorePasswordEmail.value,
-                        restorePasswordEmail.value!!
-                    )
+    private fun sendEmailRestorePasswordLinkFirebase() {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(restorePasswordEmail.value!!)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
                     sendEmailStatus.value = StatusCode.SUCCESS
-                }
-
-                else -> {
+                } else {
                     sendEmailStatus.value = StatusCode.ERROR
                 }
             }
-        }
+//        val accessKey = IntegerUtils().getRandomInteger()
+//        repository.updateAccessKey(user, accessKey).let {
+//            when (it) {
+//                StatusCode.SUCCESS.value -> {
+//                    val sender = GMailSender("trailead.ar@gmail.com", "xrykimnglzyeoglc")
+//                    sender.sendMail(
+//                        "TraiLead",
+//                        "Bienvenido a TraiLead, ingrese el siguiente código de seguridad para poder restaurar su contraseña: $accessKey",
+//                        restorePasswordEmail.value,
+//                        restorePasswordEmail.value!!
+//                    )
+//                    sendEmailStatus.value = StatusCode.SUCCESS
+//                }
+//
+//                else -> {
+//                    sendEmailStatus.value = StatusCode.ERROR
+//                }
+//            }
+//        }
     }
 
     fun restorePassword() {

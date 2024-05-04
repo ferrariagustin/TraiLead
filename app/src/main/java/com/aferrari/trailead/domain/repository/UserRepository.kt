@@ -2,7 +2,6 @@ package com.aferrari.trailead.domain.repository
 
 import android.util.Log
 import com.aferrari.trailead.app.configurer.NetworkManager
-import com.aferrari.trailead.common.PasswordUtil
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.RegisterState
 import com.aferrari.trailead.common.common_enum.StatusCode
@@ -199,11 +198,7 @@ class UserRepository(
     }
 
     suspend fun updateTraineePassword(traineeId: String, password: String) {
-        val passwordHash = PasswordUtil.hashSHA256Base36(password)
-        val result = remoteDataSource.updateTraineePassword(traineeId, passwordHash)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.updateTraineePassword(traineeId, passwordHash)
-        }
+        remoteDataSource.updateTraineePassword(traineeId, password)
     }
 
     suspend fun updateTraineePosition(trainee: Trainee, position: Position) {

@@ -75,7 +75,13 @@ class RestorePasswordFragment : Fragment() {
     }
 
     private fun successFlow() {
-        findNavController().navigate(R.id.action_restorePasswordFragment_to_restorePasswordValidateKeyAccessFragment)
+        TraiLeadSnackbar().init(
+            requireContext(),
+            binding.root,
+            resources.getString(R.string.email_sent),
+            type = ErrorView.INFO
+        )
+        findNavController().navigate(R.id.action_restorePasswordFragment_to_loginFragment)
     }
 
     private fun failedFlow(message: String) {

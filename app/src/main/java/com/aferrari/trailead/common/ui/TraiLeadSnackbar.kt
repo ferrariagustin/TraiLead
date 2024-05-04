@@ -7,18 +7,19 @@ import com.aferrari.trailead.common.common_enum.ErrorView
 import com.google.android.material.snackbar.Snackbar
 
 
-class TraiLeadSnackbar() {
+class TraiLeadSnackbar {
 
     fun init(
         context: Context,
         view: View,
         message: String,
         type: ErrorView = ErrorView.INFO,
+        mode: Int = Snackbar.LENGTH_SHORT,
         disable: (() -> Unit)? = null
     ) {
 
         val snackbar =
-            Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+            Snackbar.make(view, message, mode)
 
         // Personaliza el color de fondo del Snackbar (opcional)
         snackbar.view.setBackgroundColor(

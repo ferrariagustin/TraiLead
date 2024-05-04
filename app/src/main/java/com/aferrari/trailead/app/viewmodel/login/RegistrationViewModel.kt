@@ -75,7 +75,7 @@ class RegistrationViewModel(private val repository: UserRepository) : ViewModel(
                 inputName.value!!,
                 inputLastName.value!!,
                 inputEmail.value!!,
-                PasswordUtil.hashSHA256Base36(inputPass.value!!)
+                inputPass.value!!
             ).collect { state ->
                 registerState.value = state
             }
