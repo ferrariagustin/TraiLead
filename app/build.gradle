@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.aferrari.trailead"
-        minSdk 24
-        targetSdk 32
+        minSdk 26
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -123,6 +123,9 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:21.1.0'
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+
+    // webkit
+    implementation("androidx.webkit:webkit:1.8.0")
 
 }
 
