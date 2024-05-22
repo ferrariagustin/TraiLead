@@ -70,8 +70,6 @@ class MaterialListAdapter(
             }
             fragment.findNavController()
                 .navigate(R.id.action_leaderMaterialListFragment_to_linkFragment, bundle)
-//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
-//            fragment.startActivity(intent)
         }
         holder.viewHolderBinding.linkViewMaterial.itemLinkSettingImageView.setOnClickListener {
             viewModel.setSelectedMaterial(link)
