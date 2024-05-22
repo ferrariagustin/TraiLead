@@ -9,6 +9,7 @@ object StringUtils {
     const val TRAINEE_KEY = "trainee_key"
     const val TAB_ID = "tab_id"
     const val TRAINEE_INSTANCE_KEY = "trainee_instance_key"
+    const val ERROR_WEBVIEW_PATH = "file:///android_asset/error.html"
 
     const val DEEPLINK_HOME = "trailead://home"
     const val DEEPLINK_LOGIN = "trailead://login"

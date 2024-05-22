@@ -1,8 +1,7 @@
 package com.aferrari.trailead.app.ui.leader.home.adapter
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View.GONE
@@ -66,8 +65,11 @@ class MaterialListAdapter(
         holder.viewHolderBinding.linkViewMaterial.root.visibility = VISIBLE
         holder.viewHolderBinding.linkViewMaterial.itemLinkTextView.text = link.title
         holder.viewHolderBinding.linkViewMaterial.itemLinkImageView.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
-            fragment.startActivity(intent)
+            val bundle = Bundle().apply {
+                putString(LINK, link.url)
+            }
+            fragment.findNavController()
+                .navigate(R.id.action_leaderMaterialListFragment_to_linkFragment, bundle)
         }
         holder.viewHolderBinding.linkViewMaterial.itemLinkSettingImageView.setOnClickListener {
             viewModel.setSelectedMaterial(link)
@@ -167,5 +169,9 @@ class MaterialListAdapter(
     class MaterialListViewHolder(binding: ItemMaterialBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val viewHolderBinding: ItemMaterialBinding = binding
+    }
+
+    companion object {
+        const val LINK = "link"
     }
 }
