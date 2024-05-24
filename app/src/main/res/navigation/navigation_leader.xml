@@ -199,6 +199,9 @@
         <action
             android:id="@+id/action_leaderMaterialListFragment_to_linkFragment"
             app:destination="@id/linkFragment" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_addPdfFragment"
+            app:destination="@id/addPdfFragment" />
     </fragment>
     <fragment
         android:id="@+id/fullScreenVideo"
@@ -269,12 +272,18 @@
         android:name="com.aferrari.trailead.app.ui.leader.home.LinkFragment"
         android:label="LinkFragment"
         tools:layout="@layout/link_fragment">
-        <argument
-            android:name="link"
-            app:argType="string"
-            android:defaultValue="1"/>
         <action
             android:id="@+id/action_linkFragment_to_leaderMaterialListFragment"
             app:destination="@id/leaderMaterialListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addPdfFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.AddPdfFragment"
+        android:label="AddPdfFragment">
+        <action
+            android:id="@+id/action_addPdfFragment_to_leaderMaterialListFragment2"
+            app:destination="@id/leaderMaterialListFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim" />
     </fragment>
 </navigation>

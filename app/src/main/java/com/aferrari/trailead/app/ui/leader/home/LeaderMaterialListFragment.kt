@@ -77,6 +77,9 @@ class LeaderMaterialListFragment : Fragment(), RefreshListener {
         binding.addLinkMaterial.setOnClickListener {
             findNavController().navigate(R.id.action_leaderMaterialListFragment_to_addLinkFragment)
         }
+        binding.addPdfMaterial.setOnClickListener {
+            findNavController().navigate(R.id.action_leaderMaterialListFragment_to_addPdfFragment)
+        }
         refresh()
     }
 

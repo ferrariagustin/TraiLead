@@ -123,5 +123,9 @@
     <string name="invalid_email">\"Ingrese un email válido\"</string>
     <string name="internet_connection">No hay conexión a internet</string>
     <string name="email_sent">Te enviamos un email para restaurar la contraseña</string>
+    <string name="pdf">PDF</string>
+    <string name="add_pdf_information">Ingresar el Título del PDF</string>
+    <string name="search">Buscar</string>
+    <string name="do_not_file_selected">No hay archivo seleccionado</string>
 
 </resources>

@@ -1,0 +1,77 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/add_pdf_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/default_toolbar_elevation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/primaryColor"
+            app:title="@string/pdf" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/pdf_title_id_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/add_pdf_information"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_pdf_toolbar" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pdf_title_id_textview_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pdf_title_id_textview" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_pdf_file_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:elevation="@dimen/default_toolbar_elevation"
+            app:icon="@drawable/ic_search"
+            app:iconGravity="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pdf_title_id_textview_text_input" />
+
+        <TextView
+            android:id="@+id/pdf_file_path_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:hint="@string/do_not_file_selected"
+            app:layout_constraintBottom_toBottomOf="@id/search_pdf_file_button"
+            app:layout_constraintStart_toEndOf="@id/search_pdf_file_button"
+            app:layout_constraintTop_toTopOf="@id/search_pdf_file_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_pdf_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:text="@string/save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_pdf_file_button" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
