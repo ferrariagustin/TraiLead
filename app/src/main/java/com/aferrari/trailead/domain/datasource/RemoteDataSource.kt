@@ -6,6 +6,7 @@ import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
+import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface RemoteDataSource {
+
     suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long
 
     suspend fun getAllYoutubeVideo(leaderId: String): List<YouTubeVideo>
@@ -133,4 +135,5 @@ interface RemoteDataSource {
     suspend fun updateTraineeAccessKey(traineeIds: String, accessKey: Int): Long
     suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode>
     suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode>
+    suspend fun insertPDF(pdf: Pdf): Long
 }

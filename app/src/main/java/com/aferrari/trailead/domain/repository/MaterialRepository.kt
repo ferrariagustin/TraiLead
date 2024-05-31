@@ -1,5 +1,6 @@
 package com.aferrari.trailead.domain.repository
 
+import android.net.Uri
 import com.aferrari.trailead.app.configurer.NetworkManager
 import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.StatusCode
@@ -7,6 +8,7 @@ import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
+import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import kotlinx.coroutines.flow.Flow
@@ -126,4 +128,25 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
 
     suspend fun getCategoriesSelected(traineeId: String): List<Category> =
         remoteDataSource.getCategoriesFromTrainee(traineeId)
+
+    suspend fun insertPDF(
+        pdfTitle: String,
+        uri: Uri,
+        categoryId: Int,
+        leaderId: String
+    ) =
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION.value
+        } else {
+            remoteDataSource.insertPDF(
+                Pdf(
+                    IntegerUtils().createObjectId(),
+                    pdfTitle,
+                    uri.toString(),
+                    categoryId,
+                    leaderId,
+                    uri
+                )
+            )
+        }
 }

@@ -1,5 +1,6 @@
 package com.aferrari.trailead.app.viewmodel.leader
 
+import android.net.Uri
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -74,6 +75,11 @@ open class LeaderViewModel(
 
     val bottomNavigationViewVisibility = MutableLiveData(View.VISIBLE)
 
+    // PDF
+    val pdfUri = MutableLiveData<Uri>()
+
+    val statusUpdatePdf = MutableLiveData<StatusUpdateInformation>()
+
     fun init() {
         refresh.value = false
         bottomNavigationViewVisibility.value = View.VISIBLE
@@ -83,6 +89,7 @@ open class LeaderViewModel(
         statusUpdateEditCategory.value = StatusUpdateInformation.NONE
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
         statusUpdatePassword.value = StatusUpdateInformation.NONE
+        statusUpdatePdf.value = StatusUpdateInformation.NONE
     }
 
     fun setLeader(leader: Leader?) {
@@ -484,6 +491,34 @@ open class LeaderViewModel(
         viewModelScope.launch {
             setLeader(repository.getLeader(leader.userId))
         }
+    }
+
+
+    // PDF
+
+    fun selectedPdfUri(uri: Uri?) {
+        uri?.let { pdfUri.value = it }
+    }
+
+    fun savePdf(pdfTitle: String) {
+        statusUpdatePdf.value = StatusUpdateInformation.LOADING
+        if (pdfUri.value == null || pdfUri.value.toString().isEmpty() || pdfTitle.isEmpty()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+        if (categorySelected == null) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            materialRepository.insertPDF(
+                pdfTitle,
+                pdfUri.value!!,
+                categorySelected!!.id, leader.userId
+            ).toStatusUpdateInformation().let { statusUpdatePdf.postValue(it) }
+        }
+
     }
 
     private companion object {

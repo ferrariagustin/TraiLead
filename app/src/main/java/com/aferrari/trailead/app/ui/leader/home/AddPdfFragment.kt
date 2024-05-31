@@ -1,22 +1,39 @@
 package com.aferrari.trailead.app.ui.leader.home
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
+import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.AddPdfFragmentBinding
 
 class AddPdfFragment : Fragment() {
 
     private lateinit var binding: AddPdfFragmentBinding
     private val viewModel: LeaderViewModel by activityViewModels()
+
+    private val selectedPdfCallback =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.let {
+                    viewModel.selectedPdfUri(it)
+                    binding.pdfView.fromUri(it).load()
+                }
+                return@registerForActivityResult
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,9 +54,47 @@ class AddPdfFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         binding.savePdfButton.setOnClickListener {
-            Toast.makeText(requireContext(), "TODO: PDF saved", Toast.LENGTH_SHORT).show()
-            findNavController().navigateUp()
+            viewModel.savePdf(binding.pdfTitleIdTextviewTextInput.text.toString())
         }
+        binding.searchPdfFileButton.setOnClickListener {
+            openDocumentPDF()
+        }
+        viewModel.statusUpdatePdf.observe(viewLifecycleOwner) {
+            when (it) {
+                StatusUpdateInformation.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+
+                StatusUpdateInformation.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    TraiLeadSnackbar().success(requireContext(), binding.root)
+                    findNavController().navigateUp()
+                }
+
+                StatusUpdateInformation.FAILED -> {
+                    binding.progressBar.visibility = View.GONE
+                    TraileadDialog().showDialog(
+                        getString(R.string.error),
+                        getString(R.string.show_error_save_pdf),
+                        requireContext()
+                    )
+                }
+
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    binding.progressBar.visibility = View.GONE
+                    TraiLeadSnackbar().errorConection(requireContext(), binding.root)
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
+    private fun openDocumentPDF() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.setType("application/pdf")
+        selectedPdfCallback.launch(intent)
     }
 
     private fun setupToolbar() {

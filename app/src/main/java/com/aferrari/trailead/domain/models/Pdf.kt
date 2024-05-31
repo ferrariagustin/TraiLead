@@ -1,5 +1,6 @@
 package com.aferrari.trailead.domain.models
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,5 +12,5 @@ data class Pdf(
     override val url: String,
     override var categoryId: Int?,
     override val leaderMaterialId: String,
-    val path: String
+    val uri: Uri?
 ) : Material

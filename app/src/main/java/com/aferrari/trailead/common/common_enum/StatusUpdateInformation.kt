@@ -1,7 +1,7 @@
 package com.aferrari.trailead.common.common_enum
 
 enum class StatusUpdateInformation {
-    FAILED, SUCCESS, NONE, INTERNET_CONECTION
+    FAILED, SUCCESS, NONE, INTERNET_CONECTION, LOADING
 }
 
 enum class StatusVisibilityPassword {
