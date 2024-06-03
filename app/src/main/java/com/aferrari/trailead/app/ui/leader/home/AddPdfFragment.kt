@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -29,6 +30,8 @@ class AddPdfFragment : Fragment() {
                 result.data?.data?.let {
                     viewModel.selectedPdfUri(it)
                     binding.pdfView.fromUri(it).load()
+                    binding.pdfFilePathTextview.hint =
+                        DocumentFile.fromSingleUri(requireContext(), it)?.name
                 }
                 return@registerForActivityResult
             }
@@ -55,6 +58,7 @@ class AddPdfFragment : Fragment() {
         setupToolbar()
         binding.savePdfButton.setOnClickListener {
             viewModel.savePdf(binding.pdfTitleIdTextviewTextInput.text.toString())
+            binding.pdfFilePathTextview.hint = getString(R.string.do_not_file_selected)
         }
         binding.searchPdfFileButton.setOnClickListener {
             openDocumentPDF()

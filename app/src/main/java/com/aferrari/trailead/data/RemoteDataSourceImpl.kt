@@ -1,6 +1,7 @@
 package com.aferrari.trailead.data
 
 import android.util.Log
+import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -31,25 +32,34 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun insertPDF(pdf: Pdf): Long = withContext(Dispatchers.IO) {
 
         // TODO: Fix configuracion de storage bucket y todo eso
-        val storageRef: StorageReference =
-            FirebaseStorage.getInstance().getReference("pdfs/" + pdf.uri!!.lastPathSegment)
 
+//        val storageRef: StorageReference =
+//            FirebaseStorage.getInstance().getReference("pdfs/" + pdf.uri!!.lastPathSegment)
+
+        val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("pdfs")
+        // TODO: revisar porque falla la configuración y da un 403
         // Sube el archivo PDF a Firebase Storage
         var resultCode: Long = StatusCode.INIT.value
         try {
-            storageRef.putFile(pdf.uri)
-                .addOnSuccessListener { task -> // Archivo subido exitosamente
-                    val pdfUri = task.uploadSessionUri
-                    Log.e("TRAILEAD_STORAGE", "pdfUri: ${pdfUri.toString()}")
-                    resultCode = StatusCode.SUCCESS.value
-                }.addOnFailureListener { e -> // Error al subir el archivo PDF
-                    resultCode = StatusCode.ERROR.value
-                }.await()
+            pdf.uri?.let {
+                storageRef.child("${IntegerUtils().createObjectId()}/${pdf.title}").putFile(it)
+                    .addOnSuccessListener { task -> // Archivo subido exitosamente
+                        val pdfUri = task.uploadSessionUri
+                        Log.e("TRAILEAD_STORAGE", "success")
+                        Log.e("TRAILEAD_STORAGE", "pdfUri: ${pdfUri.toString()}")
+                        resultCode = StatusCode.SUCCESS.value
+                    }.addOnProgressListener {
+                        Log.e("TRAILEAD_STORAGE", "progress")
+                    }.addOnFailureListener { e -> // Error al subir el archivo PDF
+                        Log.e("TRAILEAD_STORAGE", "failure")
+                        resultCode = StatusCode.ERROR.value
+                    }.await()
+            }
         } catch (e: Exception) {
             resultCode = StatusCode.ERROR.value
         }
 
-        delay(500)
+        delay(5000)
         return@withContext if (resultCode == StatusCode.SUCCESS.value) {
             insertPDFDatabase(pdf)
         } else {
