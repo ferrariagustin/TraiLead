@@ -1,6 +1,6 @@
 package com.aferrari.trailead.data
 
-import android.util.Log
+import android.net.Uri
 import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
@@ -18,72 +18,79 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
+import java.util.concurrent.CompletableFuture
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
 class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
-    override suspend fun insertPDF(pdf: Pdf) = flow<StatusCode> {
+    override suspend fun insertPDF(pdf: Pdf) = flow {
         val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("pdfs")
-        val resultCode = MutableStateFlow(StatusCode.INIT)
+        val result = CompletableFuture<StatusCode>()
         try {
-            pdf.uri?.let {
-                val result =
-                    storageRef.child("${IntegerUtils().createObjectId()}/${pdf.title}").putFile(it)
-                        .addOnSuccessListener { task -> // Archivo subido exitosamente
-                            val pdfUri = task.uploadSessionUri
-//                            insertPDFDatabase()
-                            Log.e("TRAILEAD_STORAGE", "success")
-                            Log.e("TRAILEAD_STORAGE", "pdfUri: ${pdfUri.toString()}")
-                            resultCode.value = StatusCode.SUCCESS
-                        }.addOnFailureListener { e -> // Error al subir el archivo PDF
-                            Log.e("TRAILEAD_STORAGE", "failure")
-                            resultCode.value = StatusCode.ERROR
+            Uri.parse(pdf.url)?.let {
+                storageRef.child("${IntegerUtils().createObjectId()}/${pdf.title}").putFile(it)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            pdf.downloadUri = task.result.uploadSessionUri.toString()
+                            result.complete(StatusCode.SUCCESS)
+                        } else {
+                            result.complete(StatusCode.ERROR)
                         }
+                    }.await()
+                if (result.await() == StatusCode.SUCCESS) {
+                    emit(insertPDFDatabase(pdf))
+                } else {
+                    emit(StatusCode.ERROR)
+                }
             }
         } catch (e: Exception) {
-            resultCode.emit(StatusCode.ERROR)
-        }
-        resultCode.collect {
-            emit(it)
+            emit(StatusCode.ERROR)
         }
     }
 
-    private fun insertPDFDatabase(pdf: Pdf): Long {
+    private suspend fun insertPDFDatabase(pdf: Pdf): StatusCode = withContext(Dispatchers.IO) {
         val reference = FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
-        var resultCode: Long = StatusCode.ERROR.value
-        reference?.child(pdf.id.toString())?.setValue(pdf)
-            ?.addOnCompleteListener { task ->
-                resultCode = if (task.isSuccessful) {
-                    StatusCode.SUCCESS.value
-                } else {
-                    StatusCode.ERROR.value
-                }
-            }
-        return resultCode
+        val result = CompletableFuture<StatusCode>()
+        try {
+            reference?.child(pdf.id.toString())?.setValue(pdf)?.addOnCompleteListener { task ->
+                result.complete(
+                    if (task.isSuccessful) {
+                        StatusCode.SUCCESS
+                    } else {
+                        StatusCode.ERROR
+                    }
+                )
+            }?.await()
+        } catch (_: Exception) {
+            result.complete(StatusCode.ERROR)
+        }
+        result.await()
     }
 
     override suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long =
         withContext(Dispatchers.IO) {
+            val result = CompletableFuture<Long>()
             val reference =
                 FirebaseDataBase.database?.child(YouTubeVideo::class.simpleName.toString())
-            var resultCode: Long = StatusCode.ERROR.value
             reference?.child(newYouTubeVideo.id.toString())?.setValue(newYouTubeVideo)
                 ?.addOnCompleteListener { task ->
-                    resultCode = if (task.isSuccessful) {
-                        StatusCode.SUCCESS.value
-                    } else {
-                        StatusCode.ERROR.value
-                    }
+                    result.complete(
+                        if (task.isSuccessful) {
+                            StatusCode.SUCCESS.value
+                        } else {
+                            StatusCode.ERROR.value
+                        }
+                    )
                 }?.await()
-            resultCode
+            result.await()
         }
 
     override suspend fun getAllYoutubeVideo(leaderId: String): List<YouTubeVideo> =

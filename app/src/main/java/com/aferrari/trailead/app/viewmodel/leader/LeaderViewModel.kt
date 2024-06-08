@@ -515,7 +515,9 @@ open class LeaderViewModel(
                 pdfTitle,
                 pdfUri.value!!,
                 categorySelected!!.id, leader.userId
-            ).toStatusUpdateInformation().let { statusUpdatePdf.postValue(it) }
+            ).collect {
+                it.value.toStatusUpdateInformation().let { statusUpdatePdf.postValue(it) }
+            }
         }
 
     }

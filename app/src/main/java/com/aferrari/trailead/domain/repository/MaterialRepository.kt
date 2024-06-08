@@ -12,6 +12,7 @@ import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
@@ -134,9 +135,9 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
         uri: Uri,
         categoryId: Int,
         leaderId: String
-    ) =
+    ) = flow<StatusCode> {
         if (!NetworkManager.isOnline()) {
-            StatusCode.INTERNET_CONECTION.value
+            emit(StatusCode.INTERNET_CONECTION)
         } else {
             remoteDataSource.insertPDF(
                 Pdf(
@@ -144,9 +145,11 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
                     pdfTitle,
                     uri.toString(),
                     categoryId,
-                    leaderId,
-                    uri
+                    leaderId
                 )
-            )
+            ).collect {
+                emit(it)
+            }
         }
+    }
 }
