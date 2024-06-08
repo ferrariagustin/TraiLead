@@ -4,24 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.common.StringUtils
+import com.aferrari.trailead.common.StringUtils.DOWNLOAD_PDF
+import com.aferrari.trailead.common.StringUtils.PDF_KEY
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.databinding.PdfFragmentBinding
+import com.aferrari.trailead.domain.models.Pdf
 
 class PdfFragment : Fragment() {
 
     private lateinit var binding: PdfFragmentBinding
     private val viewModel: LeaderViewModel by activityViewModels()
-    private val launcher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let {
-            binding.pdfView.fromUri(it).load()
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,9 +37,38 @@ class PdfFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
-        binding.searchPdfFloatButton.setOnClickListener {
-            launcher.launch("application/pdf")
+        arguments?.getSerializable(PDF_KEY).let {
+            viewModel.restorePdf(it as? Pdf)
         }
+        viewModel.statusUpdatePdf.observe(viewLifecycleOwner) {
+            when (it) {
+                StatusUpdateInformation.LOADING -> {
+                    binding.pdfProgressBar.visibility = View.VISIBLE
+                }
+
+                StatusUpdateInformation.SUCCESS -> {
+                    binding.pdfProgressBar.visibility = View.GONE
+                    showPdf()
+                }
+
+                StatusUpdateInformation.FAILED -> {
+                    binding.pdfProgressBar.visibility = View.GONE
+                }
+
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    binding.pdfProgressBar.visibility = View.GONE
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
+    private fun showPdf() {
+        // TODO: Show PDF
+        binding.pdfView.fromFile(viewModel.pdfFileSelected).load()
+        Toast.makeText(requireContext(), "Show PDF", Toast.LENGTH_SHORT).show()
+        // binding.pdfView.fromUri(Uri.parse(it)).load()
     }
 
     private fun setupToolbar() {

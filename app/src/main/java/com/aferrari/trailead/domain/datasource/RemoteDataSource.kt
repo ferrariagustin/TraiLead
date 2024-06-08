@@ -10,6 +10,7 @@ import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import java.io.File
 import kotlinx.coroutines.flow.Flow
 
 
@@ -73,7 +74,7 @@ interface RemoteDataSource {
 
     suspend fun updateTitleLink(linkId: Int, newTitle: String): Long
 
-    suspend fun getLinkByCategory(leaderId: String, categoryId: Int): List<Link>
+    suspend fun getLinksByCategory(leaderId: String, categoryId: Int): List<Link>
 
     suspend fun insertLeader(leader: Leader): Long
 
@@ -135,5 +136,10 @@ interface RemoteDataSource {
     suspend fun updateTraineeAccessKey(traineeIds: String, accessKey: Int): Long
     suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode>
     suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode>
+
+    // PDF
     suspend fun insertPDF(pdf: Pdf): Flow<StatusCode>
+    suspend fun getAllPDF(leaderId: String): List<Pdf>
+    suspend fun getAllPDF(): List<Pdf>
+    suspend fun getPdf(pdf: Pdf): File?
 }

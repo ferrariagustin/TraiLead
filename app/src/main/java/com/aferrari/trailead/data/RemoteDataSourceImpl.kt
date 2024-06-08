@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
+import java.io.File
 import java.util.concurrent.CompletableFuture
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,7 @@ import kotlinx.coroutines.withContext
 
 class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
+    // PDF
     override suspend fun insertPDF(pdf: Pdf) = flow {
         val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("pdfs")
         val result = CompletableFuture<StatusCode>()
@@ -53,6 +55,51 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             }
         } catch (e: Exception) {
             emit(StatusCode.ERROR)
+        }
+    }
+
+    override suspend fun getAllPDF(leaderId: String): List<Pdf> = withContext(Dispatchers.IO) {
+        getAllPDF().filter { it.leaderMaterialId == leaderId }
+    }
+
+    override suspend fun getAllPDF(): List<Pdf> =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
+            val dataSnapshot = reference?.get()?.await()
+            val pdfList = mutableListOf<Pdf>()
+            if (dataSnapshot?.key == Pdf::class.simpleName.toString()) {
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                    pdfList.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), Pdf::class.java)
+                    })
+                }
+            }
+            pdfList
+        }
+
+    override suspend fun getPdf(pdf: Pdf): File? {
+        val storageRef = FirebaseStorage.getInstance().reference.child("pdfs")
+        val httpReference =
+            storageRef.child("${pdf.id}/${pdf.title}")
+        val localFile = File.createTempFile("traileadPdf", "pdf")
+        val result = CompletableFuture<StatusCode>()
+        try {
+            httpReference.getFile(localFile).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    result.complete(StatusCode.SUCCESS)
+                } else {
+                    result.complete(StatusCode.ERROR)
+                }
+            }
+        } catch (_: Exception) {
+            result.complete(StatusCode.ERROR)
+        }
+        return if (result.await() == StatusCode.SUCCESS) {
+            localFile
+        } else {
+            null
         }
     }
 
@@ -170,7 +217,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         leaderId: String,
         categoryId: Int
     ): List<YouTubeVideo> = withContext(Dispatchers.IO) {
-        getAllYoutubeVideo(leaderId).filter { it.categoryId == categoryId }
+        getAllYoutubeVideo().filter { it.categoryId == categoryId }
     }
 
     override suspend fun insertCategory(category: Category): Flow<StatusCode> = flow {
@@ -448,7 +495,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
-    override suspend fun getLinkByCategory(leaderId: String, categoryId: Int): List<Link> =
+    override suspend fun getLinksByCategory(leaderId: String, categoryId: Int): List<Link> =
         withContext(Dispatchers.IO) {
             val reference = FirebaseDataBase.database?.child(Link::class.simpleName.toString())
             val dataSnapshot = reference?.get()?.await()

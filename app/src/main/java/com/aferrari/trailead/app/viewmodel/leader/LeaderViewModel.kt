@@ -17,10 +17,12 @@ import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Material
+import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOn
@@ -77,6 +79,8 @@ open class LeaderViewModel(
 
     // PDF
     val pdfUri = MutableLiveData<Uri>()
+
+    var pdfFileSelected: File? = null
 
     val statusUpdatePdf = MutableLiveData<StatusUpdateInformation>()
 
@@ -348,7 +352,7 @@ open class LeaderViewModel(
             statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             return
         }
-        if (categorySelected == null) {
+        if (!hasCategorySelected()) {
             statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             return
         }
@@ -370,9 +374,12 @@ open class LeaderViewModel(
         val listAllMaterlialJoin = mutableListOf<Material>()
         listAllMaterlialJoin.addAll(getAllYouTubeVideosCategoryFilter())
         listAllMaterlialJoin.addAll(getAllLinkCategoryFilter())
-        // TODO: add list pdf
+        listAllMaterlialJoin.addAll(getAllPDFCategoryFilter())
         listAllMaterials.value = listAllMaterlialJoin
     }
+
+    private suspend fun getAllPDFCategoryFilter() = materialRepository.getAllPDF(leader)
+        .filter { it.categoryId == categorySelected?.id }
 
     private suspend fun getAllYouTubeVideosCategoryFilter() =
         materialRepository.getAllYoutubeVideo(leader)
@@ -500,13 +507,16 @@ open class LeaderViewModel(
         uri?.let { pdfUri.value = it }
     }
 
+    /**
+     * Save PDF in database and storage
+     */
     fun savePdf(pdfTitle: String) {
         statusUpdatePdf.value = StatusUpdateInformation.LOADING
         if (pdfUri.value == null || pdfUri.value.toString().isEmpty() || pdfTitle.isEmpty()) {
             statusUpdatePdf.value = StatusUpdateInformation.FAILED
             return
         }
-        if (categorySelected == null) {
+        if (!hasCategorySelected()) {
             statusUpdatePdf.value = StatusUpdateInformation.FAILED
             return
         }
@@ -516,10 +526,34 @@ open class LeaderViewModel(
                 pdfUri.value!!,
                 categorySelected!!.id, leader.userId
             ).collect {
-                it.value.toStatusUpdateInformation().let { statusUpdatePdf.postValue(it) }
+                statusUpdatePdf.postValue(it.value.toStatusUpdateInformation())
             }
         }
 
+    }
+
+    private fun hasCategorySelected() = categorySelected != null
+
+    fun restorePdf(pdf: Pdf?) {
+        statusUpdatePdf.value = StatusUpdateInformation.LOADING
+        if (pdf == null) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        if (!hasCategorySelected()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            materialRepository.getPdf(pdf).collect {
+                if (it != null) {
+                    pdfFileSelected = it
+                    statusUpdatePdf.postValue(StatusUpdateInformation.SUCCESS)
+                }
+            }
+        }
     }
 
     private companion object {

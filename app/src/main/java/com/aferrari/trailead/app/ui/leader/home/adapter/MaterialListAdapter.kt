@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.component.TraileadPopupMenu
 import com.aferrari.trailead.app.viewmodel.IMaterial
+import com.aferrari.trailead.common.StringUtils.DOWNLOAD_PDF
+import com.aferrari.trailead.common.StringUtils.PDF_KEY
 import com.aferrari.trailead.databinding.ItemMaterialBinding
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Material
@@ -101,7 +103,19 @@ class MaterialListAdapter(
 
 
     private fun bindingPdf(holder: MaterialListViewHolder, material: Pdf) {
-        TODO("Not yet implemented")
+        holder.viewHolderBinding.pdfViewMaterial.let {
+            it.root.visibility = VISIBLE
+            it.itemPdfTextView.text = material.title
+            it.root.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putSerializable(PDF_KEY, material)
+                }
+                fragment.findNavController()
+                    .navigate(R.id.action_leaderMaterialListFragment_to_pdfFragment, bundle)
+            }
+            it.itemPdfSettingImageView.visibility = GONE
+        }
+
     }
 
     @SuppressLint("ResourceType")
@@ -164,6 +178,7 @@ class MaterialListAdapter(
     private fun goneAllViews(holder: MaterialListViewHolder) {
         holder.viewHolderBinding.cardMaterialId.visibility = GONE
         holder.viewHolderBinding.linkViewMaterial.root.visibility = GONE
+        holder.viewHolderBinding.pdfViewMaterial.root.visibility = GONE
     }
 
     class MaterialListViewHolder(binding: ItemMaterialBinding) :
