@@ -22,6 +22,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -29,58 +30,45 @@ import kotlinx.coroutines.withContext
 
 class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
-    override suspend fun insertPDF(pdf: Pdf): Long = withContext(Dispatchers.IO) {
-
-        // TODO: Fix configuracion de storage bucket y todo eso
-
-//        val storageRef: StorageReference =
-//            FirebaseStorage.getInstance().getReference("pdfs/" + pdf.uri!!.lastPathSegment)
-
+    override suspend fun insertPDF(pdf: Pdf) = flow<StatusCode> {
         val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("pdfs")
-        // TODO: revisar porque falla la configuración y da un 403
-        // Sube el archivo PDF a Firebase Storage
-        var resultCode: Long = StatusCode.INIT.value
+        val resultCode = MutableStateFlow(StatusCode.INIT)
         try {
             pdf.uri?.let {
-                storageRef.child("${IntegerUtils().createObjectId()}/${pdf.title}").putFile(it)
-                    .addOnSuccessListener { task -> // Archivo subido exitosamente
-                        val pdfUri = task.uploadSessionUri
-                        Log.e("TRAILEAD_STORAGE", "success")
-                        Log.e("TRAILEAD_STORAGE", "pdfUri: ${pdfUri.toString()}")
-                        resultCode = StatusCode.SUCCESS.value
-                    }.addOnProgressListener {
-                        Log.e("TRAILEAD_STORAGE", "progress")
-                    }.addOnFailureListener { e -> // Error al subir el archivo PDF
-                        Log.e("TRAILEAD_STORAGE", "failure")
-                        resultCode = StatusCode.ERROR.value
-                    }.await()
+                val result =
+                    storageRef.child("${IntegerUtils().createObjectId()}/${pdf.title}").putFile(it)
+                        .addOnSuccessListener { task -> // Archivo subido exitosamente
+                            val pdfUri = task.uploadSessionUri
+//                            insertPDFDatabase()
+                            Log.e("TRAILEAD_STORAGE", "success")
+                            Log.e("TRAILEAD_STORAGE", "pdfUri: ${pdfUri.toString()}")
+                            resultCode.value = StatusCode.SUCCESS
+                        }.addOnFailureListener { e -> // Error al subir el archivo PDF
+                            Log.e("TRAILEAD_STORAGE", "failure")
+                            resultCode.value = StatusCode.ERROR
+                        }
             }
         } catch (e: Exception) {
-            resultCode = StatusCode.ERROR.value
+            resultCode.emit(StatusCode.ERROR)
         }
-
-        delay(5000)
-        return@withContext if (resultCode == StatusCode.SUCCESS.value) {
-            insertPDFDatabase(pdf)
-        } else {
-            resultCode
+        resultCode.collect {
+            emit(it)
         }
     }
 
-    private suspend fun insertPDFDatabase(pdf: Pdf): Long =
-        withContext(Dispatchers.IO) {
-            val reference = FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
-            var resultCode: Long = StatusCode.ERROR.value
-            reference?.child(pdf.id.toString())?.setValue(pdf)
-                ?.addOnCompleteListener { task ->
-                    resultCode = if (task.isSuccessful) {
-                        StatusCode.SUCCESS.value
-                    } else {
-                        StatusCode.ERROR.value
-                    }
-                }?.await()
-            resultCode
-        }
+    private fun insertPDFDatabase(pdf: Pdf): Long {
+        val reference = FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
+        var resultCode: Long = StatusCode.ERROR.value
+        reference?.child(pdf.id.toString())?.setValue(pdf)
+            ?.addOnCompleteListener { task ->
+                resultCode = if (task.isSuccessful) {
+                    StatusCode.SUCCESS.value
+                } else {
+                    StatusCode.ERROR.value
+                }
+            }
+        return resultCode
+    }
 
     override suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long =
         withContext(Dispatchers.IO) {

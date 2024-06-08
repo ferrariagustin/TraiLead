@@ -510,7 +510,6 @@ open class LeaderViewModel(
             statusUpdatePdf.value = StatusUpdateInformation.FAILED
             return
         }
-
         viewModelScope.launch(Dispatchers.IO) {
             materialRepository.insertPDF(
                 pdfTitle,

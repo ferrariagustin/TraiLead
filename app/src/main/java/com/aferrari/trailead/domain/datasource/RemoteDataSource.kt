@@ -135,5 +135,5 @@ interface RemoteDataSource {
     suspend fun updateTraineeAccessKey(traineeIds: String, accessKey: Int): Long
     suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode>
     suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode>
-    suspend fun insertPDF(pdf: Pdf): Long
+    suspend fun insertPDF(pdf: Pdf): Flow<StatusCode>
 }

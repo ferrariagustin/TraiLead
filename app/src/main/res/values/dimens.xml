@@ -20,5 +20,6 @@
     <dimen name="default_toolbar_elevation">1dp</dimen>
     <dimen name="spinner_margin">112dp</dimen>
     <dimen name="card_view_presentation_size">200dp</dimen>
+    <dimen name="progress_bar_elevation">5dp</dimen>
 
 </resources>
