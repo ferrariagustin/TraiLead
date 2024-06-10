@@ -38,7 +38,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val result = CompletableFuture<StatusCode>()
         try {
             Uri.parse(pdf.url)?.let {
-                storageRef.child("${IntegerUtils().createObjectId()}/${pdf.title}").putFile(it)
+                storageRef.child("${pdf.id}/${pdf.title}").putFile(it)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             pdf.downloadUri = task.result.uploadSessionUri.toString()
@@ -92,10 +92,11 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 } else {
                     result.complete(StatusCode.ERROR)
                 }
-            }
+            }.await()
         } catch (_: Exception) {
             result.complete(StatusCode.ERROR)
         }
+        delay(3000)
         return if (result.await() == StatusCode.SUCCESS) {
             localFile
         } else {

@@ -551,6 +551,8 @@ open class LeaderViewModel(
                 if (it != null) {
                     pdfFileSelected = it
                     statusUpdatePdf.postValue(StatusUpdateInformation.SUCCESS)
+                } else {
+                    statusUpdatePdf.postValue(StatusUpdateInformation.FAILED)
                 }
             }
         }

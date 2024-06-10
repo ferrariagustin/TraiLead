@@ -59,6 +59,7 @@
     <string name="dialog_message_delete_category">Esta seguro que desea eliminar la categoría %s</string>
     <string name="save_category_success">Se actualizó correctamente</string>
     <string name="error">Error</string>
+    <string name="unexpected_error">Hubo un error, intente más tarde</string>
     <string name="error_message_dialog_category">Ingrese un nombre de categoría diferente</string>
     <string name="leader_material_list_title">Material</string>
     <string name="add_new_material_hint">Ingresar la URL completa del video de youtube</string>
