@@ -55,6 +55,7 @@ class AddPdfFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.setStateRefreshingScreen(false)
         setupToolbar()
         binding.savePdfButton.setOnClickListener {
             viewModel.savePdf(binding.pdfTitleIdTextviewTextInput.text.toString())

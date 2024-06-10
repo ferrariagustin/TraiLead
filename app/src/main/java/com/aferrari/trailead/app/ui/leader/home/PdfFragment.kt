@@ -38,6 +38,7 @@ class PdfFragment : Fragment() {
         arguments?.getSerializable(PDF_KEY).let {
             viewModel.restorePdf(it as? Pdf)
         }
+        viewModel.setStateRefreshingScreen(false)
         viewModel.statusUpdatePdf.observe(viewLifecycleOwner) {
             when (it) {
                 StatusUpdateInformation.LOADING -> {

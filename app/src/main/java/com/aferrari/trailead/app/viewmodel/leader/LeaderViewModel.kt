@@ -60,6 +60,8 @@ open class LeaderViewModel(
 
     val refresh = MutableLiveData<Boolean>()
 
+    val isRefreshingEnabled = MutableLiveData<Boolean>()
+
     //    Category
     val listCategory = MutableLiveData<List<Category>>()
 
@@ -86,6 +88,7 @@ open class LeaderViewModel(
 
     fun init() {
         refresh.value = false
+        isRefreshingEnabled.value = true
         bottomNavigationViewVisibility.value = View.VISIBLE
         statusUpdateDeleteCategory.value = StatusUpdateInformation.NONE
         statusUpdateYoutubeVideo.value = StatusUpdateInformation.NONE
@@ -103,25 +106,6 @@ open class LeaderViewModel(
             lastNameUser.value = leader.lastName
             emailUser.value = leader.email
         }
-    }
-
-    override fun onCleared() {
-        saveState()
-        super.onCleared()
-    }
-
-    private fun saveState() {
-        // TODO: review if is neccesary
-//        savedStateHandle[CATEGORY_SELECTED] = categorySelected
-//        savedStateHandle[TRAINEE_SELECTED] = traineeSelected
-//        savedStateHandle[MATERIAL_SELECTED] = materialSelected
-    }
-
-    fun restoreState() {
-        // TODO: review if is neccesary
-//        categorySelected = savedStateHandle[CATEGORY_SELECTED]
-//        traineeSelected = savedStateHandle[TRAINEE_SELECTED]
-//        materialSelected = savedStateHandle[MATERIAL_SELECTED]
     }
 
     fun getLeaderId() = leader.userId
@@ -492,6 +476,10 @@ open class LeaderViewModel(
             delay(3000)
             refresh.value = false
         }
+    }
+
+    fun setStateRefreshingScreen(isEnabled: Boolean) {
+        isRefreshingEnabled.value = isEnabled
     }
 
     fun updateProfile() {
