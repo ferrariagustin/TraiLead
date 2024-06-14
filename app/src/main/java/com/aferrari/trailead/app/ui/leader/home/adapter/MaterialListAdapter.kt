@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.component.TraileadPopupMenu
 import com.aferrari.trailead.app.viewmodel.IMaterial
-import com.aferrari.trailead.common.StringUtils.DOWNLOAD_PDF
 import com.aferrari.trailead.common.StringUtils.PDF_KEY
+import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.ItemMaterialBinding
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Material
@@ -84,6 +85,22 @@ class MaterialListAdapter(
         configureSettingEditable()
     }
 
+    private fun popupPDFListener(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.material_delete -> navigateToDeleteMaterial()
+            R.id.material_edit -> {
+                navigateToEditPdf()
+            }
+
+            else -> return true
+        }
+        return false
+    }
+
+    private fun navigateToEditPdf() {
+        Toast.makeText(fragment.requireContext(), "Edit PDF", Toast.LENGTH_SHORT).show()
+    }
+
     private fun popupLinkListener(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.material_delete -> navigateToDeleteMaterial()
@@ -102,20 +119,33 @@ class MaterialListAdapter(
     }
 
 
+    @SuppressLint("ResourceType")
     private fun bindingPdf(holder: MaterialListViewHolder, material: Pdf) {
-        holder.viewHolderBinding.pdfViewMaterial.let {
-            it.root.visibility = VISIBLE
-            it.itemPdfTextView.text = material.title
-            it.root.setOnClickListener {
+        holder.viewHolderBinding.pdfViewMaterial.let { pdfBinding ->
+            pdfBinding.root.visibility = VISIBLE
+            pdfBinding.itemPdfTextView.text = material.title
+            pdfBinding.itemPdfSettingImageView.visibility = VISIBLE
+            pdfBinding.root.setOnClickListener {
                 val bundle = Bundle().apply {
                     putSerializable(PDF_KEY, material)
                 }
                 fragment.findNavController()
                     .navigate(R.id.action_leaderMaterialListFragment_to_pdfFragment, bundle)
             }
-            it.itemPdfSettingImageView.visibility = GONE
+            pdfBinding.itemPdfSettingImageView.setOnClickListener {
+                TraileadDialog().showDialogWithAction(
+                    fragment.resources.getString(R.string.delete_pdf),
+                    fragment.resources.getString(R.string.delete_pdf_message, material.title),
+                    fragment,
+                    positiveAction = { _, _ ->
+                        viewModel.setSelectedMaterial(material)
+                        navigateToDeleteMaterial()
+                    },
+                    iconRes = R.drawable.ic_delete,
+                    colorRes = R.color.red
+                )
+            }
         }
-
     }
 
     @SuppressLint("ResourceType")

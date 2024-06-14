@@ -426,6 +426,10 @@ open class LeaderViewModel(
                         materialRepository.deleteLink(it)
                     }
 
+                    is Pdf -> {
+                        materialRepository.deletePdf(it)
+                    }
+
                     else -> {
                         StatusCode.SUCCESS.value
                     }

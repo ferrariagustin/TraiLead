@@ -166,4 +166,12 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
             emit(remoteDataSource.getPdf(pdf))
         }
     }
+
+    /**
+     * Delete Pdf from database and storage
+     */
+    suspend fun deletePdf(pdf: Pdf): Long =
+        if (!NetworkManager.isOnline())
+            StatusCode.INTERNET_CONECTION.value
+        else remoteDataSource.deletePdf(pdf)
 }

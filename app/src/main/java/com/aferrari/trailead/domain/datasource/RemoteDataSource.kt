@@ -142,4 +142,5 @@ interface RemoteDataSource {
     suspend fun getAllPDF(leaderId: String): List<Pdf>
     suspend fun getAllPDF(): List<Pdf>
     suspend fun getPdf(pdf: Pdf): File?
+    suspend fun deletePdf(pdf: Pdf): Long
 }

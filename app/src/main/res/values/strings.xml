@@ -132,4 +132,7 @@
     <string name="show_error_save_pdf">Hubo un error al guardar el PDF, intente nuevamente.</string>
     <string name="success">Se guardó correctamente</string>
 
+    <string name="delete_pdf">Eliminar PDF</string>
+    <string name="delete_pdf_message">Esta seguro que desea eliminar: %s</string>
+
 </resources>

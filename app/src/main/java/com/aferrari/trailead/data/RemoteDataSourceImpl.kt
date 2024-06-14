@@ -1,7 +1,6 @@
 package com.aferrari.trailead.data
 
 import android.net.Uri
-import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -102,6 +101,47 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         } else {
             null
         }
+    }
+
+    override suspend fun deletePdf(pdf: Pdf): Long =
+        withContext(Dispatchers.IO) {
+            val resultDeletePdfStorage = deletePdfStorage(pdf)
+            if (resultDeletePdfStorage == StatusCode.ERROR) {
+                return@withContext StatusCode.ERROR.value
+            }
+            val reference =
+                FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(pdf.id.toString())
+                ?.removeValue()
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
+
+    private suspend fun deletePdfStorage(pdf: Pdf): StatusCode = withContext(Dispatchers.IO) {
+        val storageRef = FirebaseStorage.getInstance().reference.child("pdfs")
+        val httpReference = storageRef.child("${pdf.id}/${pdf.title}")
+        val result = CompletableFuture<StatusCode>()
+        try {
+            httpReference.delete().addOnCompleteListener {
+                result.complete(
+                    if (it.isSuccessful) {
+                        StatusCode.SUCCESS
+                    } else {
+                        StatusCode.ERROR
+                    }
+                )
+            }.await()
+        } catch (_: Exception) {
+            result.complete(StatusCode.ERROR)
+        }
+        result.await()
     }
 
     private suspend fun insertPDFDatabase(pdf: Pdf): StatusCode = withContext(Dispatchers.IO) {
