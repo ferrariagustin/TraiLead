@@ -134,5 +134,7 @@
 
     <string name="delete_pdf">Eliminar PDF</string>
     <string name="delete_pdf_message">Esta seguro que desea eliminar: %s</string>
+    <string name="edit_material_pdf_title">Editar el título del PDF</string>
+    <string name="add_title_new_pdf_description">Ingresá el nuevo título de tu PDF</string>
 
 </resources>

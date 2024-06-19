@@ -56,7 +56,7 @@
                     android:layout_gravity="top"
                     android:layout_margin="@dimen/margin_ultra_small"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_delete"
+                    android:src="@drawable/ic_setting"
                     android:tint="@color/primaryColor" />
 
 

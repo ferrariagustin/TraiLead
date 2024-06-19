@@ -11,7 +11,6 @@ import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
-import java.io.File
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -138,7 +137,7 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
         uri: Uri,
         categoryId: Int,
         leaderId: String
-    ) = flow<StatusCode> {
+    ) = flow {
         if (!NetworkManager.isOnline()) {
             emit(StatusCode.INTERNET_CONECTION)
         } else {
@@ -159,7 +158,7 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
     suspend fun getAllPDF(leader: Leader) =
         remoteDataSource.getAllPDF(leader.userId)
 
-    fun getPdf(pdf: Pdf) = flow<File?> {
+    fun getPdf(pdf: Pdf) = flow {
         if (!NetworkManager.isOnline()) {
             emit(null)
         } else {
@@ -174,4 +173,10 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
         if (!NetworkManager.isOnline())
             StatusCode.INTERNET_CONECTION.value
         else remoteDataSource.deletePdf(pdf)
+
+    suspend fun updatePdf(pdfSelected: Pdf, newPdfTitle: String) = flow {
+        if (!NetworkManager.isOnline())
+            emit(StatusCode.INTERNET_CONECTION.value)
+        else emit(remoteDataSource.updatePdf(pdfSelected.id, newPdfTitle))
+    }
 }

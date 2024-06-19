@@ -550,6 +550,32 @@ open class LeaderViewModel(
         }
     }
 
+    fun updatePdf(newPdfTitle: String) {
+        statusUpdatePdf.value = StatusUpdateInformation.LOADING
+        if (materialSelected == null || materialSelected !is Pdf || newPdfTitle.isEmpty()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        if (!hasCategorySelected()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            materialRepository.updatePdf(
+                materialSelected as Pdf,
+                newPdfTitle
+            ).collect {
+                statusUpdatePdf.postValue(it.toStatusUpdateInformation())
+            }
+        }
+    }
+
+    fun resetPdfStatus() {
+        statusUpdatePdf.value = StatusUpdateInformation.NONE
+    }
+
     private companion object {
         const val CATEGORY_SELECTED = "categorySelected"
         const val TRAINEE_SELECTED = "traineeSelected"

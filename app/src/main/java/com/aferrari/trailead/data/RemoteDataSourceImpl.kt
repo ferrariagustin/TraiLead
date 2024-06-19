@@ -124,6 +124,23 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
+    override suspend fun updatePdf(pdfId: Int, newPdfTitle: String): Long =
+        withContext(Dispatchers.IO) {
+            val reference =
+                FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
+            var resultCode: Long = StatusCode.ERROR.value
+            reference?.child(pdfId.toString())?.child(Pdf::title.name)
+                ?.setValue(newPdfTitle)
+                ?.addOnCompleteListener { task ->
+                    resultCode = if (task.isSuccessful) {
+                        StatusCode.SUCCESS.value
+                    } else {
+                        StatusCode.ERROR.value
+                    }
+                }?.await()
+            resultCode
+        }
+
     private suspend fun deletePdfStorage(pdf: Pdf): StatusCode = withContext(Dispatchers.IO) {
         val storageRef = FirebaseStorage.getInstance().reference.child("pdfs")
         val httpReference = storageRef.child("${pdf.id}/${pdf.title}")

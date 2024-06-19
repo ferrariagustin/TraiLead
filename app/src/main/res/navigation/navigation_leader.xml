@@ -205,6 +205,9 @@
         <action
             android:id="@+id/action_leaderMaterialListFragment_to_pdfFragment"
             app:destination="@id/pdfFragment" />
+        <action
+            android:id="@+id/action_leaderMaterialListFragment_to_editPdfFragment"
+            app:destination="@id/editPdfFragment" />
     </fragment>
     <fragment
         android:id="@+id/fullScreenVideo"
@@ -282,6 +285,7 @@
     <fragment
         android:id="@+id/addPdfFragment"
         android:name="com.aferrari.trailead.app.ui.leader.home.AddPdfFragment"
+        tools:layout="@layout/add_pdf_fragment"
         android:label="AddPdfFragment">
         <action
             android:id="@+id/action_addPdfFragment_to_leaderMaterialListFragment2"
@@ -296,6 +300,15 @@
         tools:layout="@layout/pdf_fragment">
         <action
             android:id="@+id/action_pdfFragment_to_leaderMaterialListFragment"
+            app:destination="@id/leaderMaterialListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPdfFragment"
+        android:name="com.aferrari.trailead.app.ui.leader.home.adapter.EditPdfFragment"
+        tools:layout="@layout/leader_edit_material_pdf"
+        android:label="EditPdfFragment" >
+        <action
+            android:id="@+id/action_editPdfFragment_to_leaderMaterialListFragment"
             app:destination="@id/leaderMaterialListFragment" />
     </fragment>
 </navigation>

@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -75,20 +74,33 @@ class MaterialListAdapter(
                 .navigate(R.id.action_leaderMaterialListFragment_to_linkFragment, bundle)
         }
         holder.viewHolderBinding.linkViewMaterial.itemLinkSettingImageView.setOnClickListener {
-            viewModel.setSelectedMaterial(link)
             TraileadPopupMenu(it, fragment)
                 .create(getMenuPopUp(), R.color.primaryColor)
                 .setVisibilityItem(R.id.material_full_screen, false)
-                .setOnClickListener { item -> popupLinkListener(item) }
+                .setOnClickListener { item -> popupLinkListener(link, item) }
                 .show()
         }
         configureSettingEditable()
     }
 
-    private fun popupPDFListener(item: MenuItem): Boolean {
+    private fun popupPDFListener(pdf: Pdf, item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.material_delete -> navigateToDeleteMaterial()
+            R.id.material_delete -> {
+                TraileadDialog().showDialogWithAction(
+                    fragment.resources.getString(R.string.delete_pdf),
+                    fragment.resources.getString(R.string.delete_pdf_message, pdf.title),
+                    fragment,
+                    positiveAction = { _, _ ->
+                        viewModel.setSelectedMaterial(pdf)
+                        navigateToDeleteMaterial()
+                    },
+                    iconRes = R.drawable.ic_delete,
+                    colorRes = R.color.red
+                )
+            }
+
             R.id.material_edit -> {
+                viewModel.setSelectedMaterial(pdf)
                 navigateToEditPdf()
             }
 
@@ -98,13 +110,19 @@ class MaterialListAdapter(
     }
 
     private fun navigateToEditPdf() {
-        Toast.makeText(fragment.requireContext(), "Edit PDF", Toast.LENGTH_SHORT).show()
+        fragment.findNavController()
+            .navigate(R.id.action_leaderMaterialListFragment_to_editPdfFragment)
     }
 
-    private fun popupLinkListener(item: MenuItem): Boolean {
+    private fun popupLinkListener(link: Link, item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.material_delete -> navigateToDeleteMaterial()
+            R.id.material_delete -> {
+                viewModel.setSelectedMaterial(link)
+                navigateToDeleteMaterial()
+            }
+
             R.id.material_edit -> {
+                viewModel.setSelectedMaterial(link)
                 navigateToEditLinkMaterial()
             }
 
@@ -120,30 +138,24 @@ class MaterialListAdapter(
 
 
     @SuppressLint("ResourceType")
-    private fun bindingPdf(holder: MaterialListViewHolder, material: Pdf) {
+    private fun bindingPdf(holder: MaterialListViewHolder, pdf: Pdf) {
         holder.viewHolderBinding.pdfViewMaterial.let { pdfBinding ->
             pdfBinding.root.visibility = VISIBLE
-            pdfBinding.itemPdfTextView.text = material.title
+            pdfBinding.itemPdfTextView.text = pdf.title
             pdfBinding.itemPdfSettingImageView.visibility = VISIBLE
             pdfBinding.root.setOnClickListener {
                 val bundle = Bundle().apply {
-                    putSerializable(PDF_KEY, material)
+                    putSerializable(PDF_KEY, pdf)
                 }
                 fragment.findNavController()
                     .navigate(R.id.action_leaderMaterialListFragment_to_pdfFragment, bundle)
             }
             pdfBinding.itemPdfSettingImageView.setOnClickListener {
-                TraileadDialog().showDialogWithAction(
-                    fragment.resources.getString(R.string.delete_pdf),
-                    fragment.resources.getString(R.string.delete_pdf_message, material.title),
-                    fragment,
-                    positiveAction = { _, _ ->
-                        viewModel.setSelectedMaterial(material)
-                        navigateToDeleteMaterial()
-                    },
-                    iconRes = R.drawable.ic_delete,
-                    colorRes = R.color.red
-                )
+                TraileadPopupMenu(it, fragment)
+                    .create(getMenuPopUp(), R.color.primaryColor)
+                    .setVisibilityItem(R.id.material_full_screen, false)
+                    .setOnClickListener { item -> popupPDFListener(pdf, item) }
+                    .show()
             }
         }
     }
