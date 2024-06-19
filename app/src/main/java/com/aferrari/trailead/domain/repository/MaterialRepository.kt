@@ -179,4 +179,10 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
             emit(StatusCode.INTERNET_CONECTION.value)
         else emit(remoteDataSource.updatePdf(pdfSelected.id, newPdfTitle))
     }
+
+    suspend fun getPdfByCategory(leaderId: String, categoryId: Int) = flow {
+        if (!NetworkManager.isOnline())
+            emit(listOf<Pdf>())
+        else emit(remoteDataSource.getPdfByCategory(leaderId, categoryId))
+    }
 }

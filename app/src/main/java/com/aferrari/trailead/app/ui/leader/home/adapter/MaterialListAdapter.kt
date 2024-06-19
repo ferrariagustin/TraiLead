@@ -148,7 +148,7 @@ class MaterialListAdapter(
                     putSerializable(PDF_KEY, pdf)
                 }
                 fragment.findNavController()
-                    .navigate(R.id.action_leaderMaterialListFragment_to_pdfFragment, bundle)
+                    .navigate(R.id.pdfFragment, bundle)
             }
             pdfBinding.itemPdfSettingImageView.setOnClickListener {
                 TraileadPopupMenu(it, fragment)
@@ -157,6 +157,7 @@ class MaterialListAdapter(
                     .setOnClickListener { item -> popupPDFListener(pdf, item) }
                     .show()
             }
+            configureSettingEditable()
         }
     }
 
@@ -187,6 +188,8 @@ class MaterialListAdapter(
     private fun configureSettingEditable() {
         binding.imageSettingMaterialLeader.visibility = if (isEditable) VISIBLE else GONE
         binding.linkViewMaterial.itemLinkSettingImageView.visibility =
+            if (isEditable) VISIBLE else GONE
+        binding.pdfViewMaterial.itemPdfSettingImageView.visibility =
             if (isEditable) VISIBLE else GONE
     }
 

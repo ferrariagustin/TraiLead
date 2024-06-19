@@ -103,10 +103,6 @@ interface RemoteDataSource {
 
     suspend fun getTrainee(traineeId: String): Trainee?
 
-//    suspend fun getLeader(userEmail: String, userPass: String): Leader?
-
-//    suspend fun getTrainee(userEmail: String, userPass: String): Trainee?
-
     suspend fun getLeaderByEmail(leaderEmail: String): Leader?
 
     suspend fun getTraineeByEmail(traineeEmail: String): Trainee?
@@ -144,4 +140,5 @@ interface RemoteDataSource {
     suspend fun getPdf(pdf: Pdf): File?
     suspend fun deletePdf(pdf: Pdf): Long
     suspend fun updatePdf(pdfId: Int, newPdfTitle: String): Long
+    suspend fun getPdfByCategory(leaderId: String, categoryId: Int): List<Pdf>
 }

@@ -141,6 +141,22 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             resultCode
         }
 
+    override suspend fun getPdfByCategory(leaderId: String, categoryId: Int): List<Pdf> =
+    withContext(Dispatchers.IO) {
+        val reference = FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
+        val dataSnapshot = reference?.get()?.await()
+        val links = mutableListOf<Pdf>()
+        if (dataSnapshot?.key == Pdf::class.simpleName.toString()) {
+            dataSnapshot.value?.let {
+                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                links.addAll(hashMapValues.values.map {
+                    Gson().fromJson(Gson().toJson(it), Pdf::class.java)
+                }.filter { it.leaderMaterialId == leaderId && it.categoryId == categoryId })
+            }
+        }
+        links
+    }
+
     private suspend fun deletePdfStorage(pdf: Pdf): StatusCode = withContext(Dispatchers.IO) {
         val storageRef = FirebaseStorage.getInstance().reference.child("pdfs")
         val httpReference = storageRef.child("${pdf.id}/${pdf.title}")

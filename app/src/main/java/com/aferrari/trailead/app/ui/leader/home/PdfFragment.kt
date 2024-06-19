@@ -16,6 +16,7 @@ import com.aferrari.trailead.common.ui.TraiLeadSnackbar
 import com.aferrari.trailead.databinding.PdfFragmentBinding
 import com.aferrari.trailead.domain.models.Pdf
 
+// fixme: This fragment generate crash on Trainee View because use LeaderViewModel
 class PdfFragment : Fragment() {
 
     private lateinit var binding: PdfFragmentBinding
