@@ -21,14 +21,14 @@ import com.aferrari.trailead.domain.models.YouTubeVideo
 import javax.inject.Singleton
 
 
-@Database(
-    version = 3,
-    entities = [Leader::class, Trainee::class, YouTubeVideo::class, Category::class, TraineeCategoryJoin::class, Link::class, Pdf::class],
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2, spec = AppDataBase.AutoMigration1To2::class)
-    ],
-    exportSchema = true
-)
+//@Database(
+//    version = 4,
+//    entities = [Leader::class, Trainee::class, YouTubeVideo::class, Category::class, TraineeCategoryJoin::class, Link::class],
+//    autoMigrations = [
+//        AutoMigration(from = 1, to = 2, spec = AppDataBase.AutoMigration1To2::class)
+//    ],
+//    exportSchema = true
+//)
 @Singleton
 abstract class AppDataBase : RoomDatabase() {
 

@@ -59,6 +59,7 @@
     <string name="dialog_message_delete_category">Esta seguro que desea eliminar la categoría %s</string>
     <string name="save_category_success">Se actualizó correctamente</string>
     <string name="error">Error</string>
+    <string name="unexpected_error">Hubo un error, intente más tarde</string>
     <string name="error_message_dialog_category">Ingrese un nombre de categoría diferente</string>
     <string name="leader_material_list_title">Material</string>
     <string name="add_new_material_hint">Ingresar la URL completa del video de youtube</string>
@@ -123,5 +124,17 @@
     <string name="invalid_email">\"Ingrese un email válido\"</string>
     <string name="internet_connection">No hay conexión a internet</string>
     <string name="email_sent">Te enviamos un email para restaurar la contraseña</string>
+    <string name="pdf">PDF</string>
+    <string name="add_pdf_information">Ingresar el Título del PDF</string>
+    <string name="search">Buscar</string>
+    <string name="do_not_file_selected">No hay archivo seleccionado</string>
+    <string name="pdf_preview">Pre visualización del PDF</string>
+    <string name="show_error_save_pdf">Hubo un error al guardar el PDF, intente nuevamente.</string>
+    <string name="success">Se guardó correctamente</string>
+
+    <string name="delete_pdf">Eliminar PDF</string>
+    <string name="delete_pdf_message">Esta seguro que desea eliminar: %s</string>
+    <string name="edit_material_pdf_title">Editar el título del PDF</string>
+    <string name="add_title_new_pdf_description">Ingresá el nuevo título de tu PDF</string>
 
 </resources>

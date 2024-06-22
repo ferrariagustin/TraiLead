@@ -55,10 +55,34 @@
     <fragment
         android:id="@+id/traineeMaterialFragment"
         android:name="com.aferrari.trailead.app.ui.trainee.home.TraineeMaterialFragment"
-        tools:layout="@layout/trainee_material_list_from_category_selected"
-        android:label="TraineeMaterialFragment" >
+        android:label="TraineeMaterialFragment"
+        tools:layout="@layout/trainee_material_list_from_category_selected">
         <action
             android:id="@+id/action_traineeMaterialFragment_to_traineeHomeFragment"
             app:destination="@id/traineeHomeFragment" />
+        <action
+            android:id="@+id/action_traineeMaterialFragment_to_pdfFragment"
+            app:destination="@id/pdfFragment" />
+        <action
+            android:id="@+id/action_traineeMaterialFragment_to_linkFragment"
+            app:destination="@id/linkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pdfFragment"
+        android:name="com.aferrari.trailead.app.ui.trainee.home.PdfFragment"
+        android:label="PdfFragment"
+        tools:layout="@layout/pdf_trainee_fragment">
+        <action
+            android:id="@+id/action_pdfFragment_to_traineeMaterialFragment"
+            app:destination="@id/traineeMaterialFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/linkFragment"
+        android:name="com.aferrari.trailead.app.ui.trainee.home.LinkFragment"
+        android:label="LinkFragment"
+        tools:layout="@layout/link_trainee_fragment" >
+        <action
+            android:id="@+id/action_linkFragment_to_traineeMaterialFragment"
+            app:destination="@id/traineeMaterialFragment" />
     </fragment>
 </navigation>

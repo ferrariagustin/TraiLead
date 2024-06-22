@@ -6,13 +6,16 @@ import com.aferrari.trailead.common.common_enum.UserType
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
+import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import java.io.File
 import kotlinx.coroutines.flow.Flow
 
 
 interface RemoteDataSource {
+
     suspend fun insertYouTubeVideo(newYouTubeVideo: YouTubeVideo): Long
 
     suspend fun getAllYoutubeVideo(leaderId: String): List<YouTubeVideo>
@@ -71,7 +74,7 @@ interface RemoteDataSource {
 
     suspend fun updateTitleLink(linkId: Int, newTitle: String): Long
 
-    suspend fun getLinkByCategory(leaderId: String, categoryId: Int): List<Link>
+    suspend fun getLinksByCategory(leaderId: String, categoryId: Int): List<Link>
 
     suspend fun insertLeader(leader: Leader): Long
 
@@ -99,10 +102,6 @@ interface RemoteDataSource {
     suspend fun getLeader(leaderId: String): Leader?
 
     suspend fun getTrainee(traineeId: String): Trainee?
-
-//    suspend fun getLeader(userEmail: String, userPass: String): Leader?
-
-//    suspend fun getTrainee(userEmail: String, userPass: String): Trainee?
 
     suspend fun getLeaderByEmail(leaderEmail: String): Leader?
 
@@ -133,4 +132,13 @@ interface RemoteDataSource {
     suspend fun updateTraineeAccessKey(traineeIds: String, accessKey: Int): Long
     suspend fun signInWithToken(userId: String, token: String): Flow<StatusCode>
     suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode>
+
+    // PDF
+    suspend fun insertPDF(pdf: Pdf): Flow<StatusCode>
+    suspend fun getAllPDF(leaderId: String): List<Pdf>
+    suspend fun getAllPDF(): List<Pdf>
+    suspend fun getPdf(pdf: Pdf): File?
+    suspend fun deletePdf(pdf: Pdf): Long
+    suspend fun updatePdf(pdfId: Int, newPdfTitle: String): Long
+    suspend fun getPdfByCategory(leaderId: String, categoryId: Int): List<Pdf>
 }

@@ -66,7 +66,7 @@ class LeaderMaterialListFragment : Fragment(), RefreshListener {
         leaderViewModel.updateMaterialsCategoryFilter()
         leaderViewModel.listAllMaterials.observe(viewLifecycleOwner) {
             binding.recyclerViewMaterialList.adapter =
-                MaterialListAdapter(it, this, leaderViewModel, true)
+                MaterialListAdapter(it, this, leaderViewModel, isLeader = true, isEditable = true)
         }
         binding.addMaterialLeader.setOnClickListener {
             onAddButtonClicked()
@@ -76,6 +76,9 @@ class LeaderMaterialListFragment : Fragment(), RefreshListener {
         }
         binding.addLinkMaterial.setOnClickListener {
             findNavController().navigate(R.id.action_leaderMaterialListFragment_to_addLinkFragment)
+        }
+        binding.addPdfMaterial.setOnClickListener {
+            findNavController().navigate(R.id.action_leaderMaterialListFragment_to_addPdfFragment)
         }
         refresh()
     }

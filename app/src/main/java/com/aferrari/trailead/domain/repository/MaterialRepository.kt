@@ -1,5 +1,6 @@
 package com.aferrari.trailead.domain.repository
 
+import android.net.Uri
 import com.aferrari.trailead.app.configurer.NetworkManager
 import com.aferrari.trailead.common.IntegerUtils
 import com.aferrari.trailead.common.common_enum.StatusCode
@@ -7,9 +8,11 @@ import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
+import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
@@ -75,7 +78,7 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
     suspend fun getAllLink(leader: Leader) = remoteDataSource.getAllLink(leader.userId)
 
     suspend fun getLinksByCategory(leaderId: String, categoryId: Int) =
-        remoteDataSource.getLinkByCategory(leaderId, categoryId)
+        remoteDataSource.getLinksByCategory(leaderId, categoryId)
 
     suspend fun deleteLink(link: Link) = if (!NetworkManager.isOnline()) {
         StatusCode.INTERNET_CONECTION.value
@@ -126,4 +129,60 @@ class MaterialRepository(private val remoteDataSource: RemoteDataSource) {
 
     suspend fun getCategoriesSelected(traineeId: String): List<Category> =
         remoteDataSource.getCategoriesFromTrainee(traineeId)
+
+    // PDF
+
+    suspend fun insertPDF(
+        pdfTitle: String,
+        uri: Uri,
+        categoryId: Int,
+        leaderId: String
+    ) = flow {
+        if (!NetworkManager.isOnline()) {
+            emit(StatusCode.INTERNET_CONECTION)
+        } else {
+            remoteDataSource.insertPDF(
+                Pdf(
+                    IntegerUtils().createObjectId(),
+                    pdfTitle,
+                    uri.toString(),
+                    categoryId,
+                    leaderId
+                )
+            ).collect {
+                emit(it)
+            }
+        }
+    }
+
+    suspend fun getAllPDF(leader: Leader) =
+        remoteDataSource.getAllPDF(leader.userId)
+
+    fun getPdf(pdf: Pdf) = flow {
+        if (!NetworkManager.isOnline()) {
+            emit(null)
+        } else {
+            emit(remoteDataSource.getPdf(pdf))
+        }
+    }
+
+    /**
+     * Delete Pdf from database and storage
+     */
+    suspend fun deletePdf(pdf: Pdf): Long =
+        if (!NetworkManager.isOnline())
+            StatusCode.INTERNET_CONECTION.value
+        else remoteDataSource.deletePdf(pdf)
+
+    suspend fun updatePdf(pdfSelected: Pdf, newPdfTitle: String) = flow {
+        if (!NetworkManager.isOnline())
+            emit(StatusCode.INTERNET_CONECTION.value)
+        else emit(remoteDataSource.updatePdf(pdfSelected.id, newPdfTitle))
+    }
+
+    suspend fun getPdfByCategory(leaderId: String, categoryId: Int) = flow {
+        if (!NetworkManager.isOnline())
+            emit(listOf<Pdf>())
+        else emit(remoteDataSource.getPdfByCategory(leaderId, categoryId))
+    }
 }

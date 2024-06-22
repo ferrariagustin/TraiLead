@@ -12,8 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/trainee_rol_toolbar"
+            android:id="@+id/edit_pdf_material_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primaryColor"
@@ -22,56 +33,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/edit_trainee_rol" />
+            app:title="@string/edit_material_pdf_title" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/edit_profile_name_label"
+            android:id="@+id/edit_pdf_material_title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:hint="@string/edit_rol"
+            android:hint="@string/add_title_new_pdf_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/trainee_rol_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/edit_pdf_material_toolbar" />
 
-        <RadioGroup
-            android:id="@+id/radio_rol"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_pdf_material_title_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/edit_profile_name_label">
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radio_junior"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rol_junior" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radio_semisenior"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rol_semisenior" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/radio_senior"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rol_senior" />
-        </RadioGroup>
-
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@{viewModel.materialSelected != null ? viewModel.materialSelected.title.toString : ' '}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_pdf_material_title_label" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_edit_rol_button"
+            android:id="@+id/save_edit_pdf_material_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
-            android:onClick="@{() -> viewModel.updateTraineeRol()}"
-            android:text="@string/edit_button"
+            android:text="@string/save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/radio_rol" />
-
+            app:layout_constraintTop_toBottomOf="@id/edit_pdf_material_title_text_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

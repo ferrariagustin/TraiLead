@@ -17,6 +17,8 @@ object StringUtils {
     const val USER_EMAIL_KEY = "user_email"
     const val USER_KEY = "user_key"
     const val EMPTY_STRING = ""
+    const val PDF_KEY = "pdf_key"
+    const val DOWNLOAD_PDF = "download_pdf"
 
     fun getUserType(userType: String?): UserType? {
         when (userType) {

@@ -1,5 +1,6 @@
 package com.aferrari.trailead.app.viewmodel.leader
 
+import android.net.Uri
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -16,10 +17,12 @@ import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Material
+import com.aferrari.trailead.domain.models.Pdf
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOn
@@ -57,6 +60,8 @@ open class LeaderViewModel(
 
     val refresh = MutableLiveData<Boolean>()
 
+    val isRefreshingEnabled = MutableLiveData<Boolean>()
+
     //    Category
     val listCategory = MutableLiveData<List<Category>>()
 
@@ -74,8 +79,16 @@ open class LeaderViewModel(
 
     val bottomNavigationViewVisibility = MutableLiveData(View.VISIBLE)
 
+    // PDF
+    val pdfUri = MutableLiveData<Uri>()
+
+    var pdfFileSelected: File? = null
+
+    val statusUpdatePdf = MutableLiveData<StatusUpdateInformation>()
+
     fun init() {
         refresh.value = false
+        isRefreshingEnabled.value = true
         bottomNavigationViewVisibility.value = View.VISIBLE
         statusUpdateDeleteCategory.value = StatusUpdateInformation.NONE
         statusUpdateYoutubeVideo.value = StatusUpdateInformation.NONE
@@ -83,6 +96,7 @@ open class LeaderViewModel(
         statusUpdateEditCategory.value = StatusUpdateInformation.NONE
         statusUpdateTraineeRol.value = StatusUpdateInformation.NONE
         statusUpdatePassword.value = StatusUpdateInformation.NONE
+        statusUpdatePdf.value = StatusUpdateInformation.NONE
     }
 
     fun setLeader(leader: Leader?) {
@@ -92,25 +106,6 @@ open class LeaderViewModel(
             lastNameUser.value = leader.lastName
             emailUser.value = leader.email
         }
-    }
-
-    override fun onCleared() {
-        saveState()
-        super.onCleared()
-    }
-
-    private fun saveState() {
-        // TODO: review if is neccesary
-//        savedStateHandle[CATEGORY_SELECTED] = categorySelected
-//        savedStateHandle[TRAINEE_SELECTED] = traineeSelected
-//        savedStateHandle[MATERIAL_SELECTED] = materialSelected
-    }
-
-    fun restoreState() {
-        // TODO: review if is neccesary
-//        categorySelected = savedStateHandle[CATEGORY_SELECTED]
-//        traineeSelected = savedStateHandle[TRAINEE_SELECTED]
-//        materialSelected = savedStateHandle[MATERIAL_SELECTED]
     }
 
     fun getLeaderId() = leader.userId
@@ -341,7 +336,7 @@ open class LeaderViewModel(
             statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             return
         }
-        if (categorySelected == null) {
+        if (!hasCategorySelected()) {
             statusUpdateYoutubeVideo.value = StatusUpdateInformation.FAILED
             return
         }
@@ -363,8 +358,12 @@ open class LeaderViewModel(
         val listAllMaterlialJoin = mutableListOf<Material>()
         listAllMaterlialJoin.addAll(getAllYouTubeVideosCategoryFilter())
         listAllMaterlialJoin.addAll(getAllLinkCategoryFilter())
+        listAllMaterlialJoin.addAll(getAllPDFCategoryFilter())
         listAllMaterials.value = listAllMaterlialJoin
     }
+
+    private suspend fun getAllPDFCategoryFilter() = materialRepository.getAllPDF(leader)
+        .filter { it.categoryId == categorySelected?.id }
 
     private suspend fun getAllYouTubeVideosCategoryFilter() =
         materialRepository.getAllYoutubeVideo(leader)
@@ -427,6 +426,10 @@ open class LeaderViewModel(
                         materialRepository.deleteLink(it)
                     }
 
+                    is Pdf -> {
+                        materialRepository.deletePdf(it)
+                    }
+
                     else -> {
                         StatusCode.SUCCESS.value
                     }
@@ -479,10 +482,98 @@ open class LeaderViewModel(
         }
     }
 
+    fun setStateRefreshingScreen(isEnabled: Boolean) {
+        isRefreshingEnabled.value = isEnabled
+    }
+
     fun updateProfile() {
         viewModelScope.launch {
             setLeader(repository.getLeader(leader.userId))
         }
+    }
+
+
+    // PDF
+
+    fun selectedPdfUri(uri: Uri?) {
+        uri?.let { pdfUri.value = it }
+    }
+
+    /**
+     * Save PDF in database and storage
+     */
+    fun savePdf(pdfTitle: String) {
+        statusUpdatePdf.value = StatusUpdateInformation.LOADING
+        if (pdfUri.value == null || pdfUri.value.toString().isEmpty() || pdfTitle.isEmpty()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+        if (!hasCategorySelected()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            materialRepository.insertPDF(
+                pdfTitle,
+                pdfUri.value!!,
+                categorySelected!!.id, leader.userId
+            ).collect {
+                statusUpdatePdf.postValue(it.value.toStatusUpdateInformation())
+            }
+        }
+
+    }
+
+    private fun hasCategorySelected() = categorySelected != null
+
+    fun restorePdf(pdf: Pdf?) {
+        statusUpdatePdf.value = StatusUpdateInformation.LOADING
+        if (pdf == null) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        if (!hasCategorySelected()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            materialRepository.getPdf(pdf).collect {
+                if (it != null) {
+                    pdfFileSelected = it
+                    statusUpdatePdf.postValue(StatusUpdateInformation.SUCCESS)
+                } else {
+                    statusUpdatePdf.postValue(StatusUpdateInformation.FAILED)
+                }
+            }
+        }
+    }
+
+    fun updatePdf(newPdfTitle: String) {
+        statusUpdatePdf.value = StatusUpdateInformation.LOADING
+        if (materialSelected == null || materialSelected !is Pdf || newPdfTitle.isEmpty()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        if (!hasCategorySelected()) {
+            statusUpdatePdf.value = StatusUpdateInformation.FAILED
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            materialRepository.updatePdf(
+                materialSelected as Pdf,
+                newPdfTitle
+            ).collect {
+                statusUpdatePdf.postValue(it.toStatusUpdateInformation())
+            }
+        }
+    }
+
+    fun resetPdfStatus() {
+        statusUpdatePdf.value = StatusUpdateInformation.NONE
     }
 
     private companion object {

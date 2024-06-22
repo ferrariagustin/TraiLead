@@ -12,7 +12,6 @@ import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY
 import com.aferrari.trailead.common.StringUtils.TAB_ID
 import com.aferrari.trailead.databinding.LeaderActivityBinding
-import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.repository.MaterialRepository
@@ -43,11 +42,6 @@ class LeaderActivity : AppCompatActivity() {
         initListener()
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        leaderViewModel.restoreState()
-    }
-
     private fun initComponent() {
         leaderViewModel.setLeader(intent.extras?.get(LEADER_KEY) as? Leader)
     }
@@ -71,6 +65,9 @@ class LeaderActivity : AppCompatActivity() {
         }
         leaderViewModel.bottomNavigationViewVisibility.observe(this) {
             binding.bottomNavigationId.visibility = it
+        }
+        leaderViewModel.isRefreshingEnabled.observe(this) {
+            binding.leaderSwipeToRefresh.isEnabled = it
         }
         binding.leaderSwipeToRefresh.setOnRefreshListener {
             leaderViewModel.refresh()

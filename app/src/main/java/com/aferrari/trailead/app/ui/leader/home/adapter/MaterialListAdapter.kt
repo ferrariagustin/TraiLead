@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.component.TraileadPopupMenu
 import com.aferrari.trailead.app.viewmodel.IMaterial
+import com.aferrari.trailead.common.StringUtils.PDF_KEY
+import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.ItemMaterialBinding
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Material
@@ -27,6 +29,7 @@ class MaterialListAdapter(
     private val dataSet: List<Material>,
     private val fragment: Fragment,
     private val viewModel: IMaterial,
+    private val isLeader: Boolean,
     private val isEditable: Boolean = false
 ) :
     RecyclerView.Adapter<MaterialListAdapter.MaterialListViewHolder>() {
@@ -68,24 +71,64 @@ class MaterialListAdapter(
             val bundle = Bundle().apply {
                 putString(LINK, link.url)
             }
-            fragment.findNavController()
-                .navigate(R.id.action_leaderMaterialListFragment_to_linkFragment, bundle)
+            if (isLeader) {
+                fragment.findNavController()
+                    .navigate(R.id.action_leaderMaterialListFragment_to_linkFragment, bundle)
+            } else {
+                fragment.findNavController()
+                    .navigate(R.id.action_traineeMaterialFragment_to_linkFragment, bundle)
+            }
         }
         holder.viewHolderBinding.linkViewMaterial.itemLinkSettingImageView.setOnClickListener {
-            viewModel.setSelectedMaterial(link)
             TraileadPopupMenu(it, fragment)
                 .create(getMenuPopUp(), R.color.primaryColor)
                 .setVisibilityItem(R.id.material_full_screen, false)
-                .setOnClickListener { item -> popupLinkListener(item) }
+                .setOnClickListener { item -> popupLinkListener(link, item) }
                 .show()
         }
         configureSettingEditable()
     }
 
-    private fun popupLinkListener(item: MenuItem): Boolean {
+    private fun popupPDFListener(pdf: Pdf, item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.material_delete -> navigateToDeleteMaterial()
+            R.id.material_delete -> {
+                TraileadDialog().showDialogWithAction(
+                    fragment.resources.getString(R.string.delete_pdf),
+                    fragment.resources.getString(R.string.delete_pdf_message, pdf.title),
+                    fragment,
+                    positiveAction = { _, _ ->
+                        viewModel.setSelectedMaterial(pdf)
+                        navigateToDeleteMaterial()
+                    },
+                    iconRes = R.drawable.ic_delete,
+                    colorRes = R.color.red
+                )
+            }
+
             R.id.material_edit -> {
+                viewModel.setSelectedMaterial(pdf)
+                navigateToEditPdf()
+            }
+
+            else -> return true
+        }
+        return false
+    }
+
+    private fun navigateToEditPdf() {
+        fragment.findNavController()
+            .navigate(R.id.action_leaderMaterialListFragment_to_editPdfFragment)
+    }
+
+    private fun popupLinkListener(link: Link, item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.material_delete -> {
+                viewModel.setSelectedMaterial(link)
+                navigateToDeleteMaterial()
+            }
+
+            R.id.material_edit -> {
+                viewModel.setSelectedMaterial(link)
                 navigateToEditLinkMaterial()
             }
 
@@ -100,8 +143,37 @@ class MaterialListAdapter(
     }
 
 
-    private fun bindingPdf(holder: MaterialListViewHolder, material: Pdf) {
-        TODO("Not yet implemented")
+    @SuppressLint("ResourceType")
+    private fun bindingPdf(holder: MaterialListViewHolder, pdf: Pdf) {
+        holder.viewHolderBinding.pdfViewMaterial.let { pdfBinding ->
+            pdfBinding.root.visibility = VISIBLE
+            pdfBinding.itemPdfTextView.text = pdf.title
+            pdfBinding.itemPdfSettingImageView.visibility = VISIBLE
+            pdfBinding.root.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putSerializable(PDF_KEY, pdf)
+                }
+                navigateToPdfView(bundle)
+            }
+            pdfBinding.itemPdfSettingImageView.setOnClickListener {
+                TraileadPopupMenu(it, fragment)
+                    .create(getMenuPopUp(), R.color.primaryColor)
+                    .setVisibilityItem(R.id.material_full_screen, false)
+                    .setOnClickListener { item -> popupPDFListener(pdf, item) }
+                    .show()
+            }
+            configureSettingEditable()
+        }
+    }
+
+    private fun navigateToPdfView(bundle: Bundle) {
+        if (isLeader) {
+            fragment.findNavController()
+                .navigate(R.id.action_leaderMaterialListFragment_to_pdfFragment, bundle)
+        } else {
+            fragment.findNavController()
+                .navigate(R.id.action_traineeMaterialFragment_to_pdfFragment, bundle)
+        }
     }
 
     @SuppressLint("ResourceType")
@@ -131,6 +203,8 @@ class MaterialListAdapter(
     private fun configureSettingEditable() {
         binding.imageSettingMaterialLeader.visibility = if (isEditable) VISIBLE else GONE
         binding.linkViewMaterial.itemLinkSettingImageView.visibility =
+            if (isEditable) VISIBLE else GONE
+        binding.pdfViewMaterial.itemPdfSettingImageView.visibility =
             if (isEditable) VISIBLE else GONE
     }
 
@@ -164,6 +238,7 @@ class MaterialListAdapter(
     private fun goneAllViews(holder: MaterialListViewHolder) {
         holder.viewHolderBinding.cardMaterialId.visibility = GONE
         holder.viewHolderBinding.linkViewMaterial.root.visibility = GONE
+        holder.viewHolderBinding.pdfViewMaterial.root.visibility = GONE
     }
 
     class MaterialListViewHolder(binding: ItemMaterialBinding) :

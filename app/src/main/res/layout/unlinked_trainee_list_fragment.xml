@@ -16,11 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small"
+            android:background="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/primaryColor"
             app:title="@string/toolbar_unlinked_trainees" />
 
         <androidx.recyclerview.widget.RecyclerView

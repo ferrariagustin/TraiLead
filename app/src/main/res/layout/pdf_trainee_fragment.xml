@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="homeLeaderViewModel"
-            type="com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel" />
+            name="viewModel"
+            type="com.aferrari.trailead.app.viewmodel.trainee.home.HomeTraineeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,35 +13,39 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/leader_home_toolbar"
+            android:id="@+id/pdf_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primaryColor"
+            android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/menu_item_toolbar_close_session"
-            app:title="@string/home" />
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/white"
+            app:title="PDF"
+            app:titleCentered="true" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_category_list"
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdf_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/toolbar_size"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/leader_home_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/pdf_toolbar" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_material_category_leader_home"
+        <ProgressBar
+            android:id="@+id/pdf_progress_bar"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_long"
-            android:elevation="@dimen/floating_elevation_default_shadow"
-            android:contentDescription="@string/add_new_category"
-            android:src="@drawable/ic_add_folder"
+            android:elevation="@dimen/progress_bar_elevation"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
