@@ -9,11 +9,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/default_toolbar_elevation"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="@string/title_training_toolbar"
+            android:background="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/title_training_toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trainee_material_recycler_view"

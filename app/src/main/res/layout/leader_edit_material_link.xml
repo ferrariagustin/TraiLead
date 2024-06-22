@@ -16,12 +16,12 @@
             android:id="@+id/edit_link_material_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
             android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/primaryColor"
             app:title="@string/edit_material_link" />
 
         <com.google.android.material.textview.MaterialTextView

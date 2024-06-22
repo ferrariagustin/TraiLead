@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel" />
+            type="com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel" />
     </data>
 
     <LinearLayout
@@ -17,9 +17,9 @@
             android:id="@+id/link_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
             android:elevation="1dp"
             app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/primaryColor"
             app:title="@string/link" />
 
         <WebView

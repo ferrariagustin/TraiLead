@@ -16,12 +16,12 @@
             android:id="@+id/setting_trainee_material_toolbar_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
             android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/primaryColor"
             app:title="@string/config_material_trainee_toolbar" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -108,8 +108,8 @@
             android:layout_gravity="center"
             android:layout_marginEnd="@dimen/margin_medium"
             android:hint="@string/selected_all"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/trainee_selected_divider_id" />
+            app:layout_constraintBottom_toTopOf="@id/trainee_selected_divider_id"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -127,11 +127,11 @@
             android:id="@+id/save_linked_category_trainee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
             android:text="@string/save"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_margin="@dimen/margin_small"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

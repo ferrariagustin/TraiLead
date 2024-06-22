@@ -277,7 +277,7 @@
         android:id="@+id/linkFragment"
         android:name="com.aferrari.trailead.app.ui.leader.home.LinkFragment"
         android:label="LinkFragment"
-        tools:layout="@layout/link_fragment">
+        tools:layout="@layout/link_leader_fragment">
         <action
             android:id="@+id/action_linkFragment_to_leaderMaterialListFragment"
             app:destination="@id/leaderMaterialListFragment" />

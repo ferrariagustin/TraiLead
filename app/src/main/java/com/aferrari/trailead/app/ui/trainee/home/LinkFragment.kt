@@ -1,4 +1,4 @@
-package com.aferrari.trailead.app.ui.leader.home
+package com.aferrari.trailead.app.ui.trainee.home
 
 import android.os.Bundle
 import android.util.Log
@@ -12,20 +12,19 @@ import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.configurer.NetworkManager
 import com.aferrari.trailead.app.ui.RefreshListener
-import com.aferrari.trailead.app.ui.leader.home.adapter.MaterialListAdapter.Companion.LINK
-import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
-import com.aferrari.trailead.common.StringUtils.ERROR_WEBVIEW_PATH
-import com.aferrari.trailead.databinding.LinkLeaderFragmentBinding
-
+import com.aferrari.trailead.app.ui.leader.home.adapter.MaterialListAdapter
+import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
+import com.aferrari.trailead.common.StringUtils
+import com.aferrari.trailead.databinding.LinkTraineeFragmentBinding
 
 class LinkFragment : Fragment(), RefreshListener {
 
-    private lateinit var binding: LinkLeaderFragmentBinding
+    private lateinit var binding: LinkTraineeFragmentBinding
 
-    private val viewmodel: LeaderViewModel by activityViewModels()
+    private val viewmodel: TraineeViewModel by activityViewModels()
 
     private val link: String by lazy {
-        arguments?.getString(LINK) ?: ERROR_WEBVIEW_PATH
+        arguments?.getString(MaterialListAdapter.LINK) ?: StringUtils.ERROR_WEBVIEW_PATH
     }
 
     override fun onCreateView(
@@ -33,7 +32,8 @@ class LinkFragment : Fragment(), RefreshListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.link_leader_fragment, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.link_trainee_fragment, container, false)
         binding.viewModel = viewmodel
         binding.lifecycleOwner = this
         return binding.root
@@ -47,7 +47,7 @@ class LinkFragment : Fragment(), RefreshListener {
 
     private fun setupWebView() {
         if (!NetworkManager.isOnline()) {
-            binding.wvLinkId.loadUrl(ERROR_WEBVIEW_PATH)
+            binding.wvLinkId.loadUrl(StringUtils.ERROR_WEBVIEW_PATH)
             return
         }
         binding.wvLinkId.loadUrl(link)

@@ -71,8 +71,13 @@ class MaterialListAdapter(
             val bundle = Bundle().apply {
                 putString(LINK, link.url)
             }
-            fragment.findNavController()
-                .navigate(R.id.action_leaderMaterialListFragment_to_linkFragment, bundle)
+            if (isLeader) {
+                fragment.findNavController()
+                    .navigate(R.id.action_leaderMaterialListFragment_to_linkFragment, bundle)
+            } else {
+                fragment.findNavController()
+                    .navigate(R.id.action_traineeMaterialFragment_to_linkFragment, bundle)
+            }
         }
         holder.viewHolderBinding.linkViewMaterial.itemLinkSettingImageView.setOnClickListener {
             TraileadPopupMenu(it, fragment)
