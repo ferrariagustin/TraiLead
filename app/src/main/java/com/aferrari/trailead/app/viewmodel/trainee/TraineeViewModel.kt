@@ -17,8 +17,7 @@ class TraineeViewModel(
     val repository: UserRepository,
     val materialRepository: MaterialRepository,
     private val savedStateHandle: SavedStateHandle
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private lateinit var trainee: Trainee
 
@@ -32,6 +31,7 @@ class TraineeViewModel(
     val traineePosition = MutableLiveData<String>()
     val traineePassword = MutableLiveData<String>()
     val traineeAssignedLeader = MutableLiveData<String>()
+    val isRefreshingEnabled = MutableLiveData<Boolean>()
 
     val refresh = MutableLiveData<Boolean>()
 
@@ -95,6 +95,7 @@ class TraineeViewModel(
     fun getTraineeSelected() = trainee
 
     fun init() {
+        isRefreshingEnabled.value = true
         statusEditProfilePass.value = StatusUpdateInformation.NONE
     }
 

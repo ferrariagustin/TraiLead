@@ -37,7 +37,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         val result = CompletableFuture<StatusCode>()
         try {
             Uri.parse(pdf.url)?.let {
-                storageRef.child("${pdf.id}/${pdf.title}").putFile(it)
+                storageRef.child("${pdf.id}/").putFile(it)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             pdf.downloadUri = task.result.uploadSessionUri.toString()
@@ -81,7 +81,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
     override suspend fun getPdf(pdf: Pdf): File? {
         val storageRef = FirebaseStorage.getInstance().reference.child("pdfs")
         val httpReference =
-            storageRef.child("${pdf.id}/${pdf.title}")
+            storageRef.child("${pdf.id}/")
         val localFile = File.createTempFile("traileadPdf", "pdf")
         val result = CompletableFuture<StatusCode>()
         try {
@@ -159,7 +159,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
     private suspend fun deletePdfStorage(pdf: Pdf): StatusCode = withContext(Dispatchers.IO) {
         val storageRef = FirebaseStorage.getInstance().reference.child("pdfs")
-        val httpReference = storageRef.child("${pdf.id}/${pdf.title}")
+        val httpReference = storageRef.child("${pdf.id}/")
         val result = CompletableFuture<StatusCode>()
         try {
             httpReference.delete().addOnCompleteListener {

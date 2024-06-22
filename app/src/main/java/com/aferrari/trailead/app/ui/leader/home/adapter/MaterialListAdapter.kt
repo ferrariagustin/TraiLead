@@ -29,6 +29,7 @@ class MaterialListAdapter(
     private val dataSet: List<Material>,
     private val fragment: Fragment,
     private val viewModel: IMaterial,
+    private val isLeader: Boolean,
     private val isEditable: Boolean = false
 ) :
     RecyclerView.Adapter<MaterialListAdapter.MaterialListViewHolder>() {
@@ -147,8 +148,7 @@ class MaterialListAdapter(
                 val bundle = Bundle().apply {
                     putSerializable(PDF_KEY, pdf)
                 }
-                fragment.findNavController()
-                    .navigate(R.id.pdfFragment, bundle)
+                navigateToPdfView(bundle)
             }
             pdfBinding.itemPdfSettingImageView.setOnClickListener {
                 TraileadPopupMenu(it, fragment)
@@ -158,6 +158,16 @@ class MaterialListAdapter(
                     .show()
             }
             configureSettingEditable()
+        }
+    }
+
+    private fun navigateToPdfView(bundle: Bundle) {
+        if (isLeader) {
+            fragment.findNavController()
+                .navigate(R.id.action_leaderMaterialListFragment_to_pdfFragment, bundle)
+        } else {
+            fragment.findNavController()
+                .navigate(R.id.action_traineeMaterialFragment_to_pdfFragment, bundle)
         }
     }
 

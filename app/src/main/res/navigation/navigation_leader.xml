@@ -297,7 +297,7 @@
         android:id="@+id/pdfFragment"
         android:name="com.aferrari.trailead.app.ui.leader.home.PdfFragment"
         android:label="PdfFragment"
-        tools:layout="@layout/pdf_fragment">
+        tools:layout="@layout/pdf_leader_fragment">
         <action
             android:id="@+id/action_pdfFragment_to_leaderMaterialListFragment"
             app:destination="@id/leaderMaterialListFragment" />

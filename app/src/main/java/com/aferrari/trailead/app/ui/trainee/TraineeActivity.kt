@@ -11,7 +11,6 @@ import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.databinding.TraineeActivityBinding
-import com.aferrari.trailead.domain.datasource.LocalDataSource
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
@@ -28,7 +27,6 @@ class TraineeActivity : AppCompatActivity() {
 
     @Inject
     lateinit var remoteDataSource: RemoteDataSource
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +66,9 @@ class TraineeActivity : AppCompatActivity() {
             homeTraineeViewModel.refresh()
             binding.traineeSwipeToRefresh.setColorSchemeResources(R.color.primaryColor)
             binding.traineeSwipeToRefresh.isRefreshing = false
+        }
+        homeTraineeViewModel.isRefreshingEnabled.observe(this) {
+            binding.traineeSwipeToRefresh.isEnabled = it
         }
     }
 

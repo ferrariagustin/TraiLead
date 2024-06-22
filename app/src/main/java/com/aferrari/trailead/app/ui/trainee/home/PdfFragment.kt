@@ -1,4 +1,4 @@
-package com.aferrari.trailead.app.ui.leader.home
+package com.aferrari.trailead.app.ui.trainee.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,24 +9,24 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
-import com.aferrari.trailead.common.StringUtils.PDF_KEY
+import com.aferrari.trailead.app.viewmodel.trainee.home.HomeTraineeViewModel
+import com.aferrari.trailead.common.StringUtils
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.common.ui.TraiLeadSnackbar
-import com.aferrari.trailead.databinding.PdfLeaderFragmentBinding
+import com.aferrari.trailead.databinding.PdfTraineeFragmentBinding
 import com.aferrari.trailead.domain.models.Pdf
 
 class PdfFragment : Fragment() {
 
-    private lateinit var binding: PdfLeaderFragmentBinding
-    private val viewModel: LeaderViewModel by activityViewModels()
+    private lateinit var binding: PdfTraineeFragmentBinding
+    private val viewModel: HomeTraineeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.pdf_leader_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.pdf_trainee_fragment, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root
@@ -35,10 +35,10 @@ class PdfFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
-        arguments?.getSerializable(PDF_KEY).let {
+        viewModel.setStateRefreshingScreen(false)
+        arguments?.getSerializable(StringUtils.PDF_KEY).let {
             viewModel.restorePdf(it as? Pdf)
         }
-        viewModel.setStateRefreshingScreen(false)
         viewModel.statusUpdatePdf.observe(viewLifecycleOwner) {
             when (it) {
                 StatusUpdateInformation.LOADING -> {
