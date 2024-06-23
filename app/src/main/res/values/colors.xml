@@ -8,6 +8,8 @@
     <color name="colorSecondaryColor">#26c6da</color>
     <color name="secondaryLightColor">#b4ffff</color>
     <color name="secondaryDarkColor">#4bacb8</color>
+    <color name="primaryBgLightColor">#EFF5F7 </color>
+    <color name="primaryBgDarkColor">#444849 </color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#000000</color>
     <color name="black">#FF000000</color>
@@ -18,4 +20,5 @@
     <color name="warning">@android:color/holo_orange_light</color>
     <color name="gray">@android:color/darker_gray</color>
     <color name="translucent_black">#80000000</color>
-</resources>
+    <color name="backgroundColor">?attr/background</color>
+    </resources>

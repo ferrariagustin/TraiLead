@@ -16,7 +16,7 @@
             android:id="@+id/trainee_edit_profile_name_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primaryColor"
+            android:background="?attr/colorPrimary"
             android:elevation="@dimen/default_toolbar_elevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/primaryDarkColor</item>
         <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
         <item name="colorOnPrimary">@color/black</item>
+        <item name="background">@color/primaryBgDarkColor</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryDarkColor</item>
         <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>

@@ -8,7 +8,8 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/trainee_swipe_to_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/background">
 
 
             <androidx.fragment.app.FragmentContainerView

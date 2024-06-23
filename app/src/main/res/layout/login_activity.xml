@@ -9,17 +9,41 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="?attr/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_marginStart="-10dp"
-            android:layout_marginTop="-20dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/top_bg_trailead_login"
+        <View
+            android:id="@+id/top_circle_first"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/top_bg_rounded_circle_shape"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/top_circle_second"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="-20dp"
+            android:layout_marginTop="-25dp"
+            android:background="@drawable/top_bg_rounded_circule_shape_2"
+            app:layout_constraintStart_toEndOf="@id/top_circle_first"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/top_circle_third"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="-10dp"
+            android:background="@drawable/top_bg_rounded_circle_shape_3"
+            app:layout_constraintStart_toEndOf="@id/top_circle_second"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
@@ -34,16 +58,28 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/navigation_login" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:scaleType="fitStart"
-            android:layout_marginEnd="-30dp"
-            android:layout_marginBottom="-30dp"
-            android:rotation="180"
-            android:src="@drawable/top_bg_trailead_login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+        <View
+            android:id="@+id/top_circle_fourth"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="-10dp"
+            android:background="@drawable/top_bg_rounded_circle_shape_4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/top_circle_five"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="-20dp"
+            android:layout_marginBottom="-20dp"
+            android:background="@drawable/top_bg_rounded_circule_shape_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/top_circle_fourth" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

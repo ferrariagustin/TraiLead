@@ -21,5 +21,7 @@
     <dimen name="spinner_margin">112dp</dimen>
     <dimen name="card_view_presentation_size">200dp</dimen>
     <dimen name="progress_bar_elevation">5dp</dimen>
+    <dimen name="corner_radius_button">20dp</dimen>
+    <dimen name="card_corner_radius">25dp</dimen>
 
 </resources>
