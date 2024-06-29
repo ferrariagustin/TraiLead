@@ -15,6 +15,8 @@ import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.ui.leader.listTrainee.adapter.SettingsMaterialTraineeAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.app.viewmodel.leader.listTrainee.ListTraineeViewModel
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.ui.TraiLeadSnackbar
 import com.aferrari.trailead.common.ui.TraileadDialog
 import com.aferrari.trailead.databinding.LinkMaterialTraineeFragmentBinding
 import com.google.android.material.radiobutton.MaterialRadioButton
@@ -78,13 +80,31 @@ class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
                 colorRes = R.color.primaryColor
             )
         }
+        viewModel.linkMaterialTraineeState.observe(viewLifecycleOwner) {
+            when (it) {
+                StatusUpdateInformation.SUCCESS -> {
+                    TraiLeadSnackbar().success(requireContext(), binding.root)
+                    viewModel.notifyTrainee()
+                    findNavController().navigateUp()
+                }
+
+                StatusUpdateInformation.FAILED -> {
+                    TraiLeadSnackbar().error(requireContext(), binding.root)
+                }
+
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    TraiLeadSnackbar().errorConection(requireContext(), binding.root)
+                }
+
+                else -> Unit
+            }
+        }
         refresh()
     }
 
     private fun getPositiveAction(): DialogInterface.OnClickListener =
         DialogInterface.OnClickListener { _, _ ->
             viewModel.saveCategorySelected()
-            findNavController().navigateUp()
         }
 
     private fun disableAllRadioButton() {

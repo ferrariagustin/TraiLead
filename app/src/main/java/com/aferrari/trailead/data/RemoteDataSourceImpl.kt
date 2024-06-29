@@ -142,20 +142,20 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         }
 
     override suspend fun getPdfByCategory(leaderId: String, categoryId: Int): List<Pdf> =
-    withContext(Dispatchers.IO) {
-        val reference = FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
-        val dataSnapshot = reference?.get()?.await()
-        val links = mutableListOf<Pdf>()
-        if (dataSnapshot?.key == Pdf::class.simpleName.toString()) {
-            dataSnapshot.value?.let {
-                val hashMapValues = dataSnapshot.value as HashMap<String, Object>
-                links.addAll(hashMapValues.values.map {
-                    Gson().fromJson(Gson().toJson(it), Pdf::class.java)
-                }.filter { it.leaderMaterialId == leaderId && it.categoryId == categoryId })
+        withContext(Dispatchers.IO) {
+            val reference = FirebaseDataBase.database?.child(Pdf::class.simpleName.toString())
+            val dataSnapshot = reference?.get()?.await()
+            val links = mutableListOf<Pdf>()
+            if (dataSnapshot?.key == Pdf::class.simpleName.toString()) {
+                dataSnapshot.value?.let {
+                    val hashMapValues = dataSnapshot.value as HashMap<String, Object>
+                    links.addAll(hashMapValues.values.map {
+                        Gson().fromJson(Gson().toJson(it), Pdf::class.java)
+                    }.filter { it.leaderMaterialId == leaderId && it.categoryId == categoryId })
+                }
             }
+            links
         }
-        links
-    }
 
     private suspend fun deletePdfStorage(pdf: Pdf): StatusCode = withContext(Dispatchers.IO) {
         val storageRef = FirebaseStorage.getInstance().reference.child("pdfs")
@@ -374,23 +374,23 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                     return@withContext StatusCode.ERROR.value
                 }
             }
-            StatusCode.SUCCESS.value
+            return@withContext StatusCode.SUCCESS.value
         }
 
     override suspend fun insertCategoryFromTrainee(traineeCategoryJoin: TraineeCategoryJoin): Long =
         withContext(Dispatchers.IO) {
             val reference =
                 FirebaseDataBase.database?.child(TraineeCategoryJoin::class.simpleName.toString())
-            var resultCode: Long = StatusCode.ERROR.value
+            val result = CompletableFuture<StatusCode>()
             reference?.child(traineeCategoryJoin.id.toString())?.setValue(traineeCategoryJoin)
                 ?.addOnCompleteListener { task ->
-                    resultCode = if (task.isSuccessful) {
-                        StatusCode.SUCCESS.value
+                    if (task.isSuccessful) {
+                        result.complete(StatusCode.SUCCESS)
                     } else {
-                        StatusCode.ERROR.value
+                        result.complete(StatusCode.ERROR)
                     }
                 }?.await()
-            resultCode
+            return@withContext result.await().value
         }
 
     override suspend fun getCategoriesFromTrainee(traineeId: String): List<Category> =
