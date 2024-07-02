@@ -112,9 +112,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:21.0.0'
     implementation 'com.google.firebase:firebase-storage:21.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
 
     // Gson
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     // bcrypt
     implementation 'at.favre.lib:bcrypt:0.4.1'
@@ -124,7 +126,7 @@ dependencies {
     implementation 'com.sun.mail:android-mail:1.6.6'
     implementation 'com.sun.mail:android-activation:1.6.6'
 
-    implementation 'com.google.android.gms:play-services-auth:21.1.0'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 
     // pdf viewer

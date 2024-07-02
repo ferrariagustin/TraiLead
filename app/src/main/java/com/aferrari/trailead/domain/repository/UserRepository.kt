@@ -1,6 +1,5 @@
 package com.aferrari.trailead.domain.repository
 
-import android.util.Log
 import com.aferrari.trailead.app.configurer.NetworkManager
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.RegisterState
@@ -256,13 +255,19 @@ class UserRepository(
             remoteDataSource.signInWithToken(userId, token)
         }
 
-    suspend fun getTokenId() = flow {
-        emit(FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-            if (it.isSuccessful)
-                Log.e("TRAILEAD TOKEN", it.result?.token ?: "")
+    suspend fun getUserToken(): Flow<String> =
+        if (!NetworkManager.isOnline()) {
+            flowOf("")
+        } else {
+            remoteDataSource.getUserToken()
         }
-            ?.await()?.token ?: "")
-    }
+
+    suspend fun updateUserToken(): Flow<StatusCode> =
+        if (!NetworkManager.isOnline()) {
+            flowOf(StatusCode.INTERNET_CONECTION)
+        } else {
+            remoteDataSource.updateUserToken()
+        }
 
 
     private companion object {

@@ -1,6 +1,7 @@
 package com.aferrari.trailead.data
 
 import android.net.Uri
+import android.util.Log
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -10,10 +11,13 @@ import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.models.Link
 import com.aferrari.trailead.domain.models.Pdf
+import com.aferrari.trailead.domain.models.Token
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
@@ -24,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -1030,7 +1035,13 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 if (FirebaseAuth.getInstance().signInWithEmailAndPassword(userId, token)
                         .addOnCompleteListener {}.await().user != null
                 ) {
-                    emit(StatusCode.SUCCESS)
+                    updateUserToken().collect {
+                        if (it == StatusCode.SUCCESS) {
+                            emit(StatusCode.SUCCESS)
+                        } else {
+                            emit(StatusCode.ERROR)
+                        }
+                    }
                 } else
                     emit(StatusCode.ERROR)
 
@@ -1040,28 +1051,6 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
 
         }
 
-//    override suspend fun signInWithEmailAndPassword(email: String, pass: String): Flow<StatusCode> =
-//        withContext(Dispatchers.IO) {
-//            val signInResult = MutableStateFlow(StatusCode.INIT)
-//            try {
-//                var resultSignInWithEmailAndPassword = false
-//                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
-//                    .addOnCompleteListener {
-//                        if (it.isSuccessful) {
-//                            resultSignInWithEmailAndPassword = true
-//                        }
-//                    }.await()
-//                if (resultSignInWithEmailAndPassword) {
-//                    signInResult.emit(StatusCode.SUCCESS)
-//                } else {
-//                    signInResult.emit(StatusCode.ERROR)
-//                }
-//            } catch (exception: Exception) {
-//                signInResult.emit(StatusCode.ERROR)
-//            }
-//            return@withContext signInResult
-//        }
-
     override suspend fun signInWithEmailAndPassword(
         email: String,
         pass: String
@@ -1070,12 +1059,86 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
             try {
                 if (FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
                         .addOnCompleteListener {}.await().user != null
-                )
-                    emit(StatusCode.SUCCESS)
-                else
+                ) {
+                    updateUserToken().collect {
+                        if (it == StatusCode.SUCCESS) {
+                            emit(StatusCode.SUCCESS)
+                        } else {
+                            emit(StatusCode.ERROR)
+                        }
+                    }
+                } else
                     emit(StatusCode.ERROR)
             } catch (exception: Exception) {
                 emit(StatusCode.ERROR)
             }
         }
+
+    // TODO: review error handling
+    // TODO: Comentar el uso de este metodo para que funcione la app. Es para las notificaciones!
+    override suspend fun updateUserToken(): Flow<StatusCode> {
+        val result = CompletableFuture<StatusCode>()
+        try {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.e(
+                        "Trailead_FIREBASE",
+                        "ERROR Fetching FCM registration token failed",
+                        task.exception
+                    )
+                    result.complete(StatusCode.ERROR)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+                FirebaseDataBase.database?.child(Token::class.simpleName.toString())
+                    ?.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    ?.child(Token::token.name)
+                    ?.setValue(token)
+                    ?.addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            result.complete(StatusCode.SUCCESS)
+                            Log.e(
+                                "Trailead_FIREBASE",
+                                "Successfully updated user token"
+                            )
+                        } else {
+                            Log.e(
+                                "Trailead_FIREBASE",
+                                "ERROR updated user token"
+                            )
+                            result.complete(StatusCode.ERROR)
+                        }
+                    }
+            })
+        } catch (exception: Exception) {
+            Log.e(
+                "Trailead_FIREBASE",
+                "ERROR Fetching FCM registration token failed ${exception.message}"
+            )
+            result.complete(StatusCode.ERROR)
+        }
+        return flowOf(result.await())
+    }
+
+    override suspend fun getUserToken(): Flow<String> = flow {
+        val result = CompletableFuture<String>()
+        try {
+            FirebaseDataBase.database?.child(Token::class.simpleName.toString())
+                ?.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                ?.child(Token::token.name)
+                ?.get()
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        result.complete(it.result.value.toString())
+                    } else {
+                        result.complete("")
+                    }
+                }
+        } catch (exception: Exception) {
+            result.complete("")
+        }
+        emit(result.await())
+    }
 }
