@@ -1,7 +1,6 @@
 package com.aferrari.trailead.data
 
 import android.net.Uri
-import android.util.Log
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -1073,19 +1072,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 emit(StatusCode.ERROR)
             }
         }
-
-    // TODO: review error handling
-    // TODO: Comentar el uso de este metodo para que funcione la app. Es para las notificaciones!
+    
     override suspend fun updateUserToken(): Flow<StatusCode> {
         val result = CompletableFuture<StatusCode>()
         try {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Log.e(
-                        "Trailead_FIREBASE",
-                        "ERROR Fetching FCM registration token failed",
-                        task.exception
-                    )
                     result.complete(StatusCode.ERROR)
                     return@OnCompleteListener
                 }
@@ -1099,24 +1091,12 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                     ?.addOnCompleteListener {
                         if (it.isSuccessful) {
                             result.complete(StatusCode.SUCCESS)
-                            Log.e(
-                                "Trailead_FIREBASE",
-                                "Successfully updated user token"
-                            )
                         } else {
-                            Log.e(
-                                "Trailead_FIREBASE",
-                                "ERROR updated user token"
-                            )
                             result.complete(StatusCode.ERROR)
                         }
                     }
             })
         } catch (exception: Exception) {
-            Log.e(
-                "Trailead_FIREBASE",
-                "ERROR Fetching FCM registration token failed ${exception.message}"
-            )
             result.complete(StatusCode.ERROR)
         }
         return flowOf(result.await())
