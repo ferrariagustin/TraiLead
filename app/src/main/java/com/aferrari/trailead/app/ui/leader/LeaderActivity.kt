@@ -16,6 +16,7 @@ import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
+import com.aferrari.trailead.notification.NotificationManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,6 +32,7 @@ class LeaderActivity : AppCompatActivity() {
     private lateinit var leaderViewModel: LeaderViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NotificationManager.displayNotification(this, "Bienvenido", "Bienvenido a TraiLead")
         binding = DataBindingUtil.setContentView(this, R.layout.leader_activity)
         val factory = HomeViewModelFactory(
             UserRepository(remoteDataSource),
@@ -44,6 +46,7 @@ class LeaderActivity : AppCompatActivity() {
 
     private fun initComponent() {
         leaderViewModel.setLeader(intent.extras?.get(LEADER_KEY) as? Leader)
+        NotificationManager.createNotificationChannel(this, leaderViewModel.getLeaderId(), "trailead_leader_channel", "This channel is for leader notifications")
     }
 
     private fun initListener() {

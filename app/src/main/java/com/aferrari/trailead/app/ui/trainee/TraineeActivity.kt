@@ -15,6 +15,7 @@ import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
+import com.aferrari.trailead.notification.NotificationManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,6 +44,12 @@ class TraineeActivity : AppCompatActivity() {
 
     private fun initComponent() {
         homeTraineeViewModel.setTrainee(intent.extras?.get(StringUtils.TRAINEE_KEY) as? Trainee)
+        NotificationManager.createNotificationChannel(
+            this,
+            homeTraineeViewModel.getTraineeId(),
+            "trailead_trainee_channel",
+            "This channel is for trainee notifications"
+        )
     }
 
     private fun initListener() {

@@ -44,7 +44,9 @@ class LeaderHomeFragment : Fragment(), RefreshListener {
 
         binding.leaderHomeToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.close_session_toolbar_menu -> logout()
+                R.id.close_session_toolbar_menu -> {
+                    logout()
+                }
             }
             return@setOnMenuItemClickListener true
         }

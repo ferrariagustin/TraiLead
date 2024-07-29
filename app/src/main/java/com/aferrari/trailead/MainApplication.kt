@@ -3,6 +3,7 @@ package com.aferrari.trailead
 import android.app.Application
 import com.aferrari.trailead.app.configurer.FirebaseConfigurer
 import com.aferrari.trailead.app.configurer.NetworkManager
+import com.aferrari.trailead.notification.NotificationManager
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 
