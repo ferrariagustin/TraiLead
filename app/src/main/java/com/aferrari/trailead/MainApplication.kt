@@ -5,6 +5,8 @@ import com.aferrari.trailead.app.configurer.FirebaseConfigurer
 import com.aferrari.trailead.app.configurer.NetworkManager
 import com.aferrari.trailead.notification.NotificationManager
 import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

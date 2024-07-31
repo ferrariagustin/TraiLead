@@ -1,6 +1,8 @@
 package com.aferrari.trailead.app.ui.leader
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +48,16 @@ class LeaderActivity : AppCompatActivity() {
 
     private fun initComponent() {
         leaderViewModel.setLeader(intent.extras?.get(LEADER_KEY) as? Leader)
-        NotificationManager.createNotificationChannel(this, leaderViewModel.getLeaderId(), "trailead_leader_channel", "This channel is for leader notifications")
+        leaderViewModel.getToken()
+        leaderViewModel.token.observe(this) {
+            Log.e("Trailead_FIREBASE", it)
+        }
+        NotificationManager.createNotificationChannel(
+            this,
+            leaderViewModel.getLeaderId(),
+            "trailead_leader_channel",
+            "This channel is for leader notifications"
+        )
     }
 
     private fun initListener() {
