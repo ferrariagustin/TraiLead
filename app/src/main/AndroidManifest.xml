@@ -88,7 +88,7 @@
         </activity>
 
         <service
-            android:name=".notification.FCMService"
+            android:name=".notification.FcmService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

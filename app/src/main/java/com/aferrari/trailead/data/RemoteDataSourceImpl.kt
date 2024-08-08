@@ -1,6 +1,7 @@
 package com.aferrari.trailead.data
 
 import android.net.Uri
+import android.util.Log
 import com.aferrari.trailead.common.common_enum.Position
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.UserType
@@ -14,6 +15,9 @@ import com.aferrari.trailead.domain.models.Token
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
+import com.aferrari.trailead.notification.api.FcmAPI
+import com.aferrari.trailead.notification.model.FcmRequest
+import com.aferrari.trailead.notification.model.Notification
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
@@ -33,7 +37,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
-class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
+class RemoteDataSourceImpl @Inject constructor(private val fcmAPI: FcmAPI) : RemoteDataSource {
 
     // PDF
     override suspend fun insertPDF(pdf: Pdf) = flow {
@@ -1072,7 +1076,7 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
                 emit(StatusCode.ERROR)
             }
         }
-    
+
     override suspend fun updateUserToken(): Flow<StatusCode> {
         val result = CompletableFuture<StatusCode>()
         try {
@@ -1107,6 +1111,40 @@ class RemoteDataSourceImpl @Inject constructor() : RemoteDataSource {
         try {
             FirebaseDataBase.database?.child(Token::class.simpleName.toString())
                 ?.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                ?.child(Token::token.name)
+                ?.get()
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        result.complete(it.result.value.toString())
+                    } else {
+                        result.complete("")
+                    }
+                }
+        } catch (exception: Exception) {
+            result.complete("")
+        }
+        emit(result.await())
+    }
+
+    override suspend fun notify(token: String, title: String, message: String): Long {
+        return try {
+            val result = fcmAPI.sendMessage(FcmRequest(token, Notification(title, message)))
+            if (result.success != null) {
+                StatusCode.SUCCESS.value
+            } else {
+                StatusCode.ERROR.value
+            }
+        } catch (exception: Exception) {
+            Log.e("Error", exception.stackTraceToString())
+            StatusCode.ERROR.value
+        }
+    }
+
+    override suspend fun getTokenByUser(userId: String): Flow<String> = flow {
+        val result = CompletableFuture<String>()
+        try {
+            FirebaseDataBase.database?.child(Token::class.simpleName.toString())
+                ?.child(userId)
                 ?.child(Token::token.name)
                 ?.get()
                 ?.addOnCompleteListener {

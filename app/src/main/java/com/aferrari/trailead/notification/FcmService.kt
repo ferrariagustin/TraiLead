@@ -3,7 +3,7 @@ package com.aferrari.trailead.notification
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class FCMService : FirebaseMessagingService() {
+class FcmService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         NotificationManager.displayNotification(

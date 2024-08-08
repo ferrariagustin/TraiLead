@@ -10,7 +10,7 @@ import com.aferrari.trailead.common.IntegerUtils
 
 object NotificationManager {
 
-    val GENERIC_CHANNEL_ID = "com.aferrari.trailead.channel1"
+    private const val GENERIC_CHANNEL_ID = "com.aferrari.trailead.channel1"
     private var notificationManager: NotificationManager? = null
     private const val CHANNEL_NAME: String = "trailead_channel"
     private const val CHANNEL_DESCRIPTION: String = "This channel is for generic notifications"

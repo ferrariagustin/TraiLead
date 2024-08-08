@@ -143,4 +143,6 @@ interface RemoteDataSource {
     suspend fun getPdfByCategory(leaderId: String, categoryId: Int): List<Pdf>
     suspend fun updateUserToken(): Flow<StatusCode>
     suspend fun getUserToken(): Flow<String>
+    suspend fun notify(token: String, title: String, message: String): Long
+    suspend fun getTokenByUser(userId: String): Flow<String>
 }

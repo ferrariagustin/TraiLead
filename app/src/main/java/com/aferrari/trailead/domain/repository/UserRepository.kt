@@ -156,43 +156,56 @@ class UserRepository(
     }
 
     suspend fun updateTraineeName(idTrainee: String, name: String) {
-        val result = remoteDataSource.updateTraineeName(idTrainee, name)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.updateTraineeName(idTrainee, name)
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.updateTraineeName(idTrainee, name)
         }
     }
 
     suspend fun updateTraineeLastName(idTrainee: String, lastName: String) {
-        val result = remoteDataSource.updateTraineeLastName(idTrainee, lastName)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.updateTraineeLastName(idTrainee, lastName)
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.updateTraineeLastName(idTrainee, lastName)
         }
     }
 
     suspend fun deleteTrainee(trainee: Trainee) {
-        val result = remoteDataSource.deleteTrainee(trainee)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.deleteTrainee(trainee)
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.deleteTrainee(trainee)
         }
     }
 
     suspend fun setLinkedTrainee(trainee: Trainee, leader: Leader) {
-        val result = remoteDataSource.setLinkedTrainee(trainee.userId, leader.userId)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.setLinkedTrainee(trainee.userId, leader.userId)
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.setLinkedTrainee(trainee.userId, leader.userId)
         }
     }
 
-    suspend fun getUnlinkedTrainees(): List<Trainee> = remoteDataSource.getUnlinkedTrainees()
+    suspend fun getUnlinkedTrainees(): List<Trainee> =
+        if (!NetworkManager.isOnline()) {
+            emptyList()
+        } else {
+            remoteDataSource.getUnlinkedTrainees()
+        }
 
     suspend fun getLinkedTrainees(leader: Leader): List<Trainee> =
-        remoteDataSource.getLinkedTrainees(leader.userId)
-
+        if (!NetworkManager.isOnline()) {
+            emptyList()
+        } else {
+            remoteDataSource.getLinkedTrainees(leader.userId)
+        }
 
     suspend fun setUnlinkedTrainee(trainee: Trainee) {
-        val result = remoteDataSource.setUnlinkedTrainee(trainee.userId)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.setUnlinkedTrainee(trainee.userId)
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.setUnlinkedTrainee(trainee.userId)
         }
     }
 
@@ -201,16 +214,18 @@ class UserRepository(
     }
 
     suspend fun updateTraineePosition(trainee: Trainee, position: Position) {
-        val result = remoteDataSource.updateTraineePosition(trainee.userId, position)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.updateTraineePosition(trainee.userId, position)
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.updateTraineePosition(trainee.userId, position)
         }
     }
 
     suspend fun updateLeaderName(leaderId: String, name: String) {
-        val result = remoteDataSource.updateLeaderName(leaderId, name)
-        if (result == StatusCode.SUCCESS.value) {
-//            localDataSource.updateLeaderName(leaderId, name)
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.updateLeaderName(leaderId, name)
         }
     }
 
@@ -262,12 +277,27 @@ class UserRepository(
             remoteDataSource.getUserToken()
         }
 
+    suspend fun getTokenByUser(userId: String): Flow<String> =
+        if (!NetworkManager.isOnline()) {
+            flowOf("")
+        } else {
+            remoteDataSource.getTokenByUser(userId)
+        }
+
     suspend fun updateUserToken(): Flow<StatusCode> =
         if (!NetworkManager.isOnline()) {
             flowOf(StatusCode.INTERNET_CONECTION)
         } else {
             remoteDataSource.updateUserToken()
         }
+
+    suspend fun sendNotify(token: String, title: String, message: String) {
+        if (!NetworkManager.isOnline()) {
+            StatusCode.INTERNET_CONECTION
+        } else {
+            remoteDataSource.notify(token, title, message)
+        }
+    }
 
 
     private companion object {
