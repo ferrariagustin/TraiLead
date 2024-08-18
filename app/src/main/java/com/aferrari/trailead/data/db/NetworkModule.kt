@@ -11,19 +11,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Singleton
 object NetworkModule {
 
-    private const val SERVER_KEY = "AIzaSyBgUqLaPqAWigZZC5A51aiH4ndVhNKsFc4"
+    internal const val SERVER_KEY: String = "e91f6024fe71eebe5eb3155a6000ef1123c6c1c6"
+//    internal const val SERVER_KEY: String = "BJVXDXNdJWU5ssf36B9HpcXde-AcjCGVsfTc-I1UBv1lK5uqlhFkvYsjatr4pnNXd1wqSSdy60JVpSVvD-D7bDs "
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         // TODO: FIX issue from 401 Unauthorized
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .addInterceptor { chain ->
-                val request = chain.request()
-                val newRequest = request.newBuilder()
-                    .addHeader("Authorization", "key=$SERVER_KEY")
+            .addInterceptor {
+                val request = it.request().newBuilder()
+                    .addHeader("Content-Type", "application/json")
                     .build()
-                chain.proceed(newRequest)
+                it.proceed(request)
             }
             .build()
     }
@@ -31,7 +31,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://fcm.googleapis.com/v1/")
+            .baseUrl("https://fcm.googleapis.com")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

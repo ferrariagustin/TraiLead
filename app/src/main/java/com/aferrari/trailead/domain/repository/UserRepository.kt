@@ -291,11 +291,11 @@ class UserRepository(
             remoteDataSource.updateUserToken()
         }
 
-    suspend fun sendNotify(token: String, title: String, message: String) {
+    suspend fun sendNotify(fromToken: String, toToken: String, title: String, message: String) {
         if (!NetworkManager.isOnline()) {
             StatusCode.INTERNET_CONECTION
         } else {
-            remoteDataSource.notify(token, title, message)
+            remoteDataSource.notify(fromToken, toToken, title, message)
         }
     }
 

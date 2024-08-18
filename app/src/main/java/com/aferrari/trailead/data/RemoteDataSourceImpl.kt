@@ -17,6 +17,7 @@ import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.notification.api.FcmAPI
 import com.aferrari.trailead.notification.model.FcmRequest
+import com.aferrari.trailead.notification.model.FcmResponse
 import com.aferrari.trailead.notification.model.Notification
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +36,9 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class RemoteDataSourceImpl @Inject constructor(private val fcmAPI: FcmAPI) : RemoteDataSource {
@@ -1087,10 +1091,10 @@ class RemoteDataSourceImpl @Inject constructor(private val fcmAPI: FcmAPI) : Rem
                 }
 
                 // Get new FCM registration token
-                val token = task.result
+                val token =
+                    Token(FirebaseAuth.getInstance().currentUser?.uid.toString(), task.result)
                 FirebaseDataBase.database?.child(Token::class.simpleName.toString())
-                    ?.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
-                    ?.child(Token::token.name)
+                    ?.child(token.userId)
                     ?.setValue(token)
                     ?.addOnCompleteListener {
                         if (it.isSuccessful) {
@@ -1126,16 +1130,42 @@ class RemoteDataSourceImpl @Inject constructor(private val fcmAPI: FcmAPI) : Rem
         emit(result.await())
     }
 
-    override suspend fun notify(token: String, title: String, message: String): Long {
+    override suspend fun notify(
+        fromToken: String,
+        toToken: String,
+        title: String,
+        message: String
+    ): Long {
         return try {
-            val result = fcmAPI.sendMessage(FcmRequest(token, Notification(title, message)))
-            if (result.success != null) {
-                StatusCode.SUCCESS.value
-            } else {
-                StatusCode.ERROR.value
-            }
+            val result = CompletableFuture<Long>()
+            Log.e("TRAILEAD_NOTIF", "Sending FCM notification")
+            fcmAPI.sendMessage(
+                FcmRequest(toToken, Notification(title, message)),
+                "Bearer e91f6024fe71eebe5eb3155a6000ef1123c6c1c6"
+            )
+                .enqueue(object : Callback<FcmResponse?> {
+                    override fun onResponse(
+                        call: Call<FcmResponse?>,
+                        response: Response<FcmResponse?>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("TRAILEAD_NOTIF", "FCM notification sent")
+                            result.complete(StatusCode.SUCCESS.value)
+                        } else {
+                            Log.e("TRAILEAD_NOTIF", "Failed to send FCM notification")
+                            result.complete(StatusCode.ERROR.value)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<FcmResponse?>, t: Throwable) {
+                        Log.e("TRAILEAD_NOTIF", "Failed to send FCM notification")
+                        result.complete(StatusCode.ERROR.value)
+                    }
+                })
+            Log.e("TRAILEAD_NOTIF", "Finish FCM notification")
+            return result.await()
         } catch (exception: Exception) {
-            Log.e("Error", exception.stackTraceToString())
+            Log.e("TRAILEAD_NOTIF", exception.stackTraceToString())
             StatusCode.ERROR.value
         }
     }

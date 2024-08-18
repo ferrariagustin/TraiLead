@@ -122,12 +122,16 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
 
     fun notifyTrainee() {
         viewModelScope.launch(Dispatchers.IO) {
-            leaderViewModel.repository.getTokenByUser(traineeSelected.userId).collect {
-                leaderViewModel.repository.sendNotify(
-                    it,
-                    "TraiLead",
-                    "Se han actualizado los materiales para tu entrenamiento"
-                )
+            leaderViewModel.repository.getTokenByUser(traineeSelected.userId).collect { toToken ->
+                leaderViewModel.repository.getTokenByUser(leaderViewModel.getLeaderId())
+                    .collect { fromToken ->
+                        leaderViewModel.repository.sendNotify(
+                            fromToken,
+                            toToken,
+                            "TraiLead",
+                            "Se han actualizado los materiales para tu entrenamiento"
+                        )
+                    }
             }
 
             GMailSender("trailead.ar@gmail.com", "37640078").sendMail(
