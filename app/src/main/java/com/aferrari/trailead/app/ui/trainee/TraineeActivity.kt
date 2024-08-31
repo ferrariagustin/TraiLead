@@ -16,6 +16,7 @@ import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.aferrari.trailead.notification.NotificationManager
+import com.aferrari.trailead.notification.NotificationManager.requestNotificationPermission
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,6 +41,7 @@ class TraineeActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initComponent()
         initListener()
+        requestNotificationPermission(this)
     }
 
     private fun initComponent() {
@@ -49,6 +51,11 @@ class TraineeActivity : AppCompatActivity() {
             homeTraineeViewModel.getTraineeId(),
             "trailead_trainee_channel",
             "This channel is for trainee notifications"
+        )
+        NotificationManager.displayNotification(
+            this,
+            "Bienvenido",
+            "Bienvenido a TraiLead: ${homeTraineeViewModel.traineeName.value.toString()}"
         )
     }
 

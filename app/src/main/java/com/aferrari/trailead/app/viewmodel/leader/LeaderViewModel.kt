@@ -111,6 +111,7 @@ open class LeaderViewModel(
     }
 
     fun getLeaderId() = leader.userId
+    fun getLeaderName() = leader.name
 
     fun getUnLinkedTrainees() {
         viewModelScope.launch {

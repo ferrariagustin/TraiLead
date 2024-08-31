@@ -2,7 +2,6 @@ package com.aferrari.trailead.app.ui.leader
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +18,7 @@ import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.aferrari.trailead.notification.NotificationManager
+import com.aferrari.trailead.notification.NotificationManager.requestNotificationPermission
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -34,7 +34,6 @@ class LeaderActivity : AppCompatActivity() {
     private lateinit var leaderViewModel: LeaderViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        NotificationManager.displayNotification(this, "Bienvenido", "Bienvenido a TraiLead")
         binding = DataBindingUtil.setContentView(this, R.layout.leader_activity)
         val factory = HomeViewModelFactory(
             UserRepository(remoteDataSource),
@@ -44,6 +43,7 @@ class LeaderActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initComponent()
         initListener()
+        requestNotificationPermission(this)
     }
 
     private fun initComponent() {
@@ -57,6 +57,11 @@ class LeaderActivity : AppCompatActivity() {
             leaderViewModel.getLeaderId(),
             "trailead_leader_channel",
             "This channel is for leader notifications"
+        )
+        NotificationManager.displayNotification(
+            this, "Bienvenido", "Bienvenido a TraiLead: ${
+                leaderViewModel.getLeaderName()
+            }"
         )
     }
 

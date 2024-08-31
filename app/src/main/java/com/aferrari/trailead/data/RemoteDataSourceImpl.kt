@@ -16,9 +16,9 @@ import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.models.TraineeCategoryJoin
 import com.aferrari.trailead.domain.models.YouTubeVideo
 import com.aferrari.trailead.notification.api.FcmAPI
-import com.aferrari.trailead.notification.model.FcmRequest
 import com.aferrari.trailead.notification.model.FcmResponse
-import com.aferrari.trailead.notification.model.Notification
+import com.aferrari.trailead.notification.model.NotificationBody
+import com.aferrari.trailead.notification.model.SendMessageDto
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
@@ -1139,10 +1139,7 @@ class RemoteDataSourceImpl @Inject constructor(private val fcmAPI: FcmAPI) : Rem
         return try {
             val result = CompletableFuture<Long>()
             Log.e("TRAILEAD_NOTIF", "Sending FCM notification")
-            fcmAPI.sendMessage(
-                FcmRequest(toToken, Notification(title, message)),
-                "Bearer e91f6024fe71eebe5eb3155a6000ef1123c6c1c6"
-            )
+            fcmAPI.send(SendMessageDto(toToken, NotificationBody(title, message)))
                 .enqueue(object : Callback<FcmResponse?> {
                     override fun onResponse(
                         call: Call<FcmResponse?>,

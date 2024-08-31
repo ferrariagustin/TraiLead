@@ -31,7 +31,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://fcm.googleapis.com")
+            .baseUrl("http://0.0.0.0:8080")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
