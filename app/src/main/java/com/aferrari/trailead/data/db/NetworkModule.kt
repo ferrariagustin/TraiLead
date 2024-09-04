@@ -31,7 +31,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://0.0.0.0:8080")
+            .baseUrl("https://stirred-ideally-ant.ngrok-free.app")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
