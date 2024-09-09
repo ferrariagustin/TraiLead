@@ -86,6 +86,8 @@ open class LeaderViewModel(
 
     val statusUpdatePdf = MutableLiveData<StatusUpdateInformation>()
 
+    var token: MutableLiveData<String> = MutableLiveData()
+
     fun init() {
         refresh.value = false
         isRefreshingEnabled.value = true
@@ -109,6 +111,7 @@ open class LeaderViewModel(
     }
 
     fun getLeaderId() = leader.userId
+    fun getLeaderName() = leader.name
 
     fun getUnLinkedTrainees() {
         viewModelScope.launch {
@@ -574,6 +577,14 @@ open class LeaderViewModel(
 
     fun resetPdfStatus() {
         statusUpdatePdf.value = StatusUpdateInformation.NONE
+    }
+
+    fun getToken() {
+        viewModelScope.launch {
+            repository.getUserToken().collect {
+                token.value = it
+            }
+        }
     }
 
     private companion object {

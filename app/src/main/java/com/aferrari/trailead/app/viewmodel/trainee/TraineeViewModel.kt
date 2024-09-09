@@ -43,11 +43,11 @@ class TraineeViewModel(
             traineeLastName.value = trainee.lastName
             traineeEmail.value = trainee.email
             traineePosition.value = trainee.position.name
-//            traineePassword.value = trainee.pass
             traineeCompleteName.value = trainee.name
             getLeaderFromTrainee(trainee.leaderId)
         }
     }
+
 
     private fun getLeaderFromTrainee(leaderId: String?) {
         viewModelScope.launch {
@@ -91,6 +91,8 @@ class TraineeViewModel(
                 repository.updateUserPass(password).value.toStatusUpdateInformation()
         }
     }
+
+    fun getTraineeId() = trainee.userId
 
     fun getTraineeSelected() = trainee
 

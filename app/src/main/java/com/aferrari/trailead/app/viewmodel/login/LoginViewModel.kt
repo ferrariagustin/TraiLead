@@ -59,9 +59,9 @@ open class LoginViewModel(val repository: UserRepository) :
                 when (state.value.toStatusUpdateInformation()) {
                     StatusUpdateInformation.SUCCESS -> {
                         val uId = FirebaseAuth.getInstance().currentUser?.uid
-                        if (uId != null)
+                        if (uId != null) {
                             goLogin(uId)
-                        else
+                        } else
                             goLoginError()
                     }
 

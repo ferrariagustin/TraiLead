@@ -1,6 +1,7 @@
 package com.aferrari.trailead.app.ui.leader
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +17,8 @@ import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
+import com.aferrari.trailead.notification.NotificationManager
+import com.aferrari.trailead.notification.NotificationManager.requestNotificationPermission
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,10 +43,26 @@ class LeaderActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initComponent()
         initListener()
+        requestNotificationPermission(this)
     }
 
     private fun initComponent() {
         leaderViewModel.setLeader(intent.extras?.get(LEADER_KEY) as? Leader)
+        leaderViewModel.getToken()
+        leaderViewModel.token.observe(this) {
+            Log.e("Trailead_FIREBASE", it)
+        }
+        NotificationManager.createNotificationChannel(
+            this,
+            leaderViewModel.getLeaderId(),
+            "trailead_leader_channel",
+            "This channel is for leader notifications"
+        )
+        NotificationManager.displayNotification(
+            this, "Bienvenido", "Bienvenido a TraiLead: ${
+                leaderViewModel.getLeaderName()
+            }"
+        )
     }
 
     private fun initListener() {

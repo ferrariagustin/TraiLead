@@ -4,16 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
+import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
+import com.aferrari.trailead.common.email.GMailSender
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Material
 import com.aferrari.trailead.domain.models.Trainee
-import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewModel() {
 
+    val linkMaterialTraineeState = MutableLiveData<StatusUpdateInformation>()
     val statusUpdateRadioButtonSelectedAll = MutableLiveData<StatusUpdateInformation>()
 
     val setCategorySelected = MutableLiveData<MutableSet<Category>>()
@@ -23,6 +25,7 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
     lateinit var traineeSelected: Trainee
 
     init {
+        linkMaterialTraineeState.value = StatusUpdateInformation.NONE
         statusUpdateRadioButtonSelectedAll.value = StatusUpdateInformation.NONE
         leaderViewModel.getAllMaterials()
         leaderViewModel.getAllCategoryForLeader()
@@ -81,13 +84,12 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
      */
     fun saveCategorySelected() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                setCategorySelected.value?.let {
+            setCategorySelected.value?.let {
+                linkMaterialTraineeState.value =
                     leaderViewModel.materialRepository.setLinkedCategory(
                         traineeSelected.userId,
                         it
-                    )
-                }
+                    ).toStatusUpdateInformation()
             }
         }
     }
@@ -116,5 +118,28 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
 
     private fun updateSizeCategorySelected() {
         allCategorySelectedSize.value = setCategorySelected.value?.size
+    }
+
+    fun notifyTrainee() {
+        viewModelScope.launch(Dispatchers.IO) {
+            leaderViewModel.repository.getTokenByUser(traineeSelected.userId).collect { toToken ->
+                leaderViewModel.repository.getTokenByUser(leaderViewModel.getLeaderId())
+                    .collect { fromToken ->
+                        leaderViewModel.repository.sendNotify(
+                            fromToken,
+                            toToken,
+                            "TraiLead",
+                            "Se han actualizado los materiales para tu entrenamiento"
+                        )
+                    }
+            }
+
+            GMailSender("trailead.ar@gmail.com", "37640078").sendMail(
+                "trailead.ar@gmail.com",
+                "TraiLead",
+                "Se han actualizado los materiales para tu entrenamiento",
+                traineeSelected.email
+            )
+        }
     }
 }

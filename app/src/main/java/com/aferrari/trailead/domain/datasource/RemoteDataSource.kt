@@ -141,4 +141,8 @@ interface RemoteDataSource {
     suspend fun deletePdf(pdf: Pdf): Long
     suspend fun updatePdf(pdfId: Int, newPdfTitle: String): Long
     suspend fun getPdfByCategory(leaderId: String, categoryId: Int): List<Pdf>
+    suspend fun updateUserToken(): Flow<StatusCode>
+    suspend fun getUserToken(): Flow<String>
+    suspend fun notify(fromToken: String, toToken: String, title: String, message: String): Long
+    suspend fun getTokenByUser(userId: String): Flow<String>
 }
