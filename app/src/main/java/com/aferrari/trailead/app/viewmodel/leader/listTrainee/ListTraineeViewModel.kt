@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
-import com.aferrari.trailead.common.email.GMailSender
+import com.aferrari.trailead.common.email.MailAPI
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Material
 import com.aferrari.trailead.domain.models.Trainee
@@ -122,6 +122,11 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
 
     fun notifyTrainee() {
         viewModelScope.launch(Dispatchers.IO) {
+            MailAPI(
+                traineeSelected.email,
+                "TraiLead",
+                "Se han actualizado los materiales para tu entrenamiento",
+            ).sendMessage()
             leaderViewModel.repository.getTokenByUser(traineeSelected.userId).collect { toToken ->
                 leaderViewModel.repository.getTokenByUser(leaderViewModel.getLeaderId())
                     .collect { fromToken ->
@@ -133,13 +138,6 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
                         )
                     }
             }
-
-            GMailSender("trailead.ar@gmail.com", "37640078").sendMail(
-                "trailead.ar@gmail.com",
-                "TraiLead",
-                "Se han actualizado los materiales para tu entrenamiento",
-                traineeSelected.email
-            )
         }
     }
 }
