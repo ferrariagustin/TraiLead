@@ -2,6 +2,7 @@ package com.aferrari.trailead.data.db
 
 import com.aferrari.trailead.notification.api.FcmAPI
 import com.google.android.datatransport.runtime.dagger.Provides
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,6 +19,9 @@ object NetworkModule {
     fun provideOkHttpClient(): OkHttpClient {
         // TODO: FIX issue from 401 Unauthorized
         return OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .addInterceptor {
                 val request = it.request().newBuilder()
