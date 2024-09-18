@@ -1,6 +1,7 @@
 package com.aferrari.trailead.common
 
 import com.aferrari.trailead.common.common_enum.UserType
+import java.time.LocalDateTime
 
 object StringUtils {
 
@@ -31,6 +32,38 @@ object StringUtils {
     fun isValidEmail(email: String?): Boolean {
         return !email.isNullOrEmpty()
                 && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun getLocalDataTimeNow(): String {
+        val now = LocalDateTime.now()
+        return "${now.hour}:${now.minute}:${now.second}"
+    }
+
+    fun getLastConnection(lastConnection: String): String {
+        // Dividimos las cadenas en horas, minutos y segundos
+        val partesUltimaConexion = lastConnection.split(":").map { it.toInt() }
+        val partesHoraActual = getLocalDataTimeNow().split(":").map { it.toInt() }
+
+        // Calculamos la diferencia en segundos
+        val diferenciaSegundos =
+            (partesHoraActual[0] * 3600 + partesHoraActual[1] * 60 + partesHoraActual[2]) -
+                    (partesUltimaConexion[0] * 3600 + partesUltimaConexion[1] * 60 + partesUltimaConexion[2])
+
+        // Convertimos la diferencia a horas, minutos y segundos
+        val horas = diferenciaSegundos / 3600
+        val minutos = (diferenciaSegundos % 3600) / 60
+        val segundos = diferenciaSegundos % 60
+
+        // Construimos el mensaje
+        return "Última conexión hace ${getHoursToString(horas)} ${getMinutesToString(minutos)} $segundos segundos."
+    }
+
+    private fun getHoursToString(hours: Int): String {
+        return if (hours > 0) "$hours horas," else ""
+    }
+
+    private fun getMinutesToString(minutes: Int): String {
+        return if (minutes > 0) "$minutes minutos y" else ""
     }
 
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -11,10 +12,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.component.TraileadPopupMenu
-import com.aferrari.trailead.databinding.ItemTraineeLinkedListBinding
-import com.aferrari.trailead.common.ui.TraileadDialog
-import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.common.StringUtils.getLastConnection
+import com.aferrari.trailead.common.ui.TraileadDialog
+import com.aferrari.trailead.databinding.ItemTraineeLinkedListBinding
+import com.aferrari.trailead.domain.models.Trainee
 
 /**
  * Trainee List that all element is linked with a leader
@@ -43,6 +45,15 @@ class LinkedTraineeListAdapter(
         holder.viewHolderBinding.nameLabelId.text = trainee.name + " " + trainee.lastName
         holder.viewHolderBinding.emailLabelId.text = trainee.email
         holder.viewHolderBinding.positionLabelId.text = trainee.position.name
+        if (trainee.lastConnection != null && trainee.lastConnection.isNotEmpty()) {
+            holder.viewHolderBinding.lastConnectionLabelId.text =
+                getLastConnection(trainee.lastConnection)
+            holder.viewHolderBinding.lastConnectionLabelId.visibility = View.VISIBLE
+            holder.viewHolderBinding.lastConnectionIconId.visibility = View.VISIBLE
+        } else {
+            holder.viewHolderBinding.lastConnectionLabelId.visibility = View.GONE
+            holder.viewHolderBinding.lastConnectionIconId.visibility = View.GONE
+        }
 
         holder.viewHolderBinding.configTraineeIconId.setOnClickListener {
             viewModel.traineeSelected = trainee

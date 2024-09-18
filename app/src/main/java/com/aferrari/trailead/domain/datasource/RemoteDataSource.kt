@@ -145,4 +145,5 @@ interface RemoteDataSource {
     suspend fun getUserToken(): Flow<String>
     suspend fun notify(fromToken: String, toToken: String, title: String, message: String): Long
     suspend fun getTokenByUser(userId: String): Flow<String>
+    suspend fun updateLastConnection(traineeId: String, lastConnection: String): Long
 }

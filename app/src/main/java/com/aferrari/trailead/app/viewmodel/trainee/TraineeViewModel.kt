@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aferrari.trailead.common.StringUtils.getLocalDataTimeNow
+import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
 import com.aferrari.trailead.domain.models.Leader
@@ -45,6 +47,18 @@ class TraineeViewModel(
             traineePosition.value = trainee.position.name
             traineeCompleteName.value = trainee.name
             getLeaderFromTrainee(trainee.leaderId)
+            saveLastTime()
+        }
+    }
+
+    private fun saveLastTime() {
+        viewModelScope.launch {
+            val lastConnection = getLocalDataTimeNow()
+            repository.updateLastConnection(trainee.userId, lastConnection).collect {
+                if (it == StatusCode.SUCCESS) {
+                    trainee.lastConnection = lastConnection
+                }
+            }
         }
     }
 
