@@ -12,13 +12,14 @@ import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY
 import com.aferrari.trailead.common.StringUtils.TAB_ID
+import com.aferrari.trailead.common.permission.Permission.requestNotificationPermission
 import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Leader
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.aferrari.trailead.notification.NotificationManager
-import com.aferrari.trailead.notification.NotificationManager.requestNotificationPermission
+import com.aferrari.trailead.notification.NotificationManager.WELCOME_CHANNEL_ID
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -53,16 +54,16 @@ class LeaderActivity : AppCompatActivity() {
             Log.e("Trailead_FIREBASE", it)
         }
         NotificationManager.createNotificationChannel(
-            this,
-            leaderViewModel.getLeaderId(),
+            this, WELCOME_CHANNEL_ID,
             "trailead_leader_channel",
             "This channel is for leader notifications"
         )
-        NotificationManager.displayNotification(
+        NotificationManager.displayWelcomeNotification(
             this, "Bienvenido", "Bienvenido a TraiLead: ${
                 leaderViewModel.getLeaderName()
             }"
         )
+
     }
 
     private fun initListener() {

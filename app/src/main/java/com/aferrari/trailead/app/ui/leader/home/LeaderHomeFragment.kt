@@ -16,7 +16,7 @@ import com.aferrari.trailead.app.ui.RefreshListener
 import com.aferrari.trailead.app.ui.leader.home.adapter.MaterialCategoryListAdapter
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.StringUtils
-import com.aferrari.trailead.common.session.SessionManagement
+import com.aferrari.trailead.common.session.SharedPreferencesManagement
 import com.aferrari.trailead.databinding.LeaderHomeFragmentBinding
 
 
@@ -65,7 +65,7 @@ class LeaderHomeFragment : Fragment(), RefreshListener {
     }
 
     private fun logout() {
-        SessionManagement(requireContext()).removeSession()
+        SharedPreferencesManagement(requireContext()).removeSession()
         goLogin()
     }
 

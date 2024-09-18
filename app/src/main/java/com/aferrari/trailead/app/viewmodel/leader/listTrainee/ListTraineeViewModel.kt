@@ -124,8 +124,8 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
         viewModelScope.launch(Dispatchers.IO) {
             MailAPI(
                 traineeSelected.email,
-                "TraiLead",
-                "Se han actualizado los materiales para tu entrenamiento",
+                TITLE_MESSAGE,
+                MESSAGE,
             ).sendMessage()
             leaderViewModel.repository.getTokenByUser(traineeSelected.userId).collect { toToken ->
                 leaderViewModel.repository.getTokenByUser(leaderViewModel.getLeaderId())
@@ -133,11 +133,16 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
                         leaderViewModel.repository.sendNotify(
                             fromToken,
                             toToken,
-                            "TraiLead",
-                            "Se han actualizado los materiales para tu entrenamiento"
+                            TITLE_MESSAGE,
+                            MESSAGE
                         )
                     }
             }
         }
+    }
+
+    private companion object {
+        const val MESSAGE = "Se ha actualizado tu contenido. ¡Es hora de entrenar!"
+        const val TITLE_MESSAGE = "TraiLead"
     }
 }

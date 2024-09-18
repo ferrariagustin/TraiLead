@@ -10,13 +10,14 @@ import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils
+import com.aferrari.trailead.common.permission.Permission.requestNotificationPermission
 import com.aferrari.trailead.databinding.TraineeActivityBinding
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import com.aferrari.trailead.domain.models.Trainee
 import com.aferrari.trailead.domain.repository.MaterialRepository
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.aferrari.trailead.notification.NotificationManager
-import com.aferrari.trailead.notification.NotificationManager.requestNotificationPermission
+import com.aferrari.trailead.notification.NotificationManager.WELCOME_CHANNEL_ID
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -48,11 +49,11 @@ class TraineeActivity : AppCompatActivity() {
         homeTraineeViewModel.setTrainee(intent.extras?.get(StringUtils.TRAINEE_KEY) as? Trainee)
         NotificationManager.createNotificationChannel(
             this,
-            homeTraineeViewModel.getTraineeId(),
+            WELCOME_CHANNEL_ID,
             "trailead_trainee_channel",
             "This channel is for trainee notifications"
         )
-        NotificationManager.displayNotification(
+        NotificationManager.displayWelcomeNotification(
             this,
             "Bienvenido",
             "Bienvenido a TraiLead: ${homeTraineeViewModel.traineeName.value.toString()}"

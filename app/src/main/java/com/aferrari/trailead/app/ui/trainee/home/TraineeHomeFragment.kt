@@ -18,7 +18,7 @@ import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModelFactory
 import com.aferrari.trailead.app.viewmodel.trainee.home.HomeTraineeViewModel
 import com.aferrari.trailead.common.StringUtils
-import com.aferrari.trailead.common.session.SessionManagement
+import com.aferrari.trailead.common.session.SharedPreferencesManagement
 import com.aferrari.trailead.databinding.TraineeHomeFragmentBinding
 
 class TraineeHomeFragment : Fragment(), RefreshListener {
@@ -78,7 +78,7 @@ class TraineeHomeFragment : Fragment(), RefreshListener {
     }
 
     private fun logout() {
-        SessionManagement(requireContext()).removeSession()
+        SharedPreferencesManagement(requireContext()).removeSession()
         goLogin()
     }
 
