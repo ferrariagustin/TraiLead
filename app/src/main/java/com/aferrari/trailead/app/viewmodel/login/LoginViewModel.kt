@@ -12,7 +12,7 @@ import com.aferrari.trailead.common.common_enum.LoginState
 import com.aferrari.trailead.common.common_enum.StatusCode
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
-import com.aferrari.trailead.common.session.SessionManagement
+import com.aferrari.trailead.common.session.SharedPreferencesManagement
 import com.aferrari.trailead.domain.models.User
 import com.aferrari.trailead.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -245,7 +245,7 @@ open class LoginViewModel(val repository: UserRepository) :
      * Save session in shared preferences
      */
     private fun saveSession(context: Context, email: String, hashPassword: String) {
-        SessionManagement(context).saveSession(email, hashPassword)
+        SharedPreferencesManagement(context).saveSession(email, hashPassword)
     }
 
     /**
@@ -254,7 +254,7 @@ open class LoginViewModel(val repository: UserRepository) :
      */
     fun validateSession(context: Context) {
         loginState.value = LoginState.IN_PROGRESS
-        val pairSession = SessionManagement(context).getSession()
+        val pairSession = SharedPreferencesManagement(context).getSession()
         if (pairSession != null && pairSession.first.isNotEmpty() && pairSession.second.isNotEmpty()) {
             login(pairSession.first, pairSession.second)
         } else {

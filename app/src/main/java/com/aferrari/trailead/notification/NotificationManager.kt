@@ -1,24 +1,23 @@
 package com.aferrari.trailead.notification
 
-import android.Manifest
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.aferrari.trailead.R
 import com.aferrari.trailead.common.IntegerUtils
+import com.aferrari.trailead.common.permission.Permission
+import com.aferrari.trailead.common.session.SharedPreferencesManagement
 
 object NotificationManager {
 
-    private const val GENERIC_CHANNEL_ID = "com.aferrari.trailead.channel1"
+    const val WELCOME_CHANNEL_ID = "com.aferrari.trailead.channel.welcome"
     private var notificationManager: NotificationManager? = null
+    private const val GENERIC_CHANNEL_ID = "com.aferrari.trailead.channel1"
     private const val CHANNEL_NAME: String = "trailead_channel"
     private const val CHANNEL_DESCRIPTION: String = "This channel is for generic notifications"
+    private const val NOTIF_DATA: String = "notif_data"
 
     fun displayNotification(
         context: Context,
@@ -70,23 +69,12 @@ object NotificationManager {
         textTitle: String,
         textContent: String
     ) {
-
-        displayNotification(context, textTitle, textContent)
-    }
-
-    fun requestNotificationPermission(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val hasPermission = ContextCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-            if (!hasPermission) {
-                ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    0
-                )
-            }
+        if (Permission.isNotificationPermissionEnabled(context) && SharedPreferencesManagement(
+                context
+            ).isNotificationEnabled()
+        ) {
+            displayNotification(context, textTitle, textContent, WELCOME_CHANNEL_ID)
+            SharedPreferencesManagement(context).disableNotification()
         }
     }
 }
