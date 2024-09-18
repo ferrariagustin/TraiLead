@@ -29,6 +29,7 @@
     <string name="place_holder_name">John Doe</string>
     <string name="email">Email</string>
     <string name="position">Rol</string>
+    <string name="last_time">Ultima vez</string>
     <string name="assigned_leader">Líder asignado</string>
     <string name="edit_trainee_profile_name">Editar nombre</string>
     <string name="edit_trainee_rol">Editar Rol</string>

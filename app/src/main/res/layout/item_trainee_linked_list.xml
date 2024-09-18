@@ -85,7 +85,6 @@
                     android:text="@string/position"
                     android:theme="@style/traiLead_text"
                     android:tint="@color/primaryColor"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/email_label_icon_id" />
 
@@ -109,6 +108,31 @@
                     android:theme="@style/traiLead_text"
                     app:layout_constraintStart_toEndOf="@id/position_label_icon_id"
                     app:layout_constraintTop_toTopOf="@id/position_label_icon_id" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/last_connection_icon_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:src="@drawable/ic_last_time"
+                    android:text="@string/last_time"
+                    android:theme="@style/traiLead_text"
+                    android:tint="@color/red"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/position_label_icon_id" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/last_connection_label_id"
+                    style="@style/traiLead_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_medium"
+                    android:theme="@style/traiLead_text"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@id/last_connection_icon_id"
+                    app:layout_constraintTop_toTopOf="@id/last_connection_icon_id" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

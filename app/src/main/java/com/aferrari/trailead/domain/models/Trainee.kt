@@ -21,5 +21,6 @@ data class Trainee(
     @ColumnInfo(name = "trainee_email") override val email: String,
     @ColumnInfo(name = "trainee_leader_id") val leaderId: String? = null,
     val position: Position = Position.JUNIOR,
+    var lastConnection: String = "",
     override val userType: UserType = UserType.TRAINEE
 ) : User

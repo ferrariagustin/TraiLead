@@ -1186,4 +1186,25 @@ class RemoteDataSourceImpl @Inject constructor(private val fcmAPI: FcmAPI) : Rem
         }
         emit(result.await())
     }
+
+
+    override suspend fun updateLastConnection(
+        traineeId: String,
+        lastConnection: String
+    ): Long =
+        withContext(Dispatchers.IO) {
+            val result = CompletableFuture<Long>()
+            val reference =
+                FirebaseDataBase.database?.child(Trainee::class.simpleName.toString())
+            reference?.child(traineeId)?.child(Trainee::lastConnection.name)
+                ?.setValue(lastConnection)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        result.complete(StatusCode.SUCCESS.value)
+                    } else {
+                        result.complete(StatusCode.ERROR.value)
+                    }
+                }?.await()
+            return@withContext result.await()
+        }
 }

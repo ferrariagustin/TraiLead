@@ -299,6 +299,13 @@ class UserRepository(
         }
     }
 
+    suspend fun updateLastConnection(userId: String, lastConnection: String) = flow {
+        if (!NetworkManager.isOnline()) {
+            emit(StatusCode.INTERNET_CONECTION)
+        } else {
+            emit(remoteDataSource.updateLastConnection(userId, lastConnection))
+        }
+    }
 
     private companion object {
         private const val FIREBASE_CREATE_USER_DUPLICATE_ERROR_MESSAGE =
