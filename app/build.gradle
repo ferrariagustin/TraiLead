@@ -12,7 +12,6 @@ android {
     defaultConfig {
         applicationId "com.aferrari.trailead"
         minSdk 26
-        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -26,11 +25,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
         freeCompilerArgs += "-Xjvm-default=all"
     }
 
@@ -57,6 +56,7 @@ android {
             exclude 'META-INF/LICENSE.md'
         }
     }
+    namespace 'com.aferrari.trailead'
 }
 
 dependencies {
@@ -131,7 +131,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 
     // pdf viewer
-    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.1'
+    //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
 
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

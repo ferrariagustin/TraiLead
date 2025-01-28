@@ -109,18 +109,19 @@
                     app:layout_constraintStart_toEndOf="@id/position_label_icon_id"
                     app:layout_constraintTop_toTopOf="@id/position_label_icon_id" />
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <View
                     android:id="@+id/last_connection_icon_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:src="@drawable/ic_last_time"
+                    android:layout_width="@dimen/last_connection_width"
+                    android:layout_height="@dimen/last_connection_height"
+                    android:layout_marginVertical="@dimen/margin_medium"
+                    android:background="@drawable/last_connection"
                     android:text="@string/last_time"
                     android:theme="@style/traiLead_text"
                     android:tint="@color/red"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/position_label_icon_id"
+                    app:layout_constraintStart_toStartOf="@id/position_label_icon_id"
                     app:layout_constraintTop_toBottomOf="@id/position_label_icon_id" />
 
                 <com.google.android.material.textview.MaterialTextView

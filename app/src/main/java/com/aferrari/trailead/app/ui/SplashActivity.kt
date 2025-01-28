@@ -4,15 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.aferrari.trailead.R
 import com.aferrari.trailead.app.viewmodel.login.LoginViewModelFactory
 import com.aferrari.trailead.app.viewmodel.login.SplashViewModel
+import com.aferrari.trailead.common.StringUtils.DEEPLINK_LOGIN
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Thread.sleep
 import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
@@ -31,14 +36,24 @@ class SplashActivity : AppCompatActivity() {
         )
         super.onCreate(savedInstanceState)
         setContentView(R.layout.motion_layout)
+        initViewModel()
 
-        Handler().postDelayed({
-            val factory = LoginViewModelFactory(remoteDataSource)
-            splashViewModel = ViewModelProvider(this, factory)[SplashViewModel::class.java]
-            val loginActivity = Intent(Intent.ACTION_VIEW, Uri.parse("trailead://login"))
-            this.startActivity(loginActivity)
-            finish()
-        }, 2000)
+        lifecycleScope.launch {
+            sleep(3000)
+            withContext(Dispatchers.Main) {
+                goLogin()
+            }
+        }
+    }
+
+    private fun initViewModel() {
+        val factory = LoginViewModelFactory(remoteDataSource)
+        splashViewModel = ViewModelProvider(this, factory)[SplashViewModel::class.java]
+    }
+
+    private fun goLogin() {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(DEEPLINK_LOGIN)))
+        finish()
     }
 
 }

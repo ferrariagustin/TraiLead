@@ -2,6 +2,8 @@ package com.aferrari.trailead.common
 
 import com.aferrari.trailead.common.common_enum.UserType
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 object StringUtils {
 
@@ -34,36 +36,39 @@ object StringUtils {
                 && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    fun getLocalDataTimeNow(): String {
+    fun getLocalDataTimeNow(format: String = "yyyy-MM-dd['T'HH:mm]"): String {
         val now = LocalDateTime.now()
-        return "${now.hour}:${now.minute}:${now.second}"
+        val formatter = DateTimeFormatter.ofPattern(format)
+        return now.format(formatter)
     }
 
-    fun getLastConnection(lastConnection: String): String {
-        // Dividimos las cadenas en horas, minutos y segundos
-        val partesUltimaConexion = lastConnection.split(":").map { it.toInt() }
-        val partesHoraActual = getLocalDataTimeNow().split(":").map { it.toInt() }
+    fun getLastConnection(lastConnectionString: String): String {
+        // Definir el formato de entrada (ajustar según sea necesario)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd['T'HH:mm]")
 
-        // Calculamos la diferencia en segundos
-        val diferenciaSegundos =
-            (partesHoraActual[0] * 3600 + partesHoraActual[1] * 60 + partesHoraActual[2]) -
-                    (partesUltimaConexion[0] * 3600 + partesUltimaConexion[1] * 60 + partesUltimaConexion[2])
+        // Convertir la cadena de entrada a un objeto LocalDateTime
+        val lastConnection = LocalDateTime.parse(lastConnectionString, formatter)
 
-        // Convertimos la diferencia a horas, minutos y segundos
-        val horas = diferenciaSegundos / 3600
-        val minutos = (diferenciaSegundos % 3600) / 60
-        val segundos = diferenciaSegundos % 60
+        // Obtener la hora actual en UTC (ajustar la zona horaria si es necesario)
+        val currentDateTime = LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"))
 
-        // Construimos el mensaje
-        return "Última conexión hace ${getHoursToString(horas)} ${getMinutesToString(minutos)} $segundos segundos."
+        // Calcular la diferencia en segundos
+        val duration = java.time.Duration.between(lastConnection, currentDateTime)
+        val totalSeconds = duration.seconds
+
+        // Convertir a días, horas y minutos (ajustar la lógica según tus necesidades)
+        val days = totalSeconds / 86400
+        val hours = (totalSeconds % 86400) / 3600
+        val minutes = (totalSeconds % 3600) / 60
+        val seconds = (totalSeconds % 60)
+
+        // Construir el mensaje (personalizar según tus requisitos)
+        return if (days > 0) {
+            "Última conexión hace $days días, $hours horas y $minutes minutos."
+        } else if (hours > 0) {
+            "Última conexión hace $hours horas y $minutes minutos."
+        } else {
+            "Última conexión hace $minutes minutos y $seconds segundos."
+        }
     }
-
-    private fun getHoursToString(hours: Int): String {
-        return if (hours > 0) "$hours horas," else ""
-    }
-
-    private fun getMinutesToString(minutes: Int): String {
-        return if (minutes > 0) "$minutes minutos y" else ""
-    }
-
 }

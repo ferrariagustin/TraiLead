@@ -23,5 +23,7 @@
     <dimen name="progress_bar_elevation">5dp</dimen>
     <dimen name="corner_radius_button">20dp</dimen>
     <dimen name="card_corner_radius">25dp</dimen>
+    <dimen name="last_connection_width">8dp</dimen>
+    <dimen name="last_connection_height">8dp</dimen>
 
 </resources>
