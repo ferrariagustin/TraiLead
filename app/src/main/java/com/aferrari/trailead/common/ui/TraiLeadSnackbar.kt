@@ -75,7 +75,15 @@ class TraiLeadSnackbar {
         init(context, view, context.getString(R.string.success), ErrorView.SUCCESS)
     }
 
+    fun successWithMessage(context: Context, view: View, message: String) {
+        init(context, view, message, ErrorView.SUCCESS)
+    }
+
     fun error(context: Context, view: View) {
         init(context, view, context.getString(R.string.unexpected_error), ErrorView.ERROR)
+    }
+
+    fun errorWithMessage(context: Context, view: View, message: String) {
+        init(context, view, message, ErrorView.ERROR)
     }
 }

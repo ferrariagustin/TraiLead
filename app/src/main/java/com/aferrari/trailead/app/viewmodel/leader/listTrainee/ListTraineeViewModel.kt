@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.common_enum.StatusUpdateInformation
 import com.aferrari.trailead.common.common_enum.toStatusUpdateInformation
-import com.aferrari.trailead.common.email.MailAPI
+import com.aferrari.trailead.common.email.MailService
 import com.aferrari.trailead.domain.models.Category
 import com.aferrari.trailead.domain.models.Material
 import com.aferrari.trailead.domain.models.Trainee
@@ -21,6 +21,9 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
     val setCategorySelected = MutableLiveData<MutableSet<Category>>()
 
     val allCategorySelectedSize = MutableLiveData<Int>()
+
+    val notifyMailResponse: MutableLiveData<StatusUpdateInformation> =
+        MutableLiveData<StatusUpdateInformation>(StatusUpdateInformation.NONE)
 
     lateinit var traineeSelected: Trainee
 
@@ -122,27 +125,37 @@ class ListTraineeViewModel(private val leaderViewModel: LeaderViewModel) : ViewM
 
     fun notifyTrainee() {
         viewModelScope.launch(Dispatchers.IO) {
-            MailAPI(
-                traineeSelected.email,
+            MailService.sendEmail(
+                listOf(traineeSelected.email),
                 TITLE_MESSAGE,
-                MESSAGE,
-            ).sendMessage()
-            leaderViewModel.repository.getTokenByUser(traineeSelected.userId).collect { toToken ->
-                leaderViewModel.repository.getTokenByUser(leaderViewModel.getLeaderId())
-                    .collect { fromToken ->
-                        leaderViewModel.repository.sendNotify(
-                            fromToken,
-                            toToken,
-                            TITLE_MESSAGE,
-                            MESSAGE
-                        )
+                text = MESSAGE,
+                onSuccess = {
+                    launch(Dispatchers.Main) {
+                        notifyMailResponse.value = StatusUpdateInformation.SUCCESS
                     }
-            }
+                },
+                onError = {
+                    launch(Dispatchers.Main) {
+                        notifyMailResponse.value = StatusUpdateInformation.FAILED
+                    }
+                })
+            leaderViewModel.repository.getTokenByUser(traineeSelected.userId)
+                .collect { toToken ->
+                    leaderViewModel.repository.getTokenByUser(leaderViewModel.getLeaderId())
+                        .collect { fromToken ->
+                            leaderViewModel.repository.sendNotify(
+                                fromToken,
+                                toToken,
+                                TITLE_MESSAGE,
+                                MESSAGE
+                            )
+                        }
+                }
         }
     }
 
     private companion object {
-        const val MESSAGE = "Se ha actualizado tu contenido. ¡Es hora de entrenar!"
-        const val TITLE_MESSAGE = "TraiLead"
+        const val MESSAGE: String = "Se ha actualizado tu contenido. ¡Es hora de entrenar!"
+        const val TITLE_MESSAGE: String = "TraiLead"
     }
 }

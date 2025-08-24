@@ -85,7 +85,6 @@ class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
                 StatusUpdateInformation.SUCCESS -> {
                     TraiLeadSnackbar().success(requireContext(), binding.root)
                     viewModel.notifyTrainee()
-                    findNavController().navigateUp()
                 }
 
                 StatusUpdateInformation.FAILED -> {
@@ -98,6 +97,34 @@ class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
 
                 else -> Unit
             }
+        }
+        viewModel.notifyMailResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                StatusUpdateInformation.SUCCESS -> {
+                    TraiLeadSnackbar().successWithMessage(
+                        requireContext(),
+                        requireView(),
+                        NOTIFY_MESSAGE_SUCCESS
+                    )
+                    findNavController().navigateUp()
+                }
+
+                StatusUpdateInformation.FAILED -> {
+                    TraiLeadSnackbar().successWithMessage(
+                        requireContext(),
+                        requireView(),
+                        NOTIFY_MESSAGE_ERROR
+                    )
+                    findNavController().navigateUp()
+                }
+
+                StatusUpdateInformation.INTERNET_CONECTION -> {
+                    TraiLeadSnackbar().errorConection(requireContext(), binding.root)
+                }
+
+                else -> Unit
+            }
+
         }
         refresh()
     }
@@ -154,5 +181,10 @@ class LinkMaterialTraineeFragment : Fragment(), RefreshListener {
         leaderViewModel.refresh.observe(viewLifecycleOwner) {
             if (it) viewModel.getCategoriesSelected()
         }
+    }
+
+    private companion object {
+        const val NOTIFY_MESSAGE_SUCCESS: String = "El trainee fue notificado"
+        const val NOTIFY_MESSAGE_ERROR: String = "Hubo un error al notificar el trainee"
     }
 }
