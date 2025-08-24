@@ -57,6 +57,8 @@ android {
         }
     }
     namespace 'com.aferrari.trailead'
+
+    buildFeatures { buildConfig true }
 }
 
 dependencies {
