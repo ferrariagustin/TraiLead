@@ -17,8 +17,8 @@ android {
         applicationId "com.aferrari.trailead"
         targetSdkVersion 35
         minSdk 26
-        versionCode 1
-        versionName "1.0"
+        versionCode versionCode
+        versionName versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
