@@ -66,6 +66,7 @@
         <activity
             android:name=".app.ui.leader.LeaderActivity"
             android:exported="true"
+            android:windowOptOutEdgeToEdgeEnforcement="true"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -12,6 +12,7 @@ import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils.LEADER_KEY
 import com.aferrari.trailead.common.StringUtils.TAB_ID
+import com.aferrari.trailead.common.applyStatusBarFromTheme
 import com.aferrari.trailead.common.permission.Permission.requestNotificationPermission
 import com.aferrari.trailead.databinding.LeaderActivityBinding
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
@@ -35,6 +36,9 @@ class LeaderActivity : AppCompatActivity() {
     private lateinit var leaderViewModel: LeaderViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        applyStatusBarFromTheme()
+
         binding = DataBindingUtil.setContentView(this, R.layout.leader_activity)
         val factory = HomeViewModelFactory(
             UserRepository(remoteDataSource),

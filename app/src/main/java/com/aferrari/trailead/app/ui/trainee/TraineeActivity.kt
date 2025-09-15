@@ -10,6 +10,7 @@ import com.aferrari.trailead.app.viewmodel.HomeViewModelFactory
 import com.aferrari.trailead.app.viewmodel.trainee.TraineeViewModel
 import com.aferrari.trailead.common.BundleUtils
 import com.aferrari.trailead.common.StringUtils
+import com.aferrari.trailead.common.applyStatusBarFromTheme
 import com.aferrari.trailead.common.permission.Permission.requestNotificationPermission
 import com.aferrari.trailead.databinding.TraineeActivityBinding
 import com.aferrari.trailead.domain.datasource.RemoteDataSource
@@ -33,6 +34,9 @@ class TraineeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        applyStatusBarFromTheme()
+
         binding = DataBindingUtil.setContentView(this, R.layout.trainee_activity)
         val factory = HomeViewModelFactory(
             UserRepository(remoteDataSource),

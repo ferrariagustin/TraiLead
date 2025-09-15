@@ -9,13 +9,17 @@
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryColor</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Bg -->
         <item name="colorOnBackground">@color/primaryBgLightColor</item>
         <!--        <item name="background">?attr/colorOnBackground</item>-->
 
         <item name="background">@color/primaryBgLightColor</item>
+
+        <!-- Color de la status bar -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+        <!-- Iconos oscuros en la status bar si el color es claro (API 23+) -->
+        <item name="android:windowLightStatusBar">true</item>
 
     </style>
 </resources>
