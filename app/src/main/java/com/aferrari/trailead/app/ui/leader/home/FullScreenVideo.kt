@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.aferrari.trailead.R
-import com.aferrari.trailead.databinding.FullScreenVideoBinding
 import com.aferrari.trailead.app.viewmodel.leader.LeaderViewModel
+import com.aferrari.trailead.databinding.FullScreenVideoBinding
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 
@@ -45,7 +45,6 @@ class FullScreenVideo : Fragment() {
                 youTubePlayer.cueVideo(leaderViewModel.materialSelected!!.url, 0f)
             }
         })
-        binding.fullScreenMaterialYoutubeId.enterFullScreen()
         binding.fullScreenToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
